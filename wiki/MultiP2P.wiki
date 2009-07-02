@@ -1,14 +1,15 @@
 #summary Multi-P2P overviews:
 #labels Phase-Requirements,requirements
  * *To save our time and to achieve the best results of the project, everyone should try to at least finish his part at his best responsibility*,
- * *Pham Thai Son* <blademaster.tauren@gmail.com> is the main Researcher & Developer of the "Multi-P2P" project. Le Tien Anh <letienanh@gmail.com> and Nguyen Quang Hoang <hoangnq@gmail.com> will follow Son's research and verify his developments, 
+ * *Pham Thai Son* <blademaster.tauren@gmail.com> is the main Researcher & Developer of the "Multi-P2P" project. Le Tien Anh <letienanh@gmail.com> and Nguyen Quang Hoang <hoangnq@gmail.com> will follow his research and verify his developments, 
  * Meetings will be held once every two odd weeks of a month via Dimdim.com. During a meeting, a presentation regarding the work progress will be made,  
- * In order to finish the project, work packages (WPs) are to be finished. Outputs of WPs are Deliverables (Ds) including documents, executable binaries and source codes. 
+ * In order to close the project, 3 Work Packages (WPs) are to be finished. Outputs of WPs are Deliverables (Ds) including documents, executable binaries and source/simulation codes. 
 
-= Multi-P2P work packages (WPs) and Deliverables (Ds)= 
+= Multi-P2P Work Packages (WPs) and Deliverables (Ds)= 
 == WP1: Background knowledges ==
  # D1.1 (document): Understanding main DHT overlay algorithms (Chord, Pastry, Tapastry),
  # D1.2 (document): Understanding IP-multicasting and main Application Level Multicasting algorithms(Scribe, ESM).
+ # D1.3 (document): Understanding overlay simulation using OverSim.
 
 == WP2: Building P2P communities on a DHT overlay and an ALM algorithm and bring that community to the PlanetLab == 
  # D2.1 (document/executable binaries/source codes): Building a community peer software (with proper GUI) which can:
@@ -18,5 +19,6 @@
   * Each peer in a group can be notified with new event (eventing), can join/disjoint, subscribe/un-subscribe to/from that group.
  # D2.2 (document/executable binaries/source codes) The community can be deployed worldwide on the PlanetLab.    
 
-== WP3: Building a video conference service using vic (and other tools) on top of the P2P communities built in WP2 == 
+== WP3: Building a video conference service using vic (and other tools) on top of the P2P communities which have been built in WP2 == 
+ # D3.1 (document/executable binaries/simulation codes) Simulation of multicasting video streams on top of a multicast-enabled P2P overlay using OverSim. 
  # D3.1 (document/executable binaries/source codes) A video conference service on top of a multicast-enabled P2P overlay.
