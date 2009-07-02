@@ -4,10 +4,16 @@
 
 Useful documents, guidances, APIs... which are stored outside.
 
-
-= DHT =
+= Overlay =
  # [http://www.bamboo-dht.org/ Bamboo DHT]
  # [http://www.planet-lab.org/ Planet lab - open test-bed platform]
+ # [http://www.oversim.org/wiki/OverSimFeatures Oversim - overlay network simulation framework]
+
 = Multicasting =
  # [http://esm.cs.cmu.edu/ End-System Multicast]
  # [http://en.wikipedia.org/wiki/Mbone MBone - IP Multicast islands]
+
+= NS-2 =
+ # [http://www.isi.edu/nsnam/ns/ns-build.html NS-2]
+ # [http://www.isi.edu/nsnam/ns/ns-build.html NS-2]
+ # [http://www.linuxquestions.org/questions/linux-newbie-8/unable-to-install-ns2-on-fedora-5-612860/ Step-by-step installation of NS-2 on Linux]
