@@ -1,0 +1,16 @@
+#summary Frequently Asked Questions.
+
+= Introduction =
+
+These are basic FAQs of the project. You are free to ask a question or add an answer when appropriate.
+
+
+= Details =
+
+*Q: What is SVN? How can I use it?*
+
+A: SVN stands for "Subversion". Further information can be found in http://svnbook.red-bean.com/en/1.5/svn-book.pdf
+
+*Q: What is the main language of the project?*
+
+A: Try to use English as much as possible. You can use Vietnamese but you may have to explain some terms in English.
