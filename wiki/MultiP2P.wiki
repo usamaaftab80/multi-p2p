@@ -1,5 +1,5 @@
 #summary Multi-P2P overviews:
-#labels Phase-Requirements
+#labels Phase-Requirements,requirements
  * To save our time and to achieve the best results of the project, everyone should try to at least finish his part at his best responsibility,
  * Pham Thai Son <blademaster.tauren@gmail.com> is the main Researcher & Developer of the "Multi-P2P" project. Le Tien Anh <letienanh@gmail.com> and Nguyen Quang Hoang <hoangnq@gmail.com> will follow Son's research and verify his developments, 
  * Meetings will be held once every two odd weeks of a month via Dimdim.com. During a meeting, a presentation regarding the work progress will be made,  
