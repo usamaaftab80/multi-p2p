@@ -1,0 +1,18 @@
+#summary Multi-P2P overviews:
+#labels Phase-Requirements
+
+ * To save our time and to achieve the best results of the project, everyone should try to at least finish his part at his best responsibility,
+ * Pham Thai Son <blademaster.tauren@gmail.com> will be the main Researcher & Developer of this project. Le Tien Anh <letienanh@gmail.com> and Nguyen Quang Hoang <hoangnq@gmail.com> will follow Son's research and verify his developments. 
+ * Meetings will be held once every two odd weeks of the month () via Dimdim.com
+
+= Multi-P2P requirements = 
+ # Understanding main DHT overlay algorithms (Chord, Pastry, Tapastry),
+ # Understanding IP-multicasting and main Application Level Multicasting algorithms()
+
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
