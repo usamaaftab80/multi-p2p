@@ -1,0 +1,13 @@
+#summary Useful links related to the project. You are free to add more links.
+
+= Introduction =
+
+Useful documents, guidances, APIs... which are stored outside.
+
+
+= DHT =
+ # [http://www.bamboo-dht.org/ Bamboo DHT]
+ # [http://www.planet-lab.org/ Planet lab - open test-bed platform]
+= Multicasting =
+ # [http://esm.cs.cmu.edu/ End-System Multicast]
+ # [http://en.wikipedia.org/wiki/Mbone MBone - IP Multicast islands]
