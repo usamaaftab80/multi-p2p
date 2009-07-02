@@ -1,20 +1,22 @@
 #summary Multi-P2P overviews:
 #labels Phase-Requirements
-
  * To save our time and to achieve the best results of the project, everyone should try to at least finish his part at his best responsibility,
  * Pham Thai Son <blademaster.tauren@gmail.com> is the main Researcher & Developer of the "Multi-P2P" project. Le Tien Anh <letienanh@gmail.com> and Nguyen Quang Hoang <hoangnq@gmail.com> will follow Son's research and verify his developments, 
  * Meetings will be held once every two odd weeks of a month via Dimdim.com. During a meeting, a presentation regarding the work progress will be made,  
  * In order to finish the project, work packages (WPs) are to be finished. Outputs of WPs are Deliverables (Ds) including documents, executable binaries and source codes. 
 
-= Multi-P2P work packages (WPs) = 
+= Multi-P2P work packages (WPs) and Deliverables (Ds)= 
 == WP1: Background knowledges ==
  # D1.1 (document): Understanding main DHT overlay algorithms (Chord, Pastry, Tapastry),
- # D1.2 (document): Understanding IP-multicasting and main Application Level Multicasting algorithms(Scribe, ESM),
+ # D1.2 (document): Understanding IP-multicasting and main Application Level Multicasting algorithms(Scribe, ESM).
+
 == WP2: Building P2P communities on a DHT overlay and an ALM algorithm and bring that community to the PlanetLab == 
  # D2.1 (document/executable binaries/source codes): Building a community peer software (with proper GUI) which can:
- * Put/get keys to the Harsh table,
- * Save/distribute small files into the overlay,
- * A peer can create, join (a) group(s) with a "group name/topic" within the p2p community,
- * Each peer in a group can be notified with new event (eventing), can join/disjoint, subscribe/un-subscribe to/from that group.
-
+  * Put/get keys to the Harsh table,
+  * Save/distribute small files into the overlay,
+  * A peer can create, join (a) group(s) with a "group name/topic" within the p2p community,
+  * Each peer in a group can be notified with new event (eventing), can join/disjoint, subscribe/un-subscribe to/from that group.
  # D2.2 (document/executable binaries/source codes) The community can be deployed worldwide on the PlanetLab.    
+
+== WP3: Building a video conference service using vic (and other tools) on top of the P2P communities built in WP2 == 
+ # D3.1 (document/executable binaries/source codes) A video conference service on top of a multicast-enabled P2P overlay.
