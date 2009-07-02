@@ -16,4 +16,5 @@
  * Save/distribute small files into the overlay,
  * A peer can create, join (a) group(s) with a "group name/topic" within the p2p community,
  * Each peer in a group can be notified with new event (eventing), can join/disjoint, subscribe/un-subscribe to/from that group.
+
  # D2.2 (document/executable binaries/source codes) The community can be deployed worldwide on the PlanetLab.    
