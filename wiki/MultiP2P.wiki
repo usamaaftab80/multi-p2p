@@ -21,4 +21,4 @@
 
 == WP3: Building a video conference service using vic (and other tools) on top of the P2P communities which have been built in WP2 == 
  # D3.1 (document/executable binaries/simulation codes) Simulation of multicasting video streams on top of a multicast-enabled P2P overlay using OverSim,
- # D3.1 (document/executable binaries/source codes) A video conference service on top of a multicast-enabled P2P overlay.
+ # D3.2 (document/executable binaries/source codes) A video conference service on top of a multicast-enabled P2P overlay.
