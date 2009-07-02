@@ -15,5 +15,4 @@ Useful documents, guidances, APIs... which are stored outside.
 
 = NS-2 =
  # [http://www.isi.edu/nsnam/ns/ns-build.html NS-2]
- # [http://www.isi.edu/nsnam/ns/ns-build.html NS-2]
  # [http://www.linuxquestions.org/questions/linux-newbie-8/unable-to-install-ns2-on-fedora-5-612860/ Step-by-step installation of NS-2 on Linux]
