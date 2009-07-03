@@ -6,7 +6,8 @@
  * In order to close the project, 3 Work Packages (WPs) are to be finished. Outputs of WPs are Deliverables (Ds) including documents, executable binaries and source/simulation codes. 
 
 = Multi-P2P Work Packages (WPs) and Deliverables (Ds)= 
-Inside the svn tree, you will find the necessary source codes for your development. The "Deliverables" folder is reserved for the storage of deliverable/output documents and/or source/simulation codes of different WPs. You can upload, edit drafts of your deliverables in this folder. 
+ * Inside the svn tree, you will find the necessary source codes for your development. The "Deliverables" folder is reserved for the storage of deliverable/output documents and/or source/simulation codes of different WPs. You can upload, edit drafts of your deliverables in this folder. 
+ * You can check-out source codes, make necessary changes and then commit them back to the svn system under the same directory. No need to create a brand new folder. After finishing all changes, you can upload the final/draft version of your code to the appropriate Deliverables folder. 
 == WP1: Background knowledges ==
  # D1.1 (document): Understanding main DHT overlay algorithms (Chord, Pastry, Tapastry),
  # D1.2 (document): Understanding IP-multicasting and main Application Level Multicasting algorithms(Scribe, ESM),
