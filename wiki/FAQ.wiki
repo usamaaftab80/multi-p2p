@@ -23,3 +23,7 @@ A: Read this [http://code.google.com/support/ support]. The main idea is that yo
  * "Wiki" tab for read/write/share common things of the project (such as to update this FAQ with your questions and answers), 
  * "Issue" tab for opening issues/problems of the codes,
  * "Source" tab for browsing the codes and their updates.
+
+====*Q: How can I communicate with the team?*====
+
+A: Send emails to evalsvc-n-multip2p(at)googlegroups.com.
