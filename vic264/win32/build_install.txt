@@ -1,0 +1,52 @@
+Win32 build instruction written by Barz Hsu and updated by Piers 4 June 09
+
+Get and install the following:
+- The latest version of mingw from http://www.mingw.org/
+  o YOu will need win32api, w32runtime, utils, gcc
+- Get Yasm and copy it to a directory in your PATH (e.g. c:\Windows) and rename it yasm.exe
+  => http://www.tortall.net/projects/yasm/wiki/Download 
+
+# Get and Make FFmpeg DLL under Mingw 
+- Get ffmpeg-0.5 from:
+  => http://ffmpeg.org/releases/ffmpeg-0.5.tar.bz2
+- Untar and configure:
+
+tar xfj ffmpeg-0.5.tar.bz2 && cd ffmpeg-0.5
+./configure  --enable-memalign-hack --enable-swscale --enable-gpl --enable-shared --disable-static --enable-postproc --prefix=../win32 --bindir=../win32/l
+ib --enable-w32threads
+make install
+
+# Get and Make X264 DLL under Mingw
+- Get x264-snapshot-20090531-2245 snapshot:
+  => http://downloads.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-20090531-2245.tar.bz2
+- Untar and configure:
+
+tar xfj x264-snapshot-20090531-2245.tar.bz2 && cd x264-snapshot-20090531-2245
+./configure --enable-shared --prefix=../win32
+  
+* patch Makefile for generating DLL
+add the 3-6 lines in SONAME target
+
+1: $(SONAME): .depend $(OBJS) $(OBJASM)
+2:        $(CC) -shared -o $@ $(OBJS) $(OBJASM) -Wl,-soname,$(SONAME) $(LDFLAGS)
+3: ifeq ($(SYS),MINGW)
+4:        $(CC) -shared -Wl,--output-def,libx264.def -o libx264.dll $(OBJS) $(OBJA
+SM)
+5:        lib /machine:i386 /def:libx264.def
+6: endif
+
+make install
+
+
+# Build VIC using Visual studio as normal. 
+~                                                                                                                                           
+~                                                                                                                                           
+~                                                                                                                                           
+~                                                                                                                                           
+~                          
+~
+~                                                                               
+~                                                                               
+~                                                                               
+~                                                                               
+~                    
