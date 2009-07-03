@@ -15,3 +15,11 @@ A: Many, but I use Eclipse with the [http://subclipse.tigris.org/servlets/Projec
 ====*Q: What is the official language of the project?*====
 
 A: Try to use English as much as possible. You can use Vietnamese but you may have to explain some terms in English.
+
+====*Q: How to use this Google code page?*====
+
+A: Read this [http://code.google.com/support/ support]. The main idea is that you refer to the:
+ * "Downloads" tab for up/download documents, 
+ * "Wiki" tab for read/write/share common things of the project (such as to update this FAQ with your questions and answers), 
+ * "Issue" tab for opening issues/problems of the codes,
+ * "Source" tab for browsing the codes and their updates.
