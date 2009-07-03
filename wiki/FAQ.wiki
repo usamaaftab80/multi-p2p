@@ -1,16 +1,17 @@
 #summary Frequently Asked Questions.
 
-= Introduction =
-
 These are basic FAQs of the project. You are free to ask a question or add an answer when appropriate.
 
+<wiki:toc max_depth="4"/>
 
-= Details =
+====*Q: What is SVN? How can I use it*====
 
-*Q: What is SVN? How can I use it?*
+A: SVN stands for "Subversion". Further information can be found in [http://svnbook.red-bean.com/en/1.5/svn-book.pdf this] svn book.
 
-A: SVN stands for "Subversion". Further information can be found in http://svnbook.red-bean.com/en/1.5/svn-book.pdf
+====*Q: Which tool can I use to check out source codes from a SVN system?*====
 
-*Q: What is the main language of the project?*
+A: Many, but I use Eclipse with the [http://subclipse.tigris.org/servlets/ProjectProcess;jsessionid=7446EF751264D8387D0992E8EDB816A5?pageID=p4wYuA Subclipse plug-in]. 
+
+====*Q: What is the official language of the project?*====
 
 A: Try to use English as much as possible. You can use Vietnamese but you may have to explain some terms in English.
