@@ -21,3 +21,6 @@ Useful documents, guidances, APIs... which are stored outside.
  # [ftp://ftp.ee.lbl.gov/conferencing/vic/ vic]: vic source code
  # [ftp://ftp.ee.lbl.gov/conferencing/vat/ vat]: vic's audio tool
  # [ftp://ftp.ee.lbl.gov/conferencing/wb/ wb]: vic's whiteboard tool
+
+= IEEE templates =
+ # [http://www.ieee.org/web/publications/authors/transjnl/index.html#template Word templates]
