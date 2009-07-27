@@ -7,7 +7,8 @@ Useful documents, guidances, APIs... which are stored outside.
 = Overlay =
  # [http://www.bamboo-dht.org/ Bamboo DHT]
  # [http://www.planet-lab.org/ Planet lab - open test-bed platform]
- # [http://www.oversim.org/wiki/OverSimFeatures Oversim - overlay network simulation framework]
+ # [http://www.oversim.org/wiki/OverSimFeatures Oversim - overlay network simulation 
+ # [http://overlayweaver.sourceforge.net/ Overlay Weaver - overlay construction toolkit]
 
 = Multicasting =
  # [http://esm.cs.cmu.edu/ End-System Multicast]
