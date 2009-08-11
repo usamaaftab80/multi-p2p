@@ -32,3 +32,5 @@ A: Read this [http://code.google.com/support/ support]. The main idea is that yo
 ====*Q: How can I communicate with the team?*====
 
 A: Send emails to evalsvc-n-multip2p(at)googlegroups.com.
+
+====*Q: What criteria of ALM do we need to consider when choosing appropriate mechanism for this multicast project?*====
