@@ -34,3 +34,10 @@ A: Read this [http://code.google.com/support/ support]. The main idea is that yo
 A: Send emails to evalsvc-n-multip2p(at)googlegroups.com.
 
 ====*Q: What criteria of ALM do we need to consider when choosing appropriate mechanism for this multicast project?*====
+
+A: The target application is a video conference service built on the P2P overlay network. We'll find many more criteria along the way, but I think, these are some basic requirements for our multicast algorithm:
+ * Real-time, many-to-many, multimedia communication,
+ * Managing as many peers as possible joining/leaving the multicast tree,
+ * Dynamic routings,
+ * Smallest signalling,
+ * ... (to be updated)   
