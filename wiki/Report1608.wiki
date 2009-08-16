@@ -27,12 +27,17 @@ In this case, the role of DHTs in P2P model is similar to the role of DNS server
 
 = What criteria do we concern when judging a specific DHT-based overlay network ? =
 
-*Maximum number of hops*: scalability of P2P network
-*Organization of the peer address space*: uniform distribution in ID address space
-*Next-hop decision criteria*: routing ability
-*Geometry of the overlay*: 
-*Overlay Maintenance*: nodes management
-*Locality and topology awareness*: routing ability
+Maximum number of hops: scalability of P2P network
+
+Organization of the peer address space: uniform distribution in ID address space
+
+Next-hop decision criteria: routing ability
+
+Geometry of the overlay: 
+
+Overlay Maintenance: nodes management
+
+Locality and topology awareness: routing ability
 
 = What differences between overlay and multicast? =
 
@@ -57,15 +62,19 @@ There are 2 types of building multicasts: mesh-based multicast and tree-based mu
 = Mutlicast =
 
 1. Group Management
+
 2. IP Multicasting / Application Level Multicasting / Hybrid Multicasting
+
 3. D1.2 Document Modification.
 
 == Research Experience == 
 
 Concepts ==> Roles of concepts in the project ==> Methods of applying these concepts.
 
-Questions
+Questions in Research
 
 What are these concepts ?
+
 Why do we need them ?
+
 How can we use them ?
