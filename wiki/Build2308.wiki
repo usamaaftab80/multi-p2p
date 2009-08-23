@@ -1,0 +1,24 @@
+#summary Build Bamboo and VIC for Linux platform
+
+= Introduction =
+
+Build Bamboo DHT
+
+= Details =
+
+Steps: 
+1) Copy Bamboo src to the destination folder, for example, /usr/local/
+2) Change the owners of the source code to your accountID, for example; 
+chown -R yourname:yourname BambooDHT
+3) Build the BambooDHT by executing the command: make
+4) Build the document of BambooDHT by executing make inside doc directory: 
+cd doc/
+make
+5) Build the java document by executing make inside doc/javadocs directory:
+cd doc/javadocs/
+make
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
