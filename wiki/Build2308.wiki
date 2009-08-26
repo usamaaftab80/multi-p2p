@@ -6,13 +6,8 @@
 Build Bamboo DHT
 
 = Steps: =
-# Copy Bamboo src to the destination folder, for example, /usr/local/
-# Change the owners of the source code to your accountID, 
-for example; chown -R yourname:yourname BambooDHT
-# Build the BambooDHT by executing the command: make
-# Build the document of BambooDHT by executing make inside doc directory: 
-cd doc/
-make
-# Build the java document by executing make inside doc/javadocs directory:
-cd doc/javadocs/
-make
+ # Copy Bamboo src to the destination folder, for example, /usr/local/
+ # Change the owners of the source code to your accountID, for example; {{{chown -R yourname:yourname BambooDHT}}}
+ # Build the BambooDHT by executing the command: make}}}
+ # Build the document of BambooDHT by executing make inside doc directory: {{{cd doc/; make}}}
+ # Build the java document by executing make inside doc/javadocs directory: {{{cd doc/javadocs/; make}}}
