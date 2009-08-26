@@ -7,9 +7,7 @@
  * We (the development team, including AnhLT, HoangNQ, CatLNA) confirm that: 
 
    # All codes, deliverables, documents developed by the group, will be opened, everyone can use them at their own risk. The only requirement is to refer to the development group when using them (according to GPL: http://www.gnu.org/licenses/gpl.html).
-
    # When using the main ideas (e.g. Evalvid supports svc, ALM supports svc, vic supports svc, mp4box supports svc, Evalvid supports OverSim?...), one has to refer to the paper(s) that I (AnhLT) provide.
-
    # If, during the development process, CatLNA or HoangNQ invent a new idea (clearly stated in the deliverables), other will have to refer to the inventor when using it. 
 
 = Multi-P2P Work Packages (WPs) and Deliverables (Ds)= 
