@@ -4,6 +4,13 @@
  * *Pham Thai Son* <blademaster.tauren@gmail.com> is the main Researcher & Developer of the "Multi-P2P" project. Le Tien Anh <letienanh@gmail.com> and Nguyen Quang Hoang <hoangnq@gmail.com> will follow his research and verify his developments, 
  * Meetings will be held once every two even weeks of a month via Dimdim.com. During a meeting, a presentation regarding the work progress will be made,  
  * In order to close the project, 3 Work Packages (WPs) are to be finished. Outputs of WPs are Deliverables (Ds) including documents, executable binaries and source/simulation codes. 
+ * We (the development team, including AnhLT, HoangNQ, CatLNA) confirm that: 
+
+ # All codes, deliverables, documents developed by the group, will be opened, everyone can use them at their own risk. The only requirement is to refer to the development group when using them (according to GPL: http://www.gnu.org/licenses/gpl.html).
+
+ # When using the main ideas (e.g. Evalvid supports svc, ALM supports svc, vic supports svc, mp4box supports svc, Evalvid supports OverSim?...), one has to refer to the paper(s) that I (AnhLT) provide.
+
+ # If, during the development process, CatLNA or HoangNQ invent a new idea (clearly stated in the deliverables), other will have to refer to the inventor when using it. 
 
 = Multi-P2P Work Packages (WPs) and Deliverables (Ds)= 
  * Inside the svn tree, you will find the necessary source codes for your development. The "Deliverables" folder is reserved for the storage of deliverable/output documents and/or source/simulation codes of different WPs. You can upload, edit drafts of your deliverables in this folder. 
