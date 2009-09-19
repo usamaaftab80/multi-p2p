@@ -1,0 +1,10 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+This wiki page is the note for difficulties and achievements in running a sample OverSim simulation.
+
+= Details =
+
+= Generating *.ini files =
+= Generatin *.make files =
