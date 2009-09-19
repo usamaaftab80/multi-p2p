@@ -1,0 +1,44 @@
+#summary OverSim Overview
+
+= Introduction =
+
+Before oversim, there have been quite number of network simulators such as P2PSim, OverlayWeaver and PlanetSim. However, none of those become standard emulators / simulators for network researching community due to shortage of vital features:
+
+P2PSim: no real-world interoperability, no visualization
+OverlayWeaver: no real-world interconnection, unscalable
+PlanetSim: too simplistic underlay network
+
+Therefore, the researching community needs another tool to simulate their ideas: OverSim.
+
+= Details =
+
+OverSim Features:
+
+Modular Architectures 
+
+Separated modules can be developed by OMNeT++ 
+
+Layer Architectures
+
+Underlying network 
+Overlay network
+Application layer
+
+Consistent interfaces between layers
+
+Between layers, there are common APIs; therefore, changes in one interfaces do not interfere with other interfaces operation.
+
+Scalability
+Heterogenity & Mobility
+BackBone Simulation
+Interoperation
+Network Emulation
+Visualization and Debugging
+Overlay Protocols
+
+
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
