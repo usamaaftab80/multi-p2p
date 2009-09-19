@@ -12,22 +12,23 @@ Therefore, the researching community needs another tool to simulate their ideas:
 
 = Details =
 
-OverSim Features:
-
-Modular Architectures 
+== Modular Architectures ==
 
 Separated modules can be developed by OMNeT++ 
 
-Layer Architectures
+== Layer Architectures ==
 
 Underlying network 
 Overlay network
 Application layer
 
-Consistent interfaces between layers
+== Consistent interfaces between layers ==
 
 Between layers, there are common APIs; therefore, changes in one interfaces do not interfere with other interfaces operation.
 
+== Other features and characteristics ( Continue Updating ) ==
+
+'<div>'
 Scalability
 Heterogenity & Mobility
 BackBone Simulation
@@ -35,10 +36,8 @@ Interoperation
 Network Emulation
 Visualization and Debugging
 Overlay Protocols
+'</div>'
 
-
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+<wiki:comment>
+This page is the draft version of D1.3 - WP1. It will be continuously updated.
+</wiki:comment>
