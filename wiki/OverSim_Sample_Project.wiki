@@ -4,7 +4,20 @@
 
 This wiki page is the note for difficulties and achievements in running a sample OverSim simulation.
 
+In this sample project, the PING program is simulated. 
+
+A node will send a message to an arbitrary node. Then it waits for a number of seconds before sending another message. 
+
+A receiving node will reply the ping message through UDP and overlay networks.
+
+The simulation is continued until the simulation is ended.
+
 = Details =
+
+The OverSimDevelop page gives detailed instructions about how to create a simple sample project. However, the given source code on this website has been simplified and some pre-processing code lines such as include, import, etc have not been provided. It causes problems during compilation for newbie. However, users can download the sample codes 
+http://www.oversim.org/attachment/wiki/OverSimDevelop/MyOverlay.tgz
+
+
 
 = Generating *.ini files =
 = Generatin *.make files =
