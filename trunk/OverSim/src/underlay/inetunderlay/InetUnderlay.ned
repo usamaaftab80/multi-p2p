@@ -20,6 +20,7 @@ package oversim.underlay.inetunderlay;
 import oversim.common.ChurnGenerator;
 import oversim.common.GlobalObserver;
 import oversim.common.inet_fiberline;
+import inet.util.StatisticsCollector;//hoang
 
 
 //
@@ -39,7 +40,7 @@ network InetUnderlayNetwork
         int outRouterNum;    // set to 1 if you want to use a TunOutRouter as connection to a real network
         double connectivity;    // degree of connectivity of backbone routers (1 = every backbone router is connected to all the others)
         @display("bgl=49");
-    submodules:
+    submodules:              
         underlayConfigurator: InetUnderlayConfigurator {
             @display("p=70,160");
         }
@@ -75,6 +76,7 @@ network InetUnderlayNetwork
         churnGenerator[0]: ChurnGenerator {
             @display("p=70,240,column");
         }
+        statisticsCollector: StatisticsCollector; //hoang
     connections allowunconnected:
 
         //

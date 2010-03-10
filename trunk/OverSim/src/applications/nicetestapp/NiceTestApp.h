@@ -10,6 +10,7 @@
 
 
 #include "BaseApp.h"
+#include "StatisticsCollector.h"
 
 class NiceTestApp : public BaseApp
 {
@@ -22,6 +23,8 @@ class NiceTestApp : public BaseApp
     // statistics
     int numSent;              //number of packets sent
     int numReceived;          //number of packets received
+
+    StatisticsCollector *stats;
 
     // our timer
     cMessage *timerMsg;

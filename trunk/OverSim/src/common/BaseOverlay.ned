@@ -54,6 +54,7 @@ simple BaseOverlay extends BaseRpc
         string routingType; // default routing mode (iterative, semi-recursive,...)
         bool rejoinOnFailure; // rejoin after loosing connection to the overlay?
         bool recordRoute; // record visited hops on route 
+        string statsModulePath; //hoang
 
     gates:
         input udpIn; // gate from the UDP layer

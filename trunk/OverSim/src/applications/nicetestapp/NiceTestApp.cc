@@ -25,6 +25,8 @@ inline std::string to_string (const T& t)
 
 #include  "NiceMessage_m.h"
 
+
+
 #include <string>
 
 using namespace std;
@@ -82,6 +84,10 @@ void NiceTestApp::initializeApp(int stage)
     numSent = 0;
     numReceived = 0;
 
+    const char *statsModulePath = par("statsModulePath");
+	cModule *modp = simulation.getModuleByPath(statsModulePath);
+	stats = check_and_cast<StatisticsCollector *>(modp);
+
     // tell the GUI to display our variables
 
     WATCH(numSent);
@@ -111,11 +117,11 @@ void NiceTestApp::finishApp()
     // The first parameter is a name for the value, you can use any name you like (use a name you can find quickly!).
     // In the end, the simulator will mix together all values, from all nodes, with the same name.
 
-    globalStatistics->addStdDev("HOANG NiceTestApp: Sent packets", numSent);
+    /*globalStatistics->addStdDev("HOANG NiceTestApp: Sent packets", numSent);
     globalStatistics->addStdDev("HOANG NiceTestApp: Received packets", numReceived);
 
     globalStatistics->recordOutVector("HOANG NiceTestApp: Sent packets", numSent);
-    globalStatistics->recordOutVector("HOANG NiceTestApp: Received packets", numReceived);
+    globalStatistics->recordOutVector("HOANG NiceTestApp: Received packets", numReceived);*/
 
 
     //globalStatistics->recordOutVector("HOANG So lan goi finishApp",1);
@@ -135,6 +141,46 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         if (underlayConfigurator->isInInitPhase()) return;
 
         if(isSender){
+
+        	//tinh so link cua cac node //hoang
+
+        	int numLink = 0;
+
+        	cTopology topo;
+
+        	//topo.extractByProperty("node");
+        	topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*] **.accessRouter[*] **.backboneRouter[*]").asVector());
+
+			std::cout << "\nIP " << thisNode.getAddress() << " has a topo of " << topo.getNumNodes() << " nodes" << endl;
+
+			for (int i=0; i<topo.getNumNodes(); i++)
+			{
+			  cTopology::Node *node = topo.getNode(i);
+			  numLink += node->getNumOutLinks();
+
+			  /*std::cout << "\nNode i=" << i << " is " << node->getModule()->getFullPath() << endl;
+			  std::cout << " It has " << node->getNumOutLinks() << " conns to other nodes\n";
+			  std::cout << " and " << node->getNumInLinks() << " conns from other nodes\n";
+
+			  std::cout << " Connections to other modules are:\n";
+			  for (int j=0; j<node->getNumOutLinks(); j++)
+			  {
+				cTopology::Node *neighbour = node->getLinkOut(j)->getRemoteNode();
+				cGate *gate = node->getLinkOut(j)->getLocalGate();
+				std::cout << " " << neighbour->getModule()->getFullPath()
+				   << " through gate " << gate->getFullName() << endl;
+			  }*/
+
+			}
+
+			stats->setNumPhysicalLink(numLink);
+
+			/*globalStatistics->recordOutVector("HOANG num physical links",numLink / 2);
+			globalStatistics->addStdDev("HOANG num physical links",numLink / 2);*/
+
+
+
+			//send data
 
             for (int i = 0; i < numToSend; i++) {
 
@@ -173,41 +219,8 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         delete msg; // who knows what this packet is?
 
     }
+
 }
-
-/*// deliver is called when we receive a message from the overlay.
-// Unhandled or unknown packets can be safely deleted here.
-
-void NiceTestApp::deliver(cMessage* msg)
-{
-    //printf("Nhay vao ham deliver\n");
-    // we are only expecting messages of type NiceTestAppMsg, throw away any other
-
-    NiceTestAppMsg *myMsg = dynamic_cast<NiceTestAppMsg*>(msg);
-    if (myMsg == 0) {
-        delete msg;     // unknown!
-        return;
-    }
-
-    // are we a PING? send a PONG!
-
-    if (myMsg->getType() == MYMSG_PING) {
-
-       myMsg->setType(MYMSG_PONG);                         // change type
-       std::cout << thisNode.getAddress() << ": Got packet from " << myMsg->getSenderAddress() << ", sending back!" << std::endl;
-       sendMessageToUDP(myMsg->getSenderAddress(), myMsg); // send it back to its owner
-
-       //hoang
-       simtime_t eed = simTime() - myMsg->getCreationTime();
-       globalStatistics->recordOutVector("End to end delay",eed.dbl());
-
-
-    } else {
-
-       delete msg;     // unhandled!
-
-    }
-}*/
 
 // handleUDPMessage is called when we receive a message from UDP.
 // Unhandled or unknown packets can be safely deleted here.

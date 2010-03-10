@@ -27,6 +27,7 @@ simple NiceTestApp extends BaseApp
         int numToSend;             // how many packets will we send at the same time?
         //int largestKey;            // largest key we can pick
         bool isSender; 				//in case 1 source sender
+        string statsModulePath;
 }                    
                     
 module NiceTestAppModules like ITier

@@ -36,6 +36,8 @@
 #include <RecursiveLookup.h>
 #include <InitStages.h>
 
+#include "StatisticsCollector.h"
+
 class GlobalNodeList;
 class UnderlayConfigurator;
 class BaseApp;
@@ -127,6 +129,10 @@ private://fields: statistics
     int bytesInternalReceived;  /**< number of bytes received from same host but different port (SimpleMultiOverlayHost) */
 
     int joinRetries; /**< number of join retries */
+
+    //hoang
+    cStdDev hopCounter;
+    StatisticsCollector *stats;
 
 protected:
 

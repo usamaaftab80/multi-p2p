@@ -486,6 +486,8 @@ void InetUnderlayConfigurator::finishUnderlay()
     topo.extractByProperty("node");*/
     //std::cout << "finish underlayyyyyyyyyy " << topo.getNumNodes() << endl;
 
+
+
     // statistics
     recordScalar("Terminals added", numCreated);
     recordScalar("Terminals removed", numKilled);
