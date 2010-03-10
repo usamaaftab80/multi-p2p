@@ -28,6 +28,8 @@
 #include "IPFragBuf.h"
 #include "ProtocolMap.h"
 
+#include "StatisticsCollector.h"
+//#include "/home/admin/sim/OverSim-20090908/src/common/GlobalStatistics.h";
 
 class ARPPacket;
 class ICMPMessage;
@@ -64,6 +66,13 @@ class INET_API IP : public QueueBase
     int numDropped;
     int numUnroutable;
     int numForwarded;
+
+    int numCbrDataRoute; //hoang
+    StatisticsCollector *stats;
+
+    //GlobalStatistics* globalStatistics;
+
+    //cStdDev linkStressCounter;
 
   protected:
     // utility: look up interface from getArrivalGate()
@@ -161,6 +170,11 @@ class INET_API IP : public QueueBase
      * of the queue.
      */
     virtual void endService(cPacket *msg);
+
+    /**
+	 * finish //hoang
+	 */
+	virtual void finish();
 };
 
 #endif

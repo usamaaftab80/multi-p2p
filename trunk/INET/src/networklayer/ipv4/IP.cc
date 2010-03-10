@@ -49,12 +49,19 @@ void IP::initialize()
     fragbuf.init(icmpAccess.get());
 
     numMulticast = numLocalDeliver = numDropped = numUnroutable = numForwarded = 0;
+    numCbrDataRoute = 0; //hoang
+
+    const char *statsModulePath = par("statsModulePath");
+	cModule *modp = simulation.getModuleByPath(statsModulePath);
+	stats = check_and_cast<StatisticsCollector *>(modp);
+
 
     WATCH(numMulticast);
     WATCH(numLocalDeliver);
     WATCH(numDropped);
     WATCH(numUnroutable);
     WATCH(numForwarded);
+
 }
 
 void IP::updateDisplayString()
@@ -121,11 +128,21 @@ void IP::handlePacketFromNetwork(IPDatagram *datagram)
     // hop counter decrement; FIXME but not if it will be locally delivered
     datagram->setTimeToLive(datagram->getTimeToLive()-1);
     /*//hoang
-    std::cout<< "HOANG timeToLive IPdataGram " << datagram->getTimeToLive()
-    << " src " << datagram->getSrcAddress()
-    << " dest " << datagram->getDestAddress()
-    << " transport " << datagram->getTransportProtocol()
-    << endl;*/
+    if(strcmp(datagram->getName(),"CBR_DATA") == 0){
+		std::cout << "RT numRoutes " << rt->getNumRoutes()
+		<< " timeToLive " << datagram->getTimeToLive()
+		<< " name " << datagram->getName()
+		<< " src " << datagram->getSrcAddress()
+		<< " dest " << datagram->getDestAddress()
+		<< " transport " << datagram->getTransportProtocol()
+		<< endl;
+    }*/
+
+	//hoang
+	if(strcmp(datagram->getName(),"CBR_DATA") == 0){
+		numCbrDataRoute++;
+		stats->incStressSum();
+	}
 
     // route packet
     if (!datagram->getDestAddress().isMulticast())
@@ -199,6 +216,7 @@ void IP::handleMessageFromHL(cPacket *msg)
 
 void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL)
 {
+
     // TBD add option handling code here
 
     IPAddress destAddr = datagram->getDestAddress();
@@ -262,6 +280,13 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL)
     // default: send datagram to fragmentation
     EV << "output interface is " << destIE->getName() << ", next-hop address: " << nextHopAddr << "\n";
     numForwarded++;
+
+	//hoang
+	if(strcmp(datagram->getName(),"CBR_DATA") == 0){
+		numCbrDataRoute++;
+		stats->incStressSum();
+	}
+
 
     //
     // fragment and send the packet
@@ -597,4 +622,29 @@ void IP::sendDatagramToOutput(IPDatagram *datagram, InterfaceEntry *ie, IPAddres
 
 }
 
+//hoang
+void IP::finish(){
 
+	//recordScalar("HOANG numCbrDataRoute",numCbrDataRoute);
+
+	//stats->addToStressSum(numCbrDataRoute);
+
+	//globalStatistics->recordOutVector("HOANG numCbrDataRoute",numCbrDataRoute);
+
+	//rt->printRoutingTable();
+
+	//recordScalar("HOANG node numRoute",rt->getNumRoutes());
+
+/*	linkStressCounter.collect(numCbrDataRoute);
+
+	FILE* f;
+
+	f = fopen ("HOANG.txt" , "a");
+
+	linkStressCounter.saveToFile(f);
+
+	fclose(f);*/
+
+	//recordStatistic("HOANG stat numCbrDataRoute",numCbrDataRoute);
+
+}

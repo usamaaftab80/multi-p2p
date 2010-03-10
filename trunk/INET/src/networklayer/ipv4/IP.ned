@@ -84,6 +84,7 @@ package inet.networklayer.ipv4;
 simple IP
 {
     parameters:
+        string statsModulePath; //hoang
         double procDelay @unit("s") = default(0s);
         int timeToLive = default(32);
         int multicastTimeToLive;
