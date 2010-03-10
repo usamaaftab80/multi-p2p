@@ -306,6 +306,7 @@ OBJS = \
     $O/transport/tcp/queues/TCPVirtualDataRcvQueue.o \
     $O/transport/udp/UDP.o \
     $O/util/opp_utils.o \
+    $O/util/StatisticsCollector.o \
     $O/util/NAMTraceWriter.o \
     $O/util/ThruputMeteringChannel.o \
     $O/util/XMLUtils.o \
@@ -1955,6 +1956,7 @@ $O/networklayer/ipv4/IP.o: networklayer/ipv4/IP.cc \
 	networklayer/ipv4/IPv4InterfaceData.h \
 	networklayer/common/IInterfaceTable.h \
 	base/QueueBase.h \
+	util/StatisticsCollector.h \
 	networklayer/ipv4/IPDatagram_m.h \
 	networklayer/ipv4/IPDatagram.h \
 	base/ReassemblyBuffer.h \
@@ -4312,6 +4314,8 @@ $O/util/common.o: util/common.cc \
 	util/common.h \
 	base/INETDefs.h \
 	networklayer/contract/IPAddress.h
+$O/util/StatisticsCollector.o: util/StatisticsCollector.cc \
+	util/StatisticsCollector.h
 $O/util/XMLUtils.o: util/XMLUtils.cc \
 	util/XMLUtils.h \
 	networklayer/contract/IPvXAddress.h \
