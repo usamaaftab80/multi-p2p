@@ -26,6 +26,8 @@ void StatisticsCollector::initialize()
 
 	hopCountVector.setName("HOANG hopCount mean");
 	linkStressVector.setName("HOANG linkStress");
+	nodeCountVector.setName("HOANG num IP node");
+	linkCountVector.setName("HOANG num physical link");
 
 	calculateNumPhysicalLink();
 
@@ -41,9 +43,13 @@ void StatisticsCollector::handleMessage(cMessage *msg)
 
 		scheduleAt(simTime() + statisticsPeriod, timerMsg);
 
+		calculateNumPhysicalLink();
+
 		hopCountVector.record(hopCountStats.getMean());
 
-		linkStressVector.record(getLinkStress());
+		linkCountVector.record(numPhysicalLink);
+
+		//linkStressVector.record(getLinkStress());
 
 	} else {
 
@@ -94,6 +100,12 @@ void StatisticsCollector::collectHopCount(int hopCount)
 	hopCountStats.collect(hopCount);
 }
 
+void StatisticsCollector::recordLinkStress()
+{
+	//double avgLinkStress = stressSum / numPhysicalLink;
+
+	linkStressVector.record(getLinkStress());
+}
 
 void StatisticsCollector::finish()
 {
@@ -134,14 +146,39 @@ void StatisticsCollector::calculateNumPhysicalLink()
 	//topo.extractByProperty("node");
 	topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*] **.accessRouter[*] **.backboneRouter[*]").asVector());
 
-	std::cout << "has a topo of " << topo.getNumNodes() << " nodes" << endl;
+	//std::cout << "has a topo of " << topo.getNumNodes() << " nodes" << endl;
 
-	for (int i=0; i<topo.getNumNodes(); i++)
+
+	/*for (int i=0; i<topo.getNumNodes(); i++)
+	{
+	  cTopology::Node *node = topo.getNode(i);
+	  numLink += node->getNumOutLinks();
+
+	  std::cout << "\nNode i=" << i << " is " << node->getModule()->getFullPath() << endl;
+	  std::cout << " It has " << node->getNumOutLinks() << " conns to other nodes\n";
+	  std::cout << " and " << node->getNumInLinks() << " conns from other nodes\n";
+
+	  std::cout << " Connections to other modules are:\n";
+	  for (int j=0; j<node->getNumOutLinks(); j++)
+	  {
+		cTopology::Node *neighbour = node->getLinkOut(j)->getRemoteNode();
+		cGate *gate = node->getLinkOut(j)->getLocalGate();
+		std::cout << " " << neighbour->getModule()->getFullPath()
+		   << " through gate " << gate->getFullName() << endl;
+	  }
+
+	}*/
+
+	int numNode = topo.getNumNodes();
+
+	nodeCountVector.record(numNode);
+
+	for (int i=0; i<numNode ; i++)
 	{
 	  cTopology::Node *node = topo.getNode(i);
 	  numLink += node->getNumOutLinks();
 	}
 
-	setNumPhysicalLink(numLink);
+	numPhysicalLink = numLink;
 
 }
