@@ -186,6 +186,9 @@ void BaseOverlay::initialize(int stage)
         cModule *modp = simulation.getModuleByPath(statsModulePath);
         stats = check_and_cast<StatisticsCollector *>(modp);
 
+        //defaultTimeToLive = par("timeToLive");
+        defaultTimeToLive = 32;
+
         WATCH(numAppDataSent);
         WATCH(bytesAppDataSent);
         WATCH(numAppLookupSent);
@@ -694,13 +697,11 @@ void BaseOverlay::handleMessage(cMessage* msg)
         //hoang
         //std::cout << "HOANG Da len den OverLay TTL " << udpControlInfo->getTimeToLive() << endl;
 
-        int hopCount = 32 - udpControlInfo->getTimeToLive();
+        int hopCount = defaultTimeToLive - udpControlInfo->getTimeToLive();
 
-        hopCounter.collect(hopCount);
         stats->collectHopCount(hopCount);
 
-        globalStatistics->recordOutVector("HOANG udp hop count",hopCount);
-        globalStatistics->recordOutVector("HOANG udp hop counter mean",hopCounter.getMean());
+        //globalStatistics->recordOutVector("HOANG udp hop count",hopCount);
 
         delete udpControlInfo;
 

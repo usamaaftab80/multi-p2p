@@ -131,8 +131,9 @@ private://fields: statistics
     int joinRetries; /**< number of join retries */
 
     //hoang
-    cStdDev hopCounter;
     StatisticsCollector *stats;
+    int defaultTimeToLive;
+
 
 protected:
 

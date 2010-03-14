@@ -3604,7 +3604,7 @@ void Nice::hoangCheckLeader(){
 
                     int size = clusters[i].getSize();
 
-                    std::cout << thisNode.getAddress() << ": is leader layer " << i << " cluster size " << size << endl;
+                    //std::cout << thisNode.getAddress() << ": is leader layer " << i << " cluster size " << size << endl;
 
                     std::string str = "HOANG num leaders layer " + to_string(i);
 
