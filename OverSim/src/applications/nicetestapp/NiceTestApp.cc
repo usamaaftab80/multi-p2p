@@ -142,43 +142,14 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
         if(isSender){
 
-        	//tinh so link cua cac node //hoang
+        	//hoang
+        	// record AvgLinkStress of previous packet
+        	// and reset StressSum counter
+        	// before send a new packet
 
-        	int numLink = 0;
+        	stats->recordLinkStress();
 
-        	cTopology topo;
-
-        	//topo.extractByProperty("node");
-        	topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*] **.accessRouter[*] **.backboneRouter[*]").asVector());
-
-			std::cout << "\nIP " << thisNode.getAddress() << " has a topo of " << topo.getNumNodes() << " nodes" << endl;
-
-			for (int i=0; i<topo.getNumNodes(); i++)
-			{
-			  cTopology::Node *node = topo.getNode(i);
-			  numLink += node->getNumOutLinks();
-
-			  /*std::cout << "\nNode i=" << i << " is " << node->getModule()->getFullPath() << endl;
-			  std::cout << " It has " << node->getNumOutLinks() << " conns to other nodes\n";
-			  std::cout << " and " << node->getNumInLinks() << " conns from other nodes\n";
-
-			  std::cout << " Connections to other modules are:\n";
-			  for (int j=0; j<node->getNumOutLinks(); j++)
-			  {
-				cTopology::Node *neighbour = node->getLinkOut(j)->getRemoteNode();
-				cGate *gate = node->getLinkOut(j)->getLocalGate();
-				std::cout << " " << neighbour->getModule()->getFullPath()
-				   << " through gate " << gate->getFullName() << endl;
-			  }*/
-
-			}
-
-			stats->setNumPhysicalLink(numLink);
-
-			/*globalStatistics->recordOutVector("HOANG num physical links",numLink / 2);
-			globalStatistics->addStdDev("HOANG num physical links",numLink / 2);*/
-
-
+        	stats->resetStressSum();
 
 			//send data
 
@@ -198,8 +169,8 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
                 //string data = (thisNode.getAddress()).str() + " HOANG ";
                 //char* data = strcat((thisNode.getAddress()).str()," HOANG ");
 
-                char* data = " HOANG ";
-                pingPongPkt->setData(data);
+                /*char* data = " HOANG ";
+                pingPongPkt->setData(data);*/
 
 
                 RECORD_STATS(numSent++);                       // update statistics

@@ -40,9 +40,9 @@ network InetUnderlayNetwork
         int outRouterNum;    // set to 1 if you want to use a TunOutRouter as connection to a real network
         double connectivity;    // degree of connectivity of backbone routers (1 = every backbone router is connected to all the others)
         @display("bgl=49");
-    submodules:              
+    submodules:
         underlayConfigurator: InetUnderlayConfigurator {
-            @display("p=70,160");
+            @display("p=70,120");
         }
         backboneRouter[backboneRouterNum]: Router {
             parameters:
@@ -74,9 +74,11 @@ network InetUnderlayNetwork
                 @display("i=block/control;p=70,50");
         }
         churnGenerator[0]: ChurnGenerator {
-            @display("p=70,240,column");
+            @display("p=70,190,column");
         }
-        statisticsCollector: StatisticsCollector; //hoang
+        statisticsCollector: StatisticsCollector {
+            @display("p=70,261,column");
+        } //hoang
     connections allowunconnected:
 
         //
