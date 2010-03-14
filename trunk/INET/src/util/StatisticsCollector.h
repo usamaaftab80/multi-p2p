@@ -34,6 +34,8 @@ class StatisticsCollector : public cSimpleModule
     cLongHistogram hopCountStats;
     cOutVector hopCountVector;
     cOutVector linkStressVector;
+    cOutVector nodeCountVector;
+    cOutVector linkCountVector;
 
     cMessage *timerMsg;
     simtime_t statisticsPeriod;
@@ -53,6 +55,10 @@ class StatisticsCollector : public cSimpleModule
       void calculateNumPhysicalLink();
 
       void collectHopCount(int hopCount);
+
+      void resetStressSum(){stressSum = 0;};
+
+      void recordLinkStress();
 
       ~StatisticsCollector();
 
