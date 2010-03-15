@@ -37,6 +37,7 @@ IPControlInfo_Base::IPControlInfo_Base() : cObject()
     this->diffServCodePoint_var = 0;
     this->timeToLive_var = 0;
     this->dontFragment_var = 0;
+    this->minBW_var = 0;
 }
 
 IPControlInfo_Base::IPControlInfo_Base(const IPControlInfo_Base& other) : cObject()
@@ -59,6 +60,7 @@ IPControlInfo_Base& IPControlInfo_Base::operator=(const IPControlInfo_Base& othe
     this->diffServCodePoint_var = other.diffServCodePoint_var;
     this->timeToLive_var = other.timeToLive_var;
     this->dontFragment_var = other.dontFragment_var;
+    this->minBW_var = other.minBW_var;
     return *this;
 }
 
@@ -71,6 +73,7 @@ void IPControlInfo_Base::parsimPack(cCommBuffer *b)
     doPacking(b,this->diffServCodePoint_var);
     doPacking(b,this->timeToLive_var);
     doPacking(b,this->dontFragment_var);
+    doPacking(b,this->minBW_var);
 }
 
 void IPControlInfo_Base::parsimUnpack(cCommBuffer *b)
@@ -82,6 +85,7 @@ void IPControlInfo_Base::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->diffServCodePoint_var);
     doUnpacking(b,this->timeToLive_var);
     doUnpacking(b,this->dontFragment_var);
+    doUnpacking(b,this->minBW_var);
 }
 
 IPAddress& IPControlInfo_Base::getDestAddr()
@@ -154,6 +158,16 @@ void IPControlInfo_Base::setDontFragment(bool dontFragment_var)
     this->dontFragment_var = dontFragment_var;
 }
 
+double IPControlInfo_Base::getMinBW() const
+{
+    return minBW_var;
+}
+
+void IPControlInfo_Base::setMinBW(double minBW_var)
+{
+    this->minBW_var = minBW_var;
+}
+
 class IPControlInfoDescriptor : public cClassDescriptor
 {
   public:
@@ -201,7 +215,7 @@ const char *IPControlInfoDescriptor::getProperty(const char *propertyname) const
 int IPControlInfoDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 7+basedesc->getFieldCount(object) : 7;
+    return basedesc ? 8+basedesc->getFieldCount(object) : 8;
 }
 
 unsigned int IPControlInfoDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -220,6 +234,7 @@ unsigned int IPControlInfoDescriptor::getFieldTypeFlags(void *object, int field)
         case 4: return FD_ISEDITABLE;
         case 5: return FD_ISEDITABLE;
         case 6: return FD_ISEDITABLE;
+        case 7: return FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -240,6 +255,7 @@ const char *IPControlInfoDescriptor::getFieldName(void *object, int field) const
         case 4: return "diffServCodePoint";
         case 5: return "timeToLive";
         case 6: return "dontFragment";
+        case 7: return "minBW";
         default: return NULL;
     }
 }
@@ -260,6 +276,7 @@ const char *IPControlInfoDescriptor::getFieldTypeString(void *object, int field)
         case 4: return "unsigned char";
         case 5: return "short";
         case 6: return "bool";
+        case 7: return "double";
         default: return NULL;
     }
 }
@@ -311,6 +328,7 @@ bool IPControlInfoDescriptor::getFieldAsString(void *object, int field, int i, c
         case 4: ulong2string(pp->getDiffServCodePoint(),resultbuf,bufsize); return true;
         case 5: long2string(pp->getTimeToLive(),resultbuf,bufsize); return true;
         case 6: bool2string(pp->getDontFragment(),resultbuf,bufsize); return true;
+        case 7: double2string(pp->getMinBW(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -330,6 +348,7 @@ bool IPControlInfoDescriptor::setFieldAsString(void *object, int field, int i, c
         case 4: pp->setDiffServCodePoint(string2ulong(value)); return true;
         case 5: pp->setTimeToLive(string2long(value)); return true;
         case 6: pp->setDontFragment(string2bool(value)); return true;
+        case 7: pp->setMinBW(string2double(value)); return true;
         default: return false;
     }
 }

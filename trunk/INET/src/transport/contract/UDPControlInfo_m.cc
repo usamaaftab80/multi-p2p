@@ -56,6 +56,7 @@ UDPControlInfo::UDPControlInfo() : cObject()
     this->destPort_var = 0;
     this->interfaceId_var = -1;
     this->timeToLive_var = 0;
+    this->minBW_var = 0;
 }
 
 UDPControlInfo::UDPControlInfo(const UDPControlInfo& other) : cObject()
@@ -79,6 +80,7 @@ UDPControlInfo& UDPControlInfo::operator=(const UDPControlInfo& other)
     this->destPort_var = other.destPort_var;
     this->interfaceId_var = other.interfaceId_var;
     this->timeToLive_var = other.timeToLive_var;
+    this->minBW_var = other.minBW_var;
     return *this;
 }
 
@@ -92,6 +94,7 @@ void UDPControlInfo::parsimPack(cCommBuffer *b)
     doPacking(b,this->destPort_var);
     doPacking(b,this->interfaceId_var);
     doPacking(b,this->timeToLive_var);
+    doPacking(b,this->minBW_var);
 }
 
 void UDPControlInfo::parsimUnpack(cCommBuffer *b)
@@ -104,6 +107,7 @@ void UDPControlInfo::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->destPort_var);
     doUnpacking(b,this->interfaceId_var);
     doUnpacking(b,this->timeToLive_var);
+    doUnpacking(b,this->minBW_var);
 }
 
 int UDPControlInfo::getSockId() const
@@ -186,6 +190,16 @@ void UDPControlInfo::setTimeToLive(int timeToLive_var)
     this->timeToLive_var = timeToLive_var;
 }
 
+double UDPControlInfo::getMinBW() const
+{
+    return minBW_var;
+}
+
+void UDPControlInfo::setMinBW(double minBW_var)
+{
+    this->minBW_var = minBW_var;
+}
+
 class UDPControlInfoDescriptor : public cClassDescriptor
 {
   public:
@@ -232,7 +246,7 @@ const char *UDPControlInfoDescriptor::getProperty(const char *propertyname) cons
 int UDPControlInfoDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 8+basedesc->getFieldCount(object) : 8;
+    return basedesc ? 9+basedesc->getFieldCount(object) : 9;
 }
 
 unsigned int UDPControlInfoDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -252,6 +266,7 @@ unsigned int UDPControlInfoDescriptor::getFieldTypeFlags(void *object, int field
         case 5: return FD_ISEDITABLE;
         case 6: return FD_ISEDITABLE;
         case 7: return FD_ISEDITABLE;
+        case 8: return FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -273,6 +288,7 @@ const char *UDPControlInfoDescriptor::getFieldName(void *object, int field) cons
         case 5: return "destPort";
         case 6: return "interfaceId";
         case 7: return "timeToLive";
+        case 8: return "minBW";
         default: return NULL;
     }
 }
@@ -294,6 +310,7 @@ const char *UDPControlInfoDescriptor::getFieldTypeString(void *object, int field
         case 5: return "int";
         case 6: return "int";
         case 7: return "int";
+        case 8: return "double";
         default: return NULL;
     }
 }
@@ -343,6 +360,7 @@ bool UDPControlInfoDescriptor::getFieldAsString(void *object, int field, int i, 
         case 5: long2string(pp->getDestPort(),resultbuf,bufsize); return true;
         case 6: long2string(pp->getInterfaceId(),resultbuf,bufsize); return true;
         case 7: long2string(pp->getTimeToLive(),resultbuf,bufsize); return true;
+        case 8: double2string(pp->getMinBW(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -363,6 +381,7 @@ bool UDPControlInfoDescriptor::setFieldAsString(void *object, int field, int i, 
         case 5: pp->setDestPort(string2long(value)); return true;
         case 6: pp->setInterfaceId(string2long(value)); return true;
         case 7: pp->setTimeToLive(string2long(value)); return true;
+        case 8: pp->setMinBW(string2double(value)); return true;
         default: return false;
     }
 }

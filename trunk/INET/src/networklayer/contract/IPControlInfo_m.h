@@ -46,6 +46,8 @@
  *     unsigned char diffServCodePoint;  
  *     short timeToLive;     
  *     bool dontFragment;    
+ *     
+ *     double minBW;
  * }
  * </pre>
  *
@@ -80,6 +82,7 @@ class INET_API IPControlInfo_Base : public cObject
     unsigned char diffServCodePoint_var;
     short timeToLive_var;
     bool dontFragment_var;
+    double minBW_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const IPControlInfo_Base&);
@@ -112,6 +115,8 @@ class INET_API IPControlInfo_Base : public cObject
     virtual void setTimeToLive(short timeToLive_var);
     virtual bool getDontFragment() const;
     virtual void setDontFragment(bool dontFragment_var);
+    virtual double getMinBW() const;
+    virtual void setMinBW(double minBW_var);
 };
 
 /**

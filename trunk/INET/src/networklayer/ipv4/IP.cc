@@ -18,7 +18,7 @@
 
 #include <omnetpp.h>
 #include <stdlib.h>
-#include <string.h>
+
 
 #include "IP.h"
 #include "IPDatagram.h"
@@ -278,7 +278,28 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL)
         datagram->setSrcAddress(destIE->ipv4Data()->getIPAddress());
 
     // default: send datagram to fragmentation
-    EV << "output interface is " << destIE->getName() << ", next-hop address: " << nextHopAddr << "\n";
+    //EV << "output interface is " << destIE->getName() << ", next-hop address: " << nextHopAddr << "\n";
+    //std::cout << "output interface is " << destIE->getName() << ", next-hop address: " << nextHopAddr << "\n";
+
+    //hoang
+    int gateID = getPPPgateIDfromName(destIE->getName());
+
+    cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
+
+	cGate* gate = check_and_cast<cGate*>(thisOverlayTerminal->gate("pppg$o",gateID)); //connect to accessRouter
+
+	cDatarateChannel *chan = check_and_cast<cDatarateChannel *>(gate->getChannel());
+
+	double bw = chan->getDatarate();
+
+	if(bw < datagram->getMinBW()){
+
+		datagram->setMinBW(chan->getDatarate()); //update MinBW
+
+	}
+
+
+    //std::cout << "ID " << gateID << endl;
     numForwarded++;
 
 	//hoang
@@ -454,6 +475,7 @@ cPacket *IP::decapsulateIP(IPDatagram *datagram)
     controlInfo->setInterfaceId(fromIE ? fromIE->getInterfaceId() : -1);
     //hoang
     controlInfo->setTimeToLive(datagram->getTimeToLive());
+    controlInfo->setMinBW(datagram->getMinBW());
 
     // original IP datagram might be needed in upper layers to send back ICMP error message
     controlInfo->setOrigDatagram(datagram);
@@ -531,6 +553,10 @@ IPDatagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE)
 {
     IPControlInfo *controlInfo = check_and_cast<IPControlInfo*>(transportPacket->removeControlInfo());
     IPDatagram *datagram = encapsulate(transportPacket, destIE, controlInfo);
+
+    //hoang
+    datagram->setMinBW(controlInfo->getMinBW());
+
     delete controlInfo;
     return datagram;
 }
@@ -581,6 +607,9 @@ IPDatagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, I
 
     datagram->setTimeToLive(ttl);
     datagram->setTransportProtocol(controlInfo->getProtocol());
+
+    //hoang
+    datagram->setMinBW(controlInfo->getMinBW());
 
     // setting IP options is currently not supported
 
@@ -647,4 +676,15 @@ void IP::finish(){
 
 	//recordStatistic("HOANG stat numCbrDataRoute",numCbrDataRoute);
 
+}
+
+int IP::getPPPgateIDfromName(string name)
+{
+	size_t pos = name.find("ppp");
+
+	string strID = name.substr(pos + 3); // string "ppp" length=3
+
+	int ID = atoi(strID.c_str()); //convert string to int
+
+	return ID;
 }

@@ -23,6 +23,7 @@ void StatisticsCollector::initialize()
 {
 	stressSum = 0;
 	numPhysicalLink = 0;
+	numRecordStress = 0;
 
 	hopCountVector.setName("HOANG hopCount mean");
 	linkStressVector.setName("HOANG linkStress");
@@ -103,7 +104,9 @@ void StatisticsCollector::collectHopCount(int hopCount)
 void StatisticsCollector::recordLinkStress()
 {
 	//double avgLinkStress = stressSum / numPhysicalLink;
+	numRecordStress++;
 
+	//linkStressVector.record(getLinkStress()/simTime().dbl()/numRecordStress);
 	linkStressVector.record(getLinkStress());
 }
 
@@ -146,10 +149,9 @@ void StatisticsCollector::calculateNumPhysicalLink()
 	//topo.extractByProperty("node");
 	topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*] **.accessRouter[*] **.backboneRouter[*]").asVector());
 
-	//std::cout << "has a topo of " << topo.getNumNodes() << " nodes" << endl;
+	/*std::cout << "\nThis topo has " << topo.getNumNodes() << " nodes" << endl;
 
-
-	/*for (int i=0; i<topo.getNumNodes(); i++)
+	for (int i=0; i<topo.getNumNodes(); i++)
 	{
 	  cTopology::Node *node = topo.getNode(i);
 	  numLink += node->getNumOutLinks();
@@ -163,8 +165,14 @@ void StatisticsCollector::calculateNumPhysicalLink()
 	  {
 		cTopology::Node *neighbour = node->getLinkOut(j)->getRemoteNode();
 		cGate *gate = node->getLinkOut(j)->getLocalGate();
+		cDatarateChannel *chan = check_and_cast<cDatarateChannel *>(gate->getChannel());
+		double d = (chan->getDelay()).dbl();
+		double e = chan->getBitErrorRate();
+		double r = chan->getDatarate();
+
 		std::cout << " " << neighbour->getModule()->getFullPath()
-		   << " through gate " << gate->getFullName() << endl;
+		   << " through gate " << gate->getFullName()
+		   << " channel Delay " << d << " BER " << e << " Datarate " << r << endl;
 	  }
 
 	}*/

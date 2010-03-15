@@ -63,6 +63,8 @@ class IPControlInfo
     unsigned char diffServCodePoint;  // for QoS
     short timeToLive;     // maximum hop count
     bool dontFragment;    // "don't fragment" bit
+    //hoang
+    double minBW;
 }
 
 
