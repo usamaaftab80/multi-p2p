@@ -40,6 +40,10 @@ class StatisticsCollector : public cSimpleModule
     cMessage *timerMsg;
     simtime_t statisticsPeriod;
 
+    int numRecordStress;
+
+    double xw,xd;
+
   public:
 
 	  void addToStressSum(int num);
@@ -59,6 +63,11 @@ class StatisticsCollector : public cSimpleModule
       void resetStressSum(){stressSum = 0;};
 
       void recordLinkStress();
+
+      double getXw(){return xw;};
+      double getXd(){return xd;};
+      void setXw(double xw_var){ xw = xw_var ;};
+      void setXd(double xd_var){ xd = xd_var ;};
 
       ~StatisticsCollector();
 

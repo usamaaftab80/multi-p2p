@@ -76,5 +76,6 @@ class UDPControlInfo
     int destPort;  // \UDP destination port in packet
     int interfaceId = -1; // interface on which pk was received/should be sent (see InterfaceTable)
     int timeToLive; //hoang
+    double minBW;
 }
 

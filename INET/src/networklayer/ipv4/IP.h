@@ -29,6 +29,8 @@
 #include "ProtocolMap.h"
 
 #include "StatisticsCollector.h"
+
+using namespace std;
 //#include "/home/admin/sim/OverSim-20090908/src/common/GlobalStatistics.h";
 
 class ARPPacket;
@@ -175,6 +177,9 @@ class INET_API IP : public QueueBase
 	 * finish //hoang
 	 */
 	virtual void finish();
+
+	int getPPPgateIDfromName(string name);
+
 };
 
 #endif
