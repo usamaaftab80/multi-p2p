@@ -703,6 +703,11 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         //globalStatistics->recordOutVector("HOANG udp hop count",hopCount);
 
+        kw = udpControlInfo->getMinBW();
+
+        //cout << " vua nhan dc packet kw=" << kw << endl;
+
+
         delete udpControlInfo;
 
         // debug message
@@ -1958,5 +1963,20 @@ void BaseOverlay::sendMessageToAllComp(cMessage* msg, CompType srcComp)
 bool BaseOverlay::isInSimpleMultiOverlayHost()
 {
     return isVector() || getParentModule()->isVector();
+}
+
+void BaseOverlay::requestKdKwFromNetwork()
+{
+	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
+
+	cGate* gate = check_and_cast<cGate*>(thisOverlayTerminal->gate("pppg$o",0)); //connect to accessRouter
+
+	cDatarateChannel *chan = check_and_cast<cDatarateChannel *>(gate->getChannel());
+
+	kd = (chan->getDelay()).dbl();
+	//double e = chan->getBitErrorRate();
+	kw = chan->getDatarate();
+
+	//std::cout << "Terminal " << thisOverlayTerminal->getFullName() << " gate " << gate->getFullName() << " kd " << kd << " kw " << kw << endl;
 }
 
