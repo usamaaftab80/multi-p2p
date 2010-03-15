@@ -131,11 +131,12 @@ private://fields: statistics
     int joinRetries; /**< number of join retries */
 
     //hoang
-    StatisticsCollector *stats;
     int defaultTimeToLive;
 
 
 protected:
+	//hoang
+	StatisticsCollector *stats;
 
     /**
      * Structure for computing the average delay in one specific hop
@@ -804,6 +805,18 @@ private:
     typedef std::map<CompType, std::pair<cModule*, cGate*> > CompModuleList;
     CompModuleList compModuleList;
     bool internalReadyState; /**< internal overlay state used for setOverlayReady() */
+
+    //hoang
+protected:
+	double kd;
+	double kw;
+
+public:
+	double getKd(){ return kd; };
+	double getKw(){ return kw; };
+	void setKd(double kd_var){ kd = kd_var; };
+	void setKw(double kw_var){ kw = kw_var; };
+	void requestKdKwFromNetwork();
 
 };
 

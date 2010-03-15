@@ -37,8 +37,21 @@ class NiceTestApp : public BaseApp
     void handleUDPMessage(cMessage* msg);          // called when we receive a UDP message
     void handleLowerMessage(cMessage* msg);          // called when we receive a message from lowertier
     void encapAndSendCbrAppMsg(cMessage* msg);
+
+	double lastPacketTime;
+	static double xw,xd;
+
+	//timers
+    cMessage* changeXdTimer;
+    simtime_t changeXdInterval;
+
+    double getXw(){return xw;};
+    double getXd(){return xd;};
+    void setXw(double xw_var){ xw = xw_var ;};
+    void setXd(double xd_var){ xd = xd_var ;};
 };
 
-
+double NiceTestApp::xd = 0;
+double NiceTestApp::xw = 0;
 
 #endif /* NICETESTAPP_H_ */

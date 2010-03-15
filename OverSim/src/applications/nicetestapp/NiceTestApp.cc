@@ -88,6 +88,8 @@ void NiceTestApp::initializeApp(int stage)
 	cModule *modp = simulation.getModuleByPath(statsModulePath);
 	stats = check_and_cast<StatisticsCollector *>(modp);
 
+	lastPacketTime = simTime().dbl();
+
     // tell the GUI to display our variables
 
     WATCH(numSent);
@@ -95,8 +97,17 @@ void NiceTestApp::initializeApp(int stage)
 
     // start our timer!
 
-    timerMsg = new cMessage("NiceTestApp Timer");
+    timerMsg = new cMessage("NiceTestAppTimer");
     scheduleAt(simTime() + sendPeriod, timerMsg);
+
+    if(isSender){
+    	xd = dblrand();
+    	stats->setXd(xd);
+		//changeXdInterval = par("changeXdInterval");
+		changeXdInterval = 10;
+		changeXdTimer = new cMessage("changeXdTimer");
+		scheduleAt(simTime() + changeXdInterval, changeXdTimer);
+    }
 
     bindToPort(2000);
 }
@@ -133,7 +144,9 @@ void NiceTestApp::finishApp()
 void NiceTestApp::handleTimerEvent(cMessage* msg)
 {
 
-    if (msg == timerMsg) {    // is this our timer?
+    if (msg->isName("NiceTestAppTimer")) {    // is this our timer?
+
+    	//cout << thisNode.getAddress() << " xd=" << xd << " xw=" << xw << endl;
 
         scheduleAt(simTime() + sendPeriod, timerMsg); // reschedule our message
 
@@ -149,13 +162,11 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
         	stats->recordLinkStress();
 
-        	stats->resetStressSum();
+        	//stats->resetStressSum();
 
 			//send data
 
             for (int i = 0; i < numToSend; i++) {
-
-                //OverlayKey randomKey(intuniform(1, largestKey)); // let's create a random key
 
                 NiceTestAppMsg *pingPongPkt;                            // the message we'll send
                 pingPongPkt = new NiceTestAppMsg();
@@ -164,7 +175,6 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
                 pingPongPkt->setType(MYMSG_PING);                  // set the message type to PING
                 pingPongPkt->setSenderAddress(thisNode);   // set the sender address to our own
-                //pingPongPkt->setByteLength(100);                       // set the message length to 100 bytes
 
                 //string data = (thisNode.getAddress()).str() + " HOANG ";
                 //char* data = strcat((thisNode.getAddress()).str()," HOANG ");
@@ -172,25 +182,45 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
                 /*char* data = " HOANG ";
                 pingPongPkt->setData(data);*/
 
-
                 RECORD_STATS(numSent++);                       // update statistics
                 //cout << ". I created " << numSent << " msg" << endl;
                 //hoang
-                //pingPongPkt->setByteLength(100+numSent);
-                //std::cout << thisNode.ip << ": Sending packet to " << randomKey << "!" << std::endl;
-                //callRoute(randomKey, myMessage); // send it to the overlay
+
+                int maxByte = 1000;
+                int length = intrand(maxByte); //random length
+                //cout << "length=" << length << endl;
+                while (!(length > 0)){
+                    length = intrand(maxByte);
+                }
+
+                //pingPongPkt->setByteLength(length);
+
+                double thisPacketTime = simTime().dbl(); //or read from trace file
+
+                xw = (double)length / (thisPacketTime - lastPacketTime); //datarate for this packet
+
+                stats->setXw(xw);
 
                 //hoang
                 encapAndSendCbrAppMsg(pingPongPkt);
             }
         }
 
-    } else {
+    }
 
-        delete msg; // who knows what this packet is?
+    else if (msg->isName("changeXdTimer")){
+
+    	scheduleAt(simTime() + changeXdInterval, changeXdTimer);
+
+    	//xd = cRNG::doubleRand(0.5);
+    	xd = dblrand();
+
+    	stats->setXd(xd);
 
     }
 
+    else
+        delete msg; // who knows what this packet is?
 }
 
 // handleUDPMessage is called when we receive a message from UDP.
@@ -232,18 +262,7 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 
             cPacket* hoang_msg = cbrMsg->decapsulate();
 
-            //hoang_msg->get
-
             if(dynamic_cast<NiceTestAppMsg*> (hoang_msg)){
-
-                /*if(dynamic_cast<IPDatagram*> (hoang_msg)){
-
-                    IPDatagram datagram = check_and_cast<IPDatagram*>(hoang_msg);
-
-                    std::cout<< "HOANG timeToLive IPdataGram " << datagram->getTimeToLive() << endl;
-
-                }*/
-
 
                 NiceTestAppMsg* myMsg = check_and_cast<NiceTestAppMsg*>(hoang_msg);
 
@@ -298,12 +317,17 @@ void NiceTestApp::encapAndSendCbrAppMsg(cMessage* msg)
         cbrMsg->setCommand(0); //CBR_DATA
         cbrMsg->setName("CBR_DATA");
         cbrMsg->setSrcNode(thisNode.getAddress());
-        //cbrMsg->setByteLength(100);
 
         cbrMsg->encapsulate(pingPongPkt);
 
+        lastPacketTime = simTime().dbl();
+
         //send(pingPongPkt,"to_lowerTier");
         //cout << "Source.IP: " << cbrMsg->getSrcNode() << " length: " << cbrMsg->getByteLength() << endl;
+
+        //cout << "xd=" << stats->getXd() << " xw=" << stats->getXw() << endl;
+        //cout << "xd=" << xd << " xw=" << xw << endl;
+
         send(cbrMsg,"to_lowerTier");
     }
 
