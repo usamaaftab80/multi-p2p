@@ -148,6 +148,7 @@ packet IPDatagram
     IPSourceRoutingOption sourceRoutingOption; // optionCode determines if strict or loose source routing
     //hoang
     double minBW;
+    double delayInfo;
 }
 
 //

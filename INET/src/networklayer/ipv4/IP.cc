@@ -298,6 +298,8 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL)
 
 	}
 
+	datagram->setDelayInfo(datagram->getDelayInfo() + chan->getDelay().dbl());
+
 
     //std::cout << "ID " << gateID << endl;
     numForwarded++;
@@ -476,6 +478,7 @@ cPacket *IP::decapsulateIP(IPDatagram *datagram)
     //hoang
     controlInfo->setTimeToLive(datagram->getTimeToLive());
     controlInfo->setMinBW(datagram->getMinBW());
+    controlInfo->setDelayInfo(datagram->getDelayInfo());
 
     // original IP datagram might be needed in upper layers to send back ICMP error message
     controlInfo->setOrigDatagram(datagram);
@@ -556,6 +559,7 @@ IPDatagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE)
 
     //hoang
     datagram->setMinBW(controlInfo->getMinBW());
+    datagram->setDelayInfo(controlInfo->getDelayInfo());
 
     delete controlInfo;
     return datagram;
@@ -610,6 +614,7 @@ IPDatagram *IP::encapsulate(cPacket *transportPacket, InterfaceEntry *&destIE, I
 
     //hoang
     datagram->setMinBW(controlInfo->getMinBW());
+    datagram->setDelayInfo(controlInfo->getDelayInfo());
 
     // setting IP options is currently not supported
 
