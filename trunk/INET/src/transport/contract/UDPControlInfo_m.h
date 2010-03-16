@@ -81,6 +81,7 @@ enum UDPStatusInd {
  *     int interfaceId = -1; 
  *     int timeToLive; 
  *     double minBW;
+ *     double delayInfo;
  * }
  * </pre>
  */
@@ -96,6 +97,7 @@ class INET_API UDPControlInfo : public cObject
     int interfaceId_var;
     int timeToLive_var;
     double minBW_var;
+    double delayInfo_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const UDPControlInfo&);
@@ -130,6 +132,8 @@ class INET_API UDPControlInfo : public cObject
     virtual void setTimeToLive(int timeToLive_var);
     virtual double getMinBW() const;
     virtual void setMinBW(double minBW_var);
+    virtual double getDelayInfo() const;
+    virtual void setDelayInfo(double delayInfo_var);
 };
 
 inline void doPacking(cCommBuffer *b, UDPControlInfo& obj) {obj.parsimPack(b);}

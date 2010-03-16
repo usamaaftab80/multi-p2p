@@ -906,6 +906,7 @@ IPDatagram::IPDatagram(const char *name, int kind) : cPacket(name,kind)
     this->diffServCodePoint_var = 0;
     this->optionCode_var = IPOPTION_NO_OPTION;
     this->minBW_var = 0;
+    this->delayInfo_var = 0;
 }
 
 IPDatagram::IPDatagram(const IPDatagram& other) : cPacket()
@@ -938,6 +939,7 @@ IPDatagram& IPDatagram::operator=(const IPDatagram& other)
     this->timestampOption_var = other.timestampOption_var;
     this->sourceRoutingOption_var = other.sourceRoutingOption_var;
     this->minBW_var = other.minBW_var;
+    this->delayInfo_var = other.delayInfo_var;
     return *this;
 }
 
@@ -960,6 +962,7 @@ void IPDatagram::parsimPack(cCommBuffer *b)
     doPacking(b,this->timestampOption_var);
     doPacking(b,this->sourceRoutingOption_var);
     doPacking(b,this->minBW_var);
+    doPacking(b,this->delayInfo_var);
 }
 
 void IPDatagram::parsimUnpack(cCommBuffer *b)
@@ -981,6 +984,7 @@ void IPDatagram::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->timestampOption_var);
     doUnpacking(b,this->sourceRoutingOption_var);
     doUnpacking(b,this->minBW_var);
+    doUnpacking(b,this->delayInfo_var);
 }
 
 short IPDatagram::getVersion() const
@@ -1143,6 +1147,16 @@ void IPDatagram::setMinBW(double minBW_var)
     this->minBW_var = minBW_var;
 }
 
+double IPDatagram::getDelayInfo() const
+{
+    return delayInfo_var;
+}
+
+void IPDatagram::setDelayInfo(double delayInfo_var)
+{
+    this->delayInfo_var = delayInfo_var;
+}
+
 class IPDatagramDescriptor : public cClassDescriptor
 {
   public:
@@ -1189,7 +1203,7 @@ const char *IPDatagramDescriptor::getProperty(const char *propertyname) const
 int IPDatagramDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 16+basedesc->getFieldCount(object) : 16;
+    return basedesc ? 17+basedesc->getFieldCount(object) : 17;
 }
 
 unsigned int IPDatagramDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -1217,6 +1231,7 @@ unsigned int IPDatagramDescriptor::getFieldTypeFlags(void *object, int field) co
         case 13: return FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
         case 14: return FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
         case 15: return FD_ISEDITABLE;
+        case 16: return FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -1246,6 +1261,7 @@ const char *IPDatagramDescriptor::getFieldName(void *object, int field) const
         case 13: return "timestampOption";
         case 14: return "sourceRoutingOption";
         case 15: return "minBW";
+        case 16: return "delayInfo";
         default: return NULL;
     }
 }
@@ -1275,6 +1291,7 @@ const char *IPDatagramDescriptor::getFieldTypeString(void *object, int field) co
         case 13: return "IPTimestampOption";
         case 14: return "IPSourceRoutingOption";
         case 15: return "double";
+        case 16: return "double";
         default: return NULL;
     }
 }
@@ -1338,6 +1355,7 @@ bool IPDatagramDescriptor::getFieldAsString(void *object, int field, int i, char
         case 13: {std::stringstream out; out << pp->getTimestampOption(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
         case 14: {std::stringstream out; out << pp->getSourceRoutingOption(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
         case 15: double2string(pp->getMinBW(),resultbuf,bufsize); return true;
+        case 16: double2string(pp->getDelayInfo(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -1363,6 +1381,7 @@ bool IPDatagramDescriptor::setFieldAsString(void *object, int field, int i, cons
         case 10: pp->setDiffServCodePoint(string2ulong(value)); return true;
         case 11: pp->setOptionCode(string2long(value)); return true;
         case 15: pp->setMinBW(string2double(value)); return true;
+        case 16: pp->setDelayInfo(string2double(value)); return true;
         default: return false;
     }
 }

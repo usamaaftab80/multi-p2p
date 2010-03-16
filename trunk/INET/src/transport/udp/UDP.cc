@@ -276,6 +276,7 @@ void UDP::sendUp(cPacket *payload, UDPPacket *udpHeader, IPControlInfo *ipCtrl, 
     //hoang
     udpCtrl->setTimeToLive(ipCtrl->getTimeToLive());
     udpCtrl->setMinBW(ipCtrl->getMinBW());
+    udpCtrl->setDelayInfo(ipCtrl->getDelayInfo());
     //std::cout << "HOANG vua dong ipCtrl vao udpCtrl. TTL " << ipCtrl->getTimeToLive() << endl;
 
     payload->setControlInfo(udpCtrl);
@@ -516,6 +517,7 @@ void UDP::processMsgFromApp(cPacket *appData)
         ipControlInfo->setInterfaceId(udpCtrl->getInterfaceId());
         //hoang
         ipControlInfo->setMinBW(1e100);//init min BW very large
+        ipControlInfo->setDelayInfo(0);//init empty delayInfo
         udpPacket->setControlInfo(ipControlInfo);
         delete udpCtrl;
 

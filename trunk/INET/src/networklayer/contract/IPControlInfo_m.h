@@ -48,6 +48,7 @@
  *     bool dontFragment;    
  *     
  *     double minBW;
+ *     double delayInfo;
  * }
  * </pre>
  *
@@ -83,6 +84,7 @@ class INET_API IPControlInfo_Base : public cObject
     short timeToLive_var;
     bool dontFragment_var;
     double minBW_var;
+    double delayInfo_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const IPControlInfo_Base&);
@@ -117,6 +119,8 @@ class INET_API IPControlInfo_Base : public cObject
     virtual void setDontFragment(bool dontFragment_var);
     virtual double getMinBW() const;
     virtual void setMinBW(double minBW_var);
+    virtual double getDelayInfo() const;
+    virtual void setDelayInfo(double delayInfo_var);
 };
 
 /**

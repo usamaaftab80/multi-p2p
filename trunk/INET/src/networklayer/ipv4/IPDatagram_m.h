@@ -274,6 +274,7 @@ inline void doUnpacking(cCommBuffer *b, IPSourceRoutingOption& obj) {obj.parsimU
  *     IPSourceRoutingOption sourceRoutingOption; 
  *     
  *     double minBW;
+ *     double delayInfo;
  * }
  * </pre>
  */
@@ -296,6 +297,7 @@ class INET_API IPDatagram : public cPacket
     IPTimestampOption timestampOption_var;
     IPSourceRoutingOption sourceRoutingOption_var;
     double minBW_var;
+    double delayInfo_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const IPDatagram&);
@@ -347,6 +349,8 @@ class INET_API IPDatagram : public cPacket
     virtual void setSourceRoutingOption(const IPSourceRoutingOption& sourceRoutingOption_var);
     virtual double getMinBW() const;
     virtual void setMinBW(double minBW_var);
+    virtual double getDelayInfo() const;
+    virtual void setDelayInfo(double delayInfo_var);
 };
 
 inline void doPacking(cCommBuffer *b, IPDatagram& obj) {obj.parsimPack(b);}

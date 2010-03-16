@@ -65,6 +65,7 @@ class IPControlInfo
     bool dontFragment;    // "don't fragment" bit
     //hoang
     double minBW;
+    double delayInfo;
 }
 
 

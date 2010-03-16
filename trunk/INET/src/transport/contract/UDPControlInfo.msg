@@ -77,5 +77,6 @@ class UDPControlInfo
     int interfaceId = -1; // interface on which pk was received/should be sent (see InterfaceTable)
     int timeToLive; //hoang
     double minBW;
+    double delayInfo;
 }
 
