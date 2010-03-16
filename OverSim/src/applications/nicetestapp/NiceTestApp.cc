@@ -162,7 +162,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
         	stats->recordLinkStress();
 
-        	//stats->resetStressSum();
+        	stats->resetStressSum();
 
 			//send data
 
@@ -194,6 +194,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
                 }
 
                 //pingPongPkt->setByteLength(length);
+                pingPongPkt->setBitLength(length);
 
                 double thisPacketTime = simTime().dbl(); //or read from trace file
 

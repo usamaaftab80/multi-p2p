@@ -269,6 +269,11 @@ private:
 
     bool checkedLeader;
 
+    double cost();
+
+    /* Cost with old delay parameter */
+    double cost(simtime_t delay);
+
 };
 
 }; //namespace
