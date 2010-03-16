@@ -705,6 +705,10 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         kw = udpControlInfo->getMinBW();
 
+        kd = udpControlInfo->getDelayInfo();
+
+        //kd = (simTime() - msg->getCreationTime()).dbl();
+
         //cout << " vua nhan dc packet kw=" << kw << endl;
 
 

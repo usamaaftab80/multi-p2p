@@ -807,7 +807,7 @@ private:
     bool internalReadyState; /**< internal overlay state used for setOverlayReady() */
 
     //hoang
-protected:
+private:
 	double kd;
 	double kw;
 

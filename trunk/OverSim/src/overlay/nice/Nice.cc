@@ -550,7 +550,8 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
                 if (it != peerInfos.end()) {
 
-                    double distance = simTime().dbl() - it->second->getDES();
+                    //double distance = simTime().dbl() - it->second->getDES();//hoang
+                	double distance = cost();
 
                     it->second->set_distance(distance);
                     it->second->touch();
@@ -1439,7 +1440,8 @@ void Nice::sendHeartbeats()
 
                 if (it != peerInfos.end()) {
 
-                    it->second->set_distance_estimation_start(simTime().dbl());
+                    //it->second->set_distance_estimation_start(simTime().dbl());//hoang
+                	it->second->set_distance_estimation_start(cost());
 
                 }
 
@@ -1739,7 +1741,8 @@ void Nice::handleHeartbeat(NiceMessage* msg)
                 double oldDistance = it->second->get_distance();
 
                 /* Use Exponential Moving Average with factor 0.1 */
-                double newDistance = (simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2.0;
+                //double newDistance = (simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2.0;//hoang
+                double newDistance = cost();
 
                 if (oldDistance > 0) {
 
@@ -1865,7 +1868,9 @@ void Nice::handleHeartbeat(NiceMessage* msg)
             if (it->second->get_backHB(hbMsg->getSeqRspNo()) > 0) {
 
                 /* Valid distance measurement, get value */
-                it->second->set_distance((simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
+
+                //it->second->set_distance((simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);//hoang
+            	it->second->set_distance(cost());
 
             }
 
@@ -3413,6 +3418,8 @@ void Nice::gracefulLeave(short bottomLayer)
  */
 void Nice::handleAppMessage(cMessage* msg)
 {
+	//hoang
+	//cost();
 
     if (dynamic_cast<CbrAppMessage*>(msg)) {
 
@@ -3626,6 +3633,46 @@ void Nice::hoangCheckLeader(){
         //do nothing, no check anymore
     }
 
+}
+
+double Nice::cost()
+{
+	double cost, kw_var , kd_var, xw, xd;
+	//TODO:get kd, kw from network
+	//requestKdKwFromNetwork();
+	kw_var = getKw();
+	kd_var = getKd();
+
+	//TODO:get xd, xw from app
+
+	xd = stats->getXd();
+	xw = stats->getXw();
+
+	//cost
+	cost = sqrt( (kd_var/(xd-kd_var)) * (xw/(kw_var-xw)) );
+
+	//std::cout << "xd=" << xd << " kd=" << kd_var << " xw=" << xw << " kw=" << kw_var << " cost=" << cost << endl;
+
+	return cost;
+}
+
+double Nice::cost(simtime_t delay)
+{
+	double cost, kw_var , kd_var, xw, xd;
+
+	kw_var = getKw();
+
+	kd_var = delay.dbl();
+
+	xd = stats->getXd();
+	xw = stats->getXw();
+
+	//cost
+	cost = sqrt( (kd_var/(xd-kd_var)) * (xw/(kw_var-xw)) );
+
+	//std::cout << "xd=" << xd << " kd=" << kd_var << " xw=" << xw << " kw=" << kw_var << " cost=" << cost << endl;
+
+	return cost;
 }
 
 }; //namespace
