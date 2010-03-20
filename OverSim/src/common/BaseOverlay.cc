@@ -189,6 +189,8 @@ void BaseOverlay::initialize(int stage)
         //defaultTimeToLive = par("timeToLive");
         defaultTimeToLive = 32;
 
+        maxKd = kw = kd = 0;
+
         WATCH(numAppDataSent);
         WATCH(bytesAppDataSent);
         WATCH(numAppLookupSent);
@@ -705,11 +707,23 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         kw = udpControlInfo->getMinBW();
 
+        if(udpControlInfo->getDelayInfo() > maxKd){
+
+        	maxKd = udpControlInfo->getDelayInfo(); //update maxKd
+
+        }
+
+        if(!(maxKd < stats->getXd())){
+
+        	stats->hardChangeXdForKd(udpControlInfo->getDelayInfo());
+
+        }
+
         kd = udpControlInfo->getDelayInfo();
 
         //kd = (simTime() - msg->getCreationTime()).dbl();
 
-        //cout << " vua nhan dc packet kw=" << kw << endl;
+        //cout << " vua nhan dc packet kw=" << kw << " kd=" << kd << endl;
 
 
         delete udpControlInfo;
@@ -1969,6 +1983,7 @@ bool BaseOverlay::isInSimpleMultiOverlayHost()
     return isVector() || getParentModule()->isVector();
 }
 
+/*
 void BaseOverlay::requestKdKwFromNetwork()
 {
 	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
@@ -1984,3 +1999,4 @@ void BaseOverlay::requestKdKwFromNetwork()
 	//std::cout << "Terminal " << thisOverlayTerminal->getFullName() << " gate " << gate->getFullName() << " kd " << kd << " kw " << kw << endl;
 }
 
+*/

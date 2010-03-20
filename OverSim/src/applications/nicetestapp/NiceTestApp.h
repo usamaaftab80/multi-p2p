@@ -39,19 +39,33 @@ class NiceTestApp : public BaseApp
     void encapAndSendCbrAppMsg(cMessage* msg);
 
 	double lastPacketTime;
-	static double xw,xd;
+	double xw,xd;
 
 	//timers
     cMessage* changeXdTimer;
     simtime_t changeXdInterval;
 
+    cMessage* sendDataTimer;
+    cMessage* stateTimer;
+
     double getXw(){return xw;};
     double getXd(){return xd;};
     void setXw(double xw_var){ xw = xw_var ;};
     void setXd(double xd_var){ xd = xd_var ;};
-};
 
-double NiceTestApp::xd = 0;
-double NiceTestApp::xw = 0;
+    void generateXd();
+
+    struct dataPacket{
+    	//int id;
+    	simtime_t time;
+    	int length;
+    };
+
+    dataPacket* videoPacket;
+    int videoSize;
+
+    simtime_t beginSendDataTime;
+    int byteSent;
+};
 
 #endif /* NICETESTAPP_H_ */

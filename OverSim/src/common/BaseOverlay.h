@@ -810,13 +810,15 @@ private:
 private:
 	double kd;
 	double kw;
+	double maxKd;
 
 public:
 	double getKd(){ return kd; };
 	double getKw(){ return kw; };
+	double getMaxKd(){ return maxKd; };
 	void setKd(double kd_var){ kd = kd_var; };
 	void setKw(double kw_var){ kw = kw_var; };
-	void requestKdKwFromNetwork();
+	//void requestKdKwFromNetwork();
 
 };
 

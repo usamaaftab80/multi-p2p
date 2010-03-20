@@ -28,6 +28,7 @@ simple NiceTestApp extends BaseApp
         //int largestKey;            // largest key we can pick
         bool isSender; 				//in case 1 source sender
         string statsModulePath;
+        string traceFileName;
 }                    
                     
 module NiceTestAppModules like ITier
