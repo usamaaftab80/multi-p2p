@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scave:Analysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:scave="http://www.omnetpp.org/omnetpp/scave">
+  <inputs>
+    <inputs name="/OverSim/simulations/results/NiceTestAppGTITM-*.vec"/>
+    <inputs name="/OverSim/simulations/results/NiceTestAppGTITM-*.sca"/>
+    <inputs name="/OverSim/simulations/results/1_cost.vec"/>
+    <inputs name="/OverSim/simulations/results/1_distance.vec"/>
+  </inputs>
+  <datasets>
+    <datasets name="3000 routers">
+      <items xsi:type="scave:Add" filterPattern="module(GTITM_TS_IPv4Network.statisticsCollector) AND name(&quot;HOANG hopCount mean&quot;)" type="VECTOR"/>
+      <items xsi:type="scave:Group" name="Avg. Path length 3000 routers">
+        <items xsi:type="scave:LineChart" name="Avg. Path length 3000 routers" lineNameFormat="">
+          <properties name="X.Axis.Title" value="Time (in secs)"/>
+          <properties name="Y.Axis.Title" value="Avg path length (hops)"/>
+          <properties name="Legend.Display" value="true"/>
+          <properties name="Legend.Position" value="Inside"/>
+          <properties name="Legend.Anchoring" value="NorthEast"/>
+          <properties name="Symbols.Size" value="2"/>
+        </items>
+      </items>
+    </datasets>
+    <datasets name="avg link stress">
+      <items xsi:type="scave:Add" filterPattern="module(GTITM_TS_IPv4Network.statisticsCollector) AND name(&quot;HOANG linkStress&quot;)" type="VECTOR"/>
+      <items xsi:type="scave:Group" name="Avg Link Stress, sendPeriod=1s">
+        <items xsi:type="scave:Compute" operation="mean"/>
+        <items xsi:type="scave:LineChart" name="Avg Link Stress, sendPeriod=1s" lineNameFormat="">
+          <properties name="X.Axis.Title" value="Time (in secs)"/>
+          <properties name="Y.Axis.Title" value="Avg. Link Stress"/>
+          <properties name="Symbols.Size" value="1"/>
+        </items>
+      </items>
+    </datasets>
+    <datasets name="Stress">
+      <items xsi:type="scave:Add" filterPattern="module(GTITM_TS_IPv4Network.statisticsCollector) AND name(&quot;HOANG linkStress&quot;)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="run(with_old_Distance) AND module(GTITM_TS_IPv4Network.statisticsCollector) AND name(&quot;HOANG linkStress&quot;)" type="VECTOR"/>
+      <items xsi:type="scave:Group" name="Avg Link Stress">
+        <items xsi:type="scave:LineChart" name="Avg Link Stress" lineNameFormat="">
+          <properties name="Graph.Title" value="Avg Link Stress 3000R, sendPeriod=1s"/>
+          <properties name="X.Axis.Title" value="Time (s)"/>
+          <properties name="Y.Axis.Title" value="Avg Link Stress"/>
+          <properties name="Legend.Display" value="true"/>
+          <properties name="Legend.Position" value="Inside"/>
+          <properties name="Legend.Anchoring" value="NorthEast"/>
+          <properties name="Symbols.Size" value="1"/>
+        </items>
+      </items>
+    </datasets>
+    <datasets name="End to end Delay">
+      <items xsi:type="scave:Add" filterPattern="module(GTITM_TS_IPv4Network.globalObserver.globalStatistics) AND name(&quot;HOANG e2e delay&quot;)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="run(with_old_Distance) AND module(GTITM_TS_IPv4Network.globalObserver.globalStatistics) AND name(&quot;HOANG e2e delay&quot;)" type="VECTOR"/>
+      <items xsi:type="scave:Group" name="">
+        <items xsi:type="scave:Apply" operation="mean"/>
+        <items xsi:type="scave:LineChart" name="End-to-end Delay" lineNameFormat="">
+          <properties name="Graph.Title" value="End-to-end Delay"/>
+          <properties name="X.Axis.Title" value="Time (s)"/>
+          <properties name="Y.Axis.Title" value="Mean e2e delay"/>
+          <properties name="Legend.Display" value="true"/>
+          <properties name="Legend.Position" value="Inside"/>
+          <properties name="Legend.Anchoring" value="NorthEast"/>
+          <properties name="Symbols.Size" value="1"/>
+        </items>
+      </items>
+    </datasets>
+    <datasets name="Hopcount">
+      <items xsi:type="scave:Add" filterPattern="module(GTITM_TS_IPv4Network.statisticsCollector) AND name(&quot;HOANG hopCount mean&quot;)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="run(with_old_Distance) AND module(GTITM_TS_IPv4Network.statisticsCollector) AND name(&quot;HOANG hopCount mean&quot;)" type="VECTOR"/>
+      <items xsi:type="scave:LineChart" name="Avg Path Length" lineNameFormat="">
+        <properties name="Graph.Title" value="Avg Path Length"/>
+        <properties name="X.Axis.Title" value="Time (s)"/>
+        <properties name="Y.Axis.Title" value="Avg path length (hops)"/>
+        <properties name="Legend.Display" value="true"/>
+        <properties name="Legend.Position" value="Inside"/>
+        <properties name="Legend.Anchoring" value="NorthEast"/>
+        <properties name="Symbols.Size" value="1"/>
+      </items>
+    </datasets>
+    <datasets name="Cost &amp; distance value">
+      <items xsi:type="scave:Add" filterPattern="module(GTITM_TS_IPv4Network.globalObserver.globalStatistics) AND name(&quot;HOANG1 Cost value&quot;)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="module(GTITM_TS_IPv4Network.globalObserver.globalStatistics) AND name(&quot;HOANG1 Distance value&quot;)" type="VECTOR"/>
+      <items xsi:type="scave:Group" name="Cost &amp; distance value Mean">
+        <items xsi:type="scave:Apply" operation="mean"/>
+        <items xsi:type="scave:LineChart" name="Cost &amp; distance value Mean" lineNameFormat="">
+          <properties name="Legend.Display" value="true"/>
+          <properties name="Legend.Position" value="Inside"/>
+          <properties name="Legend.Anchoring" value="NorthEast"/>
+        </items>
+      </items>
+    </datasets>
+  </datasets>
+  <chartSheets>
+    <chartSheets name="default" charts="//@datasets/@datasets.1/@items.1/@items.1"/>
+  </chartSheets>
+</scave:Analysis>

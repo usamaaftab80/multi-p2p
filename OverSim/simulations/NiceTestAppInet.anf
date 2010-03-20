@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scave:Analysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:scave="http://www.omnetpp.org/omnetpp/scave">
+  <inputs>
+    <inputs name="/OverSim/simulations/results/NiceTestAppInet-*.vec"/>
+    <inputs name="/OverSim/simulations/results/NiceTestAppInet-*.sca"/>
+  </inputs>
+  <datasets>
+    <datasets name="LifeTimeChurn">
+      <items xsi:type="scave:Add" filterPattern="module(InetUnderlayNetwork.statisticsCollector) AND name(&quot;HOANG linkStress&quot;)" type="VECTOR"/>
+      <items xsi:type="scave:LineChart" name="Avg Link Stress, with nodes' join, leave LifeTimeChurn" lineNameFormat=""/>
+    </datasets>
+  </datasets>
+  <chartSheets>
+    <chartSheets name="default"/>
+  </chartSheets>
+</scave:Analysis>
