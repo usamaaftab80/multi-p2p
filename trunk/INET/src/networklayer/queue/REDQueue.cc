@@ -77,7 +77,7 @@ bool REDQueue::enqueue(cMessage *msg)
     }
 
     // statistics
-    avgQlenVec.record(avg);
+    //avgQlenVec.record(avg);//hoang disable
 
     //"
     //    if minth <= avg < maxth
@@ -129,7 +129,7 @@ bool REDQueue::enqueue(cMessage *msg)
     else
     {
         queue.insert(msg);
-        qlenVec.record(queue.length());
+        //qlenVec.record(queue.length());//hoang disable
         return false;
     }
 }
@@ -148,7 +148,7 @@ cMessage *REDQueue::dequeue()
         q_time = simTime();
 
     // statistics
-    qlenVec.record(queue.length());
+    //qlenVec.record(queue.length());//hoang
 
     return pk;
 }

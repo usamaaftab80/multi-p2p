@@ -104,7 +104,8 @@ void PPP::initialize(int stage)
         // request first frame to send
         if (queueModule)
         {
-            EV << "Requesting first frame from queue module\n";
+        	//hoang disabled
+            //EV << "Requesting first frame from queue module\n";
             queueModule->requestPacket();
         }
     }
