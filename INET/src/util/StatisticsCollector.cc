@@ -32,9 +32,13 @@ void StatisticsCollector::initialize()
 
 	calculateNumPhysicalLink();
 
+	xw = xd = 0;
+
 	statisticsPeriod = par("statisticsPeriod");
     timerMsg = new cMessage("StatisticsCollector Timer");
     scheduleAt(simTime() + statisticsPeriod, timerMsg);
+
+    //std::cout << "SSSSSSSSSSSSSSSStatistic Collector INitttttttttttttt at " << simTime() << endl;
 
 }
 
@@ -189,4 +193,17 @@ void StatisticsCollector::calculateNumPhysicalLink()
 
 	numPhysicalLink = numLink;
 
+}
+
+void StatisticsCollector::hardChangeXdForKd(double kd_var)
+{
+	double xd_var = dblrand() * 1.5;
+
+	while(!(xd_var > kd_var)){
+		xd_var = dblrand() * 1.5;
+	}
+
+	xd = xd_var ;
+
+//	xd = kd_var + 0.001;
 }

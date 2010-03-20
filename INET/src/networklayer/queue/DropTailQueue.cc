@@ -48,7 +48,7 @@ bool DropTailQueue::enqueue(cMessage *msg)
     else
     {
         queue.insert(msg);
-        qlenVec.record(queue.length());
+        //qlenVec.record(queue.length());//hoang disabled
         return false;
     }
 }
@@ -61,7 +61,7 @@ cMessage *DropTailQueue::dequeue()
    cMessage *pk = (cMessage *)queue.pop();
 
     // statistics
-    qlenVec.record(queue.length());
+    //qlenVec.record(queue.length());//hoang disabled
 
     return pk;
 }

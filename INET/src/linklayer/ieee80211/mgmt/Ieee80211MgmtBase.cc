@@ -124,7 +124,8 @@ bool Ieee80211MgmtBase::enqueue(cMessage *msg)
     else
     {
         dataQueue.insert(msg);
-        dataQueueLenVec.record(dataQueue.length());
+        //hoang disabled
+        //dataQueueLenVec.record(dataQueue.length());
         return false;
     }
 }
@@ -142,7 +143,8 @@ cMessage *Ieee80211MgmtBase::dequeue()
     cMessage *pk = (cMessage *)dataQueue.pop();
 
     // statistics
-    dataQueueLenVec.record(dataQueue.length());
+    //hoang disabled
+    //dataQueueLenVec.record(dataQueue.length());
     return pk;
 }
 

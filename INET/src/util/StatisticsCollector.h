@@ -69,6 +69,8 @@ class StatisticsCollector : public cSimpleModule
       void setXw(double xw_var){ xw = xw_var ;};
       void setXd(double xd_var){ xd = xd_var ;};
 
+      void hardChangeXdForKd(double kd_var);
+
       ~StatisticsCollector();
 
 };

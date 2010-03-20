@@ -37,7 +37,8 @@ void NAMTraceWriter::initialize(int stage)
         if (!namMod)
         {
             nt = NULL;
-            EV << "NAMTraceWriter: nam module not found, no trace will be written\n";
+            //hoang disabled
+            //EV << "NAMTraceWriter: nam module not found, no trace will be written\n";
             return;
         }
 
