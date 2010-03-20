@@ -83,6 +83,8 @@ void NiceTestApp::initializeApp(int stage)
 
     numSent = 0;
     numReceived = 0;
+    byteSent = 0;
+    videoSize = 0;
 
     const char *statsModulePath = par("statsModulePath");
 	cModule *modp = simulation.getModuleByPath(statsModulePath);
@@ -95,18 +97,71 @@ void NiceTestApp::initializeApp(int stage)
     WATCH(numSent);
     WATCH(numReceived);
 
-    // start our timer!
-
-    timerMsg = new cMessage("NiceTestAppTimer");
-    scheduleAt(simTime() + sendPeriod, timerMsg);
 
     if(isSender){
-    	xd = dblrand();
-    	stats->setXd(xd);
+    	// start our timer!
+
+		timerMsg = new cMessage("NiceTestAppTimer");
+		scheduleAt(simTime() + sendPeriod, timerMsg);
+
+
+    	/* read trace file */
+		FILE * pFile;
+		float time;
+		unsigned int id;
+		unsigned int length;
+		char type;
+		unsigned int frag;
+
+		const char* traceFileName = par("traceFileName");
+
+		pFile = fopen (traceFileName , "r");
+		if (pFile == NULL) perror ("Error opening file");
+
+		while ( ! feof (pFile) ){
+			fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
+			//fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
+			//fscanf(pFile , "%u %c %u %u	%f\n", &id, &type, &length, &frag, &time);
+			videoSize++;
+		}
+		cout << "There are " << videoSize << " packet in trace file" << endl;
+
+		videoPacket = new dataPacket[videoSize];
+
+		//videoPacket = (dataPacket*)malloc(i+1);
+
+		//cout << "There are " << videoSize << " packet in trace file" << endl;
+
+		fclose(pFile);
+
+		//rewind(pFile);
+
+		//pFile = fopen ("sd_a01" , "r");
+		pFile = fopen (traceFileName , "r");
+
+		while ( ! feof (pFile) ){
+			fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
+			//fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
+			//fscanf(pFile , "%u %c %u %u %f\n", &id, &type, &length, &frag, &time);
+
+			videoPacket[id].time = time;
+			videoPacket[id].length = length;
+			//cout << id << "  " << time << "   " << length << endl;
+		}
+
+		fclose(pFile);
+
+		/* init XD and schedule */
+    	//xd = dblrand();
+    	generateXd();
+    	//stats->setXd(xd);
 		//changeXdInterval = par("changeXdInterval");
 		changeXdInterval = 10;
 		changeXdTimer = new cMessage("changeXdTimer");
 		scheduleAt(simTime() + changeXdInterval, changeXdTimer);
+
+		sendDataTimer = new cMessage("sendDataTimer");
+
     }
 
     bindToPort(2000);
@@ -121,7 +176,9 @@ void NiceTestApp::finishApp()
     // first we'll delete our timer
 
     //delete timerMsg;
-    cancelAndDelete(timerMsg);
+    //cancelAndDelete(timerMsg);
+    //cancelAndDelete(changeXdTimer);
+    //cancelAndDelete(sendDataTimer);
 
     // finish() is usually used to save the module's statistics.
     // We'll use globalStatistics->addStdDev(), which will calculate min, max, mean and deviation values.
@@ -151,73 +208,107 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         scheduleAt(simTime() + sendPeriod, timerMsg); // reschedule our message
 
         // if the simulator is still busy creating the network, let's wait a bit longer
-        if (underlayConfigurator->isInInitPhase()) return;
+        if (underlayConfigurator->isInInitPhase()) {
+        	return;
+        } else {
+        	/* Begin send data timer*/
+        	cancelAndDelete(timerMsg);
 
-        if(isSender){
+        	if(isSender){
+        		cout << "Init network finish. Bat dau send data at " << simTime() << endl;
+				beginSendDataTime = simTime()+1;
+				scheduleAt(beginSendDataTime + videoPacket[0].time, sendDataTimer);
+				//numSent++;
+        	}
 
-        	//hoang
-        	// record AvgLinkStress of previous packet
-        	// and reset StressSum counter
-        	// before send a new packet
-
-        	stats->recordLinkStress();
-
-        	stats->resetStressSum();
-
-			//send data
-
-            for (int i = 0; i < numToSend; i++) {
-
-                NiceTestAppMsg *pingPongPkt;                            // the message we'll send
-                pingPongPkt = new NiceTestAppMsg();
-
-                //cout << "IP " << thisNode.getAddress() << " created a msg at " << simTime()<< endl;
-
-                pingPongPkt->setType(MYMSG_PING);                  // set the message type to PING
-                pingPongPkt->setSenderAddress(thisNode);   // set the sender address to our own
-
-                //string data = (thisNode.getAddress()).str() + " HOANG ";
-                //char* data = strcat((thisNode.getAddress()).str()," HOANG ");
-
-                /*char* data = " HOANG ";
-                pingPongPkt->setData(data);*/
-
-                RECORD_STATS(numSent++);                       // update statistics
-                //cout << ". I created " << numSent << " msg" << endl;
-                //hoang
-
-                int maxByte = 1000;
-                int length = intrand(maxByte); //random length
-                //cout << "length=" << length << endl;
-                while (!(length > 0)){
-                    length = intrand(maxByte);
-                }
-
-                //pingPongPkt->setByteLength(length);
-                pingPongPkt->setBitLength(length);
-
-                double thisPacketTime = simTime().dbl(); //or read from trace file
-
-                xw = (double)length / (thisPacketTime - lastPacketTime); //datarate for this packet
-
-                stats->setXw(xw);
-
-                //hoang
-                encapAndSendCbrAppMsg(pingPongPkt);
-            }
         }
 
-    }
+    } else if (msg->isName("sendDataTimer")){
 
-    else if (msg->isName("changeXdTimer")){
+    	/* check finish sending video */
+        if(numSent > videoSize-1){
+        	cout << "Truyennnnnnnnnnnnnn hetttttttttt video packet at " << simTime() << endl;
+        	delete [] videoPacket;
+
+        	cancelAndDelete(sendDataTimer);
+        	cancelAndDelete(changeXdTimer);
+        	//endSimulation();
+        	return;
+        }
+
+    	scheduleAt(beginSendDataTime + videoPacket[numSent].time, sendDataTimer);
+		//hoang
+		// record AvgLinkStress of previous packet
+		// and reset StressSum counter
+		// before send a new packet
+
+		stats->recordLinkStress();
+
+		//stats->resetStressSum();
+
+		//send data
+
+		for (int i = 0; i < numToSend; i++) {
+
+			NiceTestAppMsg *pingPongPkt;                            // the message we'll send
+			pingPongPkt = new NiceTestAppMsg();
+
+			//cout << "IP " << thisNode.getAddress() << " created a msg at " << simTime()<< endl;
+
+			pingPongPkt->setType(MYMSG_PING);                  // set the message type to PING
+			pingPongPkt->setSenderAddress(thisNode);   // set the sender address to our own
+
+			//string data = (thisNode.getAddress()).str() + " HOANG ";
+			//char* data = strcat((thisNode.getAddress()).str()," HOANG ");
+
+			/*char* data = " HOANG ";
+			pingPongPkt->setData(data);*/
+
+			/*int maxByte = 1000;
+			int length = intrand(maxByte); //random length
+			//cout << "length=" << length << endl;
+			while (!(length > 0)){
+				length = intrand(maxByte);
+			}*/
+
+			int length = videoPacket[numSent].length;
+
+			pingPongPkt->setByteLength(length);
+
+			byteSent += length;
+
+			if(videoPacket[numSent].length > videoPacket[numSent-1].length){
+
+				//double thisPacketTime = simTime().dbl(); //or read from trace file
+
+				//xw = (double)length * 8 / (thisPacketTime - lastPacketTime); //datarate for this packet (bit/s)
+
+				simtime_t timeRange = videoPacket[numSent].length - videoPacket[numSent-1].length;
+
+				xw = byteSent * 8 / timeRange;
+
+				//cout << "generate packet length=" << length << " xw=" << xw << " timeperiod=" << thisPacketTime - lastPacketTime << "s" << endl;
+
+				stats->setXw(xw);
+
+				stats->resetStressSum();
+
+				byteSent = 0;
+			}
+
+			//hoang
+			encapAndSendCbrAppMsg(pingPongPkt);
+		}
+
+    } else if (msg->isName("changeXdTimer")){
+
+    	if (underlayConfigurator->isInInitPhase()) return;
 
     	scheduleAt(simTime() + changeXdInterval, changeXdTimer);
 
-    	//xd = cRNG::doubleRand(0.5);
-    	xd = dblrand();
+    	generateXd();
 
-    	stats->setXd(xd);
-
+    	//cout << " vua change xd=" << xd << endl;
     }
 
     else
@@ -330,6 +421,51 @@ void NiceTestApp::encapAndSendCbrAppMsg(cMessage* msg)
         //cout << "xd=" << xd << " xw=" << xw << endl;
 
         send(cbrMsg,"to_lowerTier");
+
+        cout << "Vua send packet: length=" << videoPacket[numSent].length << " numSent=" << numSent << " || xw=" << xw << " at " << simTime() << endl;
+
+        //if(!( videoPacket[numSent+1].time > 0 )){
+        //if( videoPacket[numSent+1] == NULL){
+
+        RECORD_STATS(numSent++);                       // update statistics
+
     }
 
+}
+
+void NiceTestApp::generateXd()
+{
+	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
+
+	//BaseOverlay* overlay = check_and_cast<BaseOverlay*> (thisOverlayTerminal->getModuleByRelativePath("**.overlayType"));
+
+	cCompoundModule* overlayModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("overlay"));
+
+	//cout << "overlayModule full name: " << overlayModule->getFullName() << endl;
+
+	BaseOverlay* overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
+
+	double kd_var = overlay->getMaxKd();
+
+	double xd_var = dblrand() * 1.5; //random double in range [0,1.5)
+
+/*
+	if(!(kd_var < xd_var)){
+		xd_var = kd_var + 0.001;
+	}
+*/
+
+	while(!(xd_var > kd_var)){
+
+		std::cout << "xd=" << xd_var << " < maxKd=" << kd_var << endl;
+
+		xd_var = dblrand() * 1.5;
+
+	}
+
+	stats->setXd(xd_var);
+
+	cout << "Vua change xd=" << xd_var << endl;
+
+	xd = xd_var;
 }

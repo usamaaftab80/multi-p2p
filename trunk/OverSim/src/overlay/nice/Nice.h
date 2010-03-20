@@ -271,8 +271,11 @@ private:
 
     double cost();
 
+    bool hoang_debug_cost;
+    bool hoang_use_cost;
+
     /* Cost with old delay parameter */
-    double cost(simtime_t delay);
+    //double cost(simtime_t delay);
 
 };
 

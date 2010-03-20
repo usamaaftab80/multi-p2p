@@ -90,12 +90,12 @@ Nice::~Nice()
 {
 
     // destroy self timer messages
-    cancelAndDelete(heartbeatTimer);
+    /*cancelAndDelete(heartbeatTimer);
     cancelAndDelete(maintenanceTimer);
     cancelAndDelete(structureConnectionTimer);
     cancelAndDelete(rpPollTimer);
     cancelAndDelete(queryTimer);
-    cancelAndDelete(visualizationTimer);
+    cancelAndDelete(visualizationTimer);*/
 
     std::map<TransportAddress, NicePeerInfo*>::iterator it = peerInfos.begin();
 
@@ -134,6 +134,9 @@ void Nice::initializeOverlay( int stage )
         clusters[i].clear();
 
     }
+
+    hoang_debug_cost = par("hoang_debug_cost");
+    hoang_use_cost = par("hoang_use_cost");
 
     /* Initialize Self-Messages */
 
@@ -550,8 +553,13 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
                 if (it != peerInfos.end()) {
 
-                    //double distance = simTime().dbl() - it->second->getDES();//hoang
-                	double distance = cost();
+                    double distance = simTime().dbl() - it->second->getDES();//hoang
+
+                    if(hoang_debug_cost){
+                    	distance = cost();
+                    } else {
+                    	globalStatistics->recordOutVector("HOANG1 Distance value",distance);
+                    }
 
                     it->second->set_distance(distance);
                     it->second->touch();
@@ -755,6 +763,14 @@ void Nice::finishOverlay()
 {
 
     hoangCheckLeader();
+    // destroy self timer messages
+	cancelAndDelete(heartbeatTimer);
+	cancelAndDelete(maintenanceTimer);
+	cancelAndDelete(structureConnectionTimer);
+	cancelAndDelete(rpPollTimer);
+	cancelAndDelete(queryTimer);
+	cancelAndDelete(visualizationTimer);
+
 
 } // finishOverlay
 
@@ -1440,8 +1456,10 @@ void Nice::sendHeartbeats()
 
                 if (it != peerInfos.end()) {
 
-                    //it->second->set_distance_estimation_start(simTime().dbl());//hoang
-                	it->second->set_distance_estimation_start(cost());
+                    it->second->set_distance_estimation_start(simTime().dbl());//hoang
+                    if(hoang_debug_cost){
+                    	it->second->set_distance_estimation_start(cost());
+                    }
 
                 }
 
@@ -1741,8 +1759,12 @@ void Nice::handleHeartbeat(NiceMessage* msg)
                 double oldDistance = it->second->get_distance();
 
                 /* Use Exponential Moving Average with factor 0.1 */
-                //double newDistance = (simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2.0;//hoang
-                double newDistance = cost();
+                double newDistance = (simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2.0;//hoang
+                if(hoang_debug_cost){
+                	newDistance = cost();
+                } else {
+                	globalStatistics->recordOutVector("HOANG1 Distance value",newDistance);
+                }
 
                 if (oldDistance > 0) {
 
@@ -1869,8 +1891,12 @@ void Nice::handleHeartbeat(NiceMessage* msg)
 
                 /* Valid distance measurement, get value */
 
-                //it->second->set_distance((simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);//hoang
-            	it->second->set_distance(cost());
+                it->second->set_distance((simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);//hoang
+                if(hoang_debug_cost){
+                	it->second->set_distance(cost());
+                } else {
+                	globalStatistics->recordOutVector("HOANG1 Distance value",(simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
+                }
 
             }
 
@@ -3611,7 +3637,7 @@ void Nice::hoangCheckLeader(){
 
                     int size = clusters[i].getSize();
 
-                    //std::cout << thisNode.getAddress() << ": is leader layer " << i << " cluster size " << size << endl;
+                    std::cout << thisNode.getAddress() << ": is leader layer " << i << " cluster size " << size << endl;
 
                     std::string str = "HOANG num leaders layer " + to_string(i);
 
@@ -3638,23 +3664,27 @@ void Nice::hoangCheckLeader(){
 double Nice::cost()
 {
 	double cost, kw_var , kd_var, xw, xd;
-	//TODO:get kd, kw from network
-	//requestKdKwFromNetwork();
+
+	//get kd, kw from network
 	kw_var = getKw();
 	kd_var = getKd();
 
-	//TODO:get xd, xw from app
-
+	//get xd, xw from app
 	xd = stats->getXd();
 	xw = stats->getXw();
 
 	//cost
 	cost = sqrt( (kd_var/(xd-kd_var)) * (xw/(kw_var-xw)) );
 
-	//std::cout << "xd=" << xd << " kd=" << kd_var << " xw=" << xw << " kw=" << kw_var << " cost=" << cost << endl;
+	if(hoang_debug_cost){
+		std::cout << "xd=" << xd << " kd=" << kd_var << " || xw=" << xw << " kw=" << kw_var << " || cost=" << cost << endl;
+	}
+
+	globalStatistics->recordOutVector("HOANG1 Cost value",cost);
 
 	return cost;
 }
+/*
 
 double Nice::cost(simtime_t delay)
 {
@@ -3673,6 +3703,7 @@ double Nice::cost(simtime_t delay)
 	//std::cout << "xd=" << xd << " kd=" << kd_var << " xw=" << xw << " kw=" << kw_var << " cost=" << cost << endl;
 
 	return cost;
-}
+}*/
 
 }; //namespace
+
