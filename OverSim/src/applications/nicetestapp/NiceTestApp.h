@@ -36,7 +36,9 @@ class NiceTestApp : public BaseApp
     //void deliver(cMessage* msg);  // called when we receive a message from the overlay
     void handleUDPMessage(cMessage* msg);          // called when we receive a UDP message
     void handleLowerMessage(cMessage* msg);          // called when we receive a message from lowertier
+
     void encapAndSendCbrAppMsg(cMessage* msg);
+    void encapAndSendCbrAppMsg(cMessage* msg, const char* name);
 
 	double lastPacketTime;
 	double xw,xd;
@@ -47,6 +49,9 @@ class NiceTestApp : public BaseApp
 
     cMessage* sendDataTimer;
     cMessage* stateTimer;
+
+    cMessage* stressTimer;
+    simtime_t stressPeriod;
 
     double getXw(){return xw;};
     double getXd(){return xd;};
