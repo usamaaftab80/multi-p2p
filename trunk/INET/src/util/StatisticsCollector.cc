@@ -124,6 +124,7 @@ void StatisticsCollector::finish()
 	calculateNumPhysicalLink();
 
 	recordScalar("HOANG linkStress",getLinkStress());
+	recordScalar("HOANG numRecordStress",numRecordStress);
 
 	std::cout << "Hop count, min:    " << hopCountStats.getMin() << endl;
 	std::cout << "Hop count, max:    " << hopCountStats.getMax() << endl;
