@@ -1770,6 +1770,9 @@ inline void doUnpacking(cCommBuffer *b, P2pnsResolveResponse& obj) {obj.parsimUn
  *     int destComp enum(CompType); 
  *     int transportType enum(TransportType) = INVALID_TRANSPORT; 
  *     int routingType enum(RoutingType);
+ *     
+ *     double kd;
+ *     double kw;
  * }
  * </pre>
  */
@@ -1786,6 +1789,8 @@ class OverlayCtrlInfo : public cObject
     int destComp_var;
     int transportType_var;
     int routingType_var;
+    double kd_var;
+    double kw_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const OverlayCtrlInfo&);
@@ -1824,6 +1829,10 @@ class OverlayCtrlInfo : public cObject
     virtual void setTransportType(int transportType_var);
     virtual int getRoutingType() const;
     virtual void setRoutingType(int routingType_var);
+    virtual double getKd() const;
+    virtual void setKd(double kd_var);
+    virtual double getKw() const;
+    virtual void setKw(double kw_var);
 };
 
 inline void doPacking(cCommBuffer *b, OverlayCtrlInfo& obj) {obj.parsimPack(b);}

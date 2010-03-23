@@ -82,6 +82,10 @@ public:
     void setSubClusterMembers( unsigned int members );
     unsigned int getSubClusterMembers();
 
+    //hoang
+    void setKd(double value) {kd = value;};
+    double getKd() {return kd;};
+
 protected:
 
     //virtual void handleMessage(cMessage* msg);
@@ -91,6 +95,9 @@ private:
     Nice* parent;
     double distance_estimation_start;
     double distance;
+    //hoang
+    double kd;
+
     cMessage* hbTimer;
     std::map<TransportAddress, double> distanceTable;
 

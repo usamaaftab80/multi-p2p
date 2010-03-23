@@ -11,6 +11,7 @@
 
 #include "BaseApp.h"
 #include "StatisticsCollector.h"
+#include "HoangGlobalObject.h"
 
 class NiceTestApp : public BaseApp
 {
@@ -25,6 +26,7 @@ class NiceTestApp : public BaseApp
     int numReceived;          //number of packets received
 
     StatisticsCollector *stats;
+    HoangGlobalObject *global;
 
     // our timer
     cMessage *timerMsg;

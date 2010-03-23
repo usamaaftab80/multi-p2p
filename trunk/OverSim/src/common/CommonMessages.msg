@@ -549,6 +549,9 @@ class OverlayCtrlInfo
     int destComp enum(CompType); // destination component
     int transportType enum(TransportType) = INVALID_TRANSPORT; // transport type of the received message
     int routingType enum(RoutingType);
+    //hoang
+    double kd;
+    double kw;
 }
 
 //

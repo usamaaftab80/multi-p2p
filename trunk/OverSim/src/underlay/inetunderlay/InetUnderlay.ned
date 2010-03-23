@@ -20,6 +20,7 @@ package oversim.underlay.inetunderlay;
 import oversim.common.ChurnGenerator;
 import oversim.common.GlobalObserver;
 import oversim.common.inet_fiberline;
+import oversim.common.HoangGlobalObject;
 import inet.util.StatisticsCollector;//hoang
 
 
@@ -79,6 +80,10 @@ network InetUnderlayNetwork
         statisticsCollector: StatisticsCollector {
             @display("p=70,261,column");
         } //hoang
+
+        hoangGlobalObject: HoangGlobalObject {
+            @display("p=70,333");
+        }
     connections allowunconnected:
 
         //

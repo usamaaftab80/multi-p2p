@@ -448,7 +448,8 @@ void BaseApp::finish()
                          += string("): ");
 
     if (time >= GlobalStatistics::MIN_MEASURED) {
-        globalStatistics->addStdDev(baseAppName + string("Sent Messages/s to "
+    	//hoang disable
+        /*globalStatistics->addStdDev(baseAppName + string("Sent Messages/s to "
                                                          "Overlay"),
                                     numOverlaySent / time);
         globalStatistics->addStdDev(baseAppName +
@@ -470,7 +471,7 @@ void BaseApp::finish()
                                     bytesUdpSent / time);
         globalStatistics->addStdDev(baseAppName + string("Received Bytes/s "
                                                          "from UDP"),
-                                    bytesUdpReceived / time);
+                                    bytesUdpReceived / time);*/
 
     }
 

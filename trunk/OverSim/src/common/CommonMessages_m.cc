@@ -9651,6 +9651,8 @@ OverlayCtrlInfo::OverlayCtrlInfo() : cObject()
     this->destComp_var = 0;
     this->transportType_var = INVALID_TRANSPORT;
     this->routingType_var = 0;
+    this->kd_var = 0;
+    this->kw_var = 0;
 }
 
 OverlayCtrlInfo::OverlayCtrlInfo(const OverlayCtrlInfo& other) : cObject()
@@ -9682,6 +9684,8 @@ OverlayCtrlInfo& OverlayCtrlInfo::operator=(const OverlayCtrlInfo& other)
     this->destComp_var = other.destComp_var;
     this->transportType_var = other.transportType_var;
     this->routingType_var = other.routingType_var;
+    this->kd_var = other.kd_var;
+    this->kw_var = other.kw_var;
     return *this;
 }
 
@@ -9697,6 +9701,8 @@ void OverlayCtrlInfo::parsimPack(cCommBuffer *b)
     doPacking(b,this->destComp_var);
     doPacking(b,this->transportType_var);
     doPacking(b,this->routingType_var);
+    doPacking(b,this->kd_var);
+    doPacking(b,this->kw_var);
 }
 
 void OverlayCtrlInfo::parsimUnpack(cCommBuffer *b)
@@ -9717,6 +9723,8 @@ void OverlayCtrlInfo::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->destComp_var);
     doUnpacking(b,this->transportType_var);
     doUnpacking(b,this->routingType_var);
+    doUnpacking(b,this->kd_var);
+    doUnpacking(b,this->kw_var);
 }
 
 TransportAddress& OverlayCtrlInfo::getLastHop()
@@ -9827,6 +9835,26 @@ void OverlayCtrlInfo::setRoutingType(int routingType_var)
     this->routingType_var = routingType_var;
 }
 
+double OverlayCtrlInfo::getKd() const
+{
+    return kd_var;
+}
+
+void OverlayCtrlInfo::setKd(double kd_var)
+{
+    this->kd_var = kd_var;
+}
+
+double OverlayCtrlInfo::getKw() const
+{
+    return kw_var;
+}
+
+void OverlayCtrlInfo::setKw(double kw_var)
+{
+    this->kw_var = kw_var;
+}
+
 class OverlayCtrlInfoDescriptor : public cClassDescriptor
 {
   public:
@@ -9873,7 +9901,7 @@ const char *OverlayCtrlInfoDescriptor::getProperty(const char *propertyname) con
 int OverlayCtrlInfoDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 9+basedesc->getFieldCount(object) : 9;
+    return basedesc ? 11+basedesc->getFieldCount(object) : 11;
 }
 
 unsigned int OverlayCtrlInfoDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -9894,6 +9922,8 @@ unsigned int OverlayCtrlInfoDescriptor::getFieldTypeFlags(void *object, int fiel
         case 6: return FD_ISEDITABLE;
         case 7: return FD_ISEDITABLE;
         case 8: return FD_ISEDITABLE;
+        case 9: return FD_ISEDITABLE;
+        case 10: return FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -9916,6 +9946,8 @@ const char *OverlayCtrlInfoDescriptor::getFieldName(void *object, int field) con
         case 6: return "destComp";
         case 7: return "transportType";
         case 8: return "routingType";
+        case 9: return "kd";
+        case 10: return "kw";
         default: return NULL;
     }
 }
@@ -9938,6 +9970,8 @@ const char *OverlayCtrlInfoDescriptor::getFieldTypeString(void *object, int fiel
         case 6: return "int";
         case 7: return "int";
         case 8: return "int";
+        case 9: return "double";
+        case 10: return "double";
         default: return NULL;
     }
 }
@@ -10001,6 +10035,8 @@ bool OverlayCtrlInfoDescriptor::getFieldAsString(void *object, int field, int i,
         case 6: long2string(pp->getDestComp(),resultbuf,bufsize); return true;
         case 7: long2string(pp->getTransportType(),resultbuf,bufsize); return true;
         case 8: long2string(pp->getRoutingType(),resultbuf,bufsize); return true;
+        case 9: double2string(pp->getKd(),resultbuf,bufsize); return true;
+        case 10: double2string(pp->getKw(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -10020,6 +10056,8 @@ bool OverlayCtrlInfoDescriptor::setFieldAsString(void *object, int field, int i,
         case 6: pp->setDestComp(string2long(value)); return true;
         case 7: pp->setTransportType(string2long(value)); return true;
         case 8: pp->setRoutingType(string2long(value)); return true;
+        case 9: pp->setKd(string2double(value)); return true;
+        case 10: pp->setKw(string2double(value)); return true;
         default: return false;
     }
 }

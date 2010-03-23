@@ -37,6 +37,7 @@
 #include <InitStages.h>
 
 #include "StatisticsCollector.h"
+#include "HoangGlobalObject.h"
 
 class GlobalNodeList;
 class UnderlayConfigurator;
@@ -137,6 +138,7 @@ private://fields: statistics
 protected:
 	//hoang
 	StatisticsCollector *stats;
+	HoangGlobalObject *global;
 
     /**
      * Structure for computing the average delay in one specific hop
@@ -811,6 +813,7 @@ private:
 	double kd;
 	double kw;
 	double maxKd;
+	int linkStress;
 
 public:
 	double getKd(){ return kd; };
