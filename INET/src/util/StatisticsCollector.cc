@@ -87,6 +87,7 @@ double StatisticsCollector::getLinkStress()
 	if(numPhysicalLink > 0){
 
 		return (double)stressSum / (double)numPhysicalLink;
+		//return (double)stressSum / (double)numNode / 2;
 
 	}
 
@@ -182,7 +183,7 @@ void StatisticsCollector::calculateNumPhysicalLink()
 
 	}*/
 
-	int numNode = topo.getNumNodes();
+	numNode = topo.getNumNodes();
 
 	nodeCountVector.record(numNode);
 
@@ -192,7 +193,7 @@ void StatisticsCollector::calculateNumPhysicalLink()
 	  numLink += node->getNumOutLinks();
 	}
 
-	numPhysicalLink = numLink;
+	numPhysicalLink = numLink; //chia 2 moi chuan
 
 }
 

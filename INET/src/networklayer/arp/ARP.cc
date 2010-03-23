@@ -66,10 +66,11 @@ void ARP::initialize()
 
 void ARP::finish()
 {
-    recordScalar("ARP requests sent", numRequestsSent);
+	//hoang disable
+    /*recordScalar("ARP requests sent", numRequestsSent);
     recordScalar("ARP replies sent", numRepliesSent);
     recordScalar("ARP resolutions", numResolutions);
-    recordScalar("failed ARP resolutions", numFailedResolutions);
+    recordScalar("failed ARP resolutions", numFailedResolutions);*/
 }
 
 ARP::~ARP()
@@ -245,7 +246,7 @@ void ARP::sendPacketToNIC(cMessage *msg, InterfaceEntry *ie, const MACAddress& m
     // send out
     //send(msg, nicOutBaseGateId + ie->getNetworkLayerGateIndex());
     sendDirect(msg, getParentModule(), "ifOut",
-                               ie->getNetworkLayerGateIndex());    
+                               ie->getNetworkLayerGateIndex());
 }
 
 void ARP::sendARPRequest(InterfaceEntry *ie, IPAddress ipAddress)
