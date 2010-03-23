@@ -43,6 +43,9 @@ NicePeerInfo::NicePeerInfo(Nice* _parent)
 
     subclustermembers = 0;
 
+    //hoang
+    kd = 0;
+
     WATCH_MAP(distanceTable);
     WATCH(last_sent_HB);
     WATCH(last_recv_HB);

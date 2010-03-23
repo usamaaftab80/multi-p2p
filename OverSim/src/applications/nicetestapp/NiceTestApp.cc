@@ -25,7 +25,7 @@ inline std::string to_string (const T& t)
 
 #include  "NiceMessage_m.h"
 
-
+#include "TransportAddress.h"
 
 #include <string>
 
@@ -49,14 +49,27 @@ void NiceTestApp::initializeApp(int stage)
 
     // copy the module parameter values to our own variables
 
+    const char *statsModulePath = par("statsModulePath");
+	cModule *modp = simulation.getModuleByPath(statsModulePath);
+	stats = check_and_cast<StatisticsCollector *>(modp);
+
+	const char *globalModulePath = par("globalModulePath");
+	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
+	global = check_and_cast<HoangGlobalObject *>(modp2);
+
+
     sendPeriod = par("sendPeriod");
     numToSend = par("numToSend");
     //largestKey = par("largestKey");
     isSender = par("isSender");
     stressPeriod = par("stressPeriod");
 
+
     if(isSender){
         cout << "senderrrrrrr " << thisNode.getAddress() << endl;
+        TransportAddress *ta = new TransportAddress (thisNode.getAddress(), 1024, TransportAddress::UNKNOWN_NAT);
+        global->setSourceSenderAddress(*ta);
+        cout << "global ::: sender ::: " << global->getSourceSenderAddress() << endl;
         globalStatistics->recordOutVector("HOANG num sender",1);
     }
 
@@ -66,10 +79,6 @@ void NiceTestApp::initializeApp(int stage)
     numReceived = 0;
     byteSent = 0;
     videoSize = 0;
-
-    const char *statsModulePath = par("statsModulePath");
-	cModule *modp = simulation.getModuleByPath(statsModulePath);
-	stats = check_and_cast<StatisticsCollector *>(modp);
 
 	lastPacketTime = simTime().dbl();
 
@@ -86,7 +95,7 @@ void NiceTestApp::initializeApp(int stage)
 		scheduleAt(simTime() + sendPeriod, stateTimer);
 
 		stressTimer = new cMessage("stressTimer");
-		scheduleAt(simTime() + stressPeriod, stressTimer);
+		//scheduleAt(simTime() + stressPeriod, stressTimer);
 
 
     	/* read trace file */
@@ -139,7 +148,7 @@ void NiceTestApp::initializeApp(int stage)
 		//changeXdInterval = par("changeXdInterval");
 		changeXdInterval = 10;
 		changeXdTimer = new cMessage("changeXdTimer");
-		scheduleAt(simTime() + changeXdInterval, changeXdTimer);
+		//scheduleAt(simTime() + changeXdInterval, changeXdTimer);
 
 		sendDataTimer = new cMessage("sendDataTimer");
 
@@ -194,6 +203,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         // if the simulator is still busy creating the network, let's wait a bit longer
         if (underlayConfigurator->isInInitPhase()) {
         	return;
+
         } else {
         	/* Begin send data timer*/
         	cancelAndDelete(stateTimer);
@@ -202,7 +212,8 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         		cout << "Init network finish at " << simTime() << endl;
 				beginSendDataTime = simTime() + par("timeSendAfterInit");
         		//beginSendDataTime = simTime() + 100;
-				scheduleAt(beginSendDataTime + videoPacket[0].time, sendDataTimer);
+				//scheduleAt(beginSendDataTime + videoPacket[0].time, sendDataTimer);
+				scheduleAt(simTime() + stressPeriod, stressTimer);
 				//numSent++;
         	}
 
@@ -311,7 +322,15 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 		NiceTestAppMsg *stressPkt;                            // the message we'll send
 		stressPkt = new NiceTestAppMsg();
 
-		//stressPkt->setSenderAddress(thisNode);   // set the sender address to our own
+		int maxByte = 1336;
+		int length = intrand(maxByte); //random length
+		//cout << "length=" << length << endl;
+		while (!(length > 0)){
+			length = intrand(maxByte);
+		}
+		stressPkt->setByteLength(length);
+
+		stressPkt->setSenderAddress(thisNode);   // set the sender address to our own
 
 		encapAndSendCbrAppMsg(stressPkt,"HOANG_STRESS");
 

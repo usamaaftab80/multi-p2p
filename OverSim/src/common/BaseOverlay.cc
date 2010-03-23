@@ -186,10 +186,15 @@ void BaseOverlay::initialize(int stage)
         cModule *modp = simulation.getModuleByPath(statsModulePath);
         stats = check_and_cast<StatisticsCollector *>(modp);
 
+    	const char *globalModulePath = par("globalModulePath");
+    	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
+    	global = check_and_cast<HoangGlobalObject *>(modp2);
+
         //defaultTimeToLive = par("timeToLive");
         defaultTimeToLive = 32;
 
         maxKd = kw = kd = 0;
+        linkStress = 0;
 
         WATCH(numAppDataSent);
         WATCH(bytesAppDataSent);
@@ -299,6 +304,10 @@ void BaseOverlay::finish()
 {
     finishOverlay();
 
+    //hoang
+    globalStatistics->addStdDev("HOANG link stress at Overlay node",linkStress);
+    globalStatistics->recordOutVector("HOANG link stress at Overlay node",linkStress);
+
     globalStatistics->nodesFinished++;
 
     simtime_t time = globalStatistics->calcMeasuredLifetime(creationTime);
@@ -317,8 +326,9 @@ void BaseOverlay::finish()
                     singleHopName.str("");
                     singleHopName << "BaseOverlay: Average Delay in Hop "
                                   << j << " of " << i;
-                    globalStatistics->addStdDev(singleHopName.str(),
-                                          SIMTIME_DBL(hdr->val / hdr->count));
+                    //hoang disable
+                    /*globalStatistics->addStdDev(singleHopName.str(),
+                                          SIMTIME_DBL(hdr->val / hdr->count));*/
                     ++hdr;
                 }
                 delete[] hdrl;
@@ -326,7 +336,8 @@ void BaseOverlay::finish()
             singleHopDelays.clear();
         }
 
-        globalStatistics->addStdDev("BaseOverlay: Join Retries", joinRetries);
+        //hoang disable
+        /*globalStatistics->addStdDev("BaseOverlay: Join Retries", joinRetries);
 
         globalStatistics->addStdDev("BaseOverlay: Sent App Data Messages/s",
                                     numAppDataSent / time);
@@ -429,7 +440,7 @@ void BaseOverlay::finish()
         globalStatistics->addStdDev("BaseRpc: Sent Ping Response Messages/s",
                                     numPingResponseSent / time);
         globalStatistics->addStdDev("BaseRpc: Sent Ping Response Bytes/s",
-                                    bytesPingResponseSent / time);
+                                    bytesPingResponseSent / time);*/
     }
 
     globalStatistics->doFinish();
@@ -693,6 +704,9 @@ void BaseOverlay::handleMessage(cMessage* msg)
                                         udpControlInfo->getSrcPort()));
         overlayCtrlInfo->setSrcRoute(overlayCtrlInfo->getLastHop());
         overlayCtrlInfo->setTransportType(UDP_TRANSPORT);
+        //hoang
+        overlayCtrlInfo->setKd(udpControlInfo->getDelayInfo());
+        overlayCtrlInfo->setKw(udpControlInfo->getMinBW());
 
         msg->setControlInfo(overlayCtrlInfo);
 
@@ -724,6 +738,11 @@ void BaseOverlay::handleMessage(cMessage* msg)
         //kd = (simTime() - msg->getCreationTime()).dbl();
 
         //cout << " vua nhan dc packet kw=" << kw << " kd=" << kd << endl;
+
+        //hoang
+		if(msg->isName("HOANG_STRESS")){
+			linkStress++;
+		}
 
 
         delete udpControlInfo;
@@ -1048,22 +1067,6 @@ void BaseOverlay::handleAppMessage(cMessage* msg)
 
 void BaseOverlay::handleUDPMessage(BaseOverlayMessage* msg)
 {
-    //hoang: decap UdpCtrlInfo to get TTL
-    //cObject *ctrlInfo;            // ptr to "control info"
-    //ctrlInfo = msg->getControlInfo();
-
-/*    if(dynamic_cast<UDPPacket*>(msg)){
-
-        UDPPacket* udpPacket = check_and_cast<UDPPacket*>(msg);
-
-        UDPControlInfo *udpCtrl = new UDPControlInfo();
-
-        udpCtrl = udpPacket->getControlInfo();
-
-        std::cout << "Base Overlay get CtrlInfo: TTL= " << udpCtrl->getTimeToLive() << endl;
-
-    }*/
-
     delete msg;
 }
 
@@ -1190,6 +1193,12 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
             RECORD_STATS(numInternalSent++; bytesInternalSent += msg->getByteLength());
         }
     }
+
+    //hoang
+	if(msg->isName("HOANG_STRESS")){
+		linkStress++;
+	}
+
     send(msg, "udpOut");
 }
 

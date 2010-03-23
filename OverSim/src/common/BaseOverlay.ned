@@ -55,6 +55,7 @@ simple BaseOverlay extends BaseRpc
         bool rejoinOnFailure; // rejoin after loosing connection to the overlay?
         bool recordRoute; // record visited hops on route 
         string statsModulePath; //hoang
+        string globalModulePath;
 
     gates:
         input udpIn; // gate from the UDP layer
