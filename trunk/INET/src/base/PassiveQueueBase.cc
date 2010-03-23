@@ -73,7 +73,8 @@ void PassiveQueueBase::requestPacket()
 
 void PassiveQueueBase::finish()
 {
-    recordScalar("packets received by queue", numQueueReceived);
-    recordScalar("packets dropped by queue", numQueueDropped);
+	//hoang disable
+    /*recordScalar("packets received by queue", numQueueReceived);
+    recordScalar("packets dropped by queue", numQueueDropped);*/
 }
 

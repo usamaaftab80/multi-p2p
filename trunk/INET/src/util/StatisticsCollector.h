@@ -31,6 +31,7 @@ class StatisticsCollector : public cSimpleModule
   private:
     int stressSum;
     int numPhysicalLink;
+    int numNode;
     cLongHistogram hopCountStats;
     cOutVector hopCountVector;
     cOutVector linkStressVector;
