@@ -79,8 +79,10 @@ void NiceTestApp::initializeApp(int stage)
     numReceived = 0;
     byteSent = 0;
     videoSize = 0;
+    //xw = 0;
+    //stats->setXw(xw);
 
-	lastPacketTime = simTime().dbl();
+	//lastPacketTime = simTime().dbl();
 
     // tell the GUI to display our variables
 
@@ -137,13 +139,15 @@ void NiceTestApp::initializeApp(int stage)
 
 		fclose(pFile);
 
-		cout << "Close trace file done" << endl;
+		//cout << "Close trace file done" << endl;
 
 		/* init XD and schedule */
 
-		//xd = dblrand() * 1.5;
+		generateXd();
 
-    	//generateXd();
+		xw = (double)videoPacket[0].length / (videoPacket[0].time).dbl();
+
+		stats->setXw(xw);
 
 		//changeXdInterval = par("changeXdInterval");
 		changeXdInterval = 10;
@@ -213,7 +217,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 				scheduleAt(beginSendDataTime + videoPacket[0].time, sendDataTimer);
 				generateXd();
 				scheduleAt(simTime() + changeXdInterval, changeXdTimer);
-				scheduleAt(simTime() + stressPeriod, stressTimer);
+				//scheduleAt(simTime() + stressPeriod, stressTimer);
 				//numSent++;
         	}
 
@@ -229,7 +233,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         	cancelAndDelete(sendDataTimer);
         	cancelAndDelete(changeXdTimer);
         	cancelAndDelete(stressTimer);
-        	endSimulation();
+        	//endSimulation();
         	return;
         }
 
@@ -440,12 +444,18 @@ void NiceTestApp::encapAndSendCbrAppMsg(cMessage* msg)
         cbrMsg = new CbrAppMessage();
 
         cbrMsg->setCommand(0); //CBR_DATA
-        cbrMsg->setName("CBR_DATA");
+
+        string payload = "CBR_DATA " + to_string(numSent);
+
+        cbrMsg->setName(payload.c_str());
+
+        //cbrMsg->setName("CBR_DATA");
+
         cbrMsg->setSrcNode(thisNode.getAddress());
 
         cbrMsg->encapsulate(pingPongPkt);
 
-        lastPacketTime = simTime().dbl();
+        //lastPacketTime = simTime().dbl();
 
         //send(pingPongPkt,"to_lowerTier");
         //cout << "Source.IP: " << cbrMsg->getSrcNode() << " length: " << cbrMsg->getByteLength() << endl;
@@ -461,6 +471,7 @@ void NiceTestApp::encapAndSendCbrAppMsg(cMessage* msg)
         //if( videoPacket[numSent+1] == NULL){
 
         RECORD_STATS(numSent++);                       // update statistics
+        global->incNumSent();
 
     }
 
