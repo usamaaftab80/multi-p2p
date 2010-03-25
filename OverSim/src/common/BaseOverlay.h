@@ -39,6 +39,8 @@
 #include "StatisticsCollector.h"
 #include "HoangGlobalObject.h"
 
+using namespace std;
+
 class GlobalNodeList;
 class UnderlayConfigurator;
 class BaseApp;
@@ -816,6 +818,10 @@ private:
 	int linkStress;
 	int linkStressIn;
 	int linkStressOut;
+	int dataIn[10000];
+	int dataOut[10000];
+	//int dataStress[10000];
+	cLongHistogram linkStressStats;
 
 public:
 	double getKd(){ return kd; };
@@ -824,6 +830,7 @@ public:
 	void setKd(double kd_var){ kd = kd_var; };
 	void setKw(double kw_var){ kw = kw_var; };
 	//void requestKdKwFromNetwork();
+	int getIDfromName(string name);
 
 };
 

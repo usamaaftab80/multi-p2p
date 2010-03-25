@@ -190,6 +190,11 @@ void BaseOverlay::initialize(int stage)
     	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
     	global = check_and_cast<HoangGlobalObject *>(modp2);
 
+    	for(int i=0; i < 10000; i++){
+    		dataIn[i] = 0;
+    		dataOut[i] = 0;
+    	}
+
         //defaultTimeToLive = par("timeToLive");
         defaultTimeToLive = 32;
 
@@ -306,17 +311,33 @@ void BaseOverlay::finish()
 
     //hoang
     //globalStatistics->addStdDev("HOANG link stress at Overlay node",linkStress);
-    if(linkStressOut > 0){ //forwarder
+    for(int i=0; i<global->getNumSent(); i++){
+    	int dataStress;
+    	//if(dataOut[i] > 0){ //forwarder
+    	if(dataOut[i] > dataIn[i]){ //forwarder
+			//dataStress = abs(dataOut[i] - dataIn[i]);
+    		dataStress = dataOut[i];
+		}
+		else { //only receive, not forward
+			dataStress = dataIn[i];
+		}
+
+    	//cout << thisNode.getAddress() << " packet " << i << " stress dataIn " << dataIn[i] << endl;
+    	linkStressStats.collect(dataStress);
+    }
+
+    /*if(linkStressOut > 0){ //forwarder
     	linkStress = abs(linkStressOut - linkStressIn);
     }
     else { //only receive, not forward
     	linkStress = linkStressIn;
-    }
+    }*/
     //linkStress = linkStressOut + linkStressIn;
 
-    double avgLinkStress = (double)linkStress / (double)global->getNumRecordStress();
+    //double avgLinkStress = (double)linkStress / (double)global->getNumRecordStress();
 
-    globalStatistics->recordOutVector("stress--access link--BaseOverlay.cc,",avgLinkStress);
+    //globalStatistics->recordOutVector("stress--access link--BaseOverlay.cc,",avgLinkStress);
+    globalStatistics->recordOutVector("stress--access link--BaseOverlay.cc,",linkStressStats.getMean());
 
     globalStatistics->nodesFinished++;
 
@@ -750,11 +771,17 @@ void BaseOverlay::handleMessage(cMessage* msg)
         //cout << " vua nhan dc packet kw=" << kw << " kd=" << kd << endl;
 
         //hoang
-		if(msg->isName("HOANG_STRESS")){
+		/*if(msg->isName("HOANG_STRESS")){
 			global->incStressSum();
 
 			linkStressIn++;
-		}
+		}*/
+        string name = msg->getName();
+    	if(name.find("CBR_DATA") == 0){
+    		int id = getIDfromName(name);
+    		//cout << thisNode.getAddress() << " vua nhan duoc pkt " << id << endl;
+    		dataIn[id] = dataIn[id] + 1;
+    	}
 
 
         delete udpControlInfo;
@@ -1207,10 +1234,17 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
     }
 
     //hoang
-	if(msg->isName("HOANG_STRESS")){
+	/*if(msg->isName("HOANG_STRESS")){
 		global->incStressSum();
 		linkStressOut++;
+	}*/
+    string name = msg->getName();
+	if(name.find("CBR_DATA") == 0){
+		int id = getIDfromName(name);
+		//cout << thisNode.getAddress() << " vua truyen di pkt " << id << endl;
+		dataOut[id] = dataOut[id] + 1;
 	}
+
 
     send(msg, "udpOut");
 }
@@ -2022,3 +2056,13 @@ void BaseOverlay::requestKdKwFromNetwork()
 }
 
 */
+int BaseOverlay::getIDfromName(string name)
+{
+	size_t pos = name.find(" ");
+
+	string strID = name.substr(pos + 1);
+
+	int ID = atoi(strID.c_str()); //convert string to int
+
+	return ID;
+}

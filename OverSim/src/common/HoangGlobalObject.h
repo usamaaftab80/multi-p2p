@@ -31,6 +31,7 @@ private:
 	int numAccessLink;
 	int numNode;
 	int numRecordStress;
+	int numSent;
 
   protected:
     virtual void initialize();
@@ -43,6 +44,8 @@ private:
 	  void calculateNumAccessLink();
 	  void resetStressSum(){stressSum = 0;};
 	  void incStressSum(){stressSum++;};
+	  void incNumSent(){numSent++;};
+	  int getNumSent(){return numSent;};
 	  void addToStressSum(int value){stressSum += value;};
 	  double getLinkStress();
 	  int getNumRecordStress(){return numRecordStress;};

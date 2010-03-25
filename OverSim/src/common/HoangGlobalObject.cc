@@ -23,6 +23,7 @@ void HoangGlobalObject::initialize()
 	stressSum = 0;
 	numNode = 0;
 	numRecordStress = 0;
+	numSent = 0;
 }
 
 /*void HoangGlobalObject::handleMessage(cMessage *msg)
