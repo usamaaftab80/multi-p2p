@@ -814,6 +814,8 @@ private:
 	double kw;
 	double maxKd;
 	int linkStress;
+	int linkStressIn;
+	int linkStressOut;
 
 public:
 	double getKd(){ return kd; };

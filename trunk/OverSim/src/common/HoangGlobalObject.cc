@@ -19,7 +19,10 @@ Define_Module(HoangGlobalObject);
 
 void HoangGlobalObject::initialize()
 {
-	stressVector.setName("Link stress");
+	stressVector.setName("stress--access link, globalObject");
+	stressSum = 0;
+	numNode = 0;
+	numRecordStress = 0;
 }
 
 /*void HoangGlobalObject::handleMessage(cMessage *msg)
@@ -29,7 +32,11 @@ void HoangGlobalObject::initialize()
 
 void HoangGlobalObject::recordStress()
 {
-	//stressVector.record();
+	calculateNumAccessLink();
+
+	numRecordStress++;
+
+	stressVector.record(getLinkStress());
 }
 
 
@@ -41,7 +48,7 @@ void HoangGlobalObject::calculateNumAccessLink()
 
 	topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*]").asVector());
 
-	int numNode = topo.getNumNodes();
+	numNode = topo.getNumNodes();
 
 	//nodeCountVector.record(numNode);
 
@@ -52,4 +59,9 @@ void HoangGlobalObject::calculateNumAccessLink()
 	}
 
 	//numPhysicalLink = numLink;
+}
+
+double HoangGlobalObject::getLinkStress()
+{
+	return (double)stressSum / (double)numNode; //numAccessLink
 }

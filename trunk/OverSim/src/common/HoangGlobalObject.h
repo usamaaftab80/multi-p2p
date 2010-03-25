@@ -29,6 +29,8 @@ private:
 	cOutVector stressVector;
 	int stressSum;
 	int numAccessLink;
+	int numNode;
+	int numRecordStress;
 
   protected:
     virtual void initialize();
@@ -39,6 +41,11 @@ private:
 	  void setSourceSenderAddress(TransportAddress add){sourceSenderAddress = add;};
 	  void recordStress();
 	  void calculateNumAccessLink();
+	  void resetStressSum(){stressSum = 0;};
+	  void incStressSum(){stressSum++;};
+	  void addToStressSum(int value){stressSum += value;};
+	  double getLinkStress();
+	  int getNumRecordStress(){return numRecordStress;};
 
 };
 
