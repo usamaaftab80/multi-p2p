@@ -194,7 +194,7 @@ void BaseOverlay::initialize(int stage)
         defaultTimeToLive = 32;
 
         maxKd = kw = kd = 0;
-        linkStress = 0;
+        linkStress = linkStressIn = linkStressOut =  0;
 
         WATCH(numAppDataSent);
         WATCH(bytesAppDataSent);
@@ -305,8 +305,18 @@ void BaseOverlay::finish()
     finishOverlay();
 
     //hoang
-    globalStatistics->addStdDev("HOANG link stress at Overlay node",linkStress);
-    globalStatistics->recordOutVector("HOANG link stress at Overlay node",linkStress);
+    //globalStatistics->addStdDev("HOANG link stress at Overlay node",linkStress);
+    if(linkStressOut > 0){ //forwarder
+    	linkStress = abs(linkStressOut - linkStressIn);
+    }
+    else { //only receive, not forward
+    	linkStress = linkStressIn;
+    }
+    //linkStress = linkStressOut + linkStressIn;
+
+    double avgLinkStress = (double)linkStress / (double)global->getNumRecordStress();
+
+    globalStatistics->recordOutVector("stress--access link--BaseOverlay.cc,",avgLinkStress);
 
     globalStatistics->nodesFinished++;
 
@@ -741,7 +751,9 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         //hoang
 		if(msg->isName("HOANG_STRESS")){
-			linkStress++;
+			global->incStressSum();
+
+			linkStressIn++;
 		}
 
 
@@ -1196,7 +1208,8 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
 
     //hoang
 	if(msg->isName("HOANG_STRESS")){
-		linkStress++;
+		global->incStressSum();
+		linkStressOut++;
 	}
 
     send(msg, "udpOut");

@@ -3725,8 +3725,8 @@ double Nice::getKdFromNode(TransportAddress add){
 	}
 	else
 	{
-		//kd_var = 0;
-		kd_var = getMaxKd();
+		kd_var = 0;
+		//kd_var = getMaxKd();
 		//std::cout << thisNode.getAddress() << " kd == 0 from " << add << endl;
 	}
 

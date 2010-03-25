@@ -24,7 +24,7 @@ simple NiceTestApp extends BaseApp
     parameters:
         @class(NiceTestApp);
         int sendPeriod @unit(s);   // how much time to wait between sending packets
-        int stressPeriod @unit(s);
+        double stressPeriod @unit(s);
         int timeSendAfterInit @unit(s);
         int numToSend;             // how many packets will we send at the same time?
         //int largestKey;            // largest key we can pick

@@ -148,7 +148,6 @@ void NiceTestApp::initializeApp(int stage)
 		//changeXdInterval = par("changeXdInterval");
 		changeXdInterval = 10;
 		changeXdTimer = new cMessage("changeXdTimer");
-		//scheduleAt(simTime() + changeXdInterval, changeXdTimer);
 
 		sendDataTimer = new cMessage("sendDataTimer");
 
@@ -211,8 +210,9 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         	if(isSender){
         		cout << "Init network finish at " << simTime() << endl;
 				beginSendDataTime = simTime() + par("timeSendAfterInit");
-        		//beginSendDataTime = simTime() + 100;
-				//scheduleAt(beginSendDataTime + videoPacket[0].time, sendDataTimer);
+				scheduleAt(beginSendDataTime + videoPacket[0].time, sendDataTimer);
+				generateXd();
+				scheduleAt(simTime() + changeXdInterval, changeXdTimer);
 				scheduleAt(simTime() + stressPeriod, stressTimer);
 				//numSent++;
         	}
@@ -243,59 +243,54 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		//stats->resetStressSum();
 
+    	/*if(videoPacket[numSent+1].time > videoPacket[numSent].time){ //prepare to send a new packet at greater time
+    		global->recordStress();
+    		global->resetStressSum();
+    	}*/
+
 		//send data
 
-		for (int i = 0; i < numToSend; i++) {
+		NiceTestAppMsg *pingPongPkt;                            // the message we'll send
+		pingPongPkt = new NiceTestAppMsg();
 
-			NiceTestAppMsg *pingPongPkt;                            // the message we'll send
-			pingPongPkt = new NiceTestAppMsg();
+		//cout << "IP " << thisNode.getAddress() << " created a msg at " << simTime()<< endl;
 
-			//cout << "IP " << thisNode.getAddress() << " created a msg at " << simTime()<< endl;
+		pingPongPkt->setType(MYMSG_PING);                  // set the message type to PING
+		pingPongPkt->setSenderAddress(thisNode);   // set the sender address to our own
 
-			pingPongPkt->setType(MYMSG_PING);                  // set the message type to PING
-			pingPongPkt->setSenderAddress(thisNode);   // set the sender address to our own
+		//string data = (thisNode.getAddress()).str() + " HOANG ";
+		//char* data = strcat((thisNode.getAddress()).str()," HOANG ");
 
-			//string data = (thisNode.getAddress()).str() + " HOANG ";
-			//char* data = strcat((thisNode.getAddress()).str()," HOANG ");
+		/*char* data = " HOANG ";
+		pingPongPkt->setData(data);*/
 
-			/*char* data = " HOANG ";
-			pingPongPkt->setData(data);*/
+		int length = videoPacket[numSent].length;
 
-			/*int maxByte = 1000;
-			int length = intrand(maxByte); //random length
-			//cout << "length=" << length << endl;
-			while (!(length > 0)){
-				length = intrand(maxByte);
-			}*/
+		pingPongPkt->setByteLength(length);
 
-			int length = videoPacket[numSent].length;
+		byteSent += length;
 
-			//pingPongPkt->setByteLength(length);
+		if(videoPacket[numSent].length > videoPacket[numSent-1].length){
 
-			byteSent += length;
+			//double thisPacketTime = simTime().dbl(); //or read from trace file
 
-			if(videoPacket[numSent].length > videoPacket[numSent-1].length){
+			//xw = (double)length * 8 / (thisPacketTime - lastPacketTime); //datarate for this packet (bit/s)
 
-				//double thisPacketTime = simTime().dbl(); //or read from trace file
+			simtime_t timeRange = videoPacket[numSent].length - videoPacket[numSent-1].length;
 
-				//xw = (double)length * 8 / (thisPacketTime - lastPacketTime); //datarate for this packet (bit/s)
+			xw = byteSent * 8 / timeRange;
 
-				simtime_t timeRange = videoPacket[numSent].length - videoPacket[numSent-1].length;
+			//cout << "generate packet length=" << length << " xw=" << xw << " timeperiod=" << thisPacketTime - lastPacketTime << "s" << endl;
 
-				xw = byteSent * 8 / timeRange;
+			stats->setXw(xw);
 
-				//cout << "generate packet length=" << length << " xw=" << xw << " timeperiod=" << thisPacketTime - lastPacketTime << "s" << endl;
+			//stats->resetStressSum();
 
-				stats->setXw(xw);
-
-				//stats->resetStressSum();
-
-				byteSent = 0;
-			}
-
-			//hoang
-			encapAndSendCbrAppMsg(pingPongPkt);
+			byteSent = 0;
 		}
+
+		//hoang
+		encapAndSendCbrAppMsg(pingPongPkt);
 
     } else if (msg->isName("changeXdTimer")){
 
@@ -317,18 +312,22 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
     	stats->resetStressSum();
 
+    	global->recordStress();
+
+    	global->resetStressSum();
+
     	//send stress measurement packet
 
 		NiceTestAppMsg *stressPkt;                            // the message we'll send
 		stressPkt = new NiceTestAppMsg();
 
-		int maxByte = 1336;
+		/*int maxByte = 1336;
 		int length = intrand(maxByte); //random length
 		//cout << "length=" << length << endl;
 		while (!(length > 0)){
 			length = intrand(maxByte);
 		}
-		stressPkt->setByteLength(length);
+		stressPkt->setByteLength(length);*/
 
 		stressPkt->setSenderAddress(thisNode);   // set the sender address to our own
 
@@ -456,7 +455,7 @@ void NiceTestApp::encapAndSendCbrAppMsg(cMessage* msg)
 
         send(cbrMsg,"to_lowerTier");
 
-        cout << "Vua send packet: length=" << videoPacket[numSent].length << " numSent=" << numSent << " || xw=" << xw << " at " << simTime() << endl;
+        //cout << "Vua send packet: length=" << videoPacket[numSent].length << " numSent=" << numSent << " || xw=" << xw << " at " << simTime() << endl;
 
         //if(!( videoPacket[numSent+1].time > 0 )){
         //if( videoPacket[numSent+1] == NULL){
