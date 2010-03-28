@@ -29,50 +29,39 @@ class StatisticsCollector : public cSimpleModule
     virtual void finish();
 
   private:
-    int stressSum;
+
     int numPhysicalLink;
     int numNode;
     cLongHistogram hopCountStats;
     cOutVector hopCountVector;
-    cOutVector linkStressVector;
     cOutVector nodeCountVector;
     cOutVector linkCountVector;
 
     cMessage *timerMsg;
     simtime_t statisticsPeriod;
 
-    int numRecordStress;
-
     double xw,xd;
+    double maxKd;
 
   public:
 
-	  void addToStressSum(int num);
+	void setMaxKd(double val){maxKd = val;};
+	double getMaxKd(){return maxKd;};
 
-      void incStressSum(){stressSum++;};
+	void setNumPhysicalLink(int num);
 
-      double getLinkStress();
+	int getNumPhysicalLink(){return numPhysicalLink;};
 
-      void setNumPhysicalLink(int num);
+	void calculateNumPhysicalLink();
 
-      int getNumPhysicalLink(){return numPhysicalLink;};
+	void collectHopCount(int hopCount);
 
-      void calculateNumPhysicalLink();
+	double getXw(){return xw;};
+	double getXd(){return xd;};
+	void setXw(double xw_var){ xw = xw_var ;};
+	void setXd(double xd_var){ xd = xd_var ;};
 
-      void collectHopCount(int hopCount);
-
-      void resetStressSum(){stressSum = 0;};
-
-      void recordLinkStress();
-
-      double getXw(){return xw;};
-      double getXd(){return xd;};
-      void setXw(double xw_var){ xw = xw_var ;};
-      void setXd(double xd_var){ xd = xd_var ;};
-
-      void hardChangeXdForKd(double kd_var);
-
-      ~StatisticsCollector();
+	void hardChangeXdForKd(double kd_var);
 
 };
 

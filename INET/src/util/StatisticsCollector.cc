@@ -21,22 +21,40 @@ Define_Module(StatisticsCollector);
 
 void StatisticsCollector::initialize()
 {
-	stressSum = 0;
 	numPhysicalLink = 0;
-	numRecordStress = 0;
 
-	hopCountVector.setName("HOANG hopCount mean");
-	linkStressVector.setName("HOANG linkStress");
+	hopCountVector.setName("2 hopCount--through phisical IP nodes");
 	nodeCountVector.setName("HOANG num IP node");
 	linkCountVector.setName("HOANG num physical link");
 
 	calculateNumPhysicalLink();
 
 	xw = xd = 0;
+	maxKd = 0;
 
 	statisticsPeriod = par("statisticsPeriod");
     timerMsg = new cMessage("StatisticsCollector Timer");
-    scheduleAt(simTime() + statisticsPeriod, timerMsg);
+
+    //set BER,PER = 0
+    cTopology topo;
+
+    topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*] **.accessRouter[*] **.backboneRouter[*]").asVector());
+
+	for (int i=0; i<topo.getNumNodes(); i++)
+	{
+	  cTopology::Node *node = topo.getNode(i);
+
+	  for (int j=0; j<node->getNumOutLinks(); j++)
+	  {
+		cGate *gate = node->getLinkOut(j)->getLocalGate();
+		cDatarateChannel *chan = check_and_cast<cDatarateChannel *>(gate->getChannel());
+		chan->setBitErrorRate(0);
+		chan->setPacketErrorRate(0);
+	  }
+
+	}
+
+    //scheduleAt(simTime() + statisticsPeriod, timerMsg);
 
     //std::cout << "SSSSSSSSSSSSSSSStatistic Collector INitttttttttttttt at " << simTime() << endl;
 
@@ -54,8 +72,6 @@ void StatisticsCollector::handleMessage(cMessage *msg)
 
 		linkCountVector.record(numPhysicalLink);
 
-		//linkStressVector.record(getLinkStress());
-
 	} else {
 
 		delete msg;
@@ -65,84 +81,32 @@ void StatisticsCollector::handleMessage(cMessage *msg)
 
 }
 
-void StatisticsCollector::addToStressSum(int num)
-{
-	//std::cout << "nhay vao ham addToStressSum stressSum " << stressSum << " num " << num << endl;
-	stressSum += num;
-}
-
 void StatisticsCollector::setNumPhysicalLink(int num)
 {
 	numPhysicalLink = num;
 }
 
-double StatisticsCollector::getLinkStress()
-{
-
-	//debug
-
-	/*std::cout << "statisticsCollector. stressSum = " << stressSum << endl;
-	std::cout << "statisticsCollector. numPhysicalLink = " << numPhysicalLink / 2 << endl;*/
-
-	if(numPhysicalLink > 0){
-
-		return (double)stressSum / (double)numPhysicalLink;
-		//return (double)stressSum / (double)numNode / 2;
-
-	}
-
-	else{
-
-		std::cout << "Error: numPhysicalLink = 0" << endl;
-
-		return 0;
-
-	}
-
-}
 
 void StatisticsCollector::collectHopCount(int hopCount)
 {
-	hopCountStats.collect(hopCount);
+	//hopCountStats.collect(hopCount);
+	hopCountVector.record(hopCount);
 }
 
-void StatisticsCollector::recordLinkStress()
-{
-	//double avgLinkStress = stressSum / numPhysicalLink;
-	numRecordStress++;
-
-	//linkStressVector.record(getLinkStress()/simTime().dbl()/numRecordStress);
-	linkStressVector.record(getLinkStress());
-}
 
 void StatisticsCollector::finish()
 {
 
 	cancelAndDelete(timerMsg);
-
-	std::cout << "finish statisticsCollector. stressSum=" << stressSum << endl;
-
-	calculateNumPhysicalLink();
-
-	recordScalar("HOANG linkStress",getLinkStress());
-	recordScalar("HOANG numRecordStress",numRecordStress);
+	/*
+	std::cout << "finish statisticsCollector. " << endl;
 
 	std::cout << "Hop count, min:    " << hopCountStats.getMin() << endl;
 	std::cout << "Hop count, max:    " << hopCountStats.getMax() << endl;
 	std::cout << "Hop count, mean:   " << hopCountStats.getMean() << endl;
 	std::cout << "Hop count, stddev: " << hopCountStats.getStddev() << endl;
-
-	hopCountStats.recordAs("HOANG stats hop count");
-
-}
-
-
-StatisticsCollector::~StatisticsCollector()
-{
-
-	std::cout << "~~~~statisticsCollector. LinkStress = " << getLinkStress() << endl;
-
-	//recordScalar("HOANG linkStress Sum",stressSum);
+	 */
+	//hopCountStats.recordAs("HOANG stats hop count");
 
 }
 
@@ -185,7 +149,7 @@ void StatisticsCollector::calculateNumPhysicalLink()
 
 	numNode = topo.getNumNodes();
 
-	nodeCountVector.record(numNode);
+	//nodeCountVector.record(numNode);
 
 	for (int i=0; i<numNode ; i++)
 	{

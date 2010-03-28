@@ -42,7 +42,8 @@ bool DropTailQueue::enqueue(cMessage *msg)
     {
         EV << "Queue full, dropping packet.\n";
         delete msg;
-        dropVec.record(1);
+        //hoang disable
+        //dropVec.record(1);
         return true;
     }
     else

@@ -81,23 +81,5 @@ channel inet_dialup_56k extends ned.DatarateChannel
 {
     parameters:
         delay = 220ms;
-        datarate = 56kbps;
-}
-
-channel hoangChannel extends ned.DatarateChannel
-{
-    parameters:
-        delay;
-        ber;
-        datarate;
-        //weight;
-}
-
-channel GTITMChannel extends ned.DatarateChannel
-{
-    parameters:
-        delay;
-        ber;
-        datarate;
-        //weight;
+        datarate = 56000bps;
 }

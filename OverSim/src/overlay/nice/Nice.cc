@@ -565,7 +565,7 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
                     if(hoang_use_cost){
                     	distance = cost();
                     } else {
-                    	globalStatistics->recordOutVector("HOANG1 Distance value",distance);
+                    	//globalStatistics->recordOutVector("HOANG1 Distance value",distance);
                     }
 
                     it->second->set_distance(distance);
@@ -1773,7 +1773,7 @@ void Nice::handleHeartbeat(NiceMessage* msg)
                 if(hoang_use_cost){
                 	newDistance = cost();
                 } else {
-                	globalStatistics->recordOutVector("HOANG1 Distance value",newDistance);
+                	//globalStatistics->recordOutVector("HOANG1 Distance value",newDistance);
                 }
 
                 if (oldDistance > 0) {
@@ -1907,7 +1907,7 @@ void Nice::handleHeartbeat(NiceMessage* msg)
                 if(hoang_use_cost){
                 	it->second->set_distance(cost());
                 } else {
-                	globalStatistics->recordOutVector("HOANG1 Distance value",(simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
+                	//globalStatistics->recordOutVector("HOANG1 Distance value",(simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
                 }
 
             }
@@ -3689,7 +3689,7 @@ double Nice::cost()
 		std::cout << "xd=" << xd << " kd=" << kd << " || xw=" << xw << " kw=" << kw_var << " || cost=" << cost << endl;
 	}
 
-	globalStatistics->recordOutVector("HOANG1 Cost value",cost);
+	//globalStatistics->recordOutVector("HOANG1 Cost value",cost);
 
 	return cost;
 }

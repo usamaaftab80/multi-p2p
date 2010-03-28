@@ -56,6 +56,7 @@ simple BaseOverlay extends BaseRpc
         bool recordRoute; // record visited hops on route 
         string statsModulePath; //hoang
         string globalModulePath;
+        bool isSender;
 
     gates:
         input udpIn; // gate from the UDP layer

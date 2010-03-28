@@ -139,10 +139,10 @@ void IP::handlePacketFromNetwork(IPDatagram *datagram)
     }*/
 
 	//hoang
-	if(strcmp(datagram->getName(),"HOANG_STRESS") == 0){
+	/*if(strcmp(datagram->getName(),"HOANG_STRESS") == 0){
 		//numCbrDataRoute++;
 		stats->incStressSum();
-	}
+	}*/
 
     // route packet
     if (!datagram->getDestAddress().isMulticast())
@@ -305,10 +305,10 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL)
     numForwarded++;
 
 	//hoang
-	if(strcmp(datagram->getName(),"HOANG_STRESS") == 0){
+	/*if(strcmp(datagram->getName(),"HOANG_STRESS") == 0){
 		//numCbrDataRoute++;
 		stats->incStressSum();
-	}
+	}*/
 
 
     //
