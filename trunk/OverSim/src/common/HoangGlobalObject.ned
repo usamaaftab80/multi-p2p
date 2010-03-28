@@ -20,4 +20,7 @@ package oversim.common;
 //
 simple HoangGlobalObject
 {
+    parameters:
+        int targetOverlayTerminalNum;
+        int videoSize;
 }

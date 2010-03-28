@@ -190,16 +190,24 @@ void BaseOverlay::initialize(int stage)
     	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
     	global = check_and_cast<HoangGlobalObject *>(modp2);
 
-    	for(int i=0; i < 10000; i++){
+    	/*for(int i=0; i < 10000; i++){
     		dataIn[i] = 0;
     		dataOut[i] = 0;
-    	}
+    		dataStress[i] = 0;
+    	}*/
+    	int size = global->getVideoSize();
+    	dataIn = new int [size];
+    	dataOut = new int [size];
+
+    	fill(dataIn, dataIn + size, 0);
+    	fill(dataOut, dataOut + size, 0);
+
+    	//cout << thisNode.getAddress() << " baseoverlay module iniiiiiittt" << endl;
 
         //defaultTimeToLive = par("timeToLive");
         defaultTimeToLive = 32;
 
-        maxKd = kw = kd = 0;
-        linkStress = linkStressIn = linkStressOut =  0;
+        kw = kd = 0;
 
         WATCH(numAppDataSent);
         WATCH(bytesAppDataSent);
@@ -310,34 +318,41 @@ void BaseOverlay::finish()
     finishOverlay();
 
     //hoang
-    //globalStatistics->addStdDev("HOANG link stress at Overlay node",linkStress);
+    //cout << thisNode.getAddress() << " baseoverlay module finish" << endl;
+    bool isSender = par("isSender");
+
+    /*if(!isSender){
+    	cout << thisNode.getAddress() << " is NOT sender" << endl;
+    }
+    else{
+    	cout << thisNode.getAddress() << " is senderrrrrrrrrrrrr" << endl;
+    }*/
+
+    int numPacketLost = 0 ;
     for(int i=0; i<global->getNumSent(); i++){
     	int dataStress;
-    	//if(dataOut[i] > 0){ //forwarder
-    	if(dataOut[i] > dataIn[i]){ //forwarder
-			//dataStress = abs(dataOut[i] - dataIn[i]);
+
+    	if(!isSender){
+			if(dataIn[i] < 1){
+				dataIn[i] = 1; //hard code prevent packet loss
+				numPacketLost++;
+			}
+    	}
+
+    	if(dataOut[i] > 0){ //forwarder
     		dataStress = dataOut[i];
 		}
 		else { //only receive, not forward
 			dataStress = dataIn[i];
 		}
 
-    	//cout << thisNode.getAddress() << " packet " << i << " stress dataIn " << dataIn[i] << endl;
-    	linkStressStats.collect(dataStress);
+    	global->addLinkStress(i,dataStress);
+
+    	//linkStressStats.collect(dataStress);
     }
 
-    /*if(linkStressOut > 0){ //forwarder
-    	linkStress = abs(linkStressOut - linkStressIn);
-    }
-    else { //only receive, not forward
-    	linkStress = linkStressIn;
-    }*/
-    //linkStress = linkStressOut + linkStressIn;
-
-    //double avgLinkStress = (double)linkStress / (double)global->getNumRecordStress();
-
-    //globalStatistics->recordOutVector("stress--access link--BaseOverlay.cc,",avgLinkStress);
-    globalStatistics->recordOutVector("stress--access link--BaseOverlay.cc,",linkStressStats.getMean());
+    //globalStatistics->recordOutVector("1 stress--access link--BaseOverlay.cc",linkStressStats.getMean());
+    globalStatistics->recordOutVector("5 numPacketLost",numPacketLost);
 
     globalStatistics->nodesFinished++;
 
@@ -735,9 +750,6 @@ void BaseOverlay::handleMessage(cMessage* msg)
                                         udpControlInfo->getSrcPort()));
         overlayCtrlInfo->setSrcRoute(overlayCtrlInfo->getLastHop());
         overlayCtrlInfo->setTransportType(UDP_TRANSPORT);
-        //hoang
-        overlayCtrlInfo->setKd(udpControlInfo->getDelayInfo());
-        overlayCtrlInfo->setKw(udpControlInfo->getMinBW());
 
         msg->setControlInfo(overlayCtrlInfo);
 
@@ -746,43 +758,34 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         int hopCount = defaultTimeToLive - udpControlInfo->getTimeToLive();
 
-        stats->collectHopCount(hopCount);
+        //hoang
+		string name = msg->getName();
+		if(name.find("CBR_DATA") == 0){
+			int id = getIDfromName(name);
+			//cout << thisNode.getAddress() << " vua nhan duoc data pkt " << id << endl;
+			dataIn[id]++;
+
+			stats->collectHopCount(hopCount); //just calculate hopcount of data packets only
+		}
+
+        //stats->collectHopCount(hopCount);
 
         //globalStatistics->recordOutVector("HOANG udp hop count",hopCount);
 
         kw = udpControlInfo->getMinBW();
+        kd = udpControlInfo->getDelayInfo();
 
-        if(udpControlInfo->getDelayInfo() > maxKd){
-
-        	maxKd = udpControlInfo->getDelayInfo(); //update maxKd
-
+        if(udpControlInfo->getDelayInfo() > stats->getMaxKd()){
+        	stats->setMaxKd(udpControlInfo->getDelayInfo()); //update maxKd
         }
 
-        if(!(maxKd < stats->getXd())){
+        if(!(stats->getMaxKd() < stats->getXd())){
 
         	stats->hardChangeXdForKd(udpControlInfo->getDelayInfo());
 
         }
 
-        kd = udpControlInfo->getDelayInfo();
-
-        //kd = (simTime() - msg->getCreationTime()).dbl();
-
         //cout << " vua nhan dc packet kw=" << kw << " kd=" << kd << endl;
-
-        //hoang
-		/*if(msg->isName("HOANG_STRESS")){
-			global->incStressSum();
-
-			linkStressIn++;
-		}*/
-        string name = msg->getName();
-    	if(name.find("CBR_DATA") == 0){
-    		int id = getIDfromName(name);
-    		//cout << thisNode.getAddress() << " vua nhan duoc pkt " << id << endl;
-    		dataIn[id] = dataIn[id] + 1;
-    	}
-
 
         delete udpControlInfo;
 
@@ -1234,17 +1237,12 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
     }
 
     //hoang
-	/*if(msg->isName("HOANG_STRESS")){
-		global->incStressSum();
-		linkStressOut++;
-	}*/
-    string name = msg->getName();
+	string name = msg->getName();
 	if(name.find("CBR_DATA") == 0){
 		int id = getIDfromName(name);
 		//cout << thisNode.getAddress() << " vua truyen di pkt " << id << endl;
-		dataOut[id] = dataOut[id] + 1;
+		dataOut[id]++;
 	}
-
 
     send(msg, "udpOut");
 }
@@ -2039,30 +2037,11 @@ bool BaseOverlay::isInSimpleMultiOverlayHost()
     return isVector() || getParentModule()->isVector();
 }
 
-/*
-void BaseOverlay::requestKdKwFromNetwork()
-{
-	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
-
-	cGate* gate = check_and_cast<cGate*>(thisOverlayTerminal->gate("pppg$o",0)); //connect to accessRouter
-
-	cDatarateChannel *chan = check_and_cast<cDatarateChannel *>(gate->getChannel());
-
-	kd = (chan->getDelay()).dbl();
-	//double e = chan->getBitErrorRate();
-	kw = chan->getDatarate();
-
-	//std::cout << "Terminal " << thisOverlayTerminal->getFullName() << " gate " << gate->getFullName() << " kd " << kd << " kw " << kw << endl;
-}
-
-*/
 int BaseOverlay::getIDfromName(string name)
 {
 	size_t pos = name.find(" ");
 
 	string strID = name.substr(pos + 1);
 
-	int ID = atoi(strID.c_str()); //convert string to int
-
-	return ID;
+	return atoi(strID.c_str()); //convert string to int
 }

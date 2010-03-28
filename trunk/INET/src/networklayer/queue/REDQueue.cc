@@ -123,7 +123,8 @@ bool REDQueue::enqueue(cMessage *msg)
     if (mark || queue.length()>=maxth) // maxth is also the "hard" limit
     {
         delete msg;
-        dropVec.record(1);
+        //hoang disable
+        //dropVec.record(1);
         return true;
     }
     else

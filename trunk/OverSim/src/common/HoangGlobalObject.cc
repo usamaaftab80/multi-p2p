@@ -19,27 +19,46 @@ Define_Module(HoangGlobalObject);
 
 void HoangGlobalObject::initialize()
 {
-	stressVector.setName("stress--access link, globalObject");
-	stressSum = 0;
-	numNode = 0;
-	numRecordStress = 0;
+	numAccessLink = numNode = par("targetOverlayTerminalNum");
 	numSent = 0;
+	videoSize = par("videoSize");
+	linkStress = new int [videoSize];
+	fill(linkStress, linkStress + videoSize, 0);
+
+	//set random sender: generate random number in [0,par("targetOverlayTerminalNum")]
+	senderId = intrand(numNode);
+	cout << "global initttt done" << endl;
+}
+
+
+HoangGlobalObject::~HoangGlobalObject()
+{
+	//cout << "~HoangGlobalObject()" << endl;
+	int temp = linkStress[0];
+	int numValue = 1; //amount of switching times
+	int sum = linkStress[0];
+	cout << "SumStress of packet from 0: " << temp << endl;
+	for(int i=0; i<videoSize; i++){
+		//cout << "packet " << i << " sum stress " << linkStress[i] << endl;
+		//TODO: count number of different values, number of switching times
+		if(linkStress[i] != temp){ //switch
+			numValue++;
+			temp = linkStress[i];
+			cout << "Switch to new value: " << temp << " from packet " << i << endl;
+			sum += temp;
+		}
+
+	}
+	recordScalar("1. Average link stress",((double)sum / (double)numValue)/numAccessLink );
+	recordScalar("Amount of different values",numValue);
+	cout << "Amount of different values: " << numValue << endl;
+	cout << "Average link stress: "<< ((double)sum / (double)numValue)/numAccessLink << endl;
 }
 
 /*void HoangGlobalObject::handleMessage(cMessage *msg)
 {
 	// TODO - Generated method body
 }*/
-
-void HoangGlobalObject::recordStress()
-{
-	calculateNumAccessLink();
-
-	numRecordStress++;
-
-	stressVector.record(getLinkStress());
-}
-
 
 void HoangGlobalObject::calculateNumAccessLink()
 {
@@ -59,10 +78,5 @@ void HoangGlobalObject::calculateNumAccessLink()
 	  numLink += node->getNumOutLinks();
 	}
 
-	//numPhysicalLink = numLink;
-}
 
-double HoangGlobalObject::getLinkStress()
-{
-	return (double)stressSum / (double)numNode; //numAccessLink
 }

@@ -22,33 +22,35 @@
 /**
  * TODO - Generated class
  */
+
+using namespace std;
+
 class HoangGlobalObject : public cSimpleModule
 {
-private:
+  private:
 	TransportAddress sourceSenderAddress;
-	cOutVector stressVector;
-	int stressSum;
 	int numAccessLink;
 	int numNode;
-	int numRecordStress;
 	int numSent;
+	int senderId;
+	int videoSize;
+	int* linkStress;
 
   protected:
     virtual void initialize();
     //virtual void handleMessage(cMessage *msg);
 
+
   public:
 	  TransportAddress getSourceSenderAddress(){return sourceSenderAddress;};
 	  void setSourceSenderAddress(TransportAddress add){sourceSenderAddress = add;};
-	  void recordStress();
 	  void calculateNumAccessLink();
-	  void resetStressSum(){stressSum = 0;};
-	  void incStressSum(){stressSum++;};
 	  void incNumSent(){numSent++;};
 	  int getNumSent(){return numSent;};
-	  void addToStressSum(int value){stressSum += value;};
-	  double getLinkStress();
-	  int getNumRecordStress(){return numRecordStress;};
+	  int getVideoSize(){return videoSize;};
+	  void setVideoSize(int value){videoSize = value;};
+	  void addLinkStress(int pktId,int value){linkStress[pktId] += value;};
+	  ~HoangGlobalObject();
 
 };
 

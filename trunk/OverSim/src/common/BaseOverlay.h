@@ -814,19 +814,17 @@ private:
 private:
 	double kd;
 	double kw;
-	double maxKd;
-	int linkStress;
-	int linkStressIn;
-	int linkStressOut;
-	int dataIn[10000];
+
+	/*int dataIn[10000];
 	int dataOut[10000];
-	//int dataStress[10000];
-	cLongHistogram linkStressStats;
+	int dataStress[10000];*/
+	int* dataIn;
+	int* dataOut;
 
 public:
 	double getKd(){ return kd; };
 	double getKw(){ return kw; };
-	double getMaxKd(){ return maxKd; };
+
 	void setKd(double kd_var){ kd = kd_var; };
 	void setKw(double kw_var){ kw = kw_var; };
 	//void requestKdKwFromNetwork();
