@@ -207,7 +207,7 @@ void BaseOverlay::initialize(int stage)
         //defaultTimeToLive = par("timeToLive");
         defaultTimeToLive = 32;
 
-        kw = kd = 0;
+        kw = kd = maxKd = 0;
 
         WATCH(numAppDataSent);
         WATCH(bytesAppDataSent);
@@ -778,6 +778,10 @@ void BaseOverlay::handleMessage(cMessage* msg)
         if(udpControlInfo->getDelayInfo() > stats->getMaxKd()){
         	stats->setMaxKd(udpControlInfo->getDelayInfo()); //update maxKd
         }
+
+        if(udpControlInfo->getDelayInfo() > maxKd){
+			maxKd = udpControlInfo->getDelayInfo(); //update maxKd
+		}
 
         if(!(stats->getMaxKd() < stats->getXd())){
 

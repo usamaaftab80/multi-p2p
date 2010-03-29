@@ -28,16 +28,7 @@
 #include "SimpleNodeEntry.h"
 #include "SimpleUDP.h"
 #include "GlobalNodeListAccess.h"
-
-#include <string.h>
-
-template <class T>
-inline std::string to_string (const T& t)
-{
-    std::stringstream ss;
-    ss << t;
-    return ss.str();
-}
+#define DBL_MAX 1.7976931348623158e+308
 
 namespace oversim
 {
@@ -45,7 +36,7 @@ namespace oversim
 /**
  * Define colors for layers in visualization
  */
-const char *clustercolors[] = { "yellow",
+const char *clustercolors[] = {	"yellow",
                                 "magenta",
                                 "red",
                                 "orange",
@@ -57,7 +48,7 @@ const char *clustercolors[] = { "yellow",
                                 "yellow"
                               };
 
-const char *clusterarrows[] = { "m=m,50,50,50,50;ls=yellow,2",
+const char *clusterarrows[] = {	"m=m,50,50,50,50;ls=yellow,2",
                                 "m=m,50,50,50,50;ls=magenta,3",
                                 "m=m,50,50,50,50;ls=red,4",
                                 "m=m,50,50,50,50;ls=orange,5",
@@ -68,6 +59,7 @@ const char *clusterarrows[] = { "m=m,50,50,50,50;ls=yellow,2",
                                 "m=m,50,50,50,50;ls=navy,10",
                                 "m=m,50,50,50,50;ls=yellow,11"
                               };
+const double DOUBLE_TO_SIMTIME_RATIO = SimTime::getMaxTime().dbl() / DBL_MAX;
 
 Define_Module(Nice);
 
@@ -90,12 +82,12 @@ Nice::~Nice()
 {
 
     // destroy self timer messages
-    /*cancelAndDelete(heartbeatTimer);
+    cancelAndDelete(heartbeatTimer);
     cancelAndDelete(maintenanceTimer);
     cancelAndDelete(structureConnectionTimer);
     cancelAndDelete(rpPollTimer);
     cancelAndDelete(queryTimer);
-    cancelAndDelete(visualizationTimer);*/
+    cancelAndDelete(visualizationTimer);
 
     std::map<TransportAddress, NicePeerInfo*>::iterator it = peerInfos.begin();
 
@@ -115,7 +107,8 @@ Nice::~Nice()
 void Nice::initializeOverlay( int stage )
 {
 
-    checkedLeader = false;
+	hoang_use_cost = par("hoang_use_cost");
+	hoang_debug_cost = par("hoang_debug_cost");
 
     /* Because of IPAddressResolver, we need to wait until interfaces
      * are registered, address auto-assignment takes place etc. */
@@ -134,9 +127,6 @@ void Nice::initializeOverlay( int stage )
         clusters[i].clear();
 
     }
-
-    hoang_debug_cost = par("hoang_debug_cost");
-    hoang_use_cost = par("hoang_use_cost");
 
     /* Initialize Self-Messages */
 
@@ -195,7 +185,6 @@ void Nice::initializeOverlay( int stage )
     second_leader = TransportAddress::UNSPECIFIED_NODE;
 
     // add some watches
-/*
     WATCH(thisNode);
     WATCH_POINTER_MAP(peerInfos);
     WATCH(evalLayer);
@@ -203,7 +192,6 @@ void Nice::initializeOverlay( int stage )
     WATCH(heartbeatTimer);
     WATCH_MAP(tempPeers);
     WATCH(RendevouzPoint);
-*/
 
 } // initializeOverlay
 
@@ -245,7 +233,7 @@ void Nice::changeState( int toState )
         if (RendevouzPoint.isUnspecified()) {
 
             //EV << "[NICE::changeState() @ " << thisNode.ip
-            //   << "    RP undefined." << endl;
+            //	 << "    RP undefined." << endl;
 
             /* become Rendevouz Point */
             becomeRendevouzPoint();
@@ -261,7 +249,7 @@ void Nice::changeState( int toState )
         } else {
 
             //EV << "[NICE::changeState() @ " << thisNode.ip
-            //   << "    RP found: " << RendevouzPoint.getAddress() << endl;
+            //	 << "    RP found: " << RendevouzPoint.getAddress() << endl;
 
             /* initiate NICE structure joining */
             BasicJoinLayer(-1);
@@ -350,23 +338,22 @@ void Nice::handleTimerEvent( cMessage* msg )
  */
 void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 {
+
     // try message cast to NICE base message
     if (dynamic_cast<NiceMessage*>(msg) != NULL) {
 
         NiceMessage* niceMsg = check_and_cast<NiceMessage*>(msg);
-
-        //hoang
-        OverlayCtrlInfo* overlayCtrlInfo = check_and_cast<OverlayCtrlInfo*>(msg->removeControlInfo());
 
         // First of all, update activity information for sourcenode
         std::map<TransportAddress, NicePeerInfo*>::iterator it = peerInfos.find(niceMsg->getSrcNode());
         if (it != peerInfos.end()) {
 
             it->second->touch();
-            //hoang
-            it->second->setKd(overlayCtrlInfo->getKd());
 
-            //std::cout << "vua nhan dc pkt kd=" << it->second->getKd() << endl;
+            //hoang
+			it->second->setKd(getKd());
+
+			//std::cout << "vua nhan dc pkt kd=" << it->second->getKd() << endl;
 
         }
 
@@ -560,14 +547,10 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
                 if (it != peerInfos.end()) {
 
-                    double distance = simTime().dbl() - it->second->getDES();//hoang
+                    double distance = simTime().dbl() - it->second->getDES();
 
-                    if(hoang_use_cost){
-                    	distance = cost();
-                    } else {
-                    	//globalStatistics->recordOutVector("HOANG1 Distance value",distance);
-                    }
-
+                    //hoang
+                    if(hoang_use_cost) distance = cost();
                     it->second->set_distance(distance);
                     it->second->touch();
 
@@ -727,22 +710,12 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
             	setSmallXd(appMsg);
 
                 unsigned int hopCount = appMsg->getHopCount();
-
                 hopCount++;
-
-                //hoang
-                //std::cout << "I'm " << thisNode.getAddress() << " got cbrdata packet from " << appMsg->getSrcNode() << " hopcount " << hopCount << " last hop " << appMsg->getLastHop() << endl;
 
                 if (hopCount < 8) {
 
                     CbrAppMessage* dup = static_cast<CbrAppMessage*>(appMsg->dup());
                     send(dup, "appOut");
-                    //hoangCheckLeader();
-
-                    /*//hoang
-                    globalStatistics->addStdDev("HOANG Hop count",hopCount);
-                    globalStatistics->recordOutVector("HOANG Hop count",hopCount);
-                    //globalStatistics->recordOutVector("HOANG numreceive cbr from udp",1);*/
 
                     CbrAppMessage* dup2 = static_cast<CbrAppMessage*>(appMsg->dup());
                     dup2->setHopCount(hopCount);
@@ -772,15 +745,6 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 void Nice::finishOverlay()
 {
 
-    //hoangCheckLeader();
-    // destroy self timer messages
-	cancelAndDelete(heartbeatTimer);
-	cancelAndDelete(maintenanceTimer);
-	cancelAndDelete(structureConnectionTimer);
-	cancelAndDelete(rpPollTimer);
-	cancelAndDelete(queryTimer);
-	cancelAndDelete(visualizationTimer);
-
 
 } // finishOverlay
 
@@ -802,8 +766,6 @@ void Nice::becomeRendevouzPoint()
     for (int i=0; i<=getHighestLayer(); i++) {
 
         clusters[i].setLeader(thisNode);
-
-        //std::cout << "getHighestLayer() " << getHighestLayer() << endl;
 
     }
 
@@ -1466,10 +1428,10 @@ void Nice::sendHeartbeats()
 
                 if (it != peerInfos.end()) {
 
-                    it->second->set_distance_estimation_start(simTime().dbl());//hoang
+                    it->second->set_distance_estimation_start(simTime().dbl());
                     if(hoang_use_cost){
-                    	it->second->set_distance_estimation_start(cost());
-                    }
+						it->second->set_distance_estimation_start(cost());
+					}
 
                 }
 
@@ -1769,11 +1731,10 @@ void Nice::handleHeartbeat(NiceMessage* msg)
                 double oldDistance = it->second->get_distance();
 
                 /* Use Exponential Moving Average with factor 0.1 */
-                double newDistance = (simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2.0;//hoang
+                double newDistance = (simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2.0;
+
                 if(hoang_use_cost){
-                	newDistance = cost();
-                } else {
-                	//globalStatistics->recordOutVector("HOANG1 Distance value",newDistance);
+					newDistance = cost();
                 }
 
                 if (oldDistance > 0) {
@@ -1893,8 +1854,6 @@ void Nice::handleHeartbeat(NiceMessage* msg)
         /* Update sequence number information and evaluate distance */
         std::map<TransportAddress, NicePeerInfo*>::iterator it = peerInfos.find(hbMsg->getSrcNode());
 
-        //std::cout << "HB from "  << (it->first).getAddress() << endl;
-
         if (it != peerInfos.end()) { /* We already know this node */
 
             it->second->set_last_HB_arrival(simTime().dbl());
@@ -1902,13 +1861,10 @@ void Nice::handleHeartbeat(NiceMessage* msg)
             if (it->second->get_backHB(hbMsg->getSeqRspNo()) > 0) {
 
                 /* Valid distance measurement, get value */
-
-                it->second->set_distance((simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);//hoang
+                it->second->set_distance((simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
                 if(hoang_use_cost){
-                	it->second->set_distance(cost());
-                } else {
-                	//globalStatistics->recordOutVector("HOANG1 Distance value",(simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
-                }
+					it->second->set_distance(cost());
+				}
 
             }
 
@@ -2339,7 +2295,7 @@ void Nice::maintenance()
 
                 if ((clusters[i].getSize() < k) && (clusters[i+1].getSize() > 1)) {
 
-                    EV  << simTime() << " : " << thisNode.getAddress()
+                    EV 	<< simTime() << " : " << thisNode.getAddress()
                     << ": CLUSTER MERGE!: " << i << endl;
 
                     ClusterMerge(i);
@@ -3456,6 +3412,7 @@ void Nice::gracefulLeave(short bottomLayer)
  */
 void Nice::handleAppMessage(cMessage* msg)
 {
+
     if (dynamic_cast<CbrAppMessage*>(msg)) {
 
         CbrAppMessage *appMsg = check_and_cast<CbrAppMessage*>(msg);
@@ -3469,7 +3426,7 @@ void Nice::handleAppMessage(cMessage* msg)
             appMsg->setLastHop(thisNode);
             appMsg->setHopCount(0);
 
-            //appMsg->setBitLength(CBRAPPMSG_L(msg)); //hoang
+            appMsg->setBitLength(CBRAPPMSG_L(msg));
 
             sendDataToOverlay(appMsg);
 
@@ -3573,15 +3530,15 @@ void Nice::updateVisualization()
     getParentModule()->getParentModule()
     ->getDisplayString().setTagArg("i2", 1, clustercolors[getHighestLayer()]);
 
-//  std::set<TransportAddress>::iterator it = AllHosts.begin();
+//	std::set<TransportAddress>::iterator it = AllHosts.begin();
 //
-//  while (it != AllHosts.end()) {
+//	while (it != AllHosts.end()) {
 //
-//      deleteOverlayNeighborArrow(*it);
+//		deleteOverlayNeighborArrow(*it);
 //
-//      it++;
+//		it++;
 //
-//  }
+//	}
 
     //redraw
     for (int i=0; clusters[i].contains(thisNode); i++) {
@@ -3631,45 +3588,6 @@ void Nice::pollRP(int layer)
 
 } // pollRP
 
-/*************************************************
-*check if this node is leader (call once)
-*/
-void Nice::hoangCheckLeader(){
-
-    if(!checkedLeader){
-
-        for (short i=0; i<maxLayers; i++) {
-
-            if (clusters[i].getSize() > 0) {
-
-                if (clusters[i].contains(thisNode) && clusters[i].getLeader() == thisNode) {
-
-                    int size = clusters[i].getSize();
-
-                    std::cout << thisNode.getAddress() << ": is leader layer " << i << " cluster size " << size << endl;
-
-                    std::string str = "HOANG num leaders layer " + to_string(i);
-
-                    globalStatistics->recordOutVector(str,1);
-
-                    globalStatistics->recordOutVector("HOANG total ALM link count",size - 1);
-
-                    checkedLeader = true;
-
-                }
-
-            }
-
-        }
-
-    }
-
-    else{
-        //do nothing, no check anymore
-    }
-
-}
-
 double Nice::cost()
 {
 	double cost, kw_var , /*kd_var,*/ xw; //, xd;
@@ -3682,37 +3600,26 @@ double Nice::cost()
 	//xd = stats->getXd();
 	xw = stats->getXw();
 
+	if(!(xd > kd)){
+		xd = kd + 1e-10;
+	}
+
 	//cost
-	cost = sqrt( (kd/(xd-kd)) * (xw/(kw_var-xw)) );
+	cost = sqrt( (kd/(xd-kd)) * (xw/(kw_var-xw)) ) * DOUBLE_TO_SIMTIME_RATIO;
 
 	if(hoang_debug_cost){
 		std::cout << "xd=" << xd << " kd=" << kd << " || xw=" << xw << " kw=" << kw_var << " || cost=" << cost << endl;
 	}
 
+	if(cost > SimTime::getMaxTime().dbl()){
+		//cost = SimTime::getMaxTime().dbl()/2;
+		cost = 1;
+		globalStatistics->recordOutVector("Infinity cost times",1);
+	}
 	//globalStatistics->recordOutVector("HOANG1 Cost value",cost);
 
 	return cost;
 }
-/*
-
-double Nice::cost(simtime_t delay)
-{
-	double cost, kw_var , kd_var, xw, xd;
-
-	kw_var = getKw();
-
-	kd_var = delay.dbl();
-
-	xd = stats->getXd();
-	xw = stats->getXw();
-
-	//cost
-	cost = sqrt( (kd_var/(xd-kd_var)) * (xw/(kw_var-xw)) );
-
-	//std::cout << "xd=" << xd << " kd=" << kd_var << " xw=" << xw << " kw=" << kw_var << " cost=" << cost << endl;
-
-	return cost;
-}*/
 
 double Nice::getKdFromNode(TransportAddress add){
 
@@ -3725,8 +3632,8 @@ double Nice::getKdFromNode(TransportAddress add){
 	}
 	else
 	{
-		kd_var = 0;
-		//kd_var = getMaxKd();
+		//kd_var = 0;
+		kd_var = maxKd;
 		//std::cout << thisNode.getAddress() << " kd == 0 from " << add << endl;
 	}
 
@@ -3734,7 +3641,6 @@ double Nice::getKdFromNode(TransportAddress add){
 
 	return kd_var ;
 }
-
 
 void Nice::setSmallXd(CbrAppMessage* appMsg ){
 
@@ -3754,16 +3660,10 @@ void Nice::setSmallXd(CbrAppMessage* appMsg ){
 
 	xd = lastHopKd/sourceSenderKd*XD;
 
-}
-
-void Nice::setSmallXdSource(CbrAppMessage* appMsg ){
-
-	//while lasthop != source sender
-	while(appMsg->getLastHop() != global->getSourceSenderAddress()){
-		//+= kd from lasthop of lasthop
+	if(!(xd > kd)){
+		xd = kd + 1e-10;
 	}
 
 }
 
 }; //namespace
-

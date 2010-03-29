@@ -64,6 +64,13 @@ class NiceTestApp : public BaseApp
     dataPacket* videoPacket;
     int videoSize;
 
+    int* periodicData;
+    int dataSize;
+
+    cMessage* sendDataPeriodTimer;
+    simtime_t sendDataPeriod;
+
+
     simtime_t beginSendDataTime;
     int byteSent;
 };

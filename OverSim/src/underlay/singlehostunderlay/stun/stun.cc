@@ -36,7 +36,7 @@
 
 #include "stun_udp.h"
 #include "stun.h"
-
+#include <stdio.h>
 
 using namespace std;
 
