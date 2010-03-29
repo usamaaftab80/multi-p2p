@@ -59,6 +59,7 @@ void NiceTestApp::initializeApp(int stage)
 
 
     sendPeriod = par("sendPeriod");
+    sendDataPeriod = par("sendDataPeriod");
 
     //TODO:if(get this overlayterminal'id = global->senderId) isSender = true
     isSender = par("isSender");
@@ -111,16 +112,55 @@ void NiceTestApp::initializeApp(int stage)
 
 		rewind(pFile);
 
+		int i = 0;
 		while ( ! feof (pFile) ){
 			//fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
 			fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
-			videoPacket[id-1].time = time; //id-1 because ST file begins with 1, not 0
-			videoPacket[id-1].length = length;
+			//videoPacket[id-1].time = time; //id-1 because ST file begins by 1, not 0
+			videoPacket[i].time = time;
+			videoPacket[i].length = length;
+			i++;
 			//cout << id << "  " << time << "   " << length << endl;
 		}
 		cout << "Read trace done" << endl;
 
 		fclose(pFile);
+
+		/* Convert to data to send periodically */
+
+		dataSize = 1;
+		simtime_t tmpTime = videoPacket[0].time;
+		for(int i=0; i<videoSize; i++){
+			//cout << "packet " << i << " length " << videoPacket[i].length << " time " << videoPacket[i].time << endl;
+			if(videoPacket[i].time > tmpTime){
+				dataSize++;
+				tmpTime = videoPacket[i].time;
+			}
+		}
+
+		global->setVideoSize(dataSize);
+
+		periodicData = new int[dataSize];
+
+		periodicData[0] = videoPacket[0].length;
+
+		tmpTime = videoPacket[0].time;
+		int j=0; //iterator for periodicData[]
+		int tmpLength = 0;
+		for(int i=0; i<videoSize; i++){
+			if(videoPacket[i].time > tmpTime){
+				periodicData[j++] = tmpLength * sendDataPeriod/ (videoPacket[i].time - tmpTime);
+				/*reset*/
+				tmpTime = videoPacket[i].time;
+				tmpLength = 0;
+			}
+			tmpLength += videoPacket[i].length;
+		}
+
+		cout << "Init periodicData[] done. dataSize=" << dataSize << endl;
+		/*for(int jj=0; jj<dataSize; jj++){
+			cout << "periodicData " << jj << " length " << periodicData[jj] << endl;
+		}*/
 
 		/* init XD and schedule */
 
@@ -135,6 +175,8 @@ void NiceTestApp::initializeApp(int stage)
 		changeXdTimer = new cMessage("changeXdTimer");
 
 		sendDataTimer = new cMessage("sendDataTimer");
+
+		sendDataPeriodTimer = new cMessage("sendDataPeriodTimer");
 
     }
     bindToPort(2000);
@@ -195,7 +237,9 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         	if(isSender){
         		cout << "Init network finish at " << simTime() << endl;
 				beginSendDataTime = simTime() + par("timeSendAfterInit");
-				scheduleAt(beginSendDataTime + videoPacket[0].time, sendDataTimer);
+				//scheduleAt(beginSendDataTime + videoPacket[0].time, sendDataTimer);
+				scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
+
 				generateXd();
 				scheduleAt(simTime() + changeXdInterval, changeXdTimer);
 			}
@@ -254,8 +298,8 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 		encapAndSendCbrAppMsg(pingPongPkt);
 
     }
-    else
-	if (msg->isName("changeXdTimer")){
+
+    else if (msg->isName("changeXdTimer")){
 
     	if (underlayConfigurator->isInInitPhase()) return;
 
@@ -267,6 +311,45 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
     }
 
+	else if (msg->isName("sendDataPeriodTimer")){
+
+		/* check finish sending data */
+		if(numSent > dataSize-1){
+			cout << "Truyennnnnnnnnnnnnn hetttttttttt data packet at " << simTime() << endl;
+			delete [] periodicData;
+
+			cancelAndDelete(sendDataPeriodTimer);
+			cancelAndDelete(changeXdTimer);
+			cancelAndDelete(sendDataTimer);
+
+			//endSimulation();
+			return;
+		}
+
+		scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
+
+		/* send data */
+
+		NiceTestAppMsg *pingPongPkt;                            // the message we'll send
+		pingPongPkt = new NiceTestAppMsg();
+
+		//cout << "IP " << thisNode.getAddress() << " created a msg at " << simTime()<< endl;
+
+		pingPongPkt->setSenderAddress(thisNode);   // set the sender address to our own
+
+		int length = periodicData[numSent];
+
+		pingPongPkt->setByteLength(length);
+
+		xw = length * 8 / sendDataPeriod;
+
+		stats->setXw(xw);
+
+		encapAndSendCbrAppMsg(pingPongPkt);
+
+		//cout << "Vua send data: length=" << length << " numSent=" << numSent << " || xw=" << xw << " at " << simTime() << endl;
+
+	}
     else
         delete msg; // who knows what this packet is?
 }

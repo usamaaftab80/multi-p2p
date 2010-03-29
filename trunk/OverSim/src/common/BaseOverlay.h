@@ -814,6 +814,8 @@ private:
 private:
 	double kd;
 	double kw;
+protected:
+	double maxKd;
 
 	/*int dataIn[10000];
 	int dataOut[10000];

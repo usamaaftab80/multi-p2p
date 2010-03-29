@@ -24,7 +24,7 @@ simple NiceTestApp extends BaseApp
     parameters:
         @class(NiceTestApp);
         int sendPeriod @unit(s);   // how much time to wait between sending packets
-        double stressPeriod @unit(s);
+        double sendDataPeriod @unit(s);
         int timeSendAfterInit @unit(s);        
         bool isSender; 				//in case 1 source sender
         string statsModulePath;

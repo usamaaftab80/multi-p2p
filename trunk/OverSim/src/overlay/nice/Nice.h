@@ -265,24 +265,14 @@ private:
 
     void pollRP(int layer);
 
-    void hoangCheckLeader();
-
-    bool checkedLeader;
-
+    //hoang
     double cost();
+	bool hoang_debug_cost;
+	bool hoang_use_cost;
 
-    bool hoang_debug_cost;
-    bool hoang_use_cost;
-
-    OverlayCtrlInfo *overlayCtrlInfo;
-    double xd,kd;
-    double getKdFromNode(TransportAddress add);
-
-    void setSmallXd(CbrAppMessage* appMsg );
-    void setSmallXdSource(CbrAppMessage* appMsg );
-
-    /* Cost with old delay parameter */
-    //double cost(simtime_t delay);
+	double xd,kd;
+	double getKdFromNode(TransportAddress add);
+	void setSmallXd(CbrAppMessage* appMsg );
 
 };
 
