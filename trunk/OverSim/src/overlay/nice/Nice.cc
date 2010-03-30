@@ -706,11 +706,15 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
             } else {
 
-            	//hoang calculate xd (small) of this data packet
-            	setSmallXd(appMsg);
-
                 unsigned int hopCount = appMsg->getHopCount();
                 hopCount++;
+
+                if(stats->getMaxPeerCount() < hopCount){
+                	stats->setMaxPeerCount(hopCount);
+                }
+
+            	//hoang calculate xd (small) of this data packet
+            	setSmallXd(appMsg);
 
                 if (hopCount < 8) {
 
@@ -3644,7 +3648,7 @@ double Nice::getKdFromNode(TransportAddress add){
 
 void Nice::setSmallXd(CbrAppMessage* appMsg ){
 
-	double XD = stats->getXd();
+	xd = (double)stats->getXd() / (double)stats->getMaxPeerCount();
 
 	double lastHopKd = getKdFromNode(appMsg->getLastHop());
 
@@ -3654,11 +3658,11 @@ void Nice::setSmallXd(CbrAppMessage* appMsg ){
 
 	//std::cout << "source sender: " << global->getSourceSenderAddress() <<endl;
 
-	double sourceSenderKd = getKdFromNode(global->getSourceSenderAddress());
+	//double sourceSenderKd = getKdFromNode(global->getSourceSenderAddress());
 
 	//std::cout << thisNode.getAddress() << " kd from source " << global->getSourceSenderAddress() << " == " << sourceSenderKd << endl;
 
-	xd = lastHopKd/sourceSenderKd*XD;
+	//xd = lastHopKd/sourceSenderKd*XD;
 
 	if(!(xd > kd)){
 		xd = kd + 1e-10;
