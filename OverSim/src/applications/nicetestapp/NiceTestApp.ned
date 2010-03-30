@@ -30,6 +30,8 @@ simple NiceTestApp extends BaseApp
         string statsModulePath;
         string globalModulePath;
         string traceFileName;
+        string sdFile;
+        string rdFile;
 }                    
                     
 module NiceTestAppModules like ITier

@@ -36,9 +36,10 @@ void StatisticsCollector::initialize()
     timerMsg = new cMessage("StatisticsCollector Timer");
 
     //set BER,PER = 0
-    cTopology topo;
+    /*cTopology topo;
 
     topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*] **.accessRouter[*] **.backboneRouter[*]").asVector());
+    //topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*]").asVector());
 
 	for (int i=0; i<topo.getNumNodes(); i++)
 	{
@@ -48,12 +49,21 @@ void StatisticsCollector::initialize()
 	  {
 		cGate *gate = node->getLinkOut(j)->getLocalGate();
 		cDatarateChannel *chan = check_and_cast<cDatarateChannel *>(gate->getChannel());
-		chan->setBitErrorRate(0);
-		chan->setPacketErrorRate(0);
+		//std::cout << "gate " << gate->getFullName() << " channel Delay " << chan->getDelay() << endl;
+
+		double d = (chan->getDelay()).dbl();
+
+		if(d > 0.1){
+			std::cout << "is gate " << gate->getFullName() << " old Delay " << chan->getDelay() << endl;
+
+			check_and_cast<cDatarateChannel *>(gate->getChannel())->setDelay(0.1);
+			//chan->setDelay(d/10);
+			std::cout << "is gate " << gate->getFullName() << " new Delay " << chan->getDelay() << endl;
+		}
+
 	  }
 
-	}
-
+	}*/
     //scheduleAt(simTime() + statisticsPeriod, timerMsg);
 
     //std::cout << "SSSSSSSSSSSSSSSStatistic Collector INitttttttttttttt at " << simTime() << endl;
