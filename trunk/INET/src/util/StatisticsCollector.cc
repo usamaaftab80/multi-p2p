@@ -35,35 +35,37 @@ void StatisticsCollector::initialize()
 	statisticsPeriod = par("statisticsPeriod");
     timerMsg = new cMessage("StatisticsCollector Timer");
 
-    //set BER,PER = 0
-    /*cTopology topo;
+	/*cTopology topo;
 
-    topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*] **.accessRouter[*] **.backboneRouter[*]").asVector());
-    //topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*]").asVector());
+	topo.extractByModulePath(cStringTokenizer("**.backboneRouter[*]").asVector());
+
+	std::cout << "\nThis topo has " << topo.getNumNodes() << " nodes" << endl;
 
 	for (int i=0; i<topo.getNumNodes(); i++)
 	{
 	  cTopology::Node *node = topo.getNode(i);
 
+	  std::cout << "\nNode i=" << i << " is " << node->getModule()->getFullPath() << endl;
+	  std::cout << " It has " << node->getNumOutLinks() << " conns to other nodes\n";
+	  std::cout << " and " << node->getNumInLinks() << " conns from other nodes\n";
+
+	  std::cout << " Connections to other modules are:\n";
 	  for (int j=0; j<node->getNumOutLinks(); j++)
 	  {
+		cTopology::Node *neighbour = node->getLinkOut(j)->getRemoteNode();
 		cGate *gate = node->getLinkOut(j)->getLocalGate();
 		cDatarateChannel *chan = check_and_cast<cDatarateChannel *>(gate->getChannel());
-		//std::cout << "gate " << gate->getFullName() << " channel Delay " << chan->getDelay() << endl;
-
 		double d = (chan->getDelay()).dbl();
+		double r = chan->getDatarate();
 
-		if(d > 0.1){
-			std::cout << "is gate " << gate->getFullName() << " old Delay " << chan->getDelay() << endl;
-
-			check_and_cast<cDatarateChannel *>(gate->getChannel())->setDelay(0.1);
-			//chan->setDelay(d/10);
-			std::cout << "is gate " << gate->getFullName() << " new Delay " << chan->getDelay() << endl;
-		}
-
+		std::cout << " " << neighbour->getModule()->getFullPath()
+		   << " through gate " << gate->getFullName()
+		   << " channel Delay " << d << " Datarate " << r << endl;
 	  }
 
 	}*/
+
+
     //scheduleAt(simTime() + statisticsPeriod, timerMsg);
 
     //std::cout << "SSSSSSSSSSSSSSSStatistic Collector INitttttttttttttt at " << simTime() << endl;
@@ -173,10 +175,10 @@ void StatisticsCollector::calculateNumPhysicalLink()
 
 void StatisticsCollector::hardChangeXdForKd(double kd_var)
 {
-	double xd_var = dblrand() * 1.5;
+	double xd_var = dblrand() * 0.15;
 
 	while(!(xd_var > kd_var)){
-		xd_var = dblrand() * 1.5;
+		xd_var = dblrand() * 01.5;
 	}
 
 	xd = xd_var ;
