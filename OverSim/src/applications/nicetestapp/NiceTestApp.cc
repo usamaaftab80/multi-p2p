@@ -46,7 +46,21 @@ void NiceTestApp::initializeApp(int stage)
     // We only care about MIN_STAGE_APP here.
 
     if (stage != MIN_STAGE_APP) return;
+/*
 
+    cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
+
+	cGate* gate = check_and_cast<cGate*>(thisOverlayTerminal->gate("pppg$o",0)); //connect to accessRouter
+
+	cDatarateChannel *chan = check_and_cast<cDatarateChannel *>(gate->getChannel());
+
+	double kd = (chan->getDelay()).dbl();
+
+	double kw = chan->getDatarate();
+
+	std::cout << "Terminal " << thisOverlayTerminal->getFullName() << " gate " << gate->getFullName() << " kd " << kd << " kw " << kw << endl;
+
+*/
     // copy the module parameter values to our own variables
 
     const char *statsModulePath = par("statsModulePath");
@@ -109,7 +123,8 @@ void NiceTestApp::initializeApp(int stage)
 
 		while ( ! feof (pFile) ){
 			//fscanf(pFile , "%s\n",str);
-			fscanf(pFile , "1256917%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
+			//fscanf(pFile , "1256917%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
+			fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
 			videoSize++;
 		}
 
@@ -123,10 +138,10 @@ void NiceTestApp::initializeApp(int stage)
 
 		int i = 0;
 		while ( ! feof (pFile) ){
-			//fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
+			fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
 			//fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
 			//videoPacket[id-1].time = time; //id-1 because ST file begins by 1, not 0
-			fscanf(pFile , "1256917%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
+			//fscanf(pFile , "1256917%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
 			sd[i].time = time;
 			sd[i].length = length;
 			//cout << "SD packet " << i << " length " << length << " at time " << time << endl;
@@ -144,10 +159,10 @@ void NiceTestApp::initializeApp(int stage)
 
 		i = 0;
 		while ( ! feof (rFile) ){
-			//fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
+			fscanf(rFile , "%16f id %16d udp %16d\n",&time,&id,&length);
 			//fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
 			//videoPacket[id-1].time = time; //id-1 because ST file begins by 1, not 0
-			fscanf(pFile , "1256917%f IP (tos 0x0, ttl  64, id %d, offset 0, flags [DF], proto: UDP (17), length: %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
+			//fscanf(rFile , "1256917%f IP (tos 0x0, ttl  64, id %d, offset 0, flags [DF], proto: UDP (17), length: %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
 			//IP (tos 0x0, ttl  64, id %d, offset 0, flags [DF], proto: UDP (17), length: %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d
 			rd[i].time = time;
 			rd[i].length = length;
@@ -474,7 +489,7 @@ void NiceTestApp::generateXd()
 {
 	double kd_var = stats->getMaxKd();
 
-	double xd_var = dblrand() * 1.5; //random double in range [0,150ms)
+	double xd_var = dblrand() * 0.15; //random double in range [0,150ms)
 
 /*
 	if(!(kd_var < xd_var)){
@@ -486,7 +501,7 @@ void NiceTestApp::generateXd()
 
 		std::cout << "xd=" << xd_var << " < maxKd=" << kd_var << endl;
 
-		xd_var = dblrand() * 1.5;
+		xd_var = dblrand() * 0.15;
 
 	}
 
