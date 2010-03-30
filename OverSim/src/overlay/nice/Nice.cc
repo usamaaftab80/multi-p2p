@@ -3648,7 +3648,8 @@ double Nice::getKdFromNode(TransportAddress add){
 
 void Nice::setSmallXd(CbrAppMessage* appMsg ){
 
-	xd = (double)stats->getXd() / (double)stats->getMaxPeerCount();
+	//xd = (double)stats->getXd() / (double)stats->getMaxPeerCount();
+	double XD = stats->getXd();
 
 	double lastHopKd = getKdFromNode(appMsg->getLastHop());
 
@@ -3663,6 +3664,40 @@ void Nice::setSmallXd(CbrAppMessage* appMsg ){
 	//std::cout << thisNode.getAddress() << " kd from source " << global->getSourceSenderAddress() << " == " << sourceSenderKd << endl;
 
 	//xd = lastHopKd/sourceSenderKd*XD;
+
+	double a = maxKd - 2*kd;
+	double b = kd*XD; //b'
+	double c = -kd * XD * XD;
+	double delta = b*b - a*c;
+
+	double x1,x2;
+
+	if(delta >=0 ){
+		x1 = (-b+sqrt(delta))/a;
+		x2 = (-b-sqrt(delta))/a;
+		/* chon 1 trong 2 nghiem lam xd */
+
+		if( x1<0 || x1>XD ){ //loai x1
+			if(x2<0 || x2>XD ){//loai ca x2
+				xd = kd + 1e-10;
+			}
+			else
+				xd = x2;
+		}
+		else{ //x1 co the duoc
+			if(x2<0 || x2>XD ){//loai x2
+				xd = x1;
+			}
+			else{ //ca x1,x2 deu duoc
+				if(x1<=x2) xd = x1; //lay cai nho hon
+				else xd = x2;
+			}
+		}
+	}
+	else { //vo nghiem
+		xd = kd + 1e-10;
+		return;
+	}
 
 	if(!(xd > kd)){
 		xd = kd + 1e-10;
