@@ -89,24 +89,33 @@ void NiceTestApp::initializeApp(int stage)
 
     	/* read trace file */
 		FILE * pFile;
+
 		float time;
 		unsigned int id;
 		unsigned int length;
-		char type;
-		unsigned int frag;
+		unsigned int lengthUDP;
+//		char type;
+//		unsigned int frag;
+//
+//		const char* traceFileName = par("traceFileName");
+		const char* sdFile = par("sdFile");
+		const char* rdFile = par("rdFile");
 
-		const char* traceFileName = par("traceFileName");
+		//char str[200];
 
-		pFile = fopen (traceFileName , "r");
+		/* Read SD */
+		pFile = fopen (sdFile , "r");
 		if (pFile == NULL) perror ("Error opening file");
 
 		while ( ! feof (pFile) ){
-			//fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length); //SD_file
-			fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
+			//fscanf(pFile , "%s\n",str);
+			fscanf(pFile , "1256917%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
 			videoSize++;
 		}
 
-		videoPacket = new dataPacket[videoSize];
+		global->setVideoSize(videoSize);
+		sd = new dataPacket [videoSize];
+		rd = new dataPacket [videoSize];
 
 		cout << "There are " << videoSize << " packet in trace file" << endl;
 
@@ -115,20 +124,53 @@ void NiceTestApp::initializeApp(int stage)
 		int i = 0;
 		while ( ! feof (pFile) ){
 			//fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
-			fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
+			//fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
 			//videoPacket[id-1].time = time; //id-1 because ST file begins by 1, not 0
-			videoPacket[i].time = time;
-			videoPacket[i].length = length;
+			fscanf(pFile , "1256917%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
+			sd[i].time = time;
+			sd[i].length = length;
+			//cout << "SD packet " << i << " length " << length << " at time " << time << endl;
 			i++;
-			//cout << id << "  " << time << "   " << length << endl;
+
 		}
-		cout << "Read trace done" << endl;
+		cout << "Read SD done" << endl;
 
 		fclose(pFile);
 
+		/* Read RD */
+		FILE * rFile;
+		rFile = fopen (rdFile , "r");
+		if (rFile == NULL) perror ("Error opening file");
+
+		i = 0;
+		while ( ! feof (rFile) ){
+			//fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
+			//fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
+			//videoPacket[id-1].time = time; //id-1 because ST file begins by 1, not 0
+			fscanf(pFile , "1256917%f IP (tos 0x0, ttl  64, id %d, offset 0, flags [DF], proto: UDP (17), length: %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
+			//IP (tos 0x0, ttl  64, id %d, offset 0, flags [DF], proto: UDP (17), length: %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d
+			rd[i].time = time;
+			rd[i].length = length;
+			//cout << "RD packet " << i << " length " << length << " at time " << time << endl;
+			i++;
+
+		}
+		cout << "Read RD done" << endl;
+
+		fclose(rFile);
+
+		periodicData = new rateData [videoSize];
+
+		for(int i=0; i<videoSize ; i++){
+			double offset = (rd[i].time - sd[i].time).dbl();
+			int rate = (int)(sd[i].length * 8 / offset);
+			periodicData[i].rate = rate;
+			periodicData[i].length = (int)(rate * 0.003);
+		}
+
 		/* Convert to data to send periodically */
 
-		dataSize = 1;
+		/*dataSize = 1;
 		simtime_t tmpTime = videoPacket[0].time;
 		for(int i=0; i<videoSize; i++){
 			//cout << "packet " << i << " length " << videoPacket[i].length << " time " << videoPacket[i].time << endl;
@@ -150,14 +192,14 @@ void NiceTestApp::initializeApp(int stage)
 		for(int i=0; i<videoSize; i++){
 			if(videoPacket[i].time > tmpTime){
 				periodicData[j++] = tmpLength * sendDataPeriod/ (videoPacket[i].time - tmpTime);
-				/*reset*/
+				reset
 				tmpTime = videoPacket[i].time;
 				tmpLength = 0;
 			}
 			tmpLength += videoPacket[i].length;
 		}
 
-		cout << "Init periodicData[] done. dataSize=" << dataSize << endl;
+		cout << "Init periodicData[] done. dataSize=" << dataSize << endl;*/
 		/*for(int jj=0; jj<dataSize; jj++){
 			cout << "periodicData " << jj << " length " << periodicData[jj] << endl;
 		}*/
@@ -166,9 +208,9 @@ void NiceTestApp::initializeApp(int stage)
 
 		generateXd();
 
-		xw = (double)videoPacket[0].length / (videoPacket[0].time).dbl();
+		//xw = (double)videoPacket[0].length / (videoPacket[0].time).dbl();
 
-		stats->setXw(xw);
+		stats->setXw(periodicData[0].rate);
 
 		//changeXdInterval = par("changeXdInterval");
 		changeXdInterval = 10;
@@ -314,7 +356,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 	else if (msg->isName("sendDataPeriodTimer")){
 
 		/* check finish sending data */
-		if(numSent > dataSize-1){
+		if(numSent > videoSize-1){
 			cout << "Truyennnnnnnnnnnnnn hetttttttttt data packet at " << simTime() << endl;
 			delete [] periodicData;
 
@@ -337,13 +379,14 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		pingPongPkt->setSenderAddress(thisNode);   // set the sender address to our own
 
-		int length = periodicData[numSent];
+		int length = periodicData[numSent].length;
 
 		pingPongPkt->setByteLength(length);
 
-		xw = length * 8 / sendDataPeriod;
+		//xw = length * 8 / sendDataPeriod;
 
-		stats->setXw(xw);
+		//stats->setXw(xw);
+		stats->setXw(periodicData[numSent].rate);
 
 		encapAndSendCbrAppMsg(pingPongPkt);
 
@@ -431,7 +474,7 @@ void NiceTestApp::generateXd()
 {
 	double kd_var = stats->getMaxKd();
 
-	double xd_var = dblrand() * 1.5; //random double in range [0,1.5)
+	double xd_var = dblrand() * 1.5; //random double in range [0,150ms)
 
 /*
 	if(!(kd_var < xd_var)){
@@ -449,7 +492,7 @@ void NiceTestApp::generateXd()
 
 	stats->setXd(xd_var);
 
-	cout << "Vua change xd=" << xd_var << endl;
+	cout << "New changed xd=" << xd_var << endl;
 
 	xd = xd_var;
 }

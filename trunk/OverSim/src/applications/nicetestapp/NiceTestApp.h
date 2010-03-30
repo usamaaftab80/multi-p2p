@@ -61,10 +61,17 @@ class NiceTestApp : public BaseApp
     	int length;
     };
 
+    struct rateData{
+		int rate;
+		int length;
+	};
+
     dataPacket* videoPacket;
+    dataPacket* sd;
+    dataPacket* rd;
     int videoSize;
 
-    int* periodicData;
+    rateData* periodicData;
     int dataSize;
 
     cMessage* sendDataPeriodTimer;
