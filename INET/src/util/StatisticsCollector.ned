@@ -22,4 +22,5 @@ simple StatisticsCollector
 {
     parameters:
         int statisticsPeriod @unit(s);
+        double XDlimit;
 }

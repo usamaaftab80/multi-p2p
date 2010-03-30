@@ -489,7 +489,7 @@ void NiceTestApp::generateXd()
 {
 	double kd_var = stats->getMaxKd();
 
-	double xd_var = dblrand() * 0.15; //random double in range [0,150ms)
+	double xd_var = dblrand() * stats->getXDlimit(); //random double in range [0,150ms)
 
 /*
 	if(!(kd_var < xd_var)){
@@ -501,7 +501,7 @@ void NiceTestApp::generateXd()
 
 		std::cout << "xd=" << xd_var << " < maxKd=" << kd_var << endl;
 
-		xd_var = dblrand() * 0.15;
+		xd_var = dblrand() * stats->getXDlimit();
 
 	}
 

@@ -31,6 +31,8 @@ void StatisticsCollector::initialize()
 
 	xw = xd = 0;
 	maxKd = 0;
+	maxPeerCount = 0;
+	XDlimit = par("XDlimit");
 
 	statisticsPeriod = par("statisticsPeriod");
     timerMsg = new cMessage("StatisticsCollector Timer");
@@ -175,10 +177,10 @@ void StatisticsCollector::calculateNumPhysicalLink()
 
 void StatisticsCollector::hardChangeXdForKd(double kd_var)
 {
-	double xd_var = dblrand() * 0.15;
+	double xd_var = dblrand() * XDlimit;
 
 	while(!(xd_var > kd_var)){
-		xd_var = dblrand() * 01.5;
+		xd_var = dblrand() * XDlimit;
 	}
 
 	xd = xd_var ;
