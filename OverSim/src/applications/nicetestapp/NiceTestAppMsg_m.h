@@ -43,6 +43,7 @@ enum MessageType {
  *     int type;                        
  *     TransportAddress senderAddress;  
  *     string data;
+ *     int seqNo;
  * }
  * </pre>
  */
@@ -52,6 +53,7 @@ class NiceTestAppMsg : public cPacket
     int type_var;
     TransportAddress senderAddress_var;
     opp_string data_var;
+    int seqNo_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const NiceTestAppMsg&);
@@ -73,6 +75,8 @@ class NiceTestAppMsg : public cPacket
     virtual void setSenderAddress(const TransportAddress& senderAddress_var);
     virtual const char * getData() const;
     virtual void setData(const char * data_var);
+    virtual int getSeqNo() const;
+    virtual void setSeqNo(int seqNo_var);
 };
 
 inline void doPacking(cCommBuffer *b, NiceTestAppMsg& obj) {obj.parsimPack(b);}
