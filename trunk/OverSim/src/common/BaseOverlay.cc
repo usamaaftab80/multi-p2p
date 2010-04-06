@@ -207,7 +207,8 @@ void BaseOverlay::initialize(int stage)
         //defaultTimeToLive = par("timeToLive");
         defaultTimeToLive = 32;
 
-        kw = kd = maxKd = 0;
+        kw = kd = maxKd = maxKw = 0;
+        kwPrev = kdPrev = deltaXdPrev = 0;
 
         WATCH(numAppDataSent);
         WATCH(bytesAppDataSent);
@@ -771,9 +772,14 @@ void BaseOverlay::handleMessage(cMessage* msg)
         //stats->collectHopCount(hopCount);
 
         //globalStatistics->recordOutVector("HOANG udp hop count",hopCount);
+		kwPrev = kw;
 
         kw = udpControlInfo->getMinBW();
         kd = udpControlInfo->getDelayInfo();
+
+        if(kw > maxKw){
+        	maxKw = kw; //update maxKw
+        }
 
         if(udpControlInfo->getDelayInfo() > stats->getMaxKd()){
         	stats->setMaxKd(udpControlInfo->getDelayInfo()); //update maxKd

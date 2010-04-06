@@ -57,6 +57,7 @@ class NiceTestApp : public BaseApp
     void generateXd();
 
     struct dataPacket{
+    	int id;
     	simtime_t time;
     	int length;
     };
@@ -68,7 +69,8 @@ class NiceTestApp : public BaseApp
 
     dataPacket* videoPacket;
     dataPacket* sd;
-    dataPacket* rd;
+    //dataPacket* rd;
+    dataPacket* buf;
     int videoSize;
 
     rateData* periodicData;

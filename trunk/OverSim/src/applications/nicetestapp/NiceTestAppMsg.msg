@@ -41,4 +41,5 @@ packet NiceTestAppMsg
     int type;                        // message type
     TransportAddress senderAddress;  // address of the node that sent the message
     string data;
+    int seqNo;
 }

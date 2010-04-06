@@ -29,17 +29,18 @@ void StatisticsCollector::initialize()
 
 	calculateNumPhysicalLink();
 
-	xw = xd = 0;
+	//xw = xd = 0;
 	maxKd = 0;
 	maxPeerCount = 0;
 	XDlimit = par("XDlimit");
+	deltaXw = 0;
 
 	statisticsPeriod = par("statisticsPeriod");
     timerMsg = new cMessage("StatisticsCollector Timer");
 
 	/*cTopology topo;
 
-	topo.extractByModulePath(cStringTokenizer("**.backboneRouter[*]").asVector());
+	topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*] **.accessRouter[*] **.backboneRouter[*]").asVector());
 
 	std::cout << "\nThis topo has " << topo.getNumNodes() << " nodes" << endl;
 
@@ -62,7 +63,7 @@ void StatisticsCollector::initialize()
 
 		std::cout << " " << neighbour->getModule()->getFullPath()
 		   << " through gate " << gate->getFullName()
-		   << " channel Delay " << d << " Datarate " << r << endl;
+		   << " channel Delay " << d << " Bw " << r << endl;
 	  }
 
 	}*/

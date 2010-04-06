@@ -44,6 +44,7 @@ class StatisticsCollector : public cSimpleModule
     double maxKd;
     int maxPeerCount;
     double XDlimit;
+    double deltaXw;
 
   public:
 
@@ -68,6 +69,9 @@ class StatisticsCollector : public cSimpleModule
 
 	void setXDlimit(double val){XDlimit = val;};
 	double getXDlimit(){return XDlimit;};
+
+	void setDeltaXw(double val){deltaXw = val;};
+	double getDeltaXw(){return deltaXw;};
 
 	void hardChangeXdForKd(double kd_var);
 

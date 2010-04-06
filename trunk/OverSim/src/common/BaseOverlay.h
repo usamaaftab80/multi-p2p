@@ -816,6 +816,11 @@ private:
 	double kw;
 protected:
 	double maxKd;
+	double maxKw;
+	double kwPrev;
+	double kdPrev;
+	double deltaXdPrev;
+	double lastKd;
 
 	/*int dataIn[10000];
 	int dataOut[10000];
