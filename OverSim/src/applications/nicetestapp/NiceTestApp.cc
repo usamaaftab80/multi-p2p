@@ -115,7 +115,24 @@ void NiceTestApp::initializeApp(int stage)
 //
 //		const char* traceFileName = par("traceFileName");
 		const char* sdFile = par("sdFile");
-		const char* rdFile = par("rdFile");
+//		const char* rdFile = par("rdFile");
+		const char * format;
+
+		if(strcmp(sdFile,"sd_paris") == 0){
+			format = "1254866%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.41674 > 157.159.16.152.12346: UDP, length %d\n"; //sd_paris:32632
+		}
+		else if(strcmp(sdFile,"sd_snr") == 0){
+			format = "1256917%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n"; //sd_snr:7296
+		}
+		else if(strcmp(sdFile,"sd_spatial") == 0){
+			format = "1254948%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.53144 > 157.159.16.152.12346: UDP, length %d\n"; //sd_spatial:4835
+		}
+		else if(strcmp(sdFile,"sd_combined_svc") == 0){
+			format = "1270649%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.57994 > 157.159.16.50.12346: UDP, length %d\n"; //sd_combined_svc:1696
+		}
+		else if(strcmp(sdFile,"sd_sl_svc") == 0){
+			format = "1270649%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.56586 > 157.159.16.50.12346: UDP, length %d\n"; //sd_sl_svc:293
+		}
 
 		/* Read SD and write a new SD file*/
 		pFile = fopen (sdFile , "r");
@@ -123,8 +140,7 @@ void NiceTestApp::initializeApp(int stage)
 		if (pFile == NULL) perror ("Error opening file");
 
 		while ( ! feof (pFile) ){
-			//fscanf(pFile , "%s\n",str);
-			fscanf(pFile , "1256917%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
+			fscanf(pFile,format,&time,&id,&lengthUDP,&length);
 			//fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
 			videoSize++;
 		}
@@ -142,7 +158,7 @@ void NiceTestApp::initializeApp(int stage)
 			//fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
 			//fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
 			//videoPacket[id-1].time = time; //id-1 because ST file begins by 1, not 0
-			fscanf(pFile , "1256917%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
+			fscanf(pFile,format,&time,&id,&lengthUDP,&length);
 			sd[i].time = time;
 			sd[i].length = length;
 			sd[i].id = i;
