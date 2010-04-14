@@ -24,7 +24,6 @@
 
 #include "NicePeerInfo.h"
 
-
 namespace oversim
 {
 
@@ -42,9 +41,6 @@ NicePeerInfo::NicePeerInfo(Nice* _parent)
     activity = simTime().dbl();
 
     subclustermembers = 0;
-
-    //hoang
-    kd = 0;
 
     WATCH_MAP(distanceTable);
     WATCH(last_sent_HB);
@@ -76,8 +72,6 @@ void NicePeerInfo::set_distance(double value)
 {
 
     distance = value;
-
-    //std::cout << "set_distance " << value << endl;
 
 } // set_distance
 

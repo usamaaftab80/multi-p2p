@@ -22,7 +22,6 @@ inline std::string to_string (const T& t)
 #include "UnderlayConfigurator.h"
 #include "GlobalStatistics.h"
 #include "NiceTestAppMsg_m.h"
-#include "IPDatagram_m.h"
 
 #include  "NiceMessage_m.h"
 
@@ -81,8 +80,8 @@ void NiceTestApp::initializeApp(int stage)
 
     if(isSender){
         cout << "senderrrrrrr " << thisNode.getAddress() << endl;
-        TransportAddress *ta = new TransportAddress (thisNode.getAddress(), 1024, TransportAddress::UNKNOWN_NAT);
-        global->setSourceSenderAddress(*ta);
+
+        global->setSourceSenderAddress(thisNode.getAddress());
 
         globalStatistics->recordOutVector("HOANG num sender",1);
     }
@@ -91,7 +90,7 @@ void NiceTestApp::initializeApp(int stage)
 
     numSent = 0;
     numReceived = 0;
-    byteSent = 0;
+
     videoSize = 0;
 
 	//lastPacketTime = simTime().dbl();
@@ -99,7 +98,7 @@ void NiceTestApp::initializeApp(int stage)
     if(isSender){
     	// start state timer!
 
-		stateTimer = new cMessage("NiceTestAppTimer");
+		stateTimer = new cMessage("stateTimer");
 		scheduleAt(simTime() + sendPeriod, stateTimer);
 
     	/* read trace file */
@@ -172,6 +171,38 @@ void NiceTestApp::initializeApp(int stage)
 		fclose(pFile);
 		fclose(newFile);
 
+		/* Sap xep lai mang sd theo time tang dan */
+
+		dataPacket temp;   // holding variable
+		int numLength = videoSize;
+		for (int i=0; i< (numLength -1); i++)    // element to be compared
+		{
+			for(int j = (i+1); j < numLength; j++)   // rest of the elements
+			{
+				if (sd[i].time > sd[j].time)          // ascending order
+			    {
+					temp= sd[i];          // swap
+					sd[i] = sd[j];
+					sd[j] = temp;
+			    }
+			}
+		}
+
+		/* Init first XW */
+		byteSent = sd[0].length;
+		int ii = 1;
+		while (!(sd[ii].time > sd[ii-1].time)){
+			byteSent += sd[ii].length;
+			ii++;
+		}
+		xw = 8*byteSent / (sd[ii].time - sd[ii-1].time);
+		stats->setXw(xw);
+		byteSent = 0; //reset bytesent
+
+		/*for (int i=0; i< (numLength -1); i++){
+			cout << "time " << sd[i].time << " id " << sd[i].id << " length " << sd[i].length << endl;
+		}*/
+
 		/* Read RD */
 		/*FILE * rFile;
 		rFile = fopen (rdFile , "r");
@@ -204,45 +235,10 @@ void NiceTestApp::initializeApp(int stage)
 			periodicData[i].length = (int)(rate * 0.003);
 		}*/
 
-		/* Convert to data to send periodically */
-
-		/*dataSize = 1;
-		simtime_t tmpTime = videoPacket[0].time;
-		for(int i=0; i<videoSize; i++){
-			//cout << "packet " << i << " length " << videoPacket[i].length << " time " << videoPacket[i].time << endl;
-			if(videoPacket[i].time > tmpTime){
-				dataSize++;
-				tmpTime = videoPacket[i].time;
-			}
-		}
-
-		global->setVideoSize(dataSize);
-
-		periodicData = new int[dataSize];
-
-		periodicData[0] = videoPacket[0].length;
-
-		tmpTime = videoPacket[0].time;
-		int j=0; //iterator for periodicData[]
-		int tmpLength = 0;
-		for(int i=0; i<videoSize; i++){
-			if(videoPacket[i].time > tmpTime){
-				periodicData[j++] = tmpLength * sendDataPeriod/ (videoPacket[i].time - tmpTime);
-				reset
-				tmpTime = videoPacket[i].time;
-				tmpLength = 0;
-			}
-			tmpLength += videoPacket[i].length;
-		}
-
-		cout << "Init periodicData[] done. dataSize=" << dataSize << endl;*/
-		/*for(int jj=0; jj<dataSize; jj++){
-			cout << "periodicData " << jj << " length " << periodicData[jj] << endl;
-		}*/
 
 		/* init XD and schedule */
 
-		//generateXd();
+		generateXd();
 
 		//xw = (double)videoPacket[0].length / (videoPacket[0].time).dbl();
 
@@ -250,33 +246,13 @@ void NiceTestApp::initializeApp(int stage)
 
 		//changeXdInterval = par("changeXdInterval");
 		changeXdInterval = 10;
-		//changeXdTimer = new cMessage("changeXdTimer");
+		changeXdTimer = new cMessage("changeXdTimer");
 
 		sendDataTimer = new cMessage("sendDataTimer");
 
-//		/sendDataPeriodTimer = new cMessage("sendDataPeriodTimer");
+//		sendDataPeriodTimer = new cMessage("sendDataPeriodTimer");
 
-		/* Sap xep lai mang sd theo time tang dan */
-		//sort(sd, sd.length);
-		//int i, j;
-		dataPacket temp;   // holding variable
-		int numLength = videoSize;
-		for (int i=0; i< (numLength -1); i++)    // element to be compared
-		{
-			for(int j = (i+1); j < numLength; j++)   // rest of the elements
-			{
-				if (sd[i].time > sd[j].time)          // ascending order
-			    {
-					temp= sd[i];          // swap
-					sd[i] = sd[j];
-					sd[j] = temp;
-			    }
-			}
-		}
 
-		/*for (int i=0; i< (numLength -1); i++){
-			cout << "time " << sd[i].time << " id " << sd[i].id << " length " << sd[i].length << endl;
-		}*/
 
     }
 
@@ -292,11 +268,11 @@ void NiceTestApp::initializeApp(int stage)
 
 void NiceTestApp::finishApp()
 {
-	if(!isSender){
+//	if(!isSender){
 
 		//cout << "finish ne" << endl;
 		/* Resort buf[] by id, eliminate 0 */
-		dataPacket temp;   // holding variable
+		/*dataPacket temp;   // holding variable
 		int numLength = global->getVideoSize();
 		for (int i=0; i< (numLength -1); i++)    // element to be compared
 		{
@@ -309,10 +285,10 @@ void NiceTestApp::finishApp()
 					buf[j] = temp;
 				}
 			}
-		}
+		}*/
 
 		/* Write to receiver dump file */
-		FILE *f;
+		/*FILE *f;
 		string terminalID = getParentModule()->getParentModule()->getFullName();
 		string str = "rd_" + terminalID ;
 		f = fopen (str.c_str() , "w");
@@ -333,9 +309,11 @@ void NiceTestApp::finishApp()
 
 		}
 
-		fclose(f);
+		fclose(f);*/
 
-	}
+		//delete [] buf;
+
+//	}
 
 
 
@@ -370,7 +348,7 @@ void NiceTestApp::finishApp()
 void NiceTestApp::handleTimerEvent(cMessage* msg)
 {
 
-    if (msg->isName("NiceTestAppTimer")) {    // is this our timer?
+    if (msg->isName("stateTimer")) {    // is this our timer?
 
     	//cout << thisNode.getAddress() << " xd=" << xd << " xw=" << xw << endl;
 
@@ -391,8 +369,8 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 				scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
 				//scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
 
-				//generateXd();
-				//scheduleAt(simTime() + changeXdInterval, changeXdTimer);
+				generateXd();
+				scheduleAt(simTime() + changeXdInterval, changeXdTimer);
 			}
 
         }
@@ -405,7 +383,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         	delete [] sd;
 
         	cancelAndDelete(sendDataTimer);
-        	//cancelAndDelete(changeXdTimer);
+        	cancelAndDelete(changeXdTimer);
 
         	//endSimulation();
         	return;
@@ -428,17 +406,17 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		pingPongPkt->setByteLength(length);
 
-		pingPongPkt->setSeqNo(sd[numSent].id);
+		pingPongPkt->setId(sd[numSent].id);
 
-		/*byteSent += length;
+		byteSent += length;
 
-		if(videoPacket[numSent].length > videoPacket[numSent-1].length){
+		if(sd[numSent].length > sd[numSent-1].length){
 
 			//double thisPacketTime = simTime().dbl(); //or read from trace file
 
 			//xw = (double)length * 8 / (thisPacketTime - lastPacketTime); //datarate for this packet (bit/s)
 
-			simtime_t timeRange = videoPacket[numSent].length - videoPacket[numSent-1].length;
+			simtime_t timeRange = sd[numSent].length - sd[numSent-1].length;
 
 			xw = byteSent * 8 / timeRange;
 
@@ -447,7 +425,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 			stats->setXw(xw);
 
 			byteSent = 0;
-		}*/
+		}
 
 		//hoang
 		encapAndSendCbrAppMsg(pingPongPkt);
@@ -473,9 +451,9 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 			cout << "Truyennnnnnnnnnnnnn hetttttttttt data packet at " << simTime() << endl;
 			delete [] periodicData;
 
-			cancelAndDelete(sendDataPeriodTimer);
-			cancelAndDelete(changeXdTimer);
-			cancelAndDelete(sendDataTimer);
+//			cancelAndDelete(sendDataPeriodTimer);
+//			cancelAndDelete(changeXdTimer);
+//			cancelAndDelete(sendDataTimer);
 
 			//endSimulation();
 			return;
@@ -528,6 +506,41 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 
             simtime_t eed = simTime() - msg->getCreationTime();
 
+            appPeerMap.insert(std::make_pair((cbrMsg->getSrcNode()).getAddress() , eed.dbl()));
+
+            /*
+             * calculate small xd
+             * get bigKD : from App (this layer) = eed (1-n)
+             * get last hop kd from baseOverlay
+             * get bigXD from stats
+             */
+
+            cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
+			cCompoundModule* overlayModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("overlay"));
+			BaseOverlay* overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
+
+			double kd = overlay->getKdFromNode((cbrMsg->getLastHop()).getAddress());
+
+			double bigKD = eed.dbl(); //just 1-n video transmission
+			//TODO: (m-n): bigKD = appPeerMap.find(sender)->second
+			/*if(stats->getMaxKd() < bigKD){
+				stats->setMaxKd(bigKD);
+			}
+
+			if(!(stats->getMaxKd() < stats->getXd())){
+				stats->hardChangeXdForKd(stats->getMaxKd());
+			}*/
+
+			double bigXD = stats->getXd();
+
+			xd = bigXD * kd / bigKD;
+
+			if(!(xd>kd)){
+				cout << "error xd=" << xd << " not bigger than kd=" << kd << " XD=" << bigXD << " KD=" << bigKD <<endl;
+			}
+
+            //--end of calculate xd
+
             globalStatistics->recordOutVector("4 e2e delay",eed.dbl());
 
             globalStatistics->recordOutVector("3 ALM Hop count",hopCount);
@@ -542,7 +555,7 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 
 				if (myMsg->getType() == MYMSG_PING) {
 					buf[numReceived].time = simTime();
-					buf[numReceived].id = myMsg->getSeqNo();
+					buf[numReceived].id = myMsg->getId();
 					buf[numReceived].length = myMsg->getByteLength();
 
 					//cout << thisNode.getAddress() << " Received at " << buf[numReceived].time << " id " << buf[numReceived].id << " length " << buf[numReceived].length << endl;
@@ -616,7 +629,7 @@ void NiceTestApp::generateXd()
 
 	while(!(xd_var > kd_var)){
 
-		std::cout << "XD=" << xd_var << " < maxKD=" << kd_var << endl;
+		//std::cout << "XD=" << xd_var << " < maxKD=" << kd_var << endl;
 
 		xd_var = dblrand() * stats->getXDlimit();
 
@@ -624,7 +637,7 @@ void NiceTestApp::generateXd()
 
 	stats->setXd(xd_var);
 
-	cout << "New changed XD=" << xd_var << endl;
+	cout << "New changed XD=" << xd_var << " maxKD=" << kd_var <<endl;
 
 	xd = xd_var;
 }

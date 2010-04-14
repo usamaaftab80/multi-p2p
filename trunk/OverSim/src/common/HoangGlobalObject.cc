@@ -37,14 +37,14 @@ HoangGlobalObject::~HoangGlobalObject()
 	int temp = linkStress[0];
 	int numValue = 1; //amount of switching times
 	int sum = linkStress[0];
-	cout << "SumStress' value: " << temp << " from packet  0" << endl;
+	cout << "SumStress of packet from 0: " << temp << endl;
 	for(int i=0; i<videoSize; i++){
 		//cout << "packet " << i << " sum stress " << linkStress[i] << endl;
 		//TODO: count number of different values, number of switching times
 		if(linkStress[i] != temp){ //switch
 			numValue++;
 			temp = linkStress[i];
-			cout << "Switch to new value: " << temp << " from packet " << i << endl;
+			//cout << "Switch to new value: " << temp << " from packet " << i << endl;
 			sum += temp;
 		}
 

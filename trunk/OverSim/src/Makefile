@@ -1148,7 +1148,6 @@ $O/applications/nicetestapp/NiceTestApp.o: applications/nicetestapp/NiceTestApp.
 	$(INET_PROJ)/src/base/INotifiable.h \
 	applications/nicetestapp/NiceTestApp.h \
 	common/UnderlayConfigurator.h \
-	$(INET_PROJ)/src/networklayer/contract/IPProtocolId_m.h \
 	common/OverSimMessage_m.h \
 	common/RecursiveLookup.h \
 	common/oversim_mapset.h \
@@ -1156,7 +1155,6 @@ $O/applications/nicetestapp/NiceTestApp.o: applications/nicetestapp/NiceTestApp.
 	common/AbstractLookup.h \
 	common/RpcListener.h \
 	$(INET_PROJ)/src/util/StatisticsCollector.h \
-	$(INET_PROJ)/src/networklayer/ipv4/IPDatagram_m.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
 	common/NodeVector.h \
 	common/RpcState.h \
@@ -1175,9 +1173,9 @@ $O/applications/nicetestapp/NiceTestApp.o: applications/nicetestapp/NiceTestApp.
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/HoangGlobalObject.h \
-	common/Comparator.h \
-	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
 	common/BaseOverlay.h \
+	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
+	common/Comparator.h \
 	common/BaseRpc.h \
 	common/ProxNodeHandle.h \
 	common/NodeHandle.h \

@@ -265,15 +265,6 @@ private:
 
     void pollRP(int layer);
 
-    //hoang
-    double cost();
-	bool hoang_debug_cost;
-	bool hoang_use_cost;
-
-	double xd,kd;
-	double getKdFromNode(TransportAddress add);
-	void setSmallXd(CbrAppMessage* appMsg );
-
 };
 
 }; //namespace

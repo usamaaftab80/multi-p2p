@@ -28,7 +28,7 @@ using namespace std;
 class HoangGlobalObject : public cSimpleModule
 {
   private:
-	TransportAddress sourceSenderAddress;
+	IPvXAddress sourceSenderAddress;
 	int numAccessLink;
 	int numNode;
 	int numSent;
@@ -42,8 +42,8 @@ class HoangGlobalObject : public cSimpleModule
 
 
   public:
-	  TransportAddress getSourceSenderAddress(){return sourceSenderAddress;};
-	  void setSourceSenderAddress(TransportAddress add){sourceSenderAddress = add;};
+    IPvXAddress getSourceSenderAddress(){return sourceSenderAddress;};
+	  void setSourceSenderAddress(IPvXAddress add){sourceSenderAddress = add;};
 	  void calculateNumAccessLink();
 	  void incNumSent(){numSent++;};
 	  int getNumSent(){return numSent;};

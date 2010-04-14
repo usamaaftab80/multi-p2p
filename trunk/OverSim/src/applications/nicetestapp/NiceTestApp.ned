@@ -29,9 +29,9 @@ simple NiceTestApp extends BaseApp
         bool isSender; 				//in case 1 source sender
         string statsModulePath;
         string globalModulePath;
-        string traceFileName;
+        //string traceFileName;
         string sdFile;
-        string rdFile;
+        //string rdFile;
 }                    
                     
 module NiceTestAppModules like ITier

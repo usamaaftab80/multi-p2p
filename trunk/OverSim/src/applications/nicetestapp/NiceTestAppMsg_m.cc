@@ -43,7 +43,7 @@ NiceTestAppMsg::NiceTestAppMsg(const char *name, int kind) : cPacket(name,kind)
 {
     this->type_var = 0;
     this->data_var = 0;
-    this->seqNo_var = 0;
+    this->id_var = 0;
 }
 
 NiceTestAppMsg::NiceTestAppMsg(const NiceTestAppMsg& other) : cPacket()
@@ -63,7 +63,7 @@ NiceTestAppMsg& NiceTestAppMsg::operator=(const NiceTestAppMsg& other)
     this->type_var = other.type_var;
     this->senderAddress_var = other.senderAddress_var;
     this->data_var = other.data_var;
-    this->seqNo_var = other.seqNo_var;
+    this->id_var = other.id_var;
     return *this;
 }
 
@@ -73,7 +73,7 @@ void NiceTestAppMsg::parsimPack(cCommBuffer *b)
     doPacking(b,this->type_var);
     doPacking(b,this->senderAddress_var);
     doPacking(b,this->data_var);
-    doPacking(b,this->seqNo_var);
+    doPacking(b,this->id_var);
 }
 
 void NiceTestAppMsg::parsimUnpack(cCommBuffer *b)
@@ -82,7 +82,7 @@ void NiceTestAppMsg::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->type_var);
     doUnpacking(b,this->senderAddress_var);
     doUnpacking(b,this->data_var);
-    doUnpacking(b,this->seqNo_var);
+    doUnpacking(b,this->id_var);
 }
 
 int NiceTestAppMsg::getType() const
@@ -115,14 +115,14 @@ void NiceTestAppMsg::setData(const char * data_var)
     this->data_var = data_var;
 }
 
-int NiceTestAppMsg::getSeqNo() const
+int NiceTestAppMsg::getId() const
 {
-    return seqNo_var;
+    return id_var;
 }
 
-void NiceTestAppMsg::setSeqNo(int seqNo_var)
+void NiceTestAppMsg::setId(int id_var)
 {
-    this->seqNo_var = seqNo_var;
+    this->id_var = id_var;
 }
 
 class NiceTestAppMsgDescriptor : public cClassDescriptor
@@ -203,7 +203,7 @@ const char *NiceTestAppMsgDescriptor::getFieldName(void *object, int field) cons
         case 0: return "type";
         case 1: return "senderAddress";
         case 2: return "data";
-        case 3: return "seqNo";
+        case 3: return "id";
         default: return NULL;
     }
 }
@@ -265,7 +265,7 @@ bool NiceTestAppMsgDescriptor::getFieldAsString(void *object, int field, int i, 
         case 0: long2string(pp->getType(),resultbuf,bufsize); return true;
         case 1: {std::stringstream out; out << pp->getSenderAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
         case 2: oppstring2string(pp->getData(),resultbuf,bufsize); return true;
-        case 3: long2string(pp->getSeqNo(),resultbuf,bufsize); return true;
+        case 3: long2string(pp->getId(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -282,7 +282,7 @@ bool NiceTestAppMsgDescriptor::setFieldAsString(void *object, int field, int i, 
     switch (field) {
         case 0: pp->setType(string2long(value)); return true;
         case 2: pp->setData((value)); return true;
-        case 3: pp->setSeqNo(string2long(value)); return true;
+        case 3: pp->setId(string2long(value)); return true;
         default: return false;
     }
 }
