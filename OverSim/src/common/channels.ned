@@ -63,7 +63,7 @@ channel inet_ethernetline_lossy extends ned.DatarateChannel
 channel inet_dsl extends ned.DatarateChannel
 {
     parameters:
-        delay = 30ms;
+        delay = 10ms;
         datarate = 1Mbps;
 }
 

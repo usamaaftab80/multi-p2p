@@ -24,6 +24,7 @@
 
 #include "NicePeerInfo.h"
 
+
 namespace oversim
 {
 
@@ -72,6 +73,8 @@ void NicePeerInfo::set_distance(double value)
 {
 
     distance = value;
+
+    //std::cout << "set_distance " << value << endl;
 
 } // set_distance
 

@@ -83,7 +83,6 @@ class NiceTestApp : public BaseApp
     simtime_t beginSendDataTime;
     int byteSent;
 
-    std::map<IPvXAddress, double> appPeerMap;
 };
 
 #endif /* NICETESTAPP_H_ */

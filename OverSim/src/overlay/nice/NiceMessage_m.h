@@ -330,10 +330,14 @@ inline void doUnpacking(cCommBuffer *b, NiceLeaderHeartbeat& obj) {obj.parsimUnp
  *     int command enum(CbrAppCommand);
  *     TransportAddress srcNode;
  *     TransportAddress lastHop;
- *     double sendTime;
+ *     double sendTime;    
  *     unsigned int seqNo;
  *     unsigned int hopCount;
  *     short layer;
+ *     
+ *     double bigKD;
+ *     double lastHopKd;
+ *     
  * }
  * </pre>
  */
@@ -347,6 +351,8 @@ class CbrAppMessage : public BaseOverlayMessage
     unsigned int seqNo_var;
     unsigned int hopCount_var;
     short layer_var;
+    double bigKD_var;
+    double lastHopKd_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const CbrAppMessage&);
@@ -377,6 +383,10 @@ class CbrAppMessage : public BaseOverlayMessage
     virtual void setHopCount(unsigned int hopCount_var);
     virtual short getLayer() const;
     virtual void setLayer(short layer_var);
+    virtual double getBigKD() const;
+    virtual void setBigKD(double bigKD_var);
+    virtual double getLastHopKd() const;
+    virtual void setLastHopKd(double lastHopKd_var);
 };
 
 inline void doPacking(cCommBuffer *b, CbrAppMessage& obj) {obj.parsimPack(b);}
