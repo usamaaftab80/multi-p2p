@@ -67,7 +67,7 @@ class NiceTestApp : public BaseApp
 		int length;
 	};
 
-    dataPacket* videoPacket;
+    //dataPacket* videoPacket;
     dataPacket* sd;
     //dataPacket* rd;
     dataPacket* buf;
@@ -82,6 +82,8 @@ class NiceTestApp : public BaseApp
 
     simtime_t beginSendDataTime;
     int byteSent;
+
+    std::map<IPvXAddress, double> appPeerMap;
 };
 
 #endif /* NICETESTAPP_H_ */

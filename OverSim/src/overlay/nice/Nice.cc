@@ -28,7 +28,6 @@
 #include "SimpleNodeEntry.h"
 #include "SimpleUDP.h"
 #include "GlobalNodeListAccess.h"
-#define DBL_MAX 1.7976931348623158e+308
 
 namespace oversim
 {
@@ -59,7 +58,6 @@ const char *clusterarrows[] = {	"m=m,50,50,50,50;ls=yellow,2",
                                 "m=m,50,50,50,50;ls=navy,10",
                                 "m=m,50,50,50,50;ls=yellow,11"
                               };
-const double DOUBLE_TO_SIMTIME_RATIO = SimTime::getMaxTime().dbl() / DBL_MAX;
 
 Define_Module(Nice);
 
@@ -106,9 +104,6 @@ Nice::~Nice()
  */
 void Nice::initializeOverlay( int stage )
 {
-
-	hoang_use_cost = par("hoang_use_cost");
-	hoang_debug_cost = par("hoang_debug_cost");
 
     /* Because of IPAddressResolver, we need to wait until interfaces
      * are registered, address auto-assignment takes place etc. */
@@ -350,11 +345,6 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
             it->second->touch();
 
-            //hoang
-			it->second->setKd(getKd());
-
-			//std::cout << "vua nhan dc pkt kd=" << it->second->getKd() << endl;
-
         }
 
         if (niceMsg->getCommand() == NICE_QUERY) {
@@ -549,8 +539,6 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
                     double distance = simTime().dbl() - it->second->getDES();
 
-                    //hoang
-                    if(hoang_use_cost) distance = cost();
                     it->second->set_distance(distance);
                     it->second->touch();
 
@@ -708,13 +696,6 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
                 unsigned int hopCount = appMsg->getHopCount();
                 hopCount++;
-
-                if(stats->getMaxPeerCount() < hopCount){
-                	stats->setMaxPeerCount(hopCount);
-                }
-
-            	//hoang calculate xd (small) of this data packet
-            	setSmallXd(appMsg);
 
                 if (hopCount < 8) {
 
@@ -1433,9 +1414,6 @@ void Nice::sendHeartbeats()
                 if (it != peerInfos.end()) {
 
                     it->second->set_distance_estimation_start(simTime().dbl());
-                    if(hoang_use_cost){
-						it->second->set_distance_estimation_start(cost());
-					}
 
                 }
 
@@ -1737,10 +1715,6 @@ void Nice::handleHeartbeat(NiceMessage* msg)
                 /* Use Exponential Moving Average with factor 0.1 */
                 double newDistance = (simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2.0;
 
-                if(hoang_use_cost){
-					newDistance = cost();
-                }
-
                 if (oldDistance > 0) {
 
                     it->second->set_distance((0.1 * newDistance) + (0.9 * oldDistance));
@@ -1866,9 +1840,6 @@ void Nice::handleHeartbeat(NiceMessage* msg)
 
                 /* Valid distance measurement, get value */
                 it->second->set_distance((simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
-                if(hoang_use_cost){
-					it->second->set_distance(cost());
-				}
 
             }
 
@@ -3430,7 +3401,7 @@ void Nice::handleAppMessage(cMessage* msg)
             appMsg->setLastHop(thisNode);
             appMsg->setHopCount(0);
 
-            appMsg->setBitLength(CBRAPPMSG_L(msg));
+            //appMsg->setBitLength(CBRAPPMSG_L(msg)); //hoang
 
             sendDataToOverlay(appMsg);
 
@@ -3592,117 +3563,6 @@ void Nice::pollRP(int layer)
 
 } // pollRP
 
-double Nice::cost()
-{
-	double cost, kw_var , /*kd_var,*/ xw; //, xd;
 
-	//get kd, kw from network
-	kw_var = getKw();
-	//kd_var = getKd();
-
-	//get xd, xw from app
-	//xd = stats->getXd();
-	xw = stats->getXw();
-
-	if(!(xd > kd)){
-		xd = kd + 1e-10;
-	}
-
-	//cost
-	cost = sqrt( (kd/(xd-kd)) * (xw/(kw_var-xw)) ) * DOUBLE_TO_SIMTIME_RATIO;
-
-	if(hoang_debug_cost){
-		std::cout << "xd=" << xd << " kd=" << kd << " || xw=" << xw << " kw=" << kw_var << " || cost=" << cost << endl;
-	}
-
-	if(cost > SimTime::getMaxTime().dbl()){
-		//cost = SimTime::getMaxTime().dbl()/2;
-		cost = 1;
-		globalStatistics->recordOutVector("Infinity cost times",1);
-	}
-	//globalStatistics->recordOutVector("HOANG1 Cost value",cost);
-
-	return cost;
-}
-
-double Nice::getKdFromNode(TransportAddress add){
-
-	std::map<TransportAddress, NicePeerInfo*>::iterator it = peerInfos.find(add);
-
-	double kd_var;
-
-	if (it != peerInfos.end()){
-		kd_var = it->second->getKd();
-	}
-	else
-	{
-		//kd_var = 0;
-		kd_var = maxKd;
-		//std::cout << thisNode.getAddress() << " kd == 0 from " << add << endl;
-	}
-
-	//std::cout << "kd from " << add << " is " << kd_var << endl;
-
-	return kd_var ;
-}
-
-void Nice::setSmallXd(CbrAppMessage* appMsg ){
-
-	//xd = (double)stats->getXd() / (double)stats->getMaxPeerCount();
-	double XD = stats->getXd();
-
-	double lastHopKd = getKdFromNode(appMsg->getLastHop());
-
-	kd = lastHopKd ;
-
-	//std::cout << "lasthop " << appMsg->getLastHop() << " kd " << lastHopKd << endl;
-
-	//std::cout << "source sender: " << global->getSourceSenderAddress() <<endl;
-
-	//double sourceSenderKd = getKdFromNode(global->getSourceSenderAddress());
-
-	//std::cout << thisNode.getAddress() << " kd from source " << global->getSourceSenderAddress() << " == " << sourceSenderKd << endl;
-
-	//xd = lastHopKd/sourceSenderKd*XD;
-
-	double a = maxKd - 2*kd;
-	double b = kd*XD; //b'
-	double c = -kd * XD * XD;
-	double delta = b*b - a*c;
-
-	double x1,x2;
-
-	if(delta >=0 ){
-		x1 = (-b+sqrt(delta))/a;
-		x2 = (-b-sqrt(delta))/a;
-		/* chon 1 trong 2 nghiem lam xd */
-
-		if( x1<0 || x1>XD ){ //loai x1
-			if(x2<0 || x2>XD ){//loai ca x2
-				xd = kd + 1e-10;
-			}
-			else
-				xd = x2;
-		}
-		else{ //x1 co the duoc
-			if(x2<0 || x2>XD ){//loai x2
-				xd = x1;
-			}
-			else{ //ca x1,x2 deu duoc
-				if(x1<=x2) xd = x1; //lay cai nho hon
-				else xd = x2;
-			}
-		}
-	}
-	else { //vo nghiem
-		xd = kd + 1e-10;
-		return;
-	}
-
-	if(!(xd > kd)){
-		xd = kd + 1e-10;
-	}
-
-}
 
 }; //namespace

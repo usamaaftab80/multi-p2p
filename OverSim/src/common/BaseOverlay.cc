@@ -207,8 +207,7 @@ void BaseOverlay::initialize(int stage)
         //defaultTimeToLive = par("timeToLive");
         defaultTimeToLive = 32;
 
-        kw = kd = maxKd = maxKw = 0;
-        kwPrev = kdPrev = deltaXdPrev = 0;
+        kw = maxKd = maxKw = 0;
 
         WATCH(numAppDataSent);
         WATCH(bytesAppDataSent);
@@ -772,10 +771,12 @@ void BaseOverlay::handleMessage(cMessage* msg)
         //stats->collectHopCount(hopCount);
 
         //globalStatistics->recordOutVector("HOANG udp hop count",hopCount);
-		kwPrev = kw;
 
         kw = udpControlInfo->getMinBW();
-        kd = udpControlInfo->getDelayInfo();
+        //kd = udpControlInfo->getDelayInfo();
+
+        peerMap.insert(std::make_pair(udpControlInfo->getSrcAddr(),udpControlInfo->getDelayInfo()));
+        //printPeerMap();
 
         if(kw > maxKw){
         	maxKw = kw; //update maxKw
@@ -790,9 +791,7 @@ void BaseOverlay::handleMessage(cMessage* msg)
 		}
 
         if(!(stats->getMaxKd() < stats->getXd())){
-
-        	stats->hardChangeXdForKd(udpControlInfo->getDelayInfo());
-
+        	stats->hardChangeXdForKd(stats->getMaxKd());
         }
 
         //cout << " vua nhan dc packet kw=" << kw << " kd=" << kd << endl;
@@ -2054,4 +2053,29 @@ int BaseOverlay::getIDfromName(string name)
 	string strID = name.substr(pos + 1);
 
 	return atoi(strID.c_str()); //convert string to int
+}
+
+void BaseOverlay::printPeerMap()
+{
+	std::map<IPvXAddress, double>::iterator it;
+	std::cout << thisNode.getAddress() << "'s peer map" << endl;
+	it = peerMap.begin();
+	while(it != peerMap.end()){
+		std::cout << "delay from " << it->first << " = " << it->second << endl;
+		it++;
+	}
+
+}
+
+double BaseOverlay::getKdFromNode(IPvXAddress add)
+{
+	std::map<IPvXAddress, double>::iterator it = peerMap.find(add);
+
+	if(it != peerMap.end()){
+		return it->second;
+	}else{
+		std::cout << " ERRORRR no kd from " << add << endl;
+		return maxKd;
+	}
+
 }

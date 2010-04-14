@@ -812,30 +812,28 @@ private:
 
     //hoang
 private:
-	double kd;
+	//double kd;
 	double kw;
+
 protected:
 	double maxKd;
 	double maxKw;
-	double kwPrev;
-	double kdPrev;
-	double deltaXdPrev;
-	double lastKd;
 
-	/*int dataIn[10000];
-	int dataOut[10000];
-	int dataStress[10000];*/
 	int* dataIn;
 	int* dataOut;
 
+	std::map<IPvXAddress, double> peerMap;
+	void printPeerMap();
+
 public:
-	double getKd(){ return kd; };
+
 	double getKw(){ return kw; };
 
-	void setKd(double kd_var){ kd = kd_var; };
 	void setKw(double kw_var){ kw = kw_var; };
-	//void requestKdKwFromNetwork();
+
 	int getIDfromName(string name);
+
+	double getKdFromNode(IPvXAddress add);
 
 };
 
