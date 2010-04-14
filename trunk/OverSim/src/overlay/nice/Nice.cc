@@ -29,6 +29,17 @@
 #include "SimpleUDP.h"
 #include "GlobalNodeListAccess.h"
 
+#include <string.h>
+
+template <class T>
+inline std::string to_string (const T& t)
+{
+    std::stringstream ss;
+    ss << t;
+    return ss.str();
+}
+
+
 namespace oversim
 {
 
@@ -58,6 +69,7 @@ const char *clusterarrows[] = {	"m=m,50,50,50,50;ls=yellow,2",
                                 "m=m,50,50,50,50;ls=navy,10",
                                 "m=m,50,50,50,50;ls=yellow,11"
                               };
+const double DOUBLE_TO_SIMTIME_RATIO = SimTime::getMaxTime().dbl() / DBL_MAX;
 
 Define_Module(Nice);
 
@@ -104,6 +116,10 @@ Nice::~Nice()
  */
 void Nice::initializeOverlay( int stage )
 {
+
+	hoang_use_cost = par("hoang_use_cost");
+	hoang_debug_cost = par("hoang_debug_cost");
+	checkedLeader = false;
 
     /* Because of IPAddressResolver, we need to wait until interfaces
      * are registered, address auto-assignment takes place etc. */
@@ -539,6 +555,10 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
                     double distance = simTime().dbl() - it->second->getDES();
 
+                    //hoang
+                    if(hoang_use_cost)
+						distance = cost();
+
                     it->second->set_distance(distance);
                     it->second->touch();
 
@@ -686,6 +706,10 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
         if (appMsg->getCommand() == CBR_DATA) {
 
+        	//hoang
+        	appMsg->setLastHopKd(getLastHopKd());
+        	appMsg->setBigKD(appMsg->getBigKD() + getLastHopKd());
+
             /* If its mine, count */
             if (appMsg->getSrcNode() == thisNode) {
 
@@ -729,7 +753,7 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
  */
 void Nice::finishOverlay()
 {
-
+	hoangCheckLeader();
 
 } // finishOverlay
 
@@ -1414,6 +1438,9 @@ void Nice::sendHeartbeats()
                 if (it != peerInfos.end()) {
 
                     it->second->set_distance_estimation_start(simTime().dbl());
+                    /*if(hoang_use_cost){
+						it->second->set_distance_estimation_start(cost());
+					}*/
 
                 }
 
@@ -1715,6 +1742,10 @@ void Nice::handleHeartbeat(NiceMessage* msg)
                 /* Use Exponential Moving Average with factor 0.1 */
                 double newDistance = (simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2.0;
 
+                if(hoang_use_cost){
+					newDistance = cost();
+                }
+
                 if (oldDistance > 0) {
 
                     it->second->set_distance((0.1 * newDistance) + (0.9 * oldDistance));
@@ -1840,6 +1871,9 @@ void Nice::handleHeartbeat(NiceMessage* msg)
 
                 /* Valid distance measurement, get value */
                 it->second->set_distance((simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
+                if(hoang_use_cost){
+					it->second->set_distance(cost());
+				}
 
             }
 
@@ -2555,6 +2589,11 @@ void Nice::maintenance()
 
                     // Set new leader for this cluster
                     clusters[i].setLeader(new_leader);
+                    std::cout << "setLeader(new_leader); " << endl;
+//                    std::cout << "In the cluster of layer " << i << " of " << thisNode.getAddress() << endl;
+//					std::cout << "MaxDistance from new leader " << new_leader.getAddress() << " : " << getMaxDistance(new_leader, clusterset) << endl;
+//					std::cout << "0.7*MaxDistance from old leader " << clusters[i].getLeader() << " : " << 0.7 * getMaxDistance(clusters[i].getLeader(), clusterset) << endl;
+//					std::cout << "0.1*MeanDistance " << thisNode.getAddress() << " : " << minCompare << endl << endl;
 
                 }
 
@@ -2562,6 +2601,12 @@ void Nice::maintenance()
                     EV << "MaxDistance " << new_leader.getAddress() << " : " << getMaxDistance(new_leader, clusterset) << endl;
                     EV << "MaxDistance " << clusters[i].getLeader() << " : " << getMaxDistance(clusters[i].getLeader(), clusterset) << endl;
                     EV << "MaxDistance " << thisNode.getAddress() << " : " << getMaxDistance(thisNode, clusterset) << endl;
+
+                    //hoang
+                    /*std::cout << "In the cluster of layer " << i << " of " << thisNode.getAddress() << endl;
+                    std::cout << "MaxDistance from new leader " << new_leader.getAddress() << " : " << getMaxDistance(new_leader, clusterset) << endl;
+                    std::cout << "0.7*MaxDistance from old leader " << clusters[i].getLeader() << " : " << 0.7 * getMaxDistance(clusters[i].getLeader(), clusterset) << endl;
+                    std::cout << "0.1*MeanDistance " << thisNode.getAddress() << " : " << minCompare << endl << endl;*/
                 }
 
 
@@ -3401,7 +3446,9 @@ void Nice::handleAppMessage(cMessage* msg)
             appMsg->setLastHop(thisNode);
             appMsg->setHopCount(0);
 
-            //appMsg->setBitLength(CBRAPPMSG_L(msg)); //hoang
+            //appMsg->setBitLength(CBRAPPMSG_L(msg));//hoang
+            appMsg->setBigKD(0);
+            appMsg->setLastHopKd(0);
 
             sendDataToOverlay(appMsg);
 
@@ -3562,6 +3609,50 @@ void Nice::pollRP(int layer)
         EV << simTime() << " : " << thisNode.getAddress() << " : pollRP() finished." << endl;
 
 } // pollRP
+
+double Nice::cost()
+{
+
+}
+
+/*************************************************
+*check if this node is leader (call once)
+*/
+void Nice::hoangCheckLeader(){
+
+    if(!checkedLeader){
+
+        for (short i=0; i<maxLayers; i++) {
+
+            if (clusters[i].getSize() > 0) {
+
+                if (clusters[i].contains(thisNode) && clusters[i].getLeader() == thisNode) {
+
+                    int size = clusters[i].getSize();
+
+                    std::cout << thisNode.getAddress() << ": is leader layer " << i << " cluster size " << size << endl;
+
+                    std::string str = "HOANG num leaders layer " + to_string(i);
+
+                    globalStatistics->recordOutVector(str,1);
+
+                    globalStatistics->recordOutVector("HOANG total ALM link count",size - 1);
+
+                    checkedLeader = true;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    else{
+        //do nothing, no check anymore
+    }
+
+}
 
 
 

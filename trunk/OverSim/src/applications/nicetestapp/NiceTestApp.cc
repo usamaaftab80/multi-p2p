@@ -506,7 +506,7 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 
             simtime_t eed = simTime() - msg->getCreationTime();
 
-            appPeerMap.insert(std::make_pair((cbrMsg->getSrcNode()).getAddress() , eed.dbl()));
+
 
             /*
              * calculate small xd
@@ -515,33 +515,38 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
              * get bigXD from stats
              */
 
-            cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
-			cCompoundModule* overlayModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("overlay"));
-			BaseOverlay* overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
+            double kd = cbrMsg->getLastHopKd();
 
-			double kd = overlay->getKdFromNode((cbrMsg->getLastHop()).getAddress());
+            globalStatistics->recordOutVector("6 lasthop kd ",kd);
 
-			double bigKD = eed.dbl(); //just 1-n video transmission
+//			double bigKD = simTime().dbl() - cbrMsg->getCreatTime(); //just 1-n video transmission
+            double bigKD = cbrMsg->getBigKD();
+			globalStatistics->recordOutVector("6 bigKD ",bigKD);
+
 			//TODO: (m-n): bigKD = appPeerMap.find(sender)->second
-			/*if(stats->getMaxKd() < bigKD){
+
+			if(stats->getMaxKd() < bigKD){
 				stats->setMaxKd(bigKD);
 			}
 
 			if(!(stats->getMaxKd() < stats->getXd())){
 				stats->hardChangeXdForKd(stats->getMaxKd());
-			}*/
+			}
 
 			double bigXD = stats->getXd();
 
 			xd = bigXD * kd / bigKD;
 
 			if(!(xd>kd)){
-				cout << "error xd=" << xd << " not bigger than kd=" << kd << " XD=" << bigXD << " KD=" << bigKD <<endl;
+				cout << "error xd=" << xd << " not bigger than kd=" << kd << " || XD=" << bigXD << " KD=" << bigKD << " || ALM-path length " << hopCount << endl;
+				globalStatistics->recordOutVector("too late KD times",bigKD);
 			}
+
 
             //--end of calculate xd
 
             globalStatistics->recordOutVector("4 e2e delay",eed.dbl());
+
 
             globalStatistics->recordOutVector("3 ALM Hop count",hopCount);
 
@@ -641,4 +646,3 @@ void NiceTestApp::generateXd()
 
 	xd = xd_var;
 }
-

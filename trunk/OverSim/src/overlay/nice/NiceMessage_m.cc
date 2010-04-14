@@ -1479,6 +1479,8 @@ CbrAppMessage::CbrAppMessage(const char *name, int kind) : BaseOverlayMessage(na
     this->seqNo_var = 0;
     this->hopCount_var = 0;
     this->layer_var = 0;
+    this->bigKD_var = 0;
+    this->lastHopKd_var = 0;
 }
 
 CbrAppMessage::CbrAppMessage(const CbrAppMessage& other) : BaseOverlayMessage()
@@ -1502,6 +1504,8 @@ CbrAppMessage& CbrAppMessage::operator=(const CbrAppMessage& other)
     this->seqNo_var = other.seqNo_var;
     this->hopCount_var = other.hopCount_var;
     this->layer_var = other.layer_var;
+    this->bigKD_var = other.bigKD_var;
+    this->lastHopKd_var = other.lastHopKd_var;
     return *this;
 }
 
@@ -1515,6 +1519,8 @@ void CbrAppMessage::parsimPack(cCommBuffer *b)
     doPacking(b,this->seqNo_var);
     doPacking(b,this->hopCount_var);
     doPacking(b,this->layer_var);
+    doPacking(b,this->bigKD_var);
+    doPacking(b,this->lastHopKd_var);
 }
 
 void CbrAppMessage::parsimUnpack(cCommBuffer *b)
@@ -1527,6 +1533,8 @@ void CbrAppMessage::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->seqNo_var);
     doUnpacking(b,this->hopCount_var);
     doUnpacking(b,this->layer_var);
+    doUnpacking(b,this->bigKD_var);
+    doUnpacking(b,this->lastHopKd_var);
 }
 
 int CbrAppMessage::getCommand() const
@@ -1599,6 +1607,26 @@ void CbrAppMessage::setLayer(short layer_var)
     this->layer_var = layer_var;
 }
 
+double CbrAppMessage::getBigKD() const
+{
+    return bigKD_var;
+}
+
+void CbrAppMessage::setBigKD(double bigKD_var)
+{
+    this->bigKD_var = bigKD_var;
+}
+
+double CbrAppMessage::getLastHopKd() const
+{
+    return lastHopKd_var;
+}
+
+void CbrAppMessage::setLastHopKd(double lastHopKd_var)
+{
+    this->lastHopKd_var = lastHopKd_var;
+}
+
 class CbrAppMessageDescriptor : public cClassDescriptor
 {
   public:
@@ -1645,7 +1673,7 @@ const char *CbrAppMessageDescriptor::getProperty(const char *propertyname) const
 int CbrAppMessageDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 7+basedesc->getFieldCount(object) : 7;
+    return basedesc ? 9+basedesc->getFieldCount(object) : 9;
 }
 
 unsigned int CbrAppMessageDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -1664,6 +1692,8 @@ unsigned int CbrAppMessageDescriptor::getFieldTypeFlags(void *object, int field)
         case 4: return FD_ISEDITABLE;
         case 5: return FD_ISEDITABLE;
         case 6: return FD_ISEDITABLE;
+        case 7: return FD_ISEDITABLE;
+        case 8: return FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -1684,6 +1714,8 @@ const char *CbrAppMessageDescriptor::getFieldName(void *object, int field) const
         case 4: return "seqNo";
         case 5: return "hopCount";
         case 6: return "layer";
+        case 7: return "bigKD";
+        case 8: return "lastHopKd";
         default: return NULL;
     }
 }
@@ -1704,6 +1736,8 @@ const char *CbrAppMessageDescriptor::getFieldTypeString(void *object, int field)
         case 4: return "unsigned int";
         case 5: return "unsigned int";
         case 6: return "short";
+        case 7: return "double";
+        case 8: return "double";
         default: return NULL;
     }
 }
@@ -1755,6 +1789,8 @@ bool CbrAppMessageDescriptor::getFieldAsString(void *object, int field, int i, c
         case 4: ulong2string(pp->getSeqNo(),resultbuf,bufsize); return true;
         case 5: ulong2string(pp->getHopCount(),resultbuf,bufsize); return true;
         case 6: long2string(pp->getLayer(),resultbuf,bufsize); return true;
+        case 7: double2string(pp->getBigKD(),resultbuf,bufsize); return true;
+        case 8: double2string(pp->getLastHopKd(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -1774,6 +1810,8 @@ bool CbrAppMessageDescriptor::setFieldAsString(void *object, int field, int i, c
         case 4: pp->setSeqNo(string2ulong(value)); return true;
         case 5: pp->setHopCount(string2ulong(value)); return true;
         case 6: pp->setLayer(string2long(value)); return true;
+        case 7: pp->setBigKD(string2double(value)); return true;
+        case 8: pp->setLastHopKd(string2double(value)); return true;
         default: return false;
     }
 }

@@ -812,18 +812,18 @@ private:
 
     //hoang
 private:
-	//double kd;
+
 	double kw;
+	double lastHopKd;
 
 protected:
+
 	double maxKd;
 	double maxKw;
 
 	int* dataIn;
 	int* dataOut;
 
-	std::map<IPvXAddress, double> peerMap;
-	void printPeerMap();
 
 public:
 
@@ -833,7 +833,7 @@ public:
 
 	int getIDfromName(string name);
 
-	double getKdFromNode(IPvXAddress add);
+	double getLastHopKd(){ return lastHopKd;};
 
 };
 

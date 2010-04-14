@@ -116,10 +116,14 @@ message CbrAppMessage extends BaseOverlayMessage
     int command enum(CbrAppCommand);
     TransportAddress srcNode;
     TransportAddress lastHop;
-    double sendTime;
+    double sendTime;    
     unsigned int seqNo;
     unsigned int hopCount;
     short layer;
+    //hoang
+    double bigKD;
+    double lastHopKd;
+    
 }
 
 
