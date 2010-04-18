@@ -23,13 +23,13 @@ void StatisticsCollector::initialize()
 {
 	numPhysicalLink = 0;
 
-	hopCountVector.setName("2 hopCount--through phisical IP nodes");
+	hopCountVector.setName("2 hopCount--through physical IP nodes");
 	nodeCountVector.setName("HOANG num IP node");
 	linkCountVector.setName("HOANG num physical link");
 
 	calculateNumPhysicalLink();
 
-	//xw = xd = 0;
+	xw = xd = 0;
 	maxKd = 0;
 	maxPeerCount = 0;
 	XDlimit = par("XDlimit");
@@ -37,10 +37,12 @@ void StatisticsCollector::initialize()
 
 	statisticsPeriod = par("statisticsPeriod");
     timerMsg = new cMessage("StatisticsCollector Timer");
+    scheduleAt(simTime() + statisticsPeriod, timerMsg);
+    generateXD();
 
 	/*cTopology topo;
 
-	topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*] **.accessRouter[*] **.backboneRouter[*]").asVector());
+	topo.extractByModulePath(cStringTokenizer("**.backboneRouter[*]").asVector());
 
 	std::cout << "\nThis topo has " << topo.getNumNodes() << " nodes" << endl;
 
@@ -63,13 +65,10 @@ void StatisticsCollector::initialize()
 
 		std::cout << " " << neighbour->getModule()->getFullPath()
 		   << " through gate " << gate->getFullName()
-		   << " channel Delay " << d << " Bw " << r << endl;
+		   << " channel Delay " << d << " Datarate " << r << endl;
 	  }
 
 	}*/
-
-
-    //scheduleAt(simTime() + statisticsPeriod, timerMsg);
 
     //std::cout << "SSSSSSSSSSSSSSSStatistic Collector INitttttttttttttt at " << simTime() << endl;
 
@@ -81,11 +80,7 @@ void StatisticsCollector::handleMessage(cMessage *msg)
 
 		scheduleAt(simTime() + statisticsPeriod, timerMsg);
 
-		calculateNumPhysicalLink();
-
-		hopCountVector.record(hopCountStats.getMean());
-
-		linkCountVector.record(numPhysicalLink);
+		generateXD();
 
 	} else {
 
@@ -176,15 +171,15 @@ void StatisticsCollector::calculateNumPhysicalLink()
 
 }
 
-void StatisticsCollector::hardChangeXdForKd(double kd_var)
+void StatisticsCollector::generateXD()
 {
 	double xd_var = dblrand() * XDlimit;
 
-	while(!(xd_var > kd_var)){
+	while(!(xd_var > maxKd)){
 		xd_var = dblrand() * XDlimit;
 	}
 
 	xd = xd_var ;
 
-//	xd = kd_var + 0.001;
+//	std::cout << "New changed XD==" << xd << " maxKD=" << maxKd <<endl;
 }

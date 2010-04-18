@@ -57,11 +57,7 @@ simple Nice extends BaseOverlay
         
         int targetOverlayTerminalNum;
         double startTime;
-        
-        //hoang
-        bool hoang_debug_cost;
-        bool hoang_use_cost;
-        
+                
         int k;      
 }
    

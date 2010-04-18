@@ -45,22 +45,6 @@ void NiceTestApp::initializeApp(int stage)
 
     if (stage != MIN_STAGE_APP) return;
 
-/*
-
-    cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
-
-	cGate* gate = check_and_cast<cGate*>(thisOverlayTerminal->gate("pppg$o",0)); //connect to accessRouter
-
-	cDatarateChannel *chan = check_and_cast<cDatarateChannel *>(gate->getChannel());
-
-	double kd = (chan->getDelay()).dbl();
-
-	double kw = chan->getDatarate();
-
-	std::cout << "Terminal " << thisOverlayTerminal->getFullName() << " gate " << gate->getFullName() << " Delay " << kd << " Bw " << kw << endl;
-
-*/
-
     // copy the module parameter values to our own variables
 
     const char *statsModulePath = par("statsModulePath");
@@ -71,9 +55,12 @@ void NiceTestApp::initializeApp(int stage)
 	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
 	global = check_and_cast<HoangGlobalObject *>(modp2);
 
+	global->incNumNodeJoined();
+	global->updateNumLinkArray();
 
     sendPeriod = par("sendPeriod");
     sendDataPeriod = par("sendDataPeriod");
+    loopTimes = par("loopTimes");
 
     //TODO:if(get this overlayterminal'id = global->senderId) isSender = true
     isSender = par("isSender");
@@ -98,9 +85,6 @@ void NiceTestApp::initializeApp(int stage)
     if(isSender){
     	// start state timer!
 
-		stateTimer = new cMessage("stateTimer");
-		scheduleAt(simTime() + sendPeriod, stateTimer);
-
     	/* read trace file */
 		FILE * pFile;
 		FILE * newFile;
@@ -114,9 +98,10 @@ void NiceTestApp::initializeApp(int stage)
 //
 //		const char* traceFileName = par("traceFileName");
 		const char* sdFile = par("sdFile");
-//		const char* rdFile = par("rdFile");
+
 		const char * format;
 
+/*
 		if(strcmp(sdFile,"sd_paris") == 0){
 			format = "1254866%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.41674 > 157.159.16.152.12346: UDP, length %d\n"; //sd_paris:32632
 		}
@@ -132,6 +117,9 @@ void NiceTestApp::initializeApp(int stage)
 		else if(strcmp(sdFile,"sd_sl_svc") == 0){
 			format = "1270649%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.56586 > 157.159.16.50.12346: UDP, length %d\n"; //sd_sl_svc:293
 		}
+*/
+
+		format = "%16f id %16d udp %16d\n";
 
 		/* Read SD and write a new SD file*/
 		pFile = fopen (sdFile , "r");
@@ -139,16 +127,16 @@ void NiceTestApp::initializeApp(int stage)
 		if (pFile == NULL) perror ("Error opening file");
 
 		while ( ! feof (pFile) ){
-			fscanf(pFile,format,&time,&id,&lengthUDP,&length);
-			//fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
+			//fscanf(pFile,format,&time,&id,&lengthUDP,&length);
+			fscanf(pFile , format,&time,&id,&length);
 			videoSize++;
 		}
 
-		global->setVideoSize(videoSize);
+		//global->setVideoSize(videoSize);
 		sd = new dataPacket [videoSize];
-		//rd = new dataPacket [videoSize];
+		rd = new dataPacket [videoSize];
 
-		cout << "There are " << videoSize << " packet in trace file" << endl;
+		cout << "There are " << videoSize << " packets in dump file" << endl;
 
 		rewind(pFile);
 
@@ -157,7 +145,8 @@ void NiceTestApp::initializeApp(int stage)
 			//fscanf(pFile , "%16f id %16d udp %16d\n",&time,&id,&length);
 			//fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
 			//videoPacket[id-1].time = time; //id-1 because ST file begins by 1, not 0
-			fscanf(pFile,format,&time,&id,&lengthUDP,&length);
+			//fscanf(pFile,format,&time,&id,&lengthUDP,&length);
+			fscanf(pFile , format,&time,&id,&length);
 			sd[i].time = time;
 			sd[i].length = length;
 			sd[i].id = i;
@@ -172,7 +161,7 @@ void NiceTestApp::initializeApp(int stage)
 		fclose(newFile);
 
 		/* Sap xep lai mang sd theo time tang dan */
-
+/*
 		dataPacket temp;   // holding variable
 		int numLength = videoSize;
 		for (int i=0; i< (numLength -1); i++)    // element to be compared
@@ -188,7 +177,7 @@ void NiceTestApp::initializeApp(int stage)
 			}
 		}
 
-		/* Init first XW */
+		 Init first XW
 		byteSent = sd[0].length;
 		int ii = 1;
 		while (!(sd[ii].time > sd[ii-1].time)){
@@ -199,22 +188,22 @@ void NiceTestApp::initializeApp(int stage)
 		stats->setXw(xw);
 		byteSent = 0; //reset bytesent
 
-		/*for (int i=0; i< (numLength -1); i++){
+		for (int i=0; i< (numLength -1); i++){
 			cout << "time " << sd[i].time << " id " << sd[i].id << " length " << sd[i].length << endl;
-		}*/
+		}
+*/
 
 		/* Read RD */
-		/*FILE * rFile;
+		FILE * rFile;
+		const char* rdFile = par("rdFile");
 		rFile = fopen (rdFile , "r");
 		if (rFile == NULL) perror ("Error opening file");
 
 		i = 0;
 		while ( ! feof (rFile) ){
-			//fscanf(rFile , "%16f id %16d udp %16d\n",&time,&id,&length);
-			//fscanf(pFile , "%u\t%c\t%u\t%u\t%f\n", &id, &type, &length, &frag, &time);
-			//videoPacket[id-1].time = time; //id-1 because ST file begins by 1, not 0
-			fscanf(rFile , "1256917%f IP (tos 0x0, ttl  64, id %d, offset 0, flags [DF], proto: UDP (17), length: %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
-			//IP (tos 0x0, ttl  64, id %d, offset 0, flags [DF], proto: UDP (17), length: %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d
+
+			//fscanf(rFile , "1256917%f IP (tos 0x0, ttl  64, id %d, offset 0, flags [DF], proto: UDP (17), length: %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n",&time,&id,&lengthUDP,&length);
+			fscanf(rFile , format,&time,&id,&length);
 			rd[i].time = time;
 			rd[i].length = length;
 			rd[i].id = id;
@@ -226,39 +215,46 @@ void NiceTestApp::initializeApp(int stage)
 
 		fclose(rFile);
 
-		periodicData = new rateData [videoSize];
+/*
+		for(int i=0; i<videoSize; i++){
+			sd[i].time -= sd[0].time;
+			rd[i].time -= rd[0].time + 0.018;
+		}
+*/
+
+		periodicData = new rateData [videoSize * loopTimes];
 
 		for(int i=0; i<videoSize ; i++){
 			double offset = (rd[i].time - sd[i].time).dbl();
+			if(!(offset > 0)){
+				cout << "packet " << i << " rd time " << rd[i].time << " sd time " << sd[i].time << endl;
+			}
 			int rate = (int)(sd[i].length * 8 / offset);
-			periodicData[i].rate = rate;
-			periodicData[i].length = (int)(rate * 0.003);
-		}*/
+			for(int j=0; j< loopTimes; j++){
+				periodicData[j*videoSize + i].rate = rate;
+				periodicData[j*videoSize + i].length = (int)(rate * sendDataPeriod.dbl());
+			}
+
+		}
 
 
 		/* init XD and schedule */
 
-		generateXd();
+		stats->setXw(periodicData[0].rate);
 
-		//xw = (double)videoPacket[0].length / (videoPacket[0].time).dbl();
+		//sendDataTimer = new cMessage("sendDataTimer");
 
-		//stats->setXw(periodicData[0].rate);
+		sendDataPeriodTimer = new cMessage("sendDataPeriodTimer");
 
-		//changeXdInterval = par("changeXdInterval");
-		changeXdInterval = 10;
-		changeXdTimer = new cMessage("changeXdTimer");
-
-		sendDataTimer = new cMessage("sendDataTimer");
-
-//		sendDataPeriodTimer = new cMessage("sendDataPeriodTimer");
-
-
+		stateTimer = new cMessage("stateTimer");
+		scheduleAt(simTime() + sendPeriod, stateTimer);
 
     }
 
     else { //not sender, just receiver
     	buf = new dataPacket [global->getVideoSize()];
     }
+
     bindToPort(2000);
     //cout << "Init App done" << endl;
 }
@@ -350,27 +346,30 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
     if (msg->isName("stateTimer")) {    // is this our timer?
 
-    	//cout << thisNode.getAddress() << " xd=" << xd << " xw=" << xw << endl;
-
         scheduleAt(simTime() + sendPeriod, stateTimer); // reschedule our message
 
         // if the simulator is still busy creating the network, let's wait a bit longer
         if (underlayConfigurator->isInInitPhase()) {
+        	if(isSender){
+        		if(global->getNumNodeJoined() > 1 && numSent<1){
+					scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
+        		}
+        	}
         	return;
 
         } else {
 
         	cancelAndDelete(stateTimer);
+        	//cout << thisNode.getAddress() << " vua init xong at " << simTime() << endl;
+
 
         	/* Begin send data timer*/
         	if(isSender){
-        		cout << "Init network finish at " << simTime() << endl;
-				beginSendDataTime = simTime() + par("timeSendAfterInit");
-				scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
-				//scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
+        		cout << "Sender Init finish at " << simTime() << endl;
+//				beginSendDataTime = simTime() + par("timeSendAfterInit");
+//				scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
+//				scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
 
-				generateXd();
-				scheduleAt(simTime() + changeXdInterval, changeXdTimer);
 			}
 
         }
@@ -383,7 +382,6 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         	delete [] sd;
 
         	cancelAndDelete(sendDataTimer);
-        	cancelAndDelete(changeXdTimer);
 
         	//endSimulation();
         	return;
@@ -432,28 +430,14 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
     }
 
-    else if (msg->isName("changeXdTimer")){
-
-    	if (underlayConfigurator->isInInitPhase()) return;
-
-    	scheduleAt(simTime() + changeXdInterval, changeXdTimer);
-
-    	generateXd();
-
-    	//cout << " vua change xd=" << xd << endl;
-
-    }
-
 	else if (msg->isName("sendDataPeriodTimer")){
 
 		/* check finish sending data */
-		if(numSent > videoSize-1){
+		if(numSent > loopTimes*videoSize -1){
 			cout << "Truyennnnnnnnnnnnnn hetttttttttt data packet at " << simTime() << endl;
 			delete [] periodicData;
 
-//			cancelAndDelete(sendDataPeriodTimer);
-//			cancelAndDelete(changeXdTimer);
-//			cancelAndDelete(sendDataTimer);
+			cancelAndDelete(sendDataPeriodTimer);
 
 			//endSimulation();
 			return;
@@ -472,13 +456,13 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		pingPongPkt->setBitLength(length);
 
-		stats->setDeltaXw(periodicData[numSent].rate - periodicData[numSent-1].rate);
+//		stats->setDeltaXw(periodicData[numSent].rate - periodicData[numSent-1].rate);
 
 		stats->setXw(periodicData[numSent].rate);
 
 		encapAndSendCbrAppMsg(pingPongPkt);
 
-		//cout << "Vua send data: length=" << length << " numSent=" << numSent << " || xw=" << xw << " at " << simTime() << endl;
+//		cout << "Vua send data: length=" << length << " numSent=" << numSent << " || xw=" << periodicData[numSent].rate << " at " << simTime() << endl;
 
 	}
     else
@@ -506,49 +490,43 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 
             simtime_t eed = simTime() - msg->getCreationTime();
 
+            globalStatistics->recordOutVector("4 e2e delay",eed.dbl());
 
+            globalStatistics->recordOutVector("3 ALM Hop count",hopCount);
 
             /*
-             * calculate small xd
-             * get bigKD : from App (this layer) = eed (1-n)
-             * get last hop kd from baseOverlay
-             * get bigXD from stats
-             */
+			 * hoang
+			 * calculate small xd
+			 * get bigKD : from App (this layer) = eed (1-n)
+			 * get last hop kd from baseOverlay
+			 * get bigXD from stats
+			 */
 
-            double kd = cbrMsg->getLastHopKd();
+			double kd = cbrMsg->getLastHopKd();
 
-            globalStatistics->recordOutVector("6 lasthop kd ",kd);
+			globalStatistics->recordOutVector("6 lasthop kd ",kd);
 
-//			double bigKD = simTime().dbl() - cbrMsg->getCreatTime(); //just 1-n video transmission
-            double bigKD = cbrMsg->getBigKD();
+			//just 1-n video transmission
+			double bigKD = cbrMsg->getBigKD();
 			globalStatistics->recordOutVector("6 bigKD ",bigKD);
 
 			//TODO: (m-n): bigKD = appPeerMap.find(sender)->second
 
+
 			if(stats->getMaxKd() < bigKD){
 				stats->setMaxKd(bigKD);
+				stats->generateXD();
 			}
 
 			if(!(stats->getMaxKd() < stats->getXd())){
-				stats->hardChangeXdForKd(stats->getMaxKd());
+				stats->generateXD();
 			}
 
 			double bigXD = stats->getXd();
 
 			xd = bigXD * kd / bigKD;
 
-			if(!(xd>kd)){
-				cout << "error xd=" << xd << " not bigger than kd=" << kd << " || XD=" << bigXD << " KD=" << bigKD << " || ALM-path length " << hopCount << endl;
-				globalStatistics->recordOutVector("too late KD times",bigKD);
-			}
-
-
-            //--end of calculate xd
-
-            globalStatistics->recordOutVector("4 e2e delay",eed.dbl());
-
-
-            globalStatistics->recordOutVector("3 ALM Hop count",hopCount);
+			//--end of calculate xd
 
             /* data handle */
 
@@ -559,9 +537,9 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 				NiceTestAppMsg* myMsg = check_and_cast<NiceTestAppMsg*>(hoang_msg);
 
 				if (myMsg->getType() == MYMSG_PING) {
-					buf[numReceived].time = simTime();
-					buf[numReceived].id = myMsg->getId();
-					buf[numReceived].length = myMsg->getByteLength();
+//					buf[numReceived].time = simTime();
+//					buf[numReceived].id = myMsg->getId();
+//					buf[numReceived].length = myMsg->getByteLength();
 
 					//cout << thisNode.getAddress() << " Received at " << buf[numReceived].time << " id " << buf[numReceived].id << " length " << buf[numReceived].length << endl;
 
@@ -611,38 +589,11 @@ void NiceTestApp::encapAndSendCbrAppMsg(cMessage* msg)
 
         send(cbrMsg,"to_lowerTier");
 
-        //cout << "Vua send packet: length=" << videoPacket[numSent].length << " numSent=" << numSent << " || xw=" << xw << " at " << simTime() << endl;
+        //cout << "Vua send packet: length=" << periodicData[numSent].length << " numSent=" << numSent << " || xw=" << xw << " at " << simTime() << endl;
 
-        RECORD_STATS(numSent++); // update statistics
         global->incNumSent();
+        numSent++;
 
     }
 
-}
-
-void NiceTestApp::generateXd()
-{
-	double kd_var = stats->getMaxKd();
-
-	double xd_var = dblrand() * stats->getXDlimit(); //random double in range [0,150ms)
-
-/*
-	if(!(kd_var < xd_var)){
-		xd_var = kd_var + 0.001;
-	}
-*/
-
-	while(!(xd_var > kd_var)){
-
-		//std::cout << "XD=" << xd_var << " < maxKD=" << kd_var << endl;
-
-		xd_var = dblrand() * stats->getXDlimit();
-
-	}
-
-	stats->setXd(xd_var);
-
-	cout << "New changed XD=" << xd_var << " maxKD=" << kd_var <<endl;
-
-	xd = xd_var;
 }

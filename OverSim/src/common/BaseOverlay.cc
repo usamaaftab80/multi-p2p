@@ -75,6 +75,10 @@ int BaseOverlay::numInitStages() const
 
 void BaseOverlay::initialize(int stage)
 {
+	//hoang
+	hoang_use_cost = par("hoang_use_cost");
+	hoang_debug_cost = par("hoang_debug_cost");
+
     if (stage == MIN_STAGE_OVERLAY) {
         OverlayKey::setKeyLength(par("keyLength"));
 
@@ -329,7 +333,8 @@ void BaseOverlay::finish()
     }*/
 
     int numPacketLost = 0 ;
-    for(int i=0; i<global->getNumSent(); i++){
+    //for(int i=0; i<global->getNumSent(); i++){
+    for(int i=0; i<global->getVideoSize(); i++){
     	int dataStress;
 
     	if(!isSender){
@@ -337,6 +342,10 @@ void BaseOverlay::finish()
 				dataIn[i] = 1; //hard code prevent packet loss
 				numPacketLost++;
 			}
+    	}
+    	else{
+    		if(!(dataOut[i] > 0))
+    			std::cout << " Sender dataOut[" << i << "]=" << dataOut[i] << endl;
     	}
 
     	if(dataOut[i] > 0){ //forwarder
@@ -759,19 +768,6 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         int hopCount = defaultTimeToLive - udpControlInfo->getTimeToLive();
 
-        //hoang
-		string name = msg->getName();
-		if(name.find("CBR_DATA") == 0){
-			int id = getIDfromName(name);
-			//cout << thisNode.getAddress() << " vua nhan duoc data pkt " << id << endl;
-			dataIn[id]++;
-
-			stats->collectHopCount(hopCount); //just calculate hopcount of data packets only
-			//peerMap.insert(std::make_pair(udpControlInfo->getSrcAddr(),udpControlInfo->getDelayInfo()));
-			lastHopKd = udpControlInfo->getDelayInfo();
-			//globalStatistics->recordOutVector("6 data kd at BaseOverlay",udpControlInfo->getDelayInfo());
-		}
-
         //stats->collectHopCount(hopCount);
 
         //globalStatistics->recordOutVector("HOANG udp hop count",hopCount);
@@ -784,6 +780,7 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         if(udpControlInfo->getDelayInfo() > stats->getMaxKd()){
         	stats->setMaxKd(udpControlInfo->getDelayInfo()); //update maxKd
+        	stats->generateXD();
         }
 
         if(udpControlInfo->getDelayInfo() > maxKd){
@@ -791,10 +788,30 @@ void BaseOverlay::handleMessage(cMessage* msg)
 		}
 
         if(!(stats->getMaxKd() < stats->getXd())){
-        	stats->hardChangeXdForKd(stats->getMaxKd());
+        	stats->generateXD();
         }
 
-        //cout << " vua nhan dc packet kw=" << kw << " kd=" << kd << endl;
+        string name = msg->getName();
+
+//        if(name.find("NICE_QUERY") == 0){
+//        	cout << thisNode.getAddress() << " vua nhan duoc pkt " << name << endl;
+//        	lastHopKd = udpControlInfo->getDelayInfo();
+//        }
+
+		if(name.find("CBR_DATA") == 0){
+			int id = getIDfromName(name);
+
+			dataIn[id]++;
+
+			stats->collectHopCount(hopCount); //just calculate hopcount of data packets only
+//			peerMap.insert(std::make_pair(udpControlInfo->getSrcAddr(),udpControlInfo->getDelayInfo()));
+//			double prevKd = lastHopKd;
+			lastHopKd = udpControlInfo->getDelayInfo();
+//			if(lastHopKd != prevKd){
+//				std::cout << thisNode.getAddress() << " prevKd " << prevKd << " currKd " << lastHopKd << endl;
+//			}
+
+		}
 
         delete udpControlInfo;
 
@@ -2054,4 +2071,3 @@ int BaseOverlay::getIDfromName(string name)
 
 	return atoi(strID.c_str()); //convert string to int
 }
-

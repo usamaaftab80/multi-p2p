@@ -266,12 +266,11 @@ private:
     void pollRP(int layer);
 
     //hoang
-    double cost();
-	bool hoang_debug_cost;
-	bool hoang_use_cost;
 
 	void hoangCheckLeader();
 	bool checkedLeader;
+	double cost();
+//	double xd,kd;
 
 };
 

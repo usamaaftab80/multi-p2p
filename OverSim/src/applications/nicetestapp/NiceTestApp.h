@@ -43,18 +43,18 @@ class NiceTestApp : public BaseApp
 	double xw,xd;
 
 	//timers
-    cMessage* changeXdTimer;
-    simtime_t changeXdInterval;
 
     cMessage* sendDataTimer;
     cMessage* stateTimer;
 
+public:
     double getXw(){return xw;};
     double getXd(){return xd;};
     void setXw(double xw_var){ xw = xw_var ;};
     void setXd(double xd_var){ xd = xd_var ;};
 
-    void generateXd();
+private:
+
 
     struct dataPacket{
     	int id;
@@ -69,16 +69,16 @@ class NiceTestApp : public BaseApp
 
     //dataPacket* videoPacket;
     dataPacket* sd;
-    //dataPacket* rd;
+    dataPacket* rd;
     dataPacket* buf;
     int videoSize;
+    int loopTimes;
 
     rateData* periodicData;
     int dataSize;
 
     cMessage* sendDataPeriodTimer;
     simtime_t sendDataPeriod;
-
 
     simtime_t beginSendDataTime;
     int byteSent;
