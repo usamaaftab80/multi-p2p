@@ -35,6 +35,10 @@ class HoangGlobalObject : public cSimpleModule
 	int senderId;
 	int videoSize;
 	int* linkStress;
+	int* numLink;
+	int loopTimes;
+	int numNodeJoined;
+	cOutVector distanceVector;
 
   protected:
     virtual void initialize();
@@ -42,14 +46,20 @@ class HoangGlobalObject : public cSimpleModule
 
 
   public:
-    IPvXAddress getSourceSenderAddress(){return sourceSenderAddress;};
+	IPvXAddress getSourceSenderAddress(){return sourceSenderAddress;};
 	  void setSourceSenderAddress(IPvXAddress add){sourceSenderAddress = add;};
-	  void calculateNumAccessLink();
+	  void calculateNumAccessLink(int i);
 	  void incNumSent(){numSent++;};
 	  int getNumSent(){return numSent;};
 	  int getVideoSize(){return videoSize;};
 	  void setVideoSize(int value){videoSize = value;};
 	  void addLinkStress(int pktId,int value){linkStress[pktId] += value;};
+	  int getNumNodeJoined(){return numNodeJoined;};
+	  void incNumNodeJoined(){numNodeJoined++;};
+	  void updateNumLinkArray();
+	  void recordDistance(double val){distanceVector.record(val);};
+
+
 	  ~HoangGlobalObject();
 
 };

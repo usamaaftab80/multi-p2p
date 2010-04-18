@@ -811,12 +811,10 @@ private:
     bool internalReadyState; /**< internal overlay state used for setOverlayReady() */
 
     //hoang
-private:
-
+//private:
+protected:
 	double kw;
 	double lastHopKd;
-
-protected:
 
 	double maxKd;
 	double maxKw;
@@ -824,11 +822,12 @@ protected:
 	int* dataIn;
 	int* dataOut;
 
+	bool hoang_debug_cost;
+	bool hoang_use_cost;
 
 public:
 
 	double getKw(){ return kw; };
-
 	void setKw(double kw_var){ kw = kw_var; };
 
 	int getIDfromName(string name);

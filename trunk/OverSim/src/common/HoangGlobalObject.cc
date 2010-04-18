@@ -21,12 +21,20 @@ void HoangGlobalObject::initialize()
 {
 	numAccessLink = numNode = par("targetOverlayTerminalNum");
 	numSent = 0;
+	numNodeJoined = 0;
 	videoSize = par("videoSize");
+	loopTimes = par("loopTimes");
+	videoSize = videoSize * loopTimes;
+
 	linkStress = new int [videoSize];
-	fill(linkStress, linkStress + videoSize, 0);
+	fill(linkStress, linkStress + videoSize , 0);
+
+	numLink = new int [videoSize];
+	fill(numLink , numLink + videoSize , 0);
 
 	//set random sender: generate random number in [0,par("targetOverlayTerminalNum")]
 	senderId = intrand(numNode);
+	distanceVector.setName("1 Distance at NicePeerInfo");
 	cout << "global initttt done" << endl;
 }
 
@@ -34,6 +42,24 @@ void HoangGlobalObject::initialize()
 HoangGlobalObject::~HoangGlobalObject()
 {
 	//cout << "~HoangGlobalObject()" << endl;
+
+	double sum = 0;
+	int count = 0;
+	for(int i=0; i<videoSize; i++){
+
+		if (!(linkStress[i] > 0)){
+			cout << "packet " << i << " stress sum " << linkStress[i] << " for " << numLink[i] << " links" << endl;
+		}
+		if(numLink[i] >0 ){
+			sum += (double)linkStress[i] / (double)numLink[i];
+			count++;
+		}
+	}
+	cout << "Average link stress: "<< sum / (double)count << endl;
+
+	delete [] linkStress;
+	delete [] numLink;
+	/*
 	int temp = linkStress[0];
 	int numValue = 1; //amount of switching times
 	int sum = linkStress[0];
@@ -48,11 +74,12 @@ HoangGlobalObject::~HoangGlobalObject()
 			sum += temp;
 		}
 
-	}
-	recordScalar("1. Average link stress",((double)sum / (double)numValue)/numAccessLink );
-	recordScalar("Amount of different values",numValue);
-	cout << "Amount of different values: " << numValue << endl;
-	cout << "Average link stress: "<< ((double)sum / (double)numValue)/numAccessLink << endl;
+	}*/
+//	recordScalar("1. Average link stress",((double)sum / (double)numValue)/numAccessLink );
+//	recordScalar("Amount of different values",numValue);
+//	cout << "Amount of different values: " << numValue << endl;
+//	cout << "Average link stress: "<< ((double)sum / (double)numValue)/numAccessLink << endl;
+
 }
 
 /*void HoangGlobalObject::handleMessage(cMessage *msg)
@@ -60,23 +87,36 @@ HoangGlobalObject::~HoangGlobalObject()
 	// TODO - Generated method body
 }*/
 
-void HoangGlobalObject::calculateNumAccessLink()
+void HoangGlobalObject::calculateNumAccessLink(int i)
 {
-	int numLink = 0;
 
-	cTopology topo;
+/*	cTopology topo;
 
 	topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*]").asVector());
 
-	numNode = topo.getNumNodes();
+	numNode = topo.getNumNodes();*/
 
-	//nodeCountVector.record(numNode);
 
-	for (int i=0; i<numNode ; i++)
+	numLink[i] = numNode;
+
+/*
+	for (int j=0; j<numNode ; j++)
 	{
-	  cTopology::Node *node = topo.getNode(i);
-	  numLink += node->getNumOutLinks();
+	  cTopology::Node *node = topo.getNode(j);
+	  numLink[i] += node->getNumOutLinks();
 	}
+*/
 
+}
 
+void HoangGlobalObject::updateNumLinkArray()
+{
+//	cout << "numNodeJoined: " << numNodeJoined << " at " << simTime() << endl;
+//	for(int i=numSent; i<videoSize; i++){
+//		numLink[i] = numNodeJoined;
+//	}
+	fill(numLink + numSent , numLink + videoSize , numNodeJoined);
+	if(!(numNodeJoined < numNode)){
+		std::cout << "numNodeJoined=" << numNodeJoined << " numNode=" << numNode << endl;
+	}
 }

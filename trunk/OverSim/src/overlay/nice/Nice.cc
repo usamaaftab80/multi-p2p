@@ -29,6 +29,8 @@
 #include "SimpleUDP.h"
 #include "GlobalNodeListAccess.h"
 
+#include "NiceTestApp.h"
+
 #include <string.h>
 
 template <class T>
@@ -116,9 +118,7 @@ Nice::~Nice()
  */
 void Nice::initializeOverlay( int stage )
 {
-
-	hoang_use_cost = par("hoang_use_cost");
-	hoang_debug_cost = par("hoang_debug_cost");
+	//hoang
 	checkedLeader = false;
 
     /* Because of IPAddressResolver, we need to wait until interfaces
@@ -562,6 +562,9 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
                     it->second->set_distance(distance);
                     it->second->touch();
 
+                    //hoang
+                    globalStatistics->recordOutVector("1 Distance",distance);
+
                 }
 
             }
@@ -710,6 +713,12 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
         	appMsg->setLastHopKd(getLastHopKd());
         	appMsg->setBigKD(appMsg->getBigKD() + getLastHopKd());
 
+//        	double prevKd = kd;
+//
+//			if(getLastHopKd() != prevKd){
+//				//std::cout << thisNode.getAddress() << " prevKd " << prevKd << " currKd " << getLastHopKd() << " address " << appMsg->getLastHop() << endl;
+//			}
+
             /* If its mine, count */
             if (appMsg->getSrcNode() == thisNode) {
 
@@ -753,7 +762,7 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
  */
 void Nice::finishOverlay()
 {
-	hoangCheckLeader();
+	//hoangCheckLeader();
 
 } // finishOverlay
 
@@ -1438,9 +1447,9 @@ void Nice::sendHeartbeats()
                 if (it != peerInfos.end()) {
 
                     it->second->set_distance_estimation_start(simTime().dbl());
-                    /*if(hoang_use_cost){
+                    if(hoang_use_cost){
 						it->second->set_distance_estimation_start(cost());
-					}*/
+					}
 
                 }
 
@@ -1746,6 +1755,8 @@ void Nice::handleHeartbeat(NiceMessage* msg)
 					newDistance = cost();
                 }
 
+                globalStatistics->recordOutVector("1 Distance",newDistance);
+
                 if (oldDistance > 0) {
 
                     it->second->set_distance((0.1 * newDistance) + (0.9 * oldDistance));
@@ -1871,6 +1882,8 @@ void Nice::handleHeartbeat(NiceMessage* msg)
 
                 /* Valid distance measurement, get value */
                 it->second->set_distance((simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
+                //hoang
+                globalStatistics->recordOutVector("1 Distance",(simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
                 if(hoang_use_cost){
 					it->second->set_distance(cost());
 				}
@@ -2589,8 +2602,10 @@ void Nice::maintenance()
 
                     // Set new leader for this cluster
                     clusters[i].setLeader(new_leader);
-                    std::cout << "setLeader(new_leader); " << endl;
-//                    std::cout << "In the cluster of layer " << i << " of " << thisNode.getAddress() << endl;
+                    //hoang
+                    globalStatistics->recordOutVector("call setNewLeader() times",1);
+//                    std::cout << "setLeader(new_leader); " << endl;
+//                  std::cout << "In the cluster of layer " << i << " of " << thisNode.getAddress() << endl;
 //					std::cout << "MaxDistance from new leader " << new_leader.getAddress() << " : " << getMaxDistance(new_leader, clusterset) << endl;
 //					std::cout << "0.7*MaxDistance from old leader " << clusters[i].getLeader() << " : " << 0.7 * getMaxDistance(clusters[i].getLeader(), clusterset) << endl;
 //					std::cout << "0.1*MeanDistance " << thisNode.getAddress() << " : " << minCompare << endl << endl;
@@ -3610,11 +3625,6 @@ void Nice::pollRP(int layer)
 
 } // pollRP
 
-double Nice::cost()
-{
-
-}
-
 /*************************************************
 *check if this node is leader (call once)
 */
@@ -3654,6 +3664,42 @@ void Nice::hoangCheckLeader(){
 
 }
 
+double Nice::cost()
+{
+	double cost, kw_var , xw;
 
+	kw_var = getKw();
+	xw = stats->getXw();
+
+	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
+	cCompoundModule* appModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("tier1"));
+	NiceTestApp* app = check_and_cast<NiceTestApp*> (appModule->getSubmodule("nicetestapp"));
+	double xd = app->getXd();
+//	double kd = getLastHopKd();
+	double kd = lastHopKd;
+
+	if(kd < 1e-10){
+		std::cout << thisNode.getAddress() <<" kd " << kd << " at " << simTime() << endl;
+	}
+
+	if(xd < kd){
+		xd = kd + 1e-3;
+	}
+
+	cost = sqrt( (kd/(xd-kd)) * (xw/(kw_var-xw)) );
+
+	if(hoang_debug_cost){
+		std::cout << "xd=" << xd << " kd=" << kd << " || xw=" << xw << " kw=" << kw_var << " || cost=" << cost << endl;
+	}
+
+	if(cost > SimTime::getMaxTime().dbl()){
+		std::cout << "xd=" << xd << " kd=" << kd << " || xw=" << xw << " kw=" << kw_var << " || cost=" << cost << endl;
+		cost = 1;
+		globalStatistics->recordOutVector("Infinity cost times",1);
+	}
+
+	globalStatistics->recordOutVector("1 Cost",cost);
+	return cost;
+}
 
 }; //namespace

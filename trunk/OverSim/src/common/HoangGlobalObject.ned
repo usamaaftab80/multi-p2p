@@ -23,4 +23,5 @@ simple HoangGlobalObject
     parameters:
         int targetOverlayTerminalNum;
         int videoSize;
+        int loopTimes;
 }

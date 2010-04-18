@@ -73,7 +73,7 @@ class StatisticsCollector : public cSimpleModule
 	void setDeltaXw(double val){deltaXw = val;};
 	double getDeltaXw(){return deltaXw;};
 
-	void hardChangeXdForKd(double kd_var);
+	void generateXD();
 
 };
 
