@@ -39,6 +39,11 @@ class HoangGlobalObject : public cSimpleModule
 	int loopTimes;
 	int numNodeJoined;
 	cOutVector distanceVector;
+	double cost_to_distance_ratio;
+	double cost_mean;
+	double cost_variance;
+	double new_range;
+	double old_range;
 
   protected:
     virtual void initialize();
@@ -58,6 +63,11 @@ class HoangGlobalObject : public cSimpleModule
 	  void incNumNodeJoined(){numNodeJoined++;};
 	  void updateNumLinkArray();
 	  void recordDistance(double val){distanceVector.record(val);};
+	  double getCost_to_distance_ratio(){return cost_to_distance_ratio;};
+	  double getCost_mean(){return cost_mean;};
+	  double getCost_variance(){return cost_variance;};
+	  double getNew_range(){return new_range;};
+	  double getOld_range(){return old_range;};
 
 
 	  ~HoangGlobalObject();

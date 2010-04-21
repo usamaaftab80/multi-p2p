@@ -33,6 +33,8 @@ void StatisticsCollector::initialize()
 	maxKd = 0;
 	maxPeerCount = 0;
 	XDlimit = par("XDlimit");
+	fixedDiff = par("fixedDiff");
+	diff = par("diff");
 	deltaXw = 0;
 
 	statisticsPeriod = par("statisticsPeriod");
@@ -173,13 +175,18 @@ void StatisticsCollector::calculateNumPhysicalLink()
 
 void StatisticsCollector::generateXD()
 {
-	double xd_var = dblrand() * XDlimit;
-
-	while(!(xd_var > maxKd)){
-		xd_var = dblrand() * XDlimit;
+	if (fixedDiff){
+		xd = maxKd + diff;
 	}
+	else{
+		double xd_var = dblrand() * XDlimit;
 
-	xd = xd_var ;
+		while(!(xd_var > maxKd)){
+			xd_var = dblrand() * XDlimit;
+		}
+
+		xd = xd_var ;
+	}
 
 //	std::cout << "New changed XD==" << xd << " maxKD=" << maxKd <<endl;
 }

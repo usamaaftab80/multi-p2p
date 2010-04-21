@@ -83,6 +83,8 @@ private:
     simtime_t beginSendDataTime;
     int byteSent;
 
+    bool beginSend;
+
 };
 
 #endif /* NICETESTAPP_H_ */

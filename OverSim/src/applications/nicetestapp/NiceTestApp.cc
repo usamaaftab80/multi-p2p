@@ -83,6 +83,7 @@ void NiceTestApp::initializeApp(int stage)
 	//lastPacketTime = simTime().dbl();
 
     if(isSender){
+    	beginSend = false;
     	// start state timer!
 
     	/* read trace file */
@@ -351,8 +352,10 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         // if the simulator is still busy creating the network, let's wait a bit longer
         if (underlayConfigurator->isInInitPhase()) {
         	if(isSender){
-        		if(global->getNumNodeJoined() > 1 && numSent<1){
-					scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
+        		if((global->getNumNodeJoined() > 1) && (numSent<1) && (!beginSend)){
+        			//cancelEvent(sendDataPeriodTimer);
+					scheduleAt(simTime() + sendDataPeriod ,sendDataPeriodTimer );
+					beginSend = true;
         		}
         	}
         	return;
@@ -490,7 +493,7 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 
             simtime_t eed = simTime() - msg->getCreationTime();
 
-            globalStatistics->recordOutVector("4 e2e delay",eed.dbl());
+//            globalStatistics->recordOutVector("4 e2e delay",eed.dbl());
 
             globalStatistics->recordOutVector("3 ALM Hop count",hopCount);
 
@@ -504,11 +507,11 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 
 			double kd = cbrMsg->getLastHopKd();
 
-			globalStatistics->recordOutVector("6 lasthop kd ",kd);
+//			globalStatistics->recordOutVector("6 lasthop kd ",kd);
 
 			//just 1-n video transmission
 			double bigKD = cbrMsg->getBigKD();
-			globalStatistics->recordOutVector("6 bigKD ",bigKD);
+//			globalStatistics->recordOutVector("6 bigKD ",bigKD);
 
 			//TODO: (m-n): bigKD = appPeerMap.find(sender)->second
 
