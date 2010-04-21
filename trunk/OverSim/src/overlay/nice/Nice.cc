@@ -108,6 +108,8 @@ Nice::~Nice()
         delete it->second;
 
     }
+    //hoang
+    leaderHeartbeats.clear();
 
 } // ~NICE
 
@@ -563,7 +565,7 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
                     it->second->touch();
 
                     //hoang
-                    globalStatistics->recordOutVector("1 Distance",distance);
+//                    globalStatistics->recordOutVector("1 Distance",distance);
 
                 }
 
@@ -709,9 +711,22 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
         if (appMsg->getCommand() == CBR_DATA) {
 
-        	//hoang
-        	appMsg->setLastHopKd(getLastHopKd());
-        	appMsg->setBigKD(appMsg->getBigKD() + getLastHopKd());
+            /* If its mine, count */
+            if (appMsg->getSrcNode() == thisNode) {
+
+//                std::cout << simTime() << " : " << thisNode.getAddress() << " : Got my own message back. Not good." << endl;
+                globalStatistics->recordOutVector("NiceOwnMessage", 1);
+
+            } else {
+
+            	//hoang
+//        	appMsg->setLastHopKd(getLastHopKd());
+//        	std::cout << "appMsg lasthopkd=" << appMsg->getLastHopKd() << " at " << simTime() << endl;
+				if(appMsg->getLastHopKd() < 1e-10){
+					std::cout << "nhuccccc appMsg lasthopkd=" << appMsg->getLastHopKd() << " at " << simTime() << endl;
+				}
+
+				appMsg->setBigKD(appMsg->getBigKD() + appMsg->getLastHopKd());
 
 //        	double prevKd = kd;
 //
@@ -719,13 +734,6 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 //				//std::cout << thisNode.getAddress() << " prevKd " << prevKd << " currKd " << getLastHopKd() << " address " << appMsg->getLastHop() << endl;
 //			}
 
-            /* If its mine, count */
-            if (appMsg->getSrcNode() == thisNode) {
-
-                //std::cout << simTime() << " : " << thisNode.getAddress() << " : Got my own message back. Not good." << endl;
-                globalStatistics->recordOutVector("NiceOwnMessage", 1);
-
-            } else {
 
                 unsigned int hopCount = appMsg->getHopCount();
                 hopCount++;
@@ -1447,9 +1455,9 @@ void Nice::sendHeartbeats()
                 if (it != peerInfos.end()) {
 
                     it->second->set_distance_estimation_start(simTime().dbl());
-                    if(hoang_use_cost){
-						it->second->set_distance_estimation_start(cost());
-					}
+//                    if(hoang_use_cost){
+//						it->second->set_distance_estimation_start(cost());
+//					}
 
                 }
 
@@ -1755,11 +1763,16 @@ void Nice::handleHeartbeat(NiceMessage* msg)
 					newDistance = cost();
                 }
 
-                globalStatistics->recordOutVector("1 Distance",newDistance);
+//                globalStatistics->recordOutVector("1 Distance",newDistance);
 
                 if (oldDistance > 0) {
 
-                    it->second->set_distance((0.1 * newDistance) + (0.9 * oldDistance));
+//                	if(hoang_use_cost){
+//                		it->second->set_distance((0.5 * newDistance) + (0.5 * oldDistance));
+//                	}
+//                	else{
+                		it->second->set_distance((0.1 * newDistance) + (0.9 * oldDistance));
+//                	}
 
                 } else {
 
@@ -1883,7 +1896,7 @@ void Nice::handleHeartbeat(NiceMessage* msg)
                 /* Valid distance measurement, get value */
                 it->second->set_distance((simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
                 //hoang
-                globalStatistics->recordOutVector("1 Distance",(simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
+//                globalStatistics->recordOutVector("1 Distance",(simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
                 if(hoang_use_cost){
 					it->second->set_distance(cost());
 				}
@@ -3679,7 +3692,10 @@ double Nice::cost()
 	double kd = lastHopKd;
 
 	if(kd < 1e-10){
-		std::cout << thisNode.getAddress() <<" kd " << kd << " at " << simTime() << endl;
+		bool isSender = par("isSender");
+		if(!isSender){
+			std::cout << thisNode.getAddress() <<" kd " << kd << " at " << simTime() << endl;
+		}
 	}
 
 	if(xd < kd){
@@ -3698,7 +3714,7 @@ double Nice::cost()
 		globalStatistics->recordOutVector("Infinity cost times",1);
 	}
 
-	globalStatistics->recordOutVector("1 Cost",cost);
+//	globalStatistics->recordOutVector("1 Cost",cost);
 	return cost;
 }
 

@@ -814,7 +814,7 @@ private:
 //private:
 protected:
 	double kw;
-	double lastHopKd;
+
 
 	double maxKd;
 	double maxKw;
@@ -826,6 +826,8 @@ protected:
 	bool hoang_use_cost;
 
 public:
+
+	double lastHopKd;
 
 	double getKw(){ return kw; };
 	void setKw(double kw_var){ kw = kw_var; };

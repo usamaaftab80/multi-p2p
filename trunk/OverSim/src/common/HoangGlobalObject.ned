@@ -24,4 +24,9 @@ simple HoangGlobalObject
         int targetOverlayTerminalNum;
         int videoSize;
         int loopTimes;
+        double cost_to_distance_ratio;
+        double cost_mean;
+        double cost_variance;
+        double new_range;
+        double old_range;
 }

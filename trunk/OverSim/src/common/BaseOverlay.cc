@@ -46,6 +46,8 @@
 
 #include "BaseOverlay.h"
 
+#include "NiceMessage_m.h"
+
 using namespace std;
 
 
@@ -806,7 +808,20 @@ void BaseOverlay::handleMessage(cMessage* msg)
 			stats->collectHopCount(hopCount); //just calculate hopcount of data packets only
 //			peerMap.insert(std::make_pair(udpControlInfo->getSrcAddr(),udpControlInfo->getDelayInfo()));
 //			double prevKd = lastHopKd;
-			lastHopKd = udpControlInfo->getDelayInfo();
+
+			CbrAppMessage* appMsg = check_and_cast<CbrAppMessage*>(msg);
+			if(udpControlInfo->getDelayInfo() < 1e-10){
+				if (appMsg->getSrcNode() == thisNode) {
+					cout << "NICE own msg at BaseOverlay" << endl;
+				}
+				else
+					cout << "nhuc at BaseOverlay" << endl;
+			}else{
+				lastHopKd = udpControlInfo->getDelayInfo();
+				appMsg->setLastHopKd(udpControlInfo->getDelayInfo());
+			}
+
+//			std::cout << thisNode.getAddress() << " Kd ==== " << lastHopKd << endl;
 //			if(lastHopKd != prevKd){
 //				std::cout << thisNode.getAddress() << " prevKd " << prevKd << " currKd " << lastHopKd << endl;
 //			}

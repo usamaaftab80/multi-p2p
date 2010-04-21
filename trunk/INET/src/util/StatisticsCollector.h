@@ -46,6 +46,9 @@ class StatisticsCollector : public cSimpleModule
     double XDlimit;
     double deltaXw;
 
+    bool fixedDiff; //XD=KD+diff
+    double diff;
+
   public:
 
 	void setMaxKd(double val){maxKd = val;};
