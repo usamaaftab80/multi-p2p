@@ -42,9 +42,7 @@ class StatisticsCollector : public cSimpleModule
 
     double xw,xd;
     double maxKd;
-    int maxPeerCount;
     double XDlimit;
-    double deltaXw;
 
     bool fixedDiff; //XD=KD+diff
     double diff;
@@ -67,14 +65,8 @@ class StatisticsCollector : public cSimpleModule
 	void setXw(double xw_var){ xw = xw_var ;};
 	void setXd(double xd_var){ xd = xd_var ;};
 
-	void setMaxPeerCount(int val){maxPeerCount = val;};
-	int getMaxPeerCount(){return maxPeerCount;};
-
 	void setXDlimit(double val){XDlimit = val;};
 	double getXDlimit(){return XDlimit;};
-
-	void setDeltaXw(double val){deltaXw = val;};
-	double getDeltaXw(){return deltaXw;};
 
 	void generateXD();
 

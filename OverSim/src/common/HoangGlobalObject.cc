@@ -34,13 +34,8 @@ void HoangGlobalObject::initialize()
 
 	//set random sender: generate random number in [0,par("targetOverlayTerminalNum")]
 	senderId = intrand(numNode);
-	distanceVector.setName("1 Distance at NicePeerInfo");
-	cost_to_distance_ratio = par("cost_to_distance_ratio");
-	cost_mean = par("cost_mean");
-	cost_variance = par("cost_variance");
-	new_range = par("new_range");
-	old_range = par("old_range");
-	cout << "global initttt done" << endl;
+
+	cout << "Hoang global object initttt done" << endl;
 }
 
 
@@ -53,7 +48,7 @@ HoangGlobalObject::~HoangGlobalObject()
 	for(int i=0; i<videoSize; i++){
 
 		if (!(linkStress[i] > 0)){
-			cout << "packet " << i << " stress sum " << linkStress[i] << " for " << numLink[i] << " links" << endl;
+//			cout << "packet " << i << " stress sum " << linkStress[i] << " for " << numLink[i] << " links" << endl;
 		}
 		if(numLink[i] >0 ){
 			sum += (double)linkStress[i] / (double)numLink[i];

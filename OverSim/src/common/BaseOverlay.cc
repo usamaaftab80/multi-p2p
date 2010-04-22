@@ -346,8 +346,9 @@ void BaseOverlay::finish()
 			}
     	}
     	else{
-    		if(!(dataOut[i] > 0))
-    			std::cout << " Sender dataOut[" << i << "]=" << dataOut[i] << endl;
+    		if(!(dataOut[i] > 0)){
+//    			std::cout << " Sender dataOut[" << i << "]=" << dataOut[i] << endl;
+    		}
     	}
 
     	if(dataOut[i] > 0){ //forwarder
