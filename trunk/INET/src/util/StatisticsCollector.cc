@@ -31,11 +31,9 @@ void StatisticsCollector::initialize()
 
 	xw = xd = 0;
 	maxKd = 0;
-	maxPeerCount = 0;
 	XDlimit = par("XDlimit");
 	fixedDiff = par("fixedDiff");
 	diff = par("diff");
-	deltaXw = 0;
 
 	statisticsPeriod = par("statisticsPeriod");
     timerMsg = new cMessage("StatisticsCollector Timer");
