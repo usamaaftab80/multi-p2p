@@ -63,8 +63,10 @@ void MultiSenderApp::initializeApp(int stage)
 	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
 	global = check_and_cast<HoangGlobalObject *>(modp2);
 
+	nodeID = global->getNumNodeJoined();
+
 	global->incNumNodeJoined();
-	nodeID = global->getNumNodeJoined() - 1;
+
 	global->updateNumLinkArray();
 
     sendPeriod = par("sendPeriod");
@@ -93,29 +95,48 @@ void MultiSenderApp::initializeApp(int stage)
 
 		const char* sdFile = par("sdFile");
 
+		/*switch (nodeID % 5){
+			case 0:
+				sdFile = "sd_paris";
+				break;
+			case 1:
+				sdFile = "sd_snr";
+				break;
+			case 2:
+				sdFile = "sd_sl_svc";
+				break;
+			case 3:
+				sdFile = "sd_combined_svc";
+				break;
+			case 4:
+				sdFile = "sd_spatial";
+				break;
+			default:
+				sdFile = "sd_sl_svc";
+		}*/
+
 		const char * format;
 
 		if(strcmp(sdFile,"sd_paris") == 0){
-			format = "1254866%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.41674 > 157.159.16.152.12346: UDP, length %d\n"; //sd_paris:32632
+			format = "12548667%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.41674 > 157.159.16.152.12346: UDP, length %d\n"; //sd_paris:32632
 		}
 		else if(strcmp(sdFile,"sd_snr") == 0){
 			format = "1256917%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n"; //sd_snr:7296
 		}
 		else if(strcmp(sdFile,"sd_spatial") == 0){
-			format = "1254948%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.53144 > 157.159.16.152.12346: UDP, length %d\n"; //sd_spatial:4835
+			format = "12549485%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.53144 > 157.159.16.152.12346: UDP, length %d\n"; //sd_spatial:4835
 		}
 		else if(strcmp(sdFile,"sd_combined_svc") == 0){
-			format = "1270649%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.57994 > 157.159.16.50.12346: UDP, length %d\n"; //sd_combined_svc:1696
+			format = "127064915%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.57994 > 157.159.16.50.12346: UDP, length %d\n"; //sd_combined_svc:1696
 		}
 		else if(strcmp(sdFile,"sd_sl_svc") == 0){
-			format = "1270649%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.56586 > 157.159.16.50.12346: UDP, length %d\n"; //sd_sl_svc:293
+			format = "127064935%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.56586 > 157.159.16.50.12346: UDP, length %d\n"; //sd_sl_svc:293
 		}
 
 		/* Read SD and write a new SD file*/
 		pFile = fopen (sdFile , "r");
-		string newfilename = "sd_oversim_" + to_string(nodeID);
-		newFile = fopen (newfilename.c_str() , "w");
-		if (pFile == NULL) perror ("Error opening file");
+
+		if (pFile == NULL) perror ("Error opening original SD file ");
 
 		while ( ! feof (pFile) ){
 			fscanf(pFile,format,&time,&id,&lengthUDP,&length);
@@ -124,6 +145,7 @@ void MultiSenderApp::initializeApp(int stage)
 		}
 
 		sd = new dataPacket [videoSize];
+		global->setVideoLengthOfNode(nodeID,videoSize);
 
 		cout << "Node " << nodeID << " :There are " << videoSize << " packets in dump file" << endl;
 
@@ -139,22 +161,44 @@ void MultiSenderApp::initializeApp(int stage)
 			sd[i].time = time;
 			sd[i].length = length;
 			sd[i].id = i;
-//			fprintf(newFile , "%-16f id %-16d udp %-16d\n",time,i,length);
-			//cout << "SD packet " << i << " length " << length << " at time " << time << endl;
+//			cout << "SD packet " << i << " length " << length << " at time " << time << endl;
 			i++;
 
 		}
 //		cout << "Read SD done" << endl;
 
 		fclose(pFile);
-//		fclose(newFile);
+
+		/* Cung tru di cho smallest time de bat dau gui ngay sau 1s */
+
+		simtime_t startTime = 1000;
+		for(int i=0; i<videoSize; i++){
+			if(sd[i].time < startTime){
+				startTime = sd[i].time ;
+			}
+		}
+
+		startTime = startTime -1;
+
+		for(int i=0; i<videoSize; i++){
+			sd[i].time -= startTime;
+		}
+
+		string newfilename = "sd_" + to_string(nodeID);
+		newFile = fopen (newfilename.c_str() , "w");
+		if (newFile == NULL) perror ("Error opening new SD file to write");
+		for(int i=0; i<videoSize ;i++){
+			fprintf(newFile , "%-16f id %-16d udp %-16d\n", (sd[i].time).dbl() ,i ,sd[i].length);
+		}
+
+		fclose(newFile);
 
 		/* Sap xep lai mang sd theo time tang dan */
 		dataPacket temp;   // holding variable
-		int numLength = videoSize;
-		for (int i=0; i< (numLength -1); i++)    // element to be compared
+
+		for (int i=0; i< (videoSize -1); i++)    // element to be compared
 		{
-			for(int j = (i+1); j < numLength; j++)   // rest of the elements
+			for(int j = (i+1); j < videoSize; j++)   // rest of the elements
 			{
 				if (sd[i].time > sd[j].time)          // ascending order
 			    {
@@ -164,6 +208,8 @@ void MultiSenderApp::initializeApp(int stage)
 			    }
 			}
 		}
+
+
 
 		/* Init first XW */
 		byteSent = sd[0].length;
@@ -229,7 +275,7 @@ void MultiSenderApp::finishApp()
 			{
 				if (rd[i].id > rd[j].id)          // ascending order
 				{
-					temp= rd[i];          // swap
+					temp = rd[i];          // swap
 					rd[i] = rd[j];
 					rd[j] = temp;
 				}
@@ -239,7 +285,7 @@ void MultiSenderApp::finishApp()
 		//Write to receiver dump file
 		FILE *f;
 
-		string str = "rd_at_" + to_string(nodeID) + "_from_" + to_string(it->first);
+		string str = "rd_" + to_string(it->first) + "_at_" + to_string(nodeID);
 
 		f = fopen (str.c_str() , "w");
 
