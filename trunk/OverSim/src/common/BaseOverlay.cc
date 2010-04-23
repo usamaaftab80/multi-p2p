@@ -196,11 +196,6 @@ void BaseOverlay::initialize(int stage)
     	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
     	global = check_and_cast<HoangGlobalObject *>(modp2);
 
-    	/*for(int i=0; i < 10000; i++){
-    		dataIn[i] = 0;
-    		dataOut[i] = 0;
-    		dataStress[i] = 0;
-    	}*/
     	int size = global->getVideoSize();
     	dataIn = new int [size];
     	dataOut = new int [size];
@@ -804,7 +799,7 @@ void BaseOverlay::handleMessage(cMessage* msg)
 		if(name.find("CBR_DATA") == 0){
 			int id = getIDfromName(name);
 
-			dataIn[id]++;
+//			dataIn[id]++;
 
 			stats->collectHopCount(hopCount); //just calculate hopcount of data packets only
 //			peerMap.insert(std::make_pair(udpControlInfo->getSrcAddr(),udpControlInfo->getDelayInfo()));
@@ -1283,7 +1278,7 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
 	if(name.find("CBR_DATA") == 0){
 		int id = getIDfromName(name);
 		//cout << thisNode.getAddress() << " vua truyen di pkt " << id << endl;
-		dataOut[id]++;
+//		dataOut[id]++;
 	}
 
     send(msg, "udpOut");
