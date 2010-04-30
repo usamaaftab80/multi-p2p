@@ -64,10 +64,11 @@ void MultiSenderApp::initializeApp(int stage)
 	global = check_and_cast<HoangGlobalObject *>(modp2);
 
 	nodeID = global->getNumNodeJoined();
+	cout << "Node " << nodeID << " join" << endl;
 
 	global->incNumNodeJoined();
 
-	global->updateNumLinkArray();
+//	global->updateNumLinkArray();
 
     sendPeriod = par("sendPeriod");
 
@@ -86,7 +87,6 @@ void MultiSenderApp::initializeApp(int stage)
 
     	/* read trace file */
 		FILE * pFile;
-		FILE * newFile;
 
 		float time;
 		unsigned int id;
@@ -121,7 +121,7 @@ void MultiSenderApp::initializeApp(int stage)
 			format = "12548667%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.41674 > 157.159.16.152.12346: UDP, length %d\n"; //sd_paris:32632
 		}
 		else if(strcmp(sdFile,"sd_snr") == 0){
-			format = "1256917%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.60301 > 192.168.0.11.12346: UDP, length %d\n"; //sd_snr:7296
+			format = "12720243%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.196.49355 > 192.168.1.2.12346: UDP, length %d\n"; //sd_snr:1200
 		}
 		else if(strcmp(sdFile,"sd_spatial") == 0){
 			format = "12549485%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.53144 > 157.159.16.152.12346: UDP, length %d\n"; //sd_spatial:4835
@@ -134,6 +134,7 @@ void MultiSenderApp::initializeApp(int stage)
 		}
 
 		/* Read SD and write a new SD file*/
+
 		pFile = fopen (sdFile , "r");
 
 		if (pFile == NULL) perror ("Error opening original SD file ");
@@ -184,6 +185,7 @@ void MultiSenderApp::initializeApp(int stage)
 			sd[i].time -= startTime;
 		}
 
+		FILE * newFile;
 		string newfilename = "sd_" + to_string(nodeID);
 		newFile = fopen (newfilename.c_str() , "w");
 		if (newFile == NULL) perror ("Error opening new SD file to write");
@@ -231,11 +233,11 @@ void MultiSenderApp::initializeApp(int stage)
 
 		sendDataTimer = new cMessage("sendDataTimer");
 
-//		stateTimer = new cMessage("stateTimer");
-//		scheduleAt(simTime() + sendPeriod, stateTimer);
+		stateTimer = new cMessage("stateTimer");
+		scheduleAt(simTime() + sendPeriod, stateTimer);
 
-		beginSendDataTime = simTime() + par("timeSendAfterInit");
-		scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
+//		beginSendDataTime = simTime() + par("timeSendAfterInit");
+//		scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
 
     }
 
@@ -321,24 +323,21 @@ void MultiSenderApp::handleTimerEvent(cMessage* msg)
         // if the simulator is still busy creating the network, let's wait a bit longer
         if (underlayConfigurator->isInInitPhase()) {
 
+        	return;
+
+        } else {
+        	cancelAndDelete(stateTimer);
         	if(isSender){
 
-        		if((global->getNumNodeJoined() > 1) && (numSent<1) && (!beginSend)){
-        			cout<< "nhay vao ham bat dau send data "<< endl;
+				if((global->getNumNodeJoined() > 1) && (numSent<1) && (!beginSend)){
+					cout<< "nhay vao ham bat dau send data "<< endl;
 
 					beginSendDataTime = simTime() + par("timeSendAfterInit");
 					scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
 					beginSend = true;
 
-        		}
-        	}
-
-        	return;
-
-        } else {
-
-        	cancelAndDelete(stateTimer);
-
+				}
+			}
         }
 
     } else if (msg->isName("sendDataTimer")){
