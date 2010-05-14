@@ -95,7 +95,7 @@ void MultiSenderApp::initializeApp(int stage)
 
 		const char* sdFile = par("sdFile");
 
-		/*switch (nodeID % 5){
+		switch (nodeID % 5){
 			case 0:
 				sdFile = "sd_paris";
 				break;
@@ -113,7 +113,7 @@ void MultiSenderApp::initializeApp(int stage)
 				break;
 			default:
 				sdFile = "sd_sl_svc";
-		}*/
+		}
 
 		const char * format;
 
@@ -285,7 +285,7 @@ void MultiSenderApp::finishApp()
 		}
 
 		//Write to receiver dump file
-		FILE *f;
+		/*FILE *f;
 
 		string str = "rd_" + to_string(it->first) + "_at_" + to_string(nodeID);
 
@@ -294,7 +294,7 @@ void MultiSenderApp::finishApp()
 		for(int i=0; i<numLength; i++)
 		{
 			//cout << "is nhau" << i << endl;
-			float time = (rd[i].time).dbl();
+			float time = (rd[i].time - global->getBeginSendTimeOfNode(it->first)).dbl();
 			int id = rd[i].id;
 			int length = rd[i].length;
 
@@ -303,7 +303,7 @@ void MultiSenderApp::finishApp()
 		}
 		delete [] rd;
 
-		fclose(f);
+		fclose(f);*/
 	}
 
 	buf.clear();
@@ -330,9 +330,12 @@ void MultiSenderApp::handleTimerEvent(cMessage* msg)
         	if(isSender){
 
 				if((global->getNumNodeJoined() > 1) && (numSent<1) && (!beginSend)){
-					cout<< "nhay vao ham bat dau send data "<< endl;
+					cout<< "Node " << nodeID << " begin send data at "<< simTime() <<endl;
 
 					beginSendDataTime = simTime() + par("timeSendAfterInit");
+
+					global->setBeginSendTimeOfNode(nodeID,beginSendDataTime);
+
 					scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
 					beginSend = true;
 

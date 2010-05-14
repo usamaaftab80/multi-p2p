@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for OverSim
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -O out -Xapplications/rpctest -I../../INET-OverSim-20090317/src/transport/tcp -I../../INET-OverSim-20090317/src/applications/pingapp -I../../INET-OverSim-20090317/src/networklayer/mpls -I../../INET-OverSim-20090317/src/networklayer/ipv4 -I../../INET-OverSim-20090317/src/linklayer/contract -I../../INET-OverSim-20090317/src/networklayer/ldp -I../../INET-OverSim-20090317/src/linklayer/mfcore -I../../INET-OverSim-20090317/src/networklayer/ipv6 -I../../INET-OverSim-20090317/src/networklayer/arp -I../../INET-OverSim-20090317/src/applications/udpapp -I../../INET-OverSim-20090317/src/networklayer/ted -I../../INET-OverSim-20090317/src/networklayer/rsvp_te -I../../INET-OverSim-20090317/src/util/headerserializers -I../../INET-OverSim-20090317/src/networklayer/contract -I../../INET-OverSim-20090317/src/transport/contract -I../../INET-OverSim-20090317/src/networklayer/common -I../../INET-OverSim-20090317/src/transport/sctp -I../../INET-OverSim-20090317/src/base -I../../INET-OverSim-20090317/src/transport/udp -I../../INET-OverSim-20090317/src/networklayer/icmpv6 -I../../INET-OverSim-20090317/src/world -I../../INET-OverSim-20090317/src/util -L/home/admin/sim/INET-OverSim-20090317/src -L/usr/lib -L../../INET-OverSim-20090317/out/$(CONFIGNAME)/src -lINET -KINET_PROJ=../../INET-OverSim-20090317 -- -lgmp
+#  opp_makemake -f --deep -O out -I../../INET-OverSim-20090317/src/transport/tcp -I../../INET-OverSim-20090317/src/applications/pingapp -I../../INET-OverSim-20090317/src/networklayer/mpls -I../../INET-OverSim-20090317/src/networklayer/ipv4 -I../../INET-OverSim-20090317/src/linklayer/contract -I../../INET-OverSim-20090317/src/networklayer/ldp -I../../INET-OverSim-20090317/src/linklayer/mfcore -I../../INET-OverSim-20090317/src/networklayer/ipv6 -I../../INET-OverSim-20090317/src/networklayer/arp -I../../INET-OverSim-20090317/src/applications/udpapp -I../../INET-OverSim-20090317/src/networklayer/ted -I../../INET-OverSim-20090317/src/networklayer/rsvp_te -I../../INET-OverSim-20090317/src/util/headerserializers -I../../INET-OverSim-20090317/src/networklayer/contract -I../../INET-OverSim-20090317/src/transport/contract -I../../INET-OverSim-20090317/src/networklayer/common -I../../INET-OverSim-20090317/src/transport/sctp -I../../INET-OverSim-20090317/src/base -I../../INET-OverSim-20090317/src/transport/udp -I../../INET-OverSim-20090317/src/networklayer/icmpv6 -I../../INET-OverSim-20090317/src/world -I../../INET-OverSim-20090317/src/util -L/home/admin/sim/INET-OverSim-20090317/src -L/usr/lib -L../../INET-OverSim-20090317/out/$(CONFIGNAME)/src -lINET -KINET_PROJ=../../INET-OverSim-20090317 -- -lgmp
 #
 
 # Name of target to be created (-o option)
@@ -44,6 +44,7 @@ INCLUDE_PATH = \
     -Iapplications/i3 \
     -Iapplications/i3/i3Apps \
     -Iapplications/kbrtestapp \
+    -Iapplications/multisenderapp \
     -Iapplications/myapplication \
     -Iapplications/nicetestapp \
     -Iapplications/realworldtestapp \
@@ -116,6 +117,7 @@ OBJS = \
     $O/applications/i3/i3Apps/I3TriggerRoutingTime.o \
     $O/applications/i3/i3Apps/I3Session.o \
     $O/applications/kbrtestapp/KBRTestApp.o \
+    $O/applications/multisenderapp/MultiSenderApp.o \
     $O/applications/myapplication/MyApplication.o \
     $O/applications/nicetestapp/NiceTestApp.o \
     $O/applications/realworldtestapp/RealWorldTestPacketParser.o \
@@ -257,6 +259,7 @@ OBJS = \
     $O/applications/i3/i3Apps/I3TriggersMessage_m.o \
     $O/applications/i3/i3Apps/I3SessionMessage_m.o \
     $O/applications/kbrtestapp/KBRTestMessage_m.o \
+    $O/applications/multisenderapp/MultiSenderAppMsg_m.o \
     $O/applications/myapplication/MyMessage_m.o \
     $O/applications/nicetestapp/NiceTestAppMsg_m.o \
     $O/applications/realworldtestapp/RealWorldTestMessage_m.o \
@@ -291,6 +294,7 @@ MSGFILES = \
     applications/i3/i3Apps/I3TriggersMessage.msg \
     applications/i3/i3Apps/I3SessionMessage.msg \
     applications/kbrtestapp/KBRTestMessage.msg \
+    applications/multisenderapp/MultiSenderAppMsg.msg \
     applications/myapplication/MyMessage.msg \
     applications/nicetestapp/NiceTestAppMsg.msg \
     applications/realworldtestapp/RealWorldTestMessage.msg \
@@ -391,6 +395,7 @@ clean:
 	-rm -f applications/i3/*_m.cc applications/i3/*_m.h
 	-rm -f applications/i3/i3Apps/*_m.cc applications/i3/i3Apps/*_m.h
 	-rm -f applications/kbrtestapp/*_m.cc applications/kbrtestapp/*_m.h
+	-rm -f applications/multisenderapp/*_m.cc applications/multisenderapp/*_m.h
 	-rm -f applications/myapplication/*_m.cc applications/myapplication/*_m.h
 	-rm -f applications/nicetestapp/*_m.cc applications/nicetestapp/*_m.h
 	-rm -f applications/realworldtestapp/*_m.cc applications/realworldtestapp/*_m.h
@@ -430,7 +435,7 @@ cleanall: clean
 	-rm -rf $(PROJECT_OUTPUT_DIR)
 
 depend:
-	$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc applications/*.cc applications/dht/*.cc applications/giasearchapp/*.cc applications/i3/*.cc applications/i3/i3Apps/*.cc applications/kbrtestapp/*.cc applications/myapplication/*.cc applications/nicetestapp/*.cc applications/realworldtestapp/*.cc applications/scribe/*.cc applications/scribetest/*.cc applications/simplegameclient/*.cc applications/tierdummy/*.cc common/*.cc common/cbr/*.cc overlay/*.cc overlay/bamboo/*.cc overlay/broose/*.cc overlay/chord/*.cc overlay/gia/*.cc overlay/kademlia/*.cc overlay/koorde/*.cc overlay/myoverlay/*.cc overlay/nice/*.cc overlay/pastry/*.cc overlay/pubsubmmog/*.cc overlay/quon/*.cc overlay/vast/*.cc tier2/*.cc tier2/dhttestapp/*.cc tier2/p2pns/*.cc tier2/simmud/*.cc tier3/*.cc tier3/xmlrpcinterface/*.cc tier3/xmlrpcinterface/xmlrpc++/*.cc underlay/*.cc underlay/inetunderlay/*.cc underlay/simpleunderlay/*.cc underlay/singlehostunderlay/*.cc underlay/singlehostunderlay/stun/*.cc
+	$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc applications/*.cc applications/dht/*.cc applications/giasearchapp/*.cc applications/i3/*.cc applications/i3/i3Apps/*.cc applications/kbrtestapp/*.cc applications/multisenderapp/*.cc applications/myapplication/*.cc applications/nicetestapp/*.cc applications/realworldtestapp/*.cc applications/scribe/*.cc applications/scribetest/*.cc applications/simplegameclient/*.cc applications/tierdummy/*.cc common/*.cc common/cbr/*.cc overlay/*.cc overlay/bamboo/*.cc overlay/broose/*.cc overlay/chord/*.cc overlay/gia/*.cc overlay/kademlia/*.cc overlay/koorde/*.cc overlay/myoverlay/*.cc overlay/nice/*.cc overlay/pastry/*.cc overlay/pubsubmmog/*.cc overlay/quon/*.cc overlay/vast/*.cc tier2/*.cc tier2/dhttestapp/*.cc tier2/p2pns/*.cc tier2/simmud/*.cc tier3/*.cc tier3/xmlrpcinterface/*.cc tier3/xmlrpcinterface/xmlrpc++/*.cc underlay/*.cc underlay/inetunderlay/*.cc underlay/simpleunderlay/*.cc underlay/singlehostunderlay/*.cc underlay/singlehostunderlay/stun/*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 $O/applications/dht/DHT.o: applications/dht/DHT.cc \
@@ -1093,6 +1098,50 @@ $O/applications/kbrtestapp/KBRTestApp.o: applications/kbrtestapp/KBRTestApp.cc \
 	applications/kbrtestapp/KBRTestApp.h \
 	common/NodeHandle.h \
 	common/RpcMacros.h
+$O/applications/multisenderapp/MultiSenderApp.o: applications/multisenderapp/MultiSenderApp.cc \
+	$(INET_PROJ)/src/base/INotifiable.h \
+	common/UnderlayConfigurator.h \
+	common/OverSimMessage_m.h \
+	common/oversim_mapset.h \
+	common/RecursiveLookup.h \
+	common/OverSimMessage.h \
+	common/AbstractLookup.h \
+	common/RpcListener.h \
+	$(INET_PROJ)/src/util/StatisticsCollector.h \
+	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
+	common/NodeVector.h \
+	common/RpcState.h \
+	common/GlobalStatistics.h \
+	common/CommonMessages_m.h \
+	common/BaseApp.h \
+	common/InitStages.h \
+	common/TopologyVis.h \
+	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
+	common/BinaryValue.h \
+	common/Vector2D.h \
+	overlay/nice/NiceMessage_m.h \
+	common/TransportAddress.h \
+	common/IterativeLookupConfiguration.h \
+	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
+	applications/multisenderapp/MultiSenderApp.h \
+	common/BaseOverlay.h \
+	common/Comparator.h \
+	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
+	common/BaseRpc.h \
+	common/ProxNodeHandle.h \
+	applications/multisenderapp/MultiSenderAppMsg_m.h \
+	common/NodeHandle.h \
+	common/RpcMacros.h
+$O/applications/multisenderapp/MultiSenderAppMsg_m.o: applications/multisenderapp/MultiSenderAppMsg_m.cc \
+	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
+	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
+	common/oversim_mapset.h \
+	applications/multisenderapp/MultiSenderAppMsg_m.h \
+	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
+	common/TransportAddress.h
 $O/applications/myapplication/MyApplication.o: applications/myapplication/MyApplication.cc \
 	$(INET_PROJ)/src/base/INotifiable.h \
 	common/UnderlayConfigurator.h \

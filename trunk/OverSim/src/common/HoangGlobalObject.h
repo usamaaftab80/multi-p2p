@@ -39,6 +39,7 @@ class HoangGlobalObject : public cSimpleModule
 	int loopTimes;
 	int numNodeJoined;
 	int* videoLength;
+	simtime_t * beginSendDataTime;
 
   protected:
     virtual void initialize();
@@ -68,6 +69,9 @@ class HoangGlobalObject : public cSimpleModule
 
 	  void setVideoLengthOfNode(int i, int val){videoLength[i] = val;};
 	  int getVideoLengthOfNode(int i){return videoLength[i] ;};
+
+	  void setBeginSendTimeOfNode(int id, simtime_t val){beginSendDataTime[id] = val;};
+	  simtime_t getBeginSendTimeOfNode(int id){return beginSendDataTime[id];};
 
 	  ~HoangGlobalObject();
 
