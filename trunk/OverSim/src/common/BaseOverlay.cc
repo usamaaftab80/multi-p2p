@@ -196,12 +196,19 @@ void BaseOverlay::initialize(int stage)
     	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
     	global = check_and_cast<HoangGlobalObject *>(modp2);
 
-    	int size = global->getVideoSize();
+    	/*int size = global->getVideoSize();
     	dataIn = new int [size];
     	dataOut = new int [size];
 
     	fill(dataIn, dataIn + size, 0);
-    	fill(dataOut, dataOut + size, 0);
+    	fill(dataOut, dataOut + size, 0);*/
+
+    	for(int i=0; i<100; i++){
+    		for(int j=0; j<40000; j++){
+    			dataIn[i][j] = 0;
+    			dataOut[i][j] = 0;
+    		}
+    	}
 
     	//cout << thisNode.getAddress() << " baseoverlay module iniiiiiittt" << endl;
 
@@ -330,36 +337,40 @@ void BaseOverlay::finish()
     }*/
 
     int numPacketLost = 0 ;
-    //for(int i=0; i<global->getNumSent(); i++){
-    for(int i=0; i<global->getVideoSize(); i++){
-    	int dataStress;
 
-    	if(!isSender){
-			if(dataIn[i] < 1){
-				dataIn[i] = 1; //hard code prevent packet loss
-				numPacketLost++;
+    for (int sid=0; sid<global->getNumNode(); sid++){
+
+    	for(int pid=0; pid<global->getP_sid(sid); pid++){
+
+			int dataStress;
+
+			/*if(!isSender){
+				if(dataIn[sid][pid] < 1){
+					dataIn[sid][pid] = 1; //hard code prevent packet loss
+					numPacketLost++;
+				}
 			}
-    	}
-    	else{
-    		if(!(dataOut[i] > 0)){
-//    			std::cout << " Sender dataOut[" << i << "]=" << dataOut[i] << endl;
-    		}
-    	}
+			else{
+				if(!(dataOut[sid][pid] > 0)){
+	//    			std::cout << " Sender dataOut[" << i << "]=" << dataOut[i] << endl;
+				}
+			}*/
 
-    	if(dataOut[i] > 0){ //forwarder
-    		dataStress = dataOut[i];
+			if(dataOut[sid][pid] > 0){ //forwarder
+				dataStress = dataOut[sid][pid];
+			}
+			else { //only receive, not forward
+				dataStress = dataIn[sid][pid];
+			}
+
+			global->addLinkStress(sid,pid,dataStress);
+
+			//linkStressStats.collect(dataStress);
 		}
-		else { //only receive, not forward
-			dataStress = dataIn[i];
-		}
-
-    	global->addLinkStress(i,dataStress);
-
-    	//linkStressStats.collect(dataStress);
     }
 
     //globalStatistics->recordOutVector("1 stress--access link--BaseOverlay.cc",linkStressStats.getMean());
-    globalStatistics->recordOutVector("5 numPacketLost",numPacketLost);
+//    globalStatistics->recordOutVector("5 numPacketLost",numPacketLost);
 
     globalStatistics->nodesFinished++;
 
@@ -816,6 +827,8 @@ void BaseOverlay::handleMessage(cMessage* msg)
 				lastHopKd = udpControlInfo->getDelayInfo();
 				appMsg->setLastHopKd(udpControlInfo->getDelayInfo());
 			}
+			int nodeID = appMsg->getNodeID();
+			dataIn[nodeID][id]++;
 
 //			std::cout << thisNode.getAddress() << " Kd ==== " << lastHopKd << endl;
 //			if(lastHopKd != prevKd){
@@ -1278,6 +1291,10 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
 	if(name.find("CBR_DATA") == 0){
 		int id = getIDfromName(name);
 		//cout << thisNode.getAddress() << " vua truyen di pkt " << id << endl;
+		CbrAppMessage* appMsg = check_and_cast<CbrAppMessage*>(msg);
+
+		int nodeID = appMsg->getNodeID();
+		dataOut[nodeID][id]++;
 //		dataOut[id]++;
 	}
 

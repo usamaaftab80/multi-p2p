@@ -726,6 +726,8 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 					std::cout << "nhuccccc appMsg lasthopkd=" << appMsg->getLastHopKd() << " at " << simTime() << endl;
 				}
 
+				globalStatistics->recordOutVector("6. hop2hopDelay",appMsg->getLastHopKd());
+
 				appMsg->setBigKD(appMsg->getBigKD() + appMsg->getLastHopKd());
 
 //        	double prevKd = kd;

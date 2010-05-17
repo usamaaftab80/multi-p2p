@@ -40,6 +40,8 @@ class HoangGlobalObject : public cSimpleModule
 	int numNodeJoined;
 	int* videoLength;
 	simtime_t * beginSendDataTime;
+	uint8 stress[100][40000]; //stress[sid][pid]
+	int* P_sid;
 
   protected:
     virtual void initialize();
@@ -61,6 +63,7 @@ class HoangGlobalObject : public cSimpleModule
 	  void setVideoSize(int value){videoSize = value;};
 
 	  void addLinkStress(int pktId,int value){linkStress[pktId] += value;};
+	  void addLinkStress(int nodeID, int pktId, int value){stress[nodeID][pktId] += value;};
 
 	  int getNumNodeJoined(){return numNodeJoined;};
 	  void incNumNodeJoined(){numNodeJoined++;};
@@ -72,6 +75,9 @@ class HoangGlobalObject : public cSimpleModule
 
 	  void setBeginSendTimeOfNode(int id, simtime_t val){beginSendDataTime[id] = val;};
 	  simtime_t getBeginSendTimeOfNode(int id){return beginSendDataTime[id];};
+
+	  int getP_sid(int sid){return P_sid[sid];};
+	  void setP_sid(int sid, int value){P_sid[sid] = value;};
 
 	  ~HoangGlobalObject();
 

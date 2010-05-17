@@ -819,8 +819,8 @@ protected:
 	double maxKd;
 	double maxKw;
 
-	int* dataIn;
-	int* dataOut;
+	uint8_t dataIn[100][40000];
+	uint8_t dataOut[100][40000];
 
 	bool hoang_debug_cost;
 	bool hoang_use_cost;

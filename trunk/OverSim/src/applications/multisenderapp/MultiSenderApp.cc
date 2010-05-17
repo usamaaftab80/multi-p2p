@@ -89,31 +89,40 @@ void MultiSenderApp::initializeApp(int stage)
 		FILE * pFile;
 
 		float time;
-		unsigned int id;
-		unsigned int length;
-		unsigned int lengthUDP;
+		uint id;
+		uint length;
+		uint lengthUDP;
 
 		const char* sdFile = par("sdFile");
+		uint P_sid; //number of packet in the dump file
 
 		switch (nodeID % 5){
 			case 0:
 				sdFile = "sd_paris";
+				P_sid = 32632;
 				break;
 			case 1:
 				sdFile = "sd_snr";
+				P_sid = 1200;
 				break;
 			case 2:
 				sdFile = "sd_sl_svc";
+				P_sid = 293;
 				break;
 			case 3:
 				sdFile = "sd_combined_svc";
+				P_sid = 1696;
 				break;
 			case 4:
 				sdFile = "sd_spatial";
+				P_sid = 4385;
 				break;
 			default:
 				sdFile = "sd_sl_svc";
+				P_sid = 293;
 		}
+
+		global->setP_sid(nodeID,P_sid);
 
 		const char * format;
 
@@ -487,7 +496,7 @@ void MultiSenderApp::encapAndSendCbrAppMsg(cMessage* msg)
 
         cbrMsg->setName(payload.c_str());
 
-        //cbrMsg->setName("CBR_DATA");
+        cbrMsg->setNodeID(nodeID);
 
         cbrMsg->setSrcNode(thisNode.getAddress());
 

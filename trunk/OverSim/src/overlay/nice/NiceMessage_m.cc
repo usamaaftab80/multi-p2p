@@ -1481,6 +1481,7 @@ CbrAppMessage::CbrAppMessage(const char *name, int kind) : BaseOverlayMessage(na
     this->layer_var = 0;
     this->bigKD_var = 0;
     this->lastHopKd_var = 0;
+    this->nodeID_var = 0;
 }
 
 CbrAppMessage::CbrAppMessage(const CbrAppMessage& other) : BaseOverlayMessage()
@@ -1506,6 +1507,7 @@ CbrAppMessage& CbrAppMessage::operator=(const CbrAppMessage& other)
     this->layer_var = other.layer_var;
     this->bigKD_var = other.bigKD_var;
     this->lastHopKd_var = other.lastHopKd_var;
+    this->nodeID_var = other.nodeID_var;
     return *this;
 }
 
@@ -1521,6 +1523,7 @@ void CbrAppMessage::parsimPack(cCommBuffer *b)
     doPacking(b,this->layer_var);
     doPacking(b,this->bigKD_var);
     doPacking(b,this->lastHopKd_var);
+    doPacking(b,this->nodeID_var);
 }
 
 void CbrAppMessage::parsimUnpack(cCommBuffer *b)
@@ -1535,6 +1538,7 @@ void CbrAppMessage::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->layer_var);
     doUnpacking(b,this->bigKD_var);
     doUnpacking(b,this->lastHopKd_var);
+    doUnpacking(b,this->nodeID_var);
 }
 
 int CbrAppMessage::getCommand() const
@@ -1627,6 +1631,16 @@ void CbrAppMessage::setLastHopKd(double lastHopKd_var)
     this->lastHopKd_var = lastHopKd_var;
 }
 
+int CbrAppMessage::getNodeID() const
+{
+    return nodeID_var;
+}
+
+void CbrAppMessage::setNodeID(int nodeID_var)
+{
+    this->nodeID_var = nodeID_var;
+}
+
 class CbrAppMessageDescriptor : public cClassDescriptor
 {
   public:
@@ -1673,7 +1687,7 @@ const char *CbrAppMessageDescriptor::getProperty(const char *propertyname) const
 int CbrAppMessageDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 9+basedesc->getFieldCount(object) : 9;
+    return basedesc ? 10+basedesc->getFieldCount(object) : 10;
 }
 
 unsigned int CbrAppMessageDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -1694,6 +1708,7 @@ unsigned int CbrAppMessageDescriptor::getFieldTypeFlags(void *object, int field)
         case 6: return FD_ISEDITABLE;
         case 7: return FD_ISEDITABLE;
         case 8: return FD_ISEDITABLE;
+        case 9: return FD_ISEDITABLE;
         default: return 0;
     }
 }
@@ -1716,6 +1731,7 @@ const char *CbrAppMessageDescriptor::getFieldName(void *object, int field) const
         case 6: return "layer";
         case 7: return "bigKD";
         case 8: return "lastHopKd";
+        case 9: return "nodeID";
         default: return NULL;
     }
 }
@@ -1738,6 +1754,7 @@ const char *CbrAppMessageDescriptor::getFieldTypeString(void *object, int field)
         case 6: return "short";
         case 7: return "double";
         case 8: return "double";
+        case 9: return "int";
         default: return NULL;
     }
 }
@@ -1791,6 +1808,7 @@ bool CbrAppMessageDescriptor::getFieldAsString(void *object, int field, int i, c
         case 6: long2string(pp->getLayer(),resultbuf,bufsize); return true;
         case 7: double2string(pp->getBigKD(),resultbuf,bufsize); return true;
         case 8: double2string(pp->getLastHopKd(),resultbuf,bufsize); return true;
+        case 9: long2string(pp->getNodeID(),resultbuf,bufsize); return true;
         default: return false;
     }
 }
@@ -1812,6 +1830,7 @@ bool CbrAppMessageDescriptor::setFieldAsString(void *object, int field, int i, c
         case 6: pp->setLayer(string2long(value)); return true;
         case 7: pp->setBigKD(string2double(value)); return true;
         case 8: pp->setLastHopKd(string2double(value)); return true;
+        case 9: pp->setNodeID(string2long(value)); return true;
         default: return false;
     }
 }

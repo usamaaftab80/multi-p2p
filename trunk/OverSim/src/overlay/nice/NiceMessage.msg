@@ -123,6 +123,7 @@ message CbrAppMessage extends BaseOverlayMessage
     //hoang
     double bigKD;
     double lastHopKd;
+    int nodeID;
     
 }
 
