@@ -2257,6 +2257,8 @@ $O/common/ProxNodeHandle.o: common/ProxNodeHandle.cc \
 	common/NodeHandle.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
 	common/TransportAddress.h
+$O/common/DataPacket.o: common/DataPacket.cc \
+	common/DataPacket.h
 $O/common/HoangGlobalObject.o: common/HoangGlobalObject.cc \
 	common/HoangGlobalObject.h \
 	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \

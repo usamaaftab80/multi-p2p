@@ -19,9 +19,21 @@ Define_Module(HoangGlobalObject);
 
 void HoangGlobalObject::initialize()
 {
+	cout << "Hoang global object initttt begin" << endl;
+
 	numAccessLink = numNode = par("targetOverlayTerminalNum");
+	P_sid = new int [numNode];
 	beginSendDataTime = new simtime_t [numNode];
 	videoLength = new int [numNode];
+	cout << "Hoang global object initttt before empty stress[][]" << endl;
+	for(int i=0; i<100; i++){
+		for(int j=0; j<40000; j++){
+			stress[i][j] = 0;
+		}
+	}
+	//fill(stress, stress + 10000, 0);
+	cout << "Hoang global object initttt after stress[][]=0" << endl;
+
 	numSent = 0;
 	numNodeJoined = 0;
 	videoSize = par("videoSize");
@@ -45,42 +57,67 @@ HoangGlobalObject::~HoangGlobalObject()
 {
 	//cout << "~HoangGlobalObject()" << endl;
 
-	double sum = 0;
+	/*
+	 * 1-n NiceTestApp
+	 */
+	/*double sum = 0;
 	int count = 0;
 	for(int i=0; i<videoSize; i++){
 
 		if (!(linkStress[i] > 0)){
-//			cout << "packet " << i << " stress sum " << linkStress[i] << " for " << numLink[i] << " links" << endl;
+			cout << "packet " << i << " stress sum " << linkStress[i] << " for " << numLink[i] << " links" << endl;
 		}
 		if(numLink[i] >0 ){
-			sum += (double)linkStress[i] / (double)numLink[i];
-			count++;
+				sum += (double)linkStress[i] / (double)numLink[i];
+				count++;
 		}
 	}
 	cout << "Average link stress: "<< sum / (double)count << endl;
 
 	delete [] linkStress;
-	delete [] numLink;
+	delete [] numLink;*/
+
+
+
 	/*
-	int temp = linkStress[0];
-	int numValue = 1; //amount of switching times
-	int sum = linkStress[0];
-	cout << "SumStress of packet from 0: " << temp << endl;
-	for(int i=0; i<videoSize; i++){
-		//cout << "packet " << i << " sum stress " << linkStress[i] << endl;
-		//TODO: count number of different values, number of switching times
-		if(linkStress[i] != temp){ //switch
-			numValue++;
-			temp = linkStress[i];
-			//cout << "Switch to new value: " << temp << " from packet " << i << endl;
-			sum += temp;
+	 * Reserved for MultiSenderApp
+	 */
+	double sum = 0;
+	int count = 0;
+	double stressSumAtNode = 0;
+	int bigP = 0;
+	int stressSum = 0;
+
+	for(int sid=0; sid<numNode; sid++){
+
+		for(int pid=0; pid<P_sid[sid]; pid++){
+
+			if(!(stress[sid][pid] > 0)){
+//				cout << "sid " << sid << " pid " << pid << " stress " << stress[sid][pid] << endl;
+			}
+
+			stressSumAtNode += stress[sid][pid];
+			stressSum += stress[sid][pid];
+
+//			count++;
+
 		}
 
-	}*/
-//	recordScalar("1. Average link stress",((double)sum / (double)numValue)/numAccessLink );
-//	recordScalar("Amount of different values",numValue);
-//	cout << "Amount of different values: " << numValue << endl;
-//	cout << "Average link stress: "<< ((double)sum / (double)numValue)/numAccessLink << endl;
+		sum += stressSumAtNode / (double)P_sid[sid];
+
+		stressSumAtNode = 0; //reset, prepare for next node
+
+		bigP += P_sid[sid];
+	}
+
+//	cout << "Count of packet (stress > 0): "<< count << endl;
+	cout << "Total packet P= "<< bigP << endl;
+	cout << "Average link stress kieu khac: "<< (double)stressSum / (double)bigP << endl;
+	cout << "Average link stress: "<< sum / (double)numNode << endl;
+
+
+	delete [] linkStress;
+	delete [] numLink;
 
 }
 
