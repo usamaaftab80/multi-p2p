@@ -338,23 +338,23 @@ void BaseOverlay::finish()
 
     int numPacketLost = 0 ;
 
-    for (int sid=0; sid<global->getNumNode(); sid++){
+    for (uint16 sid=0; sid<global->getNumNode(); sid++){
 
     	for(int pid=0; pid<global->getP_sid(sid); pid++){
 
-			int dataStress;
+			uint8 dataStress;
 
-			/*if(!isSender){
-				if(dataIn[sid][pid] < 1){
-					dataIn[sid][pid] = 1; //hard code prevent packet loss
-					numPacketLost++;
-				}
+//			if(!isSender){
+			if(dataIn[sid][pid] < 1){
+				dataIn[sid][pid] = 1; //hard code prevent packet loss
+				numPacketLost++;
 			}
+//			}
 			else{
 				if(!(dataOut[sid][pid] > 0)){
 	//    			std::cout << " Sender dataOut[" << i << "]=" << dataOut[i] << endl;
 				}
-			}*/
+			}
 
 			if(dataOut[sid][pid] > 0){ //forwarder
 				dataStress = dataOut[sid][pid];

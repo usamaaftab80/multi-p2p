@@ -21,18 +21,17 @@ void HoangGlobalObject::initialize()
 {
 	cout << "Hoang global object initttt begin" << endl;
 
-	numAccessLink = numNode = par("targetOverlayTerminalNum");
-	P_sid = new int [numNode];
+	numNode = par("targetOverlayTerminalNum");
+	P_sid = new uint16 [numNode];
 	beginSendDataTime = new simtime_t [numNode];
 	videoLength = new int [numNode];
-	cout << "Hoang global object initttt before empty stress[][]" << endl;
+
 	for(int i=0; i<100; i++){
 		for(int j=0; j<40000; j++){
 			stress[i][j] = 0;
+			numAccessLink[i][j] = numNode;
 		}
 	}
-	//fill(stress, stress + 10000, 0);
-	cout << "Hoang global object initttt after stress[][]=0" << endl;
 
 	numSent = 0;
 	numNodeJoined = 0;
@@ -47,7 +46,7 @@ void HoangGlobalObject::initialize()
 	fill(numLink , numLink + videoSize , 0);
 
 	//set random sender: generate random number in [0,par("targetOverlayTerminalNum")]
-	senderId = intrand(numNode);
+	//senderId = intrand(numNode);
 
 	cout << "Hoang global object initttt done" << endl;
 }
@@ -86,20 +85,26 @@ HoangGlobalObject::~HoangGlobalObject()
 	int count = 0;
 	double stressSumAtNode = 0;
 	int bigP = 0;
-	int stressSum = 0;
+	double stressSum = 0;
 
-	for(int sid=0; sid<numNode; sid++){
+	for(uint16 sid=0; sid<numNode; sid++){
 
 		for(int pid=0; pid<P_sid[sid]; pid++){
 
 			if(!(stress[sid][pid] > 0)){
-//				cout << "sid " << sid << " pid " << pid << " stress " << stress[sid][pid] << endl;
+				cout << "sid " << sid << " pid " << pid << " stress " << stress[sid][pid] << endl;
 			}
 
-			stressSumAtNode += stress[sid][pid];
-			stressSum += stress[sid][pid];
+			else {
 
-//			count++;
+				/*if(numAccessLink[sid][pid] < numNode){
+					cout << "sid " << sid << " pid " << pid << " numAccessLink " << numAccessLink[sid][pid] << endl;
+				}*/
+
+				stressSumAtNode += (double)stress[sid][pid] / (double)(numAccessLink[sid][pid]);
+				stressSum += (double)(stress[sid][pid]) / (double)(numAccessLink[sid][pid]);
+				count++;
+			}
 
 		}
 
@@ -112,8 +117,8 @@ HoangGlobalObject::~HoangGlobalObject()
 
 //	cout << "Count of packet (stress > 0): "<< count << endl;
 	cout << "Total packet P= "<< bigP << endl;
-	cout << "Average link stress kieu khac: "<< (double)stressSum / (double)bigP << endl;
-	cout << "Average link stress: "<< sum / (double)numNode << endl;
+	cout << "Average link stress by Packets: "<< stressSum / (double)count << endl;
+//	cout << "Average link stress by Nodes : "<< sum / (double)numNode << endl;
 
 
 	delete [] linkStress;
