@@ -97,11 +97,11 @@ void MultiSenderApp::initializeApp(int stage)
 		uint P_sid; //number of packet in the dump file
 
 		switch (nodeID % 5){
-			case 0:
+			case 1:
 				sdFile = "sd_paris";
 				P_sid = 32632;
 				break;
-			case 1:
+			case 0:
 				sdFile = "sd_snr";
 				P_sid = 1200;
 				break;
@@ -332,14 +332,10 @@ void MultiSenderApp::handleTimerEvent(cMessage* msg)
         // if the simulator is still busy creating the network, let's wait a bit longer
         if (underlayConfigurator->isInInitPhase()) {
 
-        	return;
-
-        } else {
-        	cancelAndDelete(stateTimer);
         	if(isSender){
 
 				if((global->getNumNodeJoined() > 1) && (numSent<1) && (!beginSend)){
-					cout<< "Node " << nodeID << " begin send data at "<< simTime() <<endl;
+					cout<< "Node " << nodeID << " begin send data at "<< simTime() << " co " << global->getNumNodeJoined() << " peers trong mang" <<endl;
 
 					beginSendDataTime = simTime() + par("timeSendAfterInit");
 
@@ -350,6 +346,12 @@ void MultiSenderApp::handleTimerEvent(cMessage* msg)
 
 				}
 			}
+
+        	return;
+
+        } else {
+        	cancelAndDelete(stateTimer);
+
         }
 
     } else if (msg->isName("sendDataTimer")){
@@ -497,6 +499,14 @@ void MultiSenderApp::encapAndSendCbrAppMsg(cMessage* msg)
         cbrMsg->setName(payload.c_str());
 
         cbrMsg->setNodeID(nodeID);
+
+        //update global->numAccessLink[][]
+        uint16 numNodeJoined = global->getNumNodeJoined();
+        if(numNodeJoined  < global->getNumNode()){
+        	global->setNumAccessLink(nodeID , numSent , numNodeJoined);
+        	globalStatistics->recordOutVector("8. Num pkt sent before full join",1);
+//        	cout << "nodeID " << nodeID << " numsent " << numSent << " numNodeJoined " << global->getNumAccessLink(nodeID , numSent ) << endl;
+        }
 
         cbrMsg->setSrcNode(thisNode.getAddress());
 
