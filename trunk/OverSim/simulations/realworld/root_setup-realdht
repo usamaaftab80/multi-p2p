@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# script only runs on Linux
+
+modprobe tun
+chown admin /dev/net/tun
+chown admin .tkenvrc
+../../src/OverSim -f realdhtworld.ini &
+sleep 10
+ifconfig tun0 10.0.0.1 netmask 255.0.0.0 up
