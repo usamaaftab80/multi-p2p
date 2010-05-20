@@ -24,6 +24,8 @@ package oversim.underlay.singlehostunderlay;
 
 import oversim.common.ChurnGenerator;
 import oversim.common.GlobalObserver;
+import oversim.common.HoangGlobalObject;
+import inet.util.StatisticsCollector;//hoang
 
 
 //
@@ -31,6 +33,7 @@ import oversim.common.GlobalObserver;
 //
 network SingleHostUnderlayNetwork
 {
+    @display("bgb=332,387");
     submodules:
         underlayConfigurator: SingleHostUnderlayConfigurator {
             @display("p=70,130");
@@ -46,6 +49,12 @@ network SingleHostUnderlayNetwork
         }
         zeroconfConnector: ZeroconfConnector {
             @display("p=200,50");
+        }
+        statisticsCollector: StatisticsCollector { //hoang
+            @display("p=70,282");
+        }
+        hoangGlobalObject: HoangGlobalObject {
+            @display("p=70,348");
         }
 }
 
