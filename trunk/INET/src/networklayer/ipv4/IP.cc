@@ -282,23 +282,26 @@ void IP::routePacket(IPDatagram *datagram, InterfaceEntry *destIE, bool fromHL)
     //std::cout << "output interface is " << destIE->getName() << ", next-hop address: " << nextHopAddr << "\n";
 
     //hoang
-    int gateID = getPPPgateIDfromName(destIE->getName());
+    /*int gateID = getPPPgateIDfromName(destIE->getName());
 
     cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
 
-	cGate* gate = check_and_cast<cGate*>(thisOverlayTerminal->gate("pppg$o",gateID)); //connect to accessRouter
+    if(thisOverlayTerminal->gate("pppg$o",gateID) != NULL){
 
-	cDatarateChannel *chan = check_and_cast<cDatarateChannel *>(gate->getChannel());
+    	cGate* gate = check_and_cast<cGate*>(thisOverlayTerminal->gate("pppg$o",gateID)); //connect to accessRouter
 
-	double bw = chan->getDatarate();
+		cDatarateChannel *chan = check_and_cast<cDatarateChannel *>(gate->getChannel());
 
-	if(bw < datagram->getMinBW()){
+		double bw = chan->getDatarate();
 
-		datagram->setMinBW(chan->getDatarate()); //update MinBW
+		if(bw < datagram->getMinBW()){
 
-	}
+			datagram->setMinBW(chan->getDatarate()); //update MinBW
 
-	datagram->setDelayInfo(datagram->getDelayInfo() + chan->getDelay().dbl());
+		}
+
+		datagram->setDelayInfo(datagram->getDelayInfo() + chan->getDelay().dbl());
+	}*/
 
 
     //std::cout << "ID " << gateID << endl;
