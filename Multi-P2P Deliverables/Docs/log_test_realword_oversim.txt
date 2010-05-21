@@ -1,0 +1,18 @@
+OpenVPN tunnel
+
+Hoang (Windows) <==> Tuan (Windows): OK
+Hoang (Linux) <==> Tuan (Windows): 
+
+
+###################################################
+Single host
+
+=> via real IP address
+Hoang (Windows) 157.159.16.50 <-> 165 (Windows): OK
+Hoang (Linux) 157.159.16.51 <-> 165 (Windows): OK
+
+=> via openvpn tunnel:
+(Windows) 192.168.159.1 (VM8net) (10.9.0.1) <--tunnel--> (10.9.0.2) 159.128 (Windows): OK
+ |-->(May ao lam Bootstrap (SingleHost1) cho May that(SingleHost2))
+
+Hoang (Linux) <-> 165 (Windows): 
