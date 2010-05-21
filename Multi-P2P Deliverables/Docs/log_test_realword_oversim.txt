@@ -1,12 +1,16 @@
+###################################################
 OpenVPN tunnel
+===================================================
 
-Hoang (Windows) <==> Tuan (Windows): OK
-Hoang (Linux) <==> Tuan (Windows): 
+(Windows) <==> (Windows): OK
+(Linux) <==> (Windows): OK
+
+NOTE: turn off firewall of Windows + Linux
 
 
 ###################################################
-Single host
-
+real Single host
+===================================================
 => via real IP address
 Hoang (Windows) 157.159.16.50 <-> 165 (Windows): OK
 Hoang (Linux) 157.159.16.51 <-> 165 (Windows): OK
@@ -16,3 +20,8 @@ Hoang (Linux) 157.159.16.51 <-> 165 (Windows): OK
  |-->(May ao lam Bootstrap (SingleHost1) cho May that(SingleHost2))
 
 Hoang (Linux) <-> 165 (Windows): 
+
+
+###################################################
+real SingleHost connect to Simulate Overlay (multiple host) 
+===================================================
