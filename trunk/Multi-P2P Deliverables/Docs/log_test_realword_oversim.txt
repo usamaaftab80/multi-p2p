@@ -1,5 +1,5 @@
 ###################################################
-OpenVPN tunnel
+I. OpenVPN tunnel
 ===================================================
 
 (Windows) <==> (Windows): OK
@@ -9,7 +9,7 @@ NOTE: turn off firewall of Windows + Linux
 
 
 ###################################################
-real Single host
+II. Real Single host
 ===================================================
 => via real IP address
 Hoang (Windows) 157.159.16.50 <-> 165 (Windows): OK
@@ -23,9 +23,9 @@ Hoang (Linux) <-> 165 (Windows): OK
 
 
 ###################################################
-real SingleHost connect to Simulate Overlay (multiple host) 
+III. Real SingleHost connect to Simulate Overlay (multiple host) 
 ===================================================
-++ setup simulate instance ++
+1. ++ setup simulate instance ++
 su -
 modprobe tun
 chown admin /dev/net/tun --> use tun0 to pass packets to app
@@ -34,9 +34,17 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 ../../src/OverSim -f realdhtworld.ini &
 sleep 10
 ifconfig tun0 10.0.0.1 netmask 255.0.0.0 up
+openvpn /etc/openvpn/server.txt
 
 
-++ run another instance and connect to simulate instance ++
-==== config file realdhtapp.ini ====
-**.nodeInterface = "lo"
-../../src/OverSim -f realdhtapp.ini & 
+2. ++ run another Linux instance on server and connect to simulate instance ++
+==== modify realdhtapp.ini ====
+**.nodeInterface = "lo" "eth0" ... --> available interface (ifconfig on)
+../../src/OverSim -f realdhtapp.ini &
+
+
+3. ++ Windows instance on other computer connect to simulate instance on Linux server ++
+ ==== modify realdhtapp.ini ====
+#**.nodeInterface = "lo"
+**.nodeIP = "222.2.2.2" --> interface name isn't supported in Oversim on Windows
+../../src/OverSim -f realdhtapp.ini &
