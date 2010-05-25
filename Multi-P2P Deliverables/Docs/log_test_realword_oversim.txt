@@ -19,9 +19,24 @@ Hoang (Linux) 157.159.16.51 <-> 165 (Windows): OK
 (Windows) 192.168.159.1 (VM8net) (10.9.0.1) <--tunnel--> (10.9.0.2) 159.128 (Windows): OK
  |-->(May ao lam Bootstrap (SingleHost1) cho May that(SingleHost2))
 
-Hoang (Linux) <-> 165 (Windows): 
+Hoang (Linux) <-> 165 (Windows): OK 
 
 
 ###################################################
 real SingleHost connect to Simulate Overlay (multiple host) 
 ===================================================
+++ setup simulate instance ++
+su -
+modprobe tun
+chown admin /dev/net/tun --> use tun0 to pass packets to app
+chown admin .tkenvrc
+echo 1 > /proc/sys/net/ipv4/ip_forward
+../../src/OverSim -f realdhtworld.ini &
+sleep 10
+ifconfig tun0 10.0.0.1 netmask 255.0.0.0 up
+
+
+++ run another instance and connect to simulate instance ++
+==== config file realdhtapp.ini ====
+**.nodeInterface = "lo"
+../../src/OverSim -f realdhtapp.ini & 
