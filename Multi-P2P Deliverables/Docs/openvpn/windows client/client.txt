@@ -1,0 +1,12 @@
+# OpenVPN server
+remote 192.168.56.1
+# Tunnel mode
+dev tun
+# IP addresses
+ifconfig 222.2.2.2 222.2.2.1
+# Cipher mode
+cipher none
+# Authentification mode
+auth none
+# Log verbosity
+verb 2
