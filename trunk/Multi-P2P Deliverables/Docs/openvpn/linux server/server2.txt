@@ -1,0 +1,11 @@
+# Tunnel mode
+dev tun2
+# IP addresses
+ifconfig 2.2.2.2 2.2.2.1
+port 1195
+# Cipher mode
+cipher none
+# Authentication mode
+auth none
+# Log verbosity
+verb 2
