@@ -1,0 +1,11 @@
+# Tunnel mode
+dev tun1
+# IP addresses
+ifconfig 1.1.1.2 1.1.1.1
+port 1194
+# Cipher mode
+cipher none
+# Authentication mode
+auth none
+# Log verbosity
+verb 2

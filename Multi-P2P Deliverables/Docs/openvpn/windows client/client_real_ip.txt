@@ -1,0 +1,13 @@
+# OpenVPN server
+remote 157.159.16.51
+# Tunnel mode
+dev tun
+# IP addresses
+ifconfig 2.2.2.2 2.2.2.1
+port 1195
+# Cipher mode
+cipher none
+# Authentification mode
+auth none
+# Log verbosity
+verb 2
