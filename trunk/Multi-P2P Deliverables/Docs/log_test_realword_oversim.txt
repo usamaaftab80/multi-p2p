@@ -25,6 +25,13 @@ Hoang (Linux) <-> 165 (Windows): OK
 ###################################################
 III. Real SingleHost connect to Simulate Overlay (multiple host) 
 ===================================================
+The most important things are:
+- Use TUN to pass packets to oversim instance in Linux
+- Linux server must enable ip_forwarding to route packets to simulate overlay network
+- Windows singleHost must have a route to the IP range of simulate network
+- Must use nodeIP in Windows, instead of nodeInterface
+
+
 1. ++ Setup simulate instance ++
 su - (get root)
 modprobe tun
@@ -37,10 +44,8 @@ echo 1 > /proc/sys/net/ipv4/ip_forward
 ../../src/OverSim -f realdhtworld.ini &
 sleep 10
 
-# turn on TUN interfaces
+# turn on TUN interface
 ifconfig tun0 10.0.0.1 netmask 255.0.0.0 up
-openvpn /etc/openvpn/server1.txt --> tun1 with client 1, port 1194
-openvpn /etc/openvpn/server2.txt --> tun2 with client 2, port 1195
 
 
 2. ++ Run another Linux instance on server and connect to simulate instance ++
@@ -52,9 +57,8 @@ openvpn /etc/openvpn/server2.txt --> tun2 with client 2, port 1195
 3. ++ Windows instance on other computer connect to simulate instance on Linux server ++
 ==== modify realdhtapp.ini ====
 #**.nodeInterface = "lo"
-**.nodeIP = "2.2.2.2" --> interface name isn't supported in Oversim on Windows
+**.nodeIP = "157.159.16.186" --> interface name isn't supported in Oversim on Windows
 
-openvpn c:\Program Files\openvpn\config\client_real_ip.txt
 route add 10.0.0.0 mask 255.0.0.0 2.2.2.1 --> add the route to the simulate network, via remote IP of the tunnel (server's IP) into its routing table
 
 ../../src/OverSim -f realdhtapp.ini &
