@@ -30,6 +30,7 @@ The most important things are:
 - Linux server must enable ip_forwarding to route packets to simulate overlay network
 - Windows singleHost must have a route to the IP range of simulate network
 - Must use nodeIP in Windows, instead of nodeInterface
+- Use tunnel (III.3) between Client <=> Server in case Client's IP is private (192...)
 
 
 1. ++ Setup simulate instance ++
@@ -54,7 +55,19 @@ ifconfig tun0 10.0.0.1 netmask 255.0.0.0 up
 ../../src/OverSim -f realdhtapp.ini &
 
 
-3. ++ Windows instance on other computer connect to simulate instance on Linux server ++
+3. ++ Setup Tunnel between Client <=> Server ++
+==Linux Server==
+openvpn /etc/openvpn/server1.txt
+openvpn /etc/openvpn/server2.txt
+
+==Client 1==
+openvpn C:\Program Files\OpenVPN\config\client1.txt
+
+==Client 2==
+openvpn C:\Program Files\OpenVPN\config\client2.txt
+
+
+4. ++ Windows instance on other computer connect to simulate instance on Linux server ++
 ==== modify realdhtapp.ini ====
 #**.nodeInterface = "lo"
 **.nodeIP = "157.159.16.186" --> interface name isn't supported in Oversim on Windows
@@ -62,4 +75,3 @@ ifconfig tun0 10.0.0.1 netmask 255.0.0.0 up
 route add 10.0.0.0 mask 255.0.0.0 2.2.2.1 --> add the route to the simulate network, via remote IP of the tunnel (server's IP) into its routing table
 
 ../../src/OverSim -f realdhtapp.ini &
-
