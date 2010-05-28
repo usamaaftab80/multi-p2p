@@ -11,6 +11,10 @@ NOTE: must "add route" to get host known how to go to 10.0.0.0/8
 Check if RP undefined then become RP => pre-defined RP for all nodes
 original code: use static variable -> common for all NICE instances in one Oversim process on one computer
 or RPC
+RP can be changed during the NICE process
+--> SingleClient: 
+	- join after simulate network ready
+	- how to know RP: manual :|, read file on remote host
 
 3. Ports:
 - UDP port 1024 for Overlay service:  UDP:1024 packets will be forwarded into the TUN interface for Overlay Service
@@ -32,7 +36,7 @@ ping once to get TTL from real host to server
 7. End-to-end Delay
 Time stamp? Clock Synchonizing on 2 hosts ? 
 
-8. Remote Processing Call (RPC) -> exchange Info between hosts at different processes  
+8. Remote Procedure Call (RPC) -> exchange Info between hosts at different processes  
 mechanism, tools, APIs ???
 support Oversim ???
 exchange which info ? RP
