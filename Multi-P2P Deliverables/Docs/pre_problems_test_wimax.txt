@@ -10,38 +10,22 @@ NOTE: must "add route" to get host known how to go to 10.0.0.0/8
 2. Rendez-vous Point (RP) in NICE
 Check if RP undefined then become RP => pre-defined RP for all nodes
 original code: use static variable -> common for all NICE instances in one Oversim process on one computer
-or RPC
+
 RP can be changed during the NICE process
 --> SingleClient: 
 	- join after simulate network ready
-	- how to know RP: manual :|, read file on remote host
+	- how to know RP: manual || read file on remote host -> XML exported by PHP
 
-3. Ports:
-- UDP port 1024 for Overlay service:  UDP:1024 packets will be forwarded into the TUN interface for Overlay Service
-- Overlay-App port 2000
---> must distinguish
---> firewall policy
-
-4. Get bandwidth, delay of real link
+3. Get bandwidth, delay of real link
 -> 3rdParty tool
 
-5. Global Statistic Object at different Oversim instances on different hosts
--> Stand at host to statistic, export to file
--> Summary all statistic files
+4. Global Statistic Object at different Oversim instances on different hosts
+-> Stand at host to statistic, export to files
+-> Synthesize all statistic files
 
-6. Physical hop-count
+5. Physical hop-count + delay
 get TTL real Router + TTL Inet ?
-ping once to get TTL from real host to server
+ping once to get TTL, delay of the path from real host to server
 
-7. End-to-end Delay
+6. End-to-end Delay
 Time stamp? Clock Synchonizing on 2 hosts ? 
-
-8. Remote Procedure Call (RPC) -> exchange Info between hosts at different processes  
-mechanism, tools, APIs ???
-support Oversim ???
-exchange which info ? RP
-
-9. Distributed Resource sharing |+| Centralized Data statistic
-Hard disk, memory, database server
--> mechanism ? tools ?
--> firewall
