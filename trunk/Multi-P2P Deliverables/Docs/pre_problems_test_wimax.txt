@@ -14,7 +14,7 @@ original code: use static variable -> common for all NICE instances in one Overs
 RP can be changed during the NICE process
 --> SingleClient: 
 	- join after simulate network ready
-	- how to know RP: manual || read file on remote host -> XML exported by PHP
+	- how to know RP: manual || read file on remote host -> server generates text file, copy (SCP | manually) to the single host  
 
 3. Get bandwidth, delay of real link
 -> 3rdParty tool
