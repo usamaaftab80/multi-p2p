@@ -45,8 +45,7 @@ void HoangGlobalObject::initialize()
 	numLink = new int [videoSize];
 	fill(numLink , numLink + videoSize , 0);
 
-	//set random sender: generate random number in [0,par("targetOverlayTerminalNum")]
-	//senderId = intrand(numNode);
+	ttlFile = fopen("ttl_stats.txt","w");
 
 	cout << "Hoang global object initttt done" << endl;
 }
@@ -92,7 +91,7 @@ HoangGlobalObject::~HoangGlobalObject()
 		for(int pid=0; pid<P_sid[sid]; pid++){
 
 			if(!(stress[sid][pid] > 0)){
-				cout << "sid " << sid << " pid " << pid << " stress " << stress[sid][pid] << endl;
+				//cout << "sid " << sid << " pid " << pid << " stress " << stress[sid][pid] << endl;
 			}
 
 			else {
@@ -123,6 +122,8 @@ HoangGlobalObject::~HoangGlobalObject()
 
 	delete [] linkStress;
 	delete [] numLink;
+
+	fclose(ttlFile);
 
 }
 
@@ -155,12 +156,14 @@ void HoangGlobalObject::calculateNumAccessLink(int i)
 
 void HoangGlobalObject::updateNumLinkArray()
 {
-//	cout << "numNodeJoined: " << numNodeJoined << " at " << simTime() << endl;
-//	for(int i=numSent; i<videoSize; i++){
-//		numLink[i] = numNodeJoined;
-//	}
+
 	fill(numLink + numSent , numLink + videoSize , numNodeJoined);
 	if(!(numNodeJoined < numNode)){
 		std::cout << "numNodeJoined=" << numNodeJoined << " numNode=" << numNode << endl;
 	}
+}
+
+void HoangGlobalObject::recordTTL(uint ttl)
+{
+	fprintf(ttlFile,"%d\n",ttl);
 }

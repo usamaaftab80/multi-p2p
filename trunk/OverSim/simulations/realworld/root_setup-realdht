@@ -3,8 +3,11 @@
 # script only runs on Linux
 
 modprobe tun
+sleep 10
 chown admin /dev/net/tun
 chown admin .tkenvrc
+#echo 1 > /proc/sys/net/ipv4/ip_forward
+sleep 10
 ../../src/OverSim -f realdhtworld.ini &
 sleep 10
 ifconfig tun0 10.0.0.1 netmask 255.0.0.0 up

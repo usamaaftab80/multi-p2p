@@ -47,6 +47,15 @@
 #include "BaseOverlay.h"
 
 #include "NiceMessage_m.h"
+#include "ConferenceApp.h"
+
+template <class T>
+inline std::string to_string (const T& t)
+{
+    std::stringstream ss;
+    ss << t;
+    return ss.str();
+}
 
 using namespace std;
 
@@ -327,29 +336,43 @@ void BaseOverlay::finish()
 
     //hoang
     //cout << thisNode.getAddress() << " baseoverlay module finish" << endl;
-    bool isSender = par("isSender");
 
-    /*if(!isSender){
-    	cout << thisNode.getAddress() << " is NOT sender" << endl;
-    }
-    else{
-    	cout << thisNode.getAddress() << " is senderrrrrrrrrrrrr" << endl;
-    }*/
+    //TODO: extract dataOut to file sent_{NodeID}.txt
+    //get NodeID from app
 
-    int numPacketLost = 0 ;
+    cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
+	cCompoundModule* appModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("tier1"));
+	ConferenceApp* app = check_and_cast<ConferenceApp*> (appModule->getSubmodule("conferenceapp"));
 
-    for (uint16 sid=0; sid<global->getNumNode(); sid++){
+	int thisnodeid = app->getNodeID();
+	string str2 = "sent_" + to_string(thisnodeid);
+
+	//extract to file
+	FILE * sentFile;
+	sentFile = fopen (str2.c_str() , "w");
+
+	for(int i=0;i<100;i++)
+		for(int j=0;j<40000;j++)
+		{
+			if(dataOut[i][j] > 0){
+				fprintf(sentFile,"%d\t%d\t%d\n",i,j,dataOut[i][j]);
+			}
+
+		}
+
+	fclose(sentFile);
+
+    /*for (uint16 sid=0; sid<global->getNumNode(); sid++){
 
     	for(int pid=0; pid<global->getP_sid(sid); pid++){
 
 			uint8 dataStress;
 
-//			if(!isSender){
+
 			if(dataIn[sid][pid] < 1){
 				dataIn[sid][pid] = 1; //hard code prevent packet loss
-				numPacketLost++;
 			}
-//			}
+
 			else{
 				if(!(dataOut[sid][pid] > 0)){
 	//    			std::cout << " Sender dataOut[" << i << "]=" << dataOut[i] << endl;
@@ -365,12 +388,9 @@ void BaseOverlay::finish()
 
 			global->addLinkStress(sid,pid,dataStress);
 
-			//linkStressStats.collect(dataStress);
 		}
-    }
+    }*/
 
-    //globalStatistics->recordOutVector("1 stress--access link--BaseOverlay.cc",linkStressStats.getMean());
-//    globalStatistics->recordOutVector("5 numPacketLost",numPacketLost);
 
     globalStatistics->nodesFinished++;
 
@@ -783,7 +803,7 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         kw = udpControlInfo->getMinBW();
 
-        if(kw > maxKw){
+       /* if(kw > maxKw){
         	maxKw = kw; //update maxKw
         }
 
@@ -798,26 +818,18 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         if(!(stats->getMaxKd() < stats->getXd())){
         	stats->generateXD();
-        }
+        }*/
 
         string name = msg->getName();
-
-//        if(name.find("NICE_QUERY") == 0){
-//        	cout << thisNode.getAddress() << " vua nhan duoc pkt " << name << endl;
-//        	lastHopKd = udpControlInfo->getDelayInfo();
-//        }
 
 		if(name.find("CBR_DATA") == 0){
 			int id = getIDfromName(name);
 
-//			dataIn[id]++;
-
-			stats->collectHopCount(hopCount); //just calculate hopcount of data packets only
-//			peerMap.insert(std::make_pair(udpControlInfo->getSrcAddr(),udpControlInfo->getDelayInfo()));
-//			double prevKd = lastHopKd;
+//			stats->collectHopCount(hopCount); //just calculate hopcount of data packets only
+//			global->recordTTL(hopCount);
 
 			CbrAppMessage* appMsg = check_and_cast<CbrAppMessage*>(msg);
-			if(udpControlInfo->getDelayInfo() < 1e-10){
+			/*if(udpControlInfo->getDelayInfo() < 1e-10){
 				if (appMsg->getSrcNode() == thisNode) {
 					cout << "NICE own msg at BaseOverlay" << endl;
 				}
@@ -826,14 +838,10 @@ void BaseOverlay::handleMessage(cMessage* msg)
 			}else{
 				lastHopKd = udpControlInfo->getDelayInfo();
 				appMsg->setLastHopKd(udpControlInfo->getDelayInfo());
-			}
+			}*/
+			appMsg->setTtl(hopCount);
 			int nodeID = appMsg->getNodeID();
 			dataIn[nodeID][id]++;
-
-//			std::cout << thisNode.getAddress() << " Kd ==== " << lastHopKd << endl;
-//			if(lastHopKd != prevKd){
-//				std::cout << thisNode.getAddress() << " prevKd " << prevKd << " currKd " << lastHopKd << endl;
-//			}
 
 		}
 

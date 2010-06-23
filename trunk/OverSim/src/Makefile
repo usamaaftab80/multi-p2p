@@ -39,6 +39,7 @@ INCLUDE_PATH = \
     -I../../INET-OverSim-20090317/src/util \
     -I. \
     -Iapplications \
+    -Iapplications/conferenceapp \
     -Iapplications/dht \
     -Iapplications/giasearchapp \
     -Iapplications/i3 \
@@ -94,6 +95,7 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc and .msg files
 OBJS = \
+    $O/applications/conferenceapp/ConferenceApp.o \
     $O/applications/dht/DHTDataStorage.o \
     $O/applications/dht/DHT.o \
     $O/applications/giasearchapp/GIASearchApp.o \
@@ -254,6 +256,7 @@ OBJS = \
     $O/underlay/singlehostunderlay/udpoutscheduler.o \
     $O/underlay/singlehostunderlay/stun/stun.o \
     $O/underlay/singlehostunderlay/stun/udp.o \
+    $O/applications/conferenceapp/ConferenceAppMsg_m.o \
     $O/applications/dht/DHTMessage_m.o \
     $O/applications/i3/I3Message_m.o \
     $O/applications/i3/i3Apps/I3TriggersMessage_m.o \
@@ -289,6 +292,7 @@ OBJS = \
 
 # Message files
 MSGFILES = \
+    applications/conferenceapp/ConferenceAppMsg.msg \
     applications/dht/DHTMessage.msg \
     applications/i3/I3Message.msg \
     applications/i3/i3Apps/I3TriggersMessage.msg \
@@ -390,6 +394,7 @@ clean:
 	-rm -f OverSim OverSim.exe libOverSim.so libOverSim.a libOverSim.dll libOverSim.dylib
 	-rm -f ./*_m.cc ./*_m.h
 	-rm -f applications/*_m.cc applications/*_m.h
+	-rm -f applications/conferenceapp/*_m.cc applications/conferenceapp/*_m.h
 	-rm -f applications/dht/*_m.cc applications/dht/*_m.h
 	-rm -f applications/giasearchapp/*_m.cc applications/giasearchapp/*_m.h
 	-rm -f applications/i3/*_m.cc applications/i3/*_m.h
@@ -435,9 +440,53 @@ cleanall: clean
 	-rm -rf $(PROJECT_OUTPUT_DIR)
 
 depend:
-	$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc applications/*.cc applications/dht/*.cc applications/giasearchapp/*.cc applications/i3/*.cc applications/i3/i3Apps/*.cc applications/kbrtestapp/*.cc applications/multisenderapp/*.cc applications/myapplication/*.cc applications/nicetestapp/*.cc applications/realworldtestapp/*.cc applications/scribe/*.cc applications/scribetest/*.cc applications/simplegameclient/*.cc applications/tierdummy/*.cc common/*.cc common/cbr/*.cc overlay/*.cc overlay/bamboo/*.cc overlay/broose/*.cc overlay/chord/*.cc overlay/gia/*.cc overlay/kademlia/*.cc overlay/koorde/*.cc overlay/myoverlay/*.cc overlay/nice/*.cc overlay/pastry/*.cc overlay/pubsubmmog/*.cc overlay/quon/*.cc overlay/vast/*.cc tier2/*.cc tier2/dhttestapp/*.cc tier2/p2pns/*.cc tier2/simmud/*.cc tier3/*.cc tier3/xmlrpcinterface/*.cc tier3/xmlrpcinterface/xmlrpc++/*.cc underlay/*.cc underlay/inetunderlay/*.cc underlay/simpleunderlay/*.cc underlay/singlehostunderlay/*.cc underlay/singlehostunderlay/stun/*.cc
+	$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc applications/*.cc applications/conferenceapp/*.cc applications/dht/*.cc applications/giasearchapp/*.cc applications/i3/*.cc applications/i3/i3Apps/*.cc applications/kbrtestapp/*.cc applications/multisenderapp/*.cc applications/myapplication/*.cc applications/nicetestapp/*.cc applications/realworldtestapp/*.cc applications/scribe/*.cc applications/scribetest/*.cc applications/simplegameclient/*.cc applications/tierdummy/*.cc common/*.cc common/cbr/*.cc overlay/*.cc overlay/bamboo/*.cc overlay/broose/*.cc overlay/chord/*.cc overlay/gia/*.cc overlay/kademlia/*.cc overlay/koorde/*.cc overlay/myoverlay/*.cc overlay/nice/*.cc overlay/pastry/*.cc overlay/pubsubmmog/*.cc overlay/quon/*.cc overlay/vast/*.cc tier2/*.cc tier2/dhttestapp/*.cc tier2/p2pns/*.cc tier2/simmud/*.cc tier3/*.cc tier3/xmlrpcinterface/*.cc tier3/xmlrpcinterface/xmlrpc++/*.cc underlay/*.cc underlay/inetunderlay/*.cc underlay/simpleunderlay/*.cc underlay/singlehostunderlay/*.cc underlay/singlehostunderlay/stun/*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
+$O/applications/conferenceapp/ConferenceApp.o: applications/conferenceapp/ConferenceApp.cc \
+	$(INET_PROJ)/src/base/INotifiable.h \
+	common/UnderlayConfigurator.h \
+	applications/conferenceapp/ConferenceApp.h \
+	common/OverSimMessage_m.h \
+	common/oversim_mapset.h \
+	common/RecursiveLookup.h \
+	common/OverSimMessage.h \
+	common/AbstractLookup.h \
+	common/RpcListener.h \
+	$(INET_PROJ)/src/util/StatisticsCollector.h \
+	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
+	common/NodeVector.h \
+	common/RpcState.h \
+	common/GlobalStatistics.h \
+	common/CommonMessages_m.h \
+	common/BaseApp.h \
+	common/InitStages.h \
+	common/TopologyVis.h \
+	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
+	common/BinaryValue.h \
+	common/Vector2D.h \
+	overlay/nice/NiceMessage_m.h \
+	common/TransportAddress.h \
+	common/IterativeLookupConfiguration.h \
+	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
+	common/BaseOverlay.h \
+	common/Comparator.h \
+	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
+	common/BaseRpc.h \
+	common/ProxNodeHandle.h \
+	applications/conferenceapp/ConferenceAppMsg_m.h \
+	common/NodeHandle.h \
+	common/RpcMacros.h
+$O/applications/conferenceapp/ConferenceAppMsg_m.o: applications/conferenceapp/ConferenceAppMsg_m.cc \
+	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
+	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
+	common/oversim_mapset.h \
+	applications/conferenceapp/ConferenceAppMsg_m.h \
+	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
+	common/TransportAddress.h
 $O/applications/dht/DHT.o: applications/dht/DHT.cc \
 	$(INET_PROJ)/src/base/INotifiable.h \
 	applications/dht/DHTDataStorage.h \
@@ -1978,6 +2027,7 @@ $O/common/Nps.o: common/Nps.cc \
 	common/RpcMacros.h
 $O/common/BaseOverlay.o: common/BaseOverlay.cc \
 	common/UnderlayConfigurator.h \
+	applications/conferenceapp/ConferenceApp.h \
 	$(INET_PROJ)/src/base/NotifierConsts.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
 	common/oversim_mapset.h \
@@ -1985,10 +2035,10 @@ $O/common/BaseOverlay.o: common/BaseOverlay.cc \
 	common/RpcListener.h \
 	$(INET_PROJ)/src/util/StatisticsCollector.h \
 	common/HashFunc.h \
-	common/GlobalStatistics.h \
 	common/RpcState.h \
-	common/LookupListener.h \
+	common/GlobalStatistics.h \
 	common/InitStages.h \
+	common/LookupListener.h \
 	common/BootstrapList.h \
 	common/BinaryValue.h \
 	common/Vector2D.h \
@@ -1998,8 +2048,8 @@ $O/common/BaseOverlay.o: common/BaseOverlay.cc \
 	common/BaseRpc.h \
 	common/ProxNodeHandle.h \
 	common/NodeHandle.h \
-	common/BootstrapNodeHandle.h \
 	$(INET_PROJ)/src/base/INotifiable.h \
+	common/BootstrapNodeHandle.h \
 	common/GlobalParameters.h \
 	common/OverSimMessage_m.h \
 	common/RecursiveLookup.h \
@@ -2026,9 +2076,9 @@ $O/common/BaseOverlay.o: common/BaseOverlay.cc \
 	common/IterativeLookupConfiguration.h \
 	common/HoangGlobalObject.h \
 	$(INET_PROJ)/src/base/ModuleAccess.h \
+	common/BaseOverlay.h \
 	common/Comparator.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	common/BaseOverlay.h \
 	common/RpcMacros.h
 $O/common/NodeHandle.o: common/NodeHandle.cc \
 	common/OverlayKey.h \

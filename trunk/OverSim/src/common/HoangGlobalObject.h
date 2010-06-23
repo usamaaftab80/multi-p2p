@@ -43,6 +43,8 @@ class HoangGlobalObject : public cSimpleModule
 	uint16 numAccessLink[100][40000];
 	uint16* P_sid;
 
+	FILE * ttlFile;
+
   protected:
     virtual void initialize();
     //virtual void handleMessage(cMessage *msg);
@@ -81,6 +83,8 @@ class HoangGlobalObject : public cSimpleModule
 
 	  void setNumAccessLink(uint16 sid, int pid, uint16 val){numAccessLink[sid][pid] = val;};
 	  uint16 getNumAccessLink(uint16 sid, int pid){return numAccessLink[sid][pid];};
+
+	  void recordTTL(uint ttl);
 
 	  ~HoangGlobalObject();
 
