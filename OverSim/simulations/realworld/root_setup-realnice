@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# script only runs on Linux
+
+modprobe tun
+sleep 1
+chown admin /dev/net/tun
+chown admin .tkenvrc
+#echo 1 > /proc/sys/net/ipv4/ip_forward
+sleep 5
+../../src/OverSim -f niceworld.ini &
+sleep 5
+ifconfig tun0 10.0.0.1 netmask 255.0.0.0 up
+echo "tun0 up done"

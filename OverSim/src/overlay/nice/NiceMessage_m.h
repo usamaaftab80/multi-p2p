@@ -338,7 +338,7 @@ inline void doUnpacking(cCommBuffer *b, NiceLeaderHeartbeat& obj) {obj.parsimUnp
  *     double bigKD;
  *     double lastHopKd;
  *     int nodeID;
- *     
+ *     int ttl;
  * }
  * </pre>
  */
@@ -355,6 +355,7 @@ class CbrAppMessage : public BaseOverlayMessage
     double bigKD_var;
     double lastHopKd_var;
     int nodeID_var;
+    int ttl_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const CbrAppMessage&);
@@ -391,6 +392,8 @@ class CbrAppMessage : public BaseOverlayMessage
     virtual void setLastHopKd(double lastHopKd_var);
     virtual int getNodeID() const;
     virtual void setNodeID(int nodeID_var);
+    virtual int getTtl() const;
+    virtual void setTtl(int ttl_var);
 };
 
 inline void doPacking(cCommBuffer *b, CbrAppMessage& obj) {obj.parsimPack(b);}

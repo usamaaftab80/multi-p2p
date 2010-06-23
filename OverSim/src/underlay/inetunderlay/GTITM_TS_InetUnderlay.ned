@@ -104,6 +104,10 @@ module GTITM_TS_IPv4Underlay
 		hoangGlobalObject: HoangGlobalObject ;
 
   connections allowunconnected:
+      
+      // connect outRouter to a backboneRouter
+    backboneRouter[0].pppg$o++ --> GTITMChannel {  delay = 1ms; datarate = 1.048576E8bps; } --> outRouter[0].pppg$i++ if outRouterNum>0;
+    backboneRouter[0].pppg$i++ <-- GTITMChannel {  delay = 1ms; datarate = 1.048576E8bps; } <-- outRouter[0].pppg$o++ if outRouterNum>0;  
     backboneRouter[0].pppg$o++ --> GTITMChannel {  delay = 1ms; datarate = 1.048576E8bps; } --> backboneRouter[5].pppg$i++;
     backboneRouter[0].pppg$i++ <-- GTITMChannel {  delay = 1ms; datarate = 1.048576E8bps; } <-- backboneRouter[5].pppg$o++;
     backboneRouter[0].pppg$o++ --> GTITMChannel {  delay = 1ms; datarate = 1.048576E8bps; } --> backboneRouter[7].pppg$i++;

@@ -815,7 +815,6 @@ private:
 protected:
 	double kw;
 
-
 	double maxKd;
 	double maxKw;
 
