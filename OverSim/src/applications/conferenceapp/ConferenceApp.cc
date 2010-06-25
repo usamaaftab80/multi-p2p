@@ -52,11 +52,19 @@ void ConferenceApp::initializeApp(int stage)
 
 	nodeID = global->getNumNodeJoined();
 
+	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
+	cCompoundModule* overlayModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("overlay"));
+	BaseOverlay* overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
+	overlay->setNodeID(nodeID);
+
 	cout << "Node " << nodeID << " joins at " << simTime() << endl;
 
 	global->incNumNodeJoined();
 
 	/* open files to write: Sent_{NodeID}.txt, Received_{NodeID}.txt */
+
+	string str1 = "sent_" + to_string(nodeID);
+	sentFile = fopen (str1.c_str() , "w");
 
 	string str2 = "received_" + to_string(nodeID);
 	receivedFile = fopen (str2.c_str() , "w");
@@ -75,7 +83,7 @@ void ConferenceApp::initializeApp(int stage)
     videoSize = 0;
 
     if(isSender){
-        cout << "senderrrrrrr " << thisNode.getAddress() << " nodeID " << nodeID << endl;
+//        cout << "senderrrrrrr " << thisNode.getAddress() << " nodeID " << nodeID << endl;
 
     	/* read trace file */
 		FILE * pFile;
@@ -145,7 +153,7 @@ void ConferenceApp::initializeApp(int stage)
 
 		sd = new dataPacket [videoSize];
 
-		cout << "Node " << nodeID << " :There are " << videoSize << " packets in dump file" << endl;
+//		cout << "Node " << nodeID << " :There are " << videoSize << " packets in dump file" << endl;
 
 		rewind(pFile);
 
@@ -214,7 +222,7 @@ void ConferenceApp::initializeApp(int stage)
 
     }
     bindToPort(2000);
-    cout << thisNode.getAddress() << " init done " << endl;
+    cout << "Node " << nodeID << " IP " << thisNode.getAddress() << " APP init done " << endl;
 }
 
 
@@ -227,8 +235,8 @@ void ConferenceApp::finishApp()
 
 ConferenceApp::~ConferenceApp()
 {
-	/* close files : Sent_{NodeID}.txt, Received_{NodeID}.txt */
 	fclose(receivedFile);
+	fclose(sentFile);
 }
 
 
@@ -244,7 +252,10 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
         // if the simulator is still busy creating the network, let's wait a bit longer
         if (underlayConfigurator->isInInitPhase()) {
 
-        	if(isSender){
+        	return;
+
+        } else {
+        	/*if(isSender){
 
 				if((global->getNumNodeJoined() > 1) && (numSent<1) && (!beginSend)){
 					cout<< "Node " << nodeID << " begin send data at "<< simTime() << " co " << global->getNumNodeJoined() << " peers trong mang" << endl;
@@ -257,11 +268,14 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
 
 				}
 			}
-
-        	return;
-
-        } else {
+*/
         	cancelAndDelete(stateTimer);
+
+        	beginSendDataTime = simTime();
+
+			scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
+
+
         }
 
     } else if (msg->isName("sendDataTimer")){
@@ -300,6 +314,10 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
 		//hoang
 		encapAndSendCbrAppMsg(pingPongPkt);
 
+		//format:  Time		pid
+		const char * format = "%f\t%d\n";
+		fprintf(sentFile,format,simTime().dbl(),sd[numSent].id);
+
     }
 
     else
@@ -322,10 +340,6 @@ void ConferenceApp::handleLowerMessage(cMessage* msg)
         if (cbrMsg->getCommand() == CBR_DATA) {
 
             cbrMsg->setCommand(-1); //not CBR_DATA anymore, prevent NiceOwnMessage
-
-            /* statistics */
-
-//            globalStatistics->recordOutVector("3 ALM Hop count",hopCount);
 
             /* data handle */
 

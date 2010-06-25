@@ -71,12 +71,16 @@ BaseOverlay::BaseOverlay()
     notificationBoard = NULL;
     globalParameters = NULL;
     bootstrapList = NULL;
+    //hoang
+    nodeID = -1;
 }
 
 BaseOverlay::~BaseOverlay()
 {
     finishLookups();
     finishRpcs();
+    dataIn.clear();
+    dataOut.clear();
 }
 
 int BaseOverlay::numInitStages() const
@@ -205,19 +209,8 @@ void BaseOverlay::initialize(int stage)
     	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
     	global = check_and_cast<HoangGlobalObject *>(modp2);
 
-    	/*int size = global->getVideoSize();
-    	dataIn = new int [size];
-    	dataOut = new int [size];
-
-    	fill(dataIn, dataIn + size, 0);
-    	fill(dataOut, dataOut + size, 0);*/
-
-    	for(int i=0; i<100; i++){
-    		for(int j=0; j<40000; j++){
-    			dataIn[i][j] = 0;
-    			dataOut[i][j] = 0;
-    		}
-    	}
+    	dataIn.clear();
+    	dataOut.clear();
 
     	//cout << thisNode.getAddress() << " baseoverlay module iniiiiiittt" << endl;
 
@@ -324,10 +317,15 @@ void BaseOverlay::initialize(int stage)
             join();
         }
     }
+
+    if(nodeID > -1){
+    	cout << "BaseOverlay of node " << nodeID << " ip " << thisNode.getAddress() << " init done" << endl;
+    }
 }
 
 void BaseOverlay::initializeOverlay(int stage)
 {
+
 }
 
 void BaseOverlay::finish()
@@ -337,59 +335,22 @@ void BaseOverlay::finish()
     //hoang
     //cout << thisNode.getAddress() << " baseoverlay module finish" << endl;
 
-    //TODO: extract dataOut to file sent_{NodeID}.txt
-    //get NodeID from app
+    //extract dataOut to file out_{NodeID}.txt
 
-    cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
-	cCompoundModule* appModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("tier1"));
-	ConferenceApp* app = check_and_cast<ConferenceApp*> (appModule->getSubmodule("conferenceapp"));
+	string str2 = "out_" + to_string(nodeID);
 
-	int thisnodeid = app->getNodeID();
-	string str2 = "sent_" + to_string(thisnodeid);
+	FILE * outFile;
+	outFile = fopen (str2.c_str() , "w");
 
-	//extract to file
-	FILE * sentFile;
-	sentFile = fopen (str2.c_str() , "w");
+	int dataOutSize = dataOut.size();
 
-	for(int i=0;i<100;i++)
-		for(int j=0;j<40000;j++)
-		{
-			if(dataOut[i][j] > 0){
-				fprintf(sentFile,"%d\t%d\t%d\n",i,j,dataOut[i][j]);
-			}
+	for(int i=0; i<dataOutSize; i++)
+	{
+		donneePacket dp =  dataOut.at(i);
+		fprintf(outFile,"%f\t%d\t%d\n",(dp.time).dbl(),dp.sid,dp.pid);
+	}
 
-		}
-
-	fclose(sentFile);
-
-    /*for (uint16 sid=0; sid<global->getNumNode(); sid++){
-
-    	for(int pid=0; pid<global->getP_sid(sid); pid++){
-
-			uint8 dataStress;
-
-
-			if(dataIn[sid][pid] < 1){
-				dataIn[sid][pid] = 1; //hard code prevent packet loss
-			}
-
-			else{
-				if(!(dataOut[sid][pid] > 0)){
-	//    			std::cout << " Sender dataOut[" << i << "]=" << dataOut[i] << endl;
-				}
-			}
-
-			if(dataOut[sid][pid] > 0){ //forwarder
-				dataStress = dataOut[sid][pid];
-			}
-			else { //only receive, not forward
-				dataStress = dataIn[sid][pid];
-			}
-
-			global->addLinkStress(sid,pid,dataStress);
-
-		}
-    }*/
+	fclose(outFile);
 
 
     globalStatistics->nodesFinished++;
@@ -840,8 +801,12 @@ void BaseOverlay::handleMessage(cMessage* msg)
 				appMsg->setLastHopKd(udpControlInfo->getDelayInfo());
 			}*/
 			appMsg->setTtl(hopCount);
-			int nodeID = appMsg->getNodeID();
-			dataIn[nodeID][id]++;
+
+			donneePacket dp;
+			dp.sid = appMsg->getNodeID();
+			dp.pid = appMsg->getId();
+			dp.time = simTime();
+			dataIn.push_back(dp);
 
 		}
 
@@ -1301,9 +1266,11 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
 		//cout << thisNode.getAddress() << " vua truyen di pkt " << id << endl;
 		CbrAppMessage* appMsg = check_and_cast<CbrAppMessage*>(msg);
 
-		int nodeID = appMsg->getNodeID();
-		dataOut[nodeID][id]++;
-//		dataOut[id]++;
+		donneePacket dp;
+		dp.sid = appMsg->getNodeID();
+		dp.pid = appMsg->getId();
+		dp.time = simTime();
+		dataOut.push_back(dp);
 	}
 
     send(msg, "udpOut");

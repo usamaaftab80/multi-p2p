@@ -39,6 +39,16 @@
 #include "StatisticsCollector.h"
 #include "HoangGlobalObject.h"
 
+
+typedef struct donneePacket{
+			int sid;
+			int pid;
+			simtime_t time;
+		} donneePacket;
+
+
+typedef std::vector<donneePacket> donneePacketVector;
+
 using namespace std;
 
 class GlobalNodeList;
@@ -813,13 +823,15 @@ private:
     //hoang
 //private:
 protected:
+	int nodeID;
+
 	double kw;
 
 	double maxKd;
 	double maxKw;
 
-	uint8_t dataIn[100][40000];
-	uint8_t dataOut[100][40000];
+	donneePacketVector dataIn;
+	donneePacketVector dataOut;
 
 	bool hoang_debug_cost;
 	bool hoang_use_cost;
@@ -834,6 +846,9 @@ public:
 	int getIDfromName(string name);
 
 	double getLastHopKd(){ return lastHopKd;};
+
+	void setNodeID(int id){nodeID = id;};
+	int getNodeID(){return nodeID;};
 
 };
 
