@@ -40,15 +40,6 @@
 #include "HoangGlobalObject.h"
 
 
-typedef struct donneePacket{
-			int sid;
-			int pid;
-			simtime_t time;
-		} donneePacket;
-
-
-typedef std::vector<donneePacket> donneePacketVector;
-
 using namespace std;
 
 class GlobalNodeList;
@@ -821,7 +812,7 @@ private:
     bool internalReadyState; /**< internal overlay state used for setOverlayReady() */
 
     //hoang
-//private:
+
 protected:
 	int nodeID;
 
@@ -829,9 +820,6 @@ protected:
 
 	double maxKd;
 	double maxKw;
-
-	donneePacketVector dataIn;
-	donneePacketVector dataOut;
 
 	bool hoang_debug_cost;
 	bool hoang_use_cost;

@@ -79,8 +79,6 @@ BaseOverlay::~BaseOverlay()
 {
     finishLookups();
     finishRpcs();
-    dataIn.clear();
-    dataOut.clear();
 }
 
 int BaseOverlay::numInitStages() const
@@ -201,20 +199,15 @@ void BaseOverlay::initialize(int stage)
         bytesInternalReceived = 0;
 
         //hoang
-        const char *statsModulePath = par("statsModulePath");
+        /*const char *statsModulePath = par("statsModulePath");
         cModule *modp = simulation.getModuleByPath(statsModulePath);
         stats = check_and_cast<StatisticsCollector *>(modp);
+        */
 
     	const char *globalModulePath = par("globalModulePath");
     	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
     	global = check_and_cast<HoangGlobalObject *>(modp2);
 
-    	dataIn.clear();
-    	dataOut.clear();
-
-    	//cout << thisNode.getAddress() << " baseoverlay module iniiiiiittt" << endl;
-
-        //defaultTimeToLive = par("timeToLive");
         defaultTimeToLive = 32;
 
         lastHopKd = kw = maxKd = maxKw = 0;
@@ -318,9 +311,10 @@ void BaseOverlay::initialize(int stage)
         }
     }
 
-    if(nodeID > -1){
-    	cout << "BaseOverlay of node " << nodeID << " ip " << thisNode.getAddress() << " init done" << endl;
-    }
+//    if(nodeID > -1){
+//    	cout << "BaseOverlay of node " << nodeID << " ip " << thisNode.getAddress() << " init stage " << stage << endl;
+//    	openFile();
+//    }
 }
 
 void BaseOverlay::initializeOverlay(int stage)
@@ -331,27 +325,6 @@ void BaseOverlay::initializeOverlay(int stage)
 void BaseOverlay::finish()
 {
     finishOverlay();
-
-    //hoang
-    //cout << thisNode.getAddress() << " baseoverlay module finish" << endl;
-
-    //extract dataOut to file out_{NodeID}.txt
-
-	string str2 = "out_" + to_string(nodeID);
-
-	FILE * outFile;
-	outFile = fopen (str2.c_str() , "w");
-
-	int dataOutSize = dataOut.size();
-
-	for(int i=0; i<dataOutSize; i++)
-	{
-		donneePacket dp =  dataOut.at(i);
-		fprintf(outFile,"%f\t%d\t%d\n",(dp.time).dbl(),dp.sid,dp.pid);
-	}
-
-	fclose(outFile);
-
 
     globalStatistics->nodesFinished++;
 
@@ -786,27 +759,11 @@ void BaseOverlay::handleMessage(cMessage* msg)
 		if(name.find("CBR_DATA") == 0){
 			int id = getIDfromName(name);
 
-//			stats->collectHopCount(hopCount); //just calculate hopcount of data packets only
-//			global->recordTTL(hopCount);
+			CbrAppMessage* cbrAppMsg = check_and_cast<CbrAppMessage*>(msg);
 
-			CbrAppMessage* appMsg = check_and_cast<CbrAppMessage*>(msg);
-			/*if(udpControlInfo->getDelayInfo() < 1e-10){
-				if (appMsg->getSrcNode() == thisNode) {
-					cout << "NICE own msg at BaseOverlay" << endl;
-				}
-				else
-					cout << "nhuc at BaseOverlay" << endl;
-			}else{
-				lastHopKd = udpControlInfo->getDelayInfo();
-				appMsg->setLastHopKd(udpControlInfo->getDelayInfo());
-			}*/
-			appMsg->setTtl(hopCount);
+			cbrAppMsg->setTtl(hopCount);
 
-			donneePacket dp;
-			dp.sid = appMsg->getNodeID();
-			dp.pid = appMsg->getId();
-			dp.time = simTime();
-			dataIn.push_back(dp);
+			global->recordIn(nodeID,cbrAppMsg->getNodeID(),id);
 
 		}
 
@@ -1263,14 +1220,10 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
 	string name = msg->getName();
 	if(name.find("CBR_DATA") == 0){
 		int id = getIDfromName(name);
-		//cout << thisNode.getAddress() << " vua truyen di pkt " << id << endl;
-		CbrAppMessage* appMsg = check_and_cast<CbrAppMessage*>(msg);
 
-		donneePacket dp;
-		dp.sid = appMsg->getNodeID();
-		dp.pid = appMsg->getId();
-		dp.time = simTime();
-		dataOut.push_back(dp);
+		CbrAppMessage* cbrAppMsg = check_and_cast<CbrAppMessage*>(msg);
+
+		global->recordOut(nodeID,cbrAppMsg->getNodeID(),id);
 	}
 
     send(msg, "udpOut");

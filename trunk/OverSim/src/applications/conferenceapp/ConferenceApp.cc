@@ -57,8 +57,6 @@ void ConferenceApp::initializeApp(int stage)
 	BaseOverlay* overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
 	overlay->setNodeID(nodeID);
 
-	cout << "Node " << nodeID << " joins at " << simTime() << endl;
-
 	global->incNumNodeJoined();
 
 	/* open files to write: Sent_{NodeID}.txt, Received_{NodeID}.txt */
@@ -187,16 +185,6 @@ void ConferenceApp::initializeApp(int stage)
 			sd[i].time -= startTime;
 		}
 
-		FILE * newFile;
-		string newfilename = "sd_" + to_string(nodeID);
-		newFile = fopen (newfilename.c_str() , "w");
-		if (newFile == NULL) perror ("Error opening new SD file to write");
-		for(int i=0; i<videoSize ;i++){
-			fprintf(newFile , "%-16f id %-16d udp %-16d\n", (sd[i].time).dbl() ,i ,sd[i].length);
-		}
-
-		fclose(newFile);
-
 		/* Sap xep lai mang sd theo time tang dan */
 		dataPacket temp;   // holding variable
 
@@ -275,6 +263,7 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
 
 			scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
 
+			cout<< "Node " << nodeID << " begin send data at "<< simTime() << " co " << global->getNumNodeJoined() << " peers trong mang" << endl;
 
         }
 
@@ -381,9 +370,12 @@ void ConferenceApp::encapAndSendCbrAppMsg(cMessage* msg)
 
         cbrMsg->setCommand(0); //CBR_DATA
 
-        string pktName = "CBR_DATA " + to_string(numSent);
+        //string pktName = "CBR_DATA " + to_string(numSent);
+        string pktName = "CBR_DATA " + to_string(sd[numSent].id);
 
         cbrMsg->setName(pktName.c_str());
+
+//        cbrMsg->setId(sd[numSent].id);
 
         cbrMsg->setNodeID(nodeID);
 
