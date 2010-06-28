@@ -13,9 +13,9 @@
 #include "HoangGlobalObject.h"
 
 typedef struct dataPacket{
-			int id;
+			uint id;
 			simtime_t time;
-			int length;
+			uint length;
 		} dataPacket;
 
 

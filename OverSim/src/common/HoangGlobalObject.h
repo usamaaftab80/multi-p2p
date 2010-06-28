@@ -42,8 +42,8 @@ class HoangGlobalObject : public cSimpleModule
 	uint8 stress[100][40000]; //stress[sid][pid]
 	uint16 numAccessLink[100][40000];
 	uint16* P_sid;
-
-	FILE * ttlFile;
+	FILE * inFile;
+	FILE * outFile;
 
   protected:
     virtual void initialize();
@@ -84,7 +84,8 @@ class HoangGlobalObject : public cSimpleModule
 	  void setNumAccessLink(uint16 sid, int pid, uint16 val){numAccessLink[sid][pid] = val;};
 	  uint16 getNumAccessLink(uint16 sid, int pid){return numAccessLink[sid][pid];};
 
-	  void recordTTL(uint ttl);
+	  void recordIn(uint nodeID,int sid,int pid);
+	  void recordOut(uint nodeID,int sid,int pid);
 
 	  ~HoangGlobalObject();
 

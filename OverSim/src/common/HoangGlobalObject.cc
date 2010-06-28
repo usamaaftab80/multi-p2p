@@ -25,14 +25,6 @@ void HoangGlobalObject::initialize()
 	P_sid = new uint16 [numNode];
 	beginSendDataTime = new simtime_t [numNode];
 	videoLength = new int [numNode];
-
-	for(int i=0; i<100; i++){
-		for(int j=0; j<40000; j++){
-			stress[i][j] = 0;
-			numAccessLink[i][j] = numNode;
-		}
-	}
-
 	numSent = 0;
 	numNodeJoined = 0;
 	videoSize = par("videoSize");
@@ -45,7 +37,8 @@ void HoangGlobalObject::initialize()
 	numLink = new int [videoSize];
 	fill(numLink , numLink + videoSize , 0);
 
-	ttlFile = fopen("ttl_stats.txt","w");
+	outFile = fopen("out.log","w");
+	inFile = fopen("in.log","w");
 
 	cout << "Hoang global object initttt done" << endl;
 }
@@ -80,7 +73,7 @@ HoangGlobalObject::~HoangGlobalObject()
 	/*
 	 * Reserved for MultiSenderApp
 	 */
-	double sum = 0;
+	/*double sum = 0;
 	int count = 0;
 	double stressSumAtNode = 0;
 	int bigP = 0;
@@ -96,9 +89,9 @@ HoangGlobalObject::~HoangGlobalObject()
 
 			else {
 
-				/*if(numAccessLink[sid][pid] < numNode){
+				if(numAccessLink[sid][pid] < numNode){
 					cout << "sid " << sid << " pid " << pid << " numAccessLink " << numAccessLink[sid][pid] << endl;
-				}*/
+				}
 
 				stressSumAtNode += (double)stress[sid][pid] / (double)(numAccessLink[sid][pid]);
 				stressSum += (double)(stress[sid][pid]) / (double)(numAccessLink[sid][pid]);
@@ -117,13 +110,13 @@ HoangGlobalObject::~HoangGlobalObject()
 //	cout << "Count of packet (stress > 0): "<< count << endl;
 	cout << "Total packet P= "<< bigP << endl;
 	cout << "Average link stress by Packets: "<< stressSum / (double)count << endl;
-//	cout << "Average link stress by Nodes : "<< sum / (double)numNode << endl;
+//	cout << "Average link stress by Nodes : "<< sum / (double)numNode << endl;*/
 
+	fclose(inFile);
+	fclose(outFile);
 
 	delete [] linkStress;
 	delete [] numLink;
-
-	fclose(ttlFile);
 
 }
 
@@ -163,7 +156,16 @@ void HoangGlobalObject::updateNumLinkArray()
 	}
 }
 
-void HoangGlobalObject::recordTTL(uint ttl)
+void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid)
 {
-	fprintf(ttlFile,"%d\n",ttl);
+	//write to in.log
+	//at simTime() nodeID	received a packet sid,pid
+	fprintf(inFile,"%f\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid);
+}
+
+void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid)
+{
+	//write to out.log
+	//at simTime() nodeID	forwarded a packet sid,pid
+	fprintf(outFile,"%f\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid);
 }
