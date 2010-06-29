@@ -5,8 +5,8 @@
 Please kindly refer to these publications when using Multi-P2P.
 
 = Details =
-T. A. Le, H. Nguyen, and H. Zhang, “Multi-variable cost function for application
-layer multicast routing,” in IEEE Globecom 2010 - Communications Software,
+Tien Anh Le, Hang Nguyen, and H. Zhang, “Multi-variable cost function for application
+layer multicast routing,” in *IEEE Globecom 2010* - Communications Software,
 Services and Multimedia Applications Symposium (GC10 - CSSMA), Miami, Florida,
 USA, December 2010.
 
