@@ -61,11 +61,11 @@ void ConferenceApp::initializeApp(int stage)
 
 	/* open files to write: Sent_{NodeID}.txt, Received_{NodeID}.txt */
 
-	string str1 = "sent_" + to_string(nodeID);
-	sentFile = fopen (str1.c_str() , "w");
+//	string str1 = "sent_" + to_string(nodeID);
+//	sentFile = fopen (str1.c_str() , "w");
 
-	string str2 = "received_" + to_string(nodeID);
-	receivedFile = fopen (str2.c_str() , "w");
+//	string str2 = "received_" + to_string(nodeID);
+//	receivedFile = fopen (str2.c_str() , "w");
 
 	/* get parameters from config file */
     stateTimerPeriod = 1;
@@ -223,8 +223,8 @@ void ConferenceApp::finishApp()
 
 ConferenceApp::~ConferenceApp()
 {
-	fclose(receivedFile);
-	fclose(sentFile);
+//	fclose(receivedFile);
+//	fclose(sentFile);
 }
 
 
@@ -263,7 +263,7 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
 
 			scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
 
-			cout<< "Node " << nodeID << " begin send data at "<< simTime() << " co " << global->getNumNodeJoined() << " peers trong mang" << endl;
+			cout<< "Node " << nodeID << " begin send data at "<< simTime() << endl;
 
         }
 
@@ -304,8 +304,8 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
 		encapAndSendCbrAppMsg(pingPongPkt);
 
 		//format:  Time		pid
-		const char * format = "%f\t%d\n";
-		fprintf(sentFile,format,simTime().dbl(),sd[numSent].id);
+//		const char * format = "%f\t%d\n";
+//		fprintf(sentFile,format,simTime().dbl(),sd[numSent].id);
 
     }
 
@@ -342,8 +342,9 @@ void ConferenceApp::handleLowerMessage(cMessage* msg)
 					//write log file: nodeID receives a packet (sid,pid) at simTime()
 					//write to: Received_{NodeID}.txt
 					//format:  Time		sid		pid		hopcount	ttl
-					const char * format = "%f\t%d\t%d\t%d\t%d\n";
-					fprintf(receivedFile,format,simTime().dbl(),myMsg->getSenderID(),myMsg->getId(),hopCount,cbrMsg->getTtl());
+//					const char * format = "%f\t%d\t%d\t%d\n";
+//					fprintf(receivedFile,format,simTime().dbl(),myMsg->getSenderID(),myMsg->getId(),hopCount);
+					global->recordReceived(nodeID,myMsg->getSenderID(),myMsg->getId(),hopCount);
 
 				}
 				delete myMsg; //no need anymore if not forward or reply it
@@ -374,8 +375,6 @@ void ConferenceApp::encapAndSendCbrAppMsg(cMessage* msg)
         string pktName = "CBR_DATA " + to_string(sd[numSent].id);
 
         cbrMsg->setName(pktName.c_str());
-
-//        cbrMsg->setId(sd[numSent].id);
 
         cbrMsg->setNodeID(nodeID);
 
