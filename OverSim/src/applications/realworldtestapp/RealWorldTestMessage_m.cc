@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from applications/realworldtestapp/RealWorldTestMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from applications/realworldtestapp/RealWorldTestMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -87,12 +87,13 @@ class RealWorldTestMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -134,10 +135,10 @@ unsigned int RealWorldTestMessageDescriptor::getFieldTypeFlags(void *object, int
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RealWorldTestMessageDescriptor::getFieldName(void *object, int field) const
@@ -148,10 +149,18 @@ const char *RealWorldTestMessageDescriptor::getFieldName(void *object, int field
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "msg";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "msg",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int RealWorldTestMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='m' && strcmp(fieldName, "msg")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RealWorldTestMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -162,10 +171,10 @@ const char *RealWorldTestMessageDescriptor::getFieldTypeString(void *object, int
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "string";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "string",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RealWorldTestMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -195,18 +204,18 @@ int RealWorldTestMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RealWorldTestMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RealWorldTestMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RealWorldTestMessage *pp = (RealWorldTestMessage *)object; (void)pp;
     switch (field) {
-        case 0: oppstring2string(pp->getMsg(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return oppstring2string(pp->getMsg());
+        default: return "";
     }
 }
 
@@ -233,9 +242,10 @@ const char *RealWorldTestMessageDescriptor::getFieldStructName(void *object, int
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *RealWorldTestMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

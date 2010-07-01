@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from linklayer/contract/Ieee802Ctrl.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from linklayer/contract/Ieee802Ctrl.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -196,12 +196,13 @@ class Ieee802CtrlDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -243,16 +244,16 @@ unsigned int Ieee802CtrlDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<7) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee802CtrlDescriptor::getFieldName(void *object, int field) const
@@ -263,16 +264,30 @@ const char *Ieee802CtrlDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "src";
-        case 1: return "dest";
-        case 2: return "etherType";
-        case 3: return "ssap";
-        case 4: return "dsap";
-        case 5: return "pauseUnits";
-        case 6: return "inputPort";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "src",
+        "dest",
+        "etherType",
+        "ssap",
+        "dsap",
+        "pauseUnits",
+        "inputPort",
+    };
+    return (field>=0 && field<7) ? fieldNames[field] : NULL;
+}
+
+int Ieee802CtrlDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "src")==0) return base+0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dest")==0) return base+1;
+    if (fieldName[0]=='e' && strcmp(fieldName, "etherType")==0) return base+2;
+    if (fieldName[0]=='s' && strcmp(fieldName, "ssap")==0) return base+3;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dsap")==0) return base+4;
+    if (fieldName[0]=='p' && strcmp(fieldName, "pauseUnits")==0) return base+5;
+    if (fieldName[0]=='i' && strcmp(fieldName, "inputPort")==0) return base+6;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee802CtrlDescriptor::getFieldTypeString(void *object, int field) const
@@ -283,16 +298,16 @@ const char *Ieee802CtrlDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        case 1: return "MACAddress";
-        case 2: return "int";
-        case 3: return "int";
-        case 4: return "int";
-        case 5: return "int";
-        case 6: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+        "MACAddress",
+        "int",
+        "int",
+        "int",
+        "int",
+        "int",
+    };
+    return (field>=0 && field<7) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee802CtrlDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -322,24 +337,24 @@ int Ieee802CtrlDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool Ieee802CtrlDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee802CtrlDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee802Ctrl *pp = (Ieee802Ctrl *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSrc(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getDest(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: long2string(pp->getEtherType(),resultbuf,bufsize); return true;
-        case 3: long2string(pp->getSsap(),resultbuf,bufsize); return true;
-        case 4: long2string(pp->getDsap(),resultbuf,bufsize); return true;
-        case 5: long2string(pp->getPauseUnits(),resultbuf,bufsize); return true;
-        case 6: long2string(pp->getInputPort(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSrc(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getDest(); return out.str();}
+        case 2: return long2string(pp->getEtherType());
+        case 3: return long2string(pp->getSsap());
+        case 4: return long2string(pp->getDsap());
+        case 5: return long2string(pp->getPauseUnits());
+        case 6: return long2string(pp->getInputPort());
+        default: return "";
     }
 }
 
@@ -370,11 +385,16 @@ const char *Ieee802CtrlDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        case 1: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+        "MACAddress",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<7) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee802CtrlDescriptor::getFieldStructPointer(void *object, int field, int i) const

@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from applications/i3/i3Apps/I3SessionMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from applications/i3/i3Apps/I3SessionMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -122,12 +122,13 @@ class SessionMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -169,12 +170,12 @@ unsigned int SessionMsgDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SessionMsgDescriptor::getFieldName(void *object, int field) const
@@ -185,12 +186,22 @@ const char *SessionMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "type";
-        case 1: return "value";
-        case 2: return "source";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "type",
+        "value",
+        "source",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int SessionMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "type")==0) return base+0;
+    if (fieldName[0]=='v' && strcmp(fieldName, "value")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "source")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SessionMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -201,12 +212,12 @@ const char *SessionMsgDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "double";
-        case 2: return "I3Identifier";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "double",
+        "I3Identifier",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SessionMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -239,20 +250,20 @@ int SessionMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SessionMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SessionMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SessionMsg *pp = (SessionMsg *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getType(),resultbuf,bufsize); return true;
-        case 1: double2string(pp->getValue(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getSource(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getType());
+        case 1: return double2string(pp->getValue());
+        case 2: {std::stringstream out; out << pp->getSource(); return out.str();}
+        default: return "";
     }
 }
 
@@ -280,10 +291,12 @@ const char *SessionMsgDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 2: return "I3Identifier"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        "I3Identifier",
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *SessionMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const

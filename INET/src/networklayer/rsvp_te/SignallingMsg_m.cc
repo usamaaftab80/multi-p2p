@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/rsvp_te/SignallingMsg.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/rsvp_te/SignallingMsg.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -87,12 +87,13 @@ class SignallingMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -134,10 +135,10 @@ unsigned int SignallingMsgDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SignallingMsgDescriptor::getFieldName(void *object, int field) const
@@ -148,10 +149,18 @@ const char *SignallingMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "command";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "command",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int SignallingMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SignallingMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -162,10 +171,10 @@ const char *SignallingMsgDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SignallingMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -195,18 +204,18 @@ int SignallingMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SignallingMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SignallingMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SignallingMsg *pp = (SignallingMsg *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getCommand());
+        default: return "";
     }
 }
 
@@ -233,9 +242,10 @@ const char *SignallingMsgDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *SignallingMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -323,12 +333,13 @@ class PsbTimerMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -370,11 +381,11 @@ unsigned int PsbTimerMsgDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PsbTimerMsgDescriptor::getFieldName(void *object, int field) const
@@ -385,11 +396,20 @@ const char *PsbTimerMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "id";
-        case 1: return "command";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "id",
+        "command",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PsbTimerMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "id")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PsbTimerMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -400,11 +420,11 @@ const char *PsbTimerMsgDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PsbTimerMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -434,19 +454,19 @@ int PsbTimerMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PsbTimerMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PsbTimerMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PsbTimerMsg *pp = (PsbTimerMsg *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getId());
+        case 1: return long2string(pp->getCommand());
+        default: return "";
     }
 }
 
@@ -474,9 +494,11 @@ const char *PsbTimerMsgDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PsbTimerMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -564,12 +586,13 @@ class PsbTimeoutMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -611,11 +634,11 @@ unsigned int PsbTimeoutMsgDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PsbTimeoutMsgDescriptor::getFieldName(void *object, int field) const
@@ -626,11 +649,20 @@ const char *PsbTimeoutMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "id";
-        case 1: return "command";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "id",
+        "command",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PsbTimeoutMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "id")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PsbTimeoutMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -641,11 +673,11 @@ const char *PsbTimeoutMsgDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PsbTimeoutMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -675,19 +707,19 @@ int PsbTimeoutMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PsbTimeoutMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PsbTimeoutMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PsbTimeoutMsg *pp = (PsbTimeoutMsg *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getId());
+        case 1: return long2string(pp->getCommand());
+        default: return "";
     }
 }
 
@@ -715,9 +747,11 @@ const char *PsbTimeoutMsgDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PsbTimeoutMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -805,12 +839,13 @@ class RsbRefreshTimerMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -852,11 +887,11 @@ unsigned int RsbRefreshTimerMsgDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RsbRefreshTimerMsgDescriptor::getFieldName(void *object, int field) const
@@ -867,11 +902,20 @@ const char *RsbRefreshTimerMsgDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "id";
-        case 1: return "command";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "id",
+        "command",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int RsbRefreshTimerMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "id")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RsbRefreshTimerMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -882,11 +926,11 @@ const char *RsbRefreshTimerMsgDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RsbRefreshTimerMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -916,19 +960,19 @@ int RsbRefreshTimerMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RsbRefreshTimerMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RsbRefreshTimerMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RsbRefreshTimerMsg *pp = (RsbRefreshTimerMsg *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getId());
+        case 1: return long2string(pp->getCommand());
+        default: return "";
     }
 }
 
@@ -956,9 +1000,11 @@ const char *RsbRefreshTimerMsgDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *RsbRefreshTimerMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1046,12 +1092,13 @@ class RsbCommitTimerMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1093,11 +1140,11 @@ unsigned int RsbCommitTimerMsgDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RsbCommitTimerMsgDescriptor::getFieldName(void *object, int field) const
@@ -1108,11 +1155,20 @@ const char *RsbCommitTimerMsgDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "id";
-        case 1: return "command";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "id",
+        "command",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int RsbCommitTimerMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "id")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RsbCommitTimerMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -1123,11 +1179,11 @@ const char *RsbCommitTimerMsgDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RsbCommitTimerMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1157,19 +1213,19 @@ int RsbCommitTimerMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RsbCommitTimerMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RsbCommitTimerMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RsbCommitTimerMsg *pp = (RsbCommitTimerMsg *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getId());
+        case 1: return long2string(pp->getCommand());
+        default: return "";
     }
 }
 
@@ -1197,9 +1253,11 @@ const char *RsbCommitTimerMsgDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *RsbCommitTimerMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1287,12 +1345,13 @@ class RsbTimeoutMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1334,11 +1393,11 @@ unsigned int RsbTimeoutMsgDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RsbTimeoutMsgDescriptor::getFieldName(void *object, int field) const
@@ -1349,11 +1408,20 @@ const char *RsbTimeoutMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "id";
-        case 1: return "command";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "id",
+        "command",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int RsbTimeoutMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "id")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RsbTimeoutMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -1364,11 +1432,11 @@ const char *RsbTimeoutMsgDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RsbTimeoutMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1398,19 +1466,19 @@ int RsbTimeoutMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RsbTimeoutMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RsbTimeoutMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RsbTimeoutMsg *pp = (RsbTimeoutMsg *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getId());
+        case 1: return long2string(pp->getCommand());
+        default: return "";
     }
 }
 
@@ -1438,9 +1506,11 @@ const char *RsbTimeoutMsgDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *RsbTimeoutMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1527,12 +1597,13 @@ class HelloTimerMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1574,11 +1645,11 @@ unsigned int HelloTimerMsgDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *HelloTimerMsgDescriptor::getFieldName(void *object, int field) const
@@ -1589,11 +1660,20 @@ const char *HelloTimerMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "peer";
-        case 1: return "command";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "peer",
+        "command",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int HelloTimerMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "peer")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *HelloTimerMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -1604,11 +1684,11 @@ const char *HelloTimerMsgDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *HelloTimerMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1638,19 +1718,19 @@ int HelloTimerMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool HelloTimerMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string HelloTimerMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     HelloTimerMsg *pp = (HelloTimerMsg *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getPeer(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getPeer(); return out.str();}
+        case 1: return long2string(pp->getCommand());
+        default: return "";
     }
 }
 
@@ -1677,10 +1757,11 @@ const char *HelloTimerMsgDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *HelloTimerMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1768,12 +1849,13 @@ class HelloTimeoutMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1815,11 +1897,11 @@ unsigned int HelloTimeoutMsgDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *HelloTimeoutMsgDescriptor::getFieldName(void *object, int field) const
@@ -1830,11 +1912,20 @@ const char *HelloTimeoutMsgDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "peer";
-        case 1: return "command";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "peer",
+        "command",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int HelloTimeoutMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "peer")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *HelloTimeoutMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -1845,11 +1936,11 @@ const char *HelloTimeoutMsgDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *HelloTimeoutMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1879,19 +1970,19 @@ int HelloTimeoutMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool HelloTimeoutMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string HelloTimeoutMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     HelloTimeoutMsg *pp = (HelloTimeoutMsg *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getPeer(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getPeer(); return out.str();}
+        case 1: return long2string(pp->getCommand());
+        default: return "";
     }
 }
 
@@ -1918,10 +2009,11 @@ const char *HelloTimeoutMsgDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *HelloTimeoutMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2036,12 +2128,13 @@ class PathNotifyMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2083,13 +2176,13 @@ unsigned int PathNotifyMsgDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PathNotifyMsgDescriptor::getFieldName(void *object, int field) const
@@ -2100,13 +2193,24 @@ const char *PathNotifyMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "session";
-        case 1: return "sender";
-        case 2: return "status";
-        case 3: return "command";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "session",
+        "sender",
+        "status",
+        "command",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int PathNotifyMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "session")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sender")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "status")==0) return base+2;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PathNotifyMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -2117,13 +2221,13 @@ const char *PathNotifyMsgDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "SessionObj_t";
-        case 1: return "SenderTemplateObj_t";
-        case 2: return "int";
-        case 3: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "SessionObj_t",
+        "SenderTemplateObj_t",
+        "int",
+        "int",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PathNotifyMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2153,21 +2257,21 @@ int PathNotifyMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PathNotifyMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PathNotifyMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PathNotifyMsg *pp = (PathNotifyMsg *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSession(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getSender(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: long2string(pp->getStatus(),resultbuf,bufsize); return true;
-        case 3: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSession(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getSender(); return out.str();}
+        case 2: return long2string(pp->getStatus());
+        case 3: return long2string(pp->getCommand());
+        default: return "";
     }
 }
 
@@ -2195,11 +2299,13 @@ const char *PathNotifyMsgDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "SessionObj_t"; break;
-        case 1: return "SenderTemplateObj_t"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "SessionObj_t",
+        "SenderTemplateObj_t",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *PathNotifyMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const

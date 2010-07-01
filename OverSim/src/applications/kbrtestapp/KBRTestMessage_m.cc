@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from applications/kbrtestapp/KBRTestMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from applications/kbrtestapp/KBRTestMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -62,7 +62,7 @@ KBRTestMessage& KBRTestMessage::operator=(const KBRTestMessage& other)
     this->seqNum_var = other.seqNum_var;
     this->measurementPhase_var = other.measurementPhase_var;
     delete [] this->visitedNodes_var;
-    this->visitedNodes_var = (other.visitedNodes_arraysize==0) ? NULL : new IPvXAddress[other.visitedNodes_arraysize];
+    this->visitedNodes_var = (other.visitedNodes_arraysize==0) ? NULL : new ::IPvXAddress[other.visitedNodes_arraysize];
     visitedNodes_arraysize = other.visitedNodes_arraysize;
     for (unsigned int i=0; i<visitedNodes_arraysize; i++)
         this->visitedNodes_var[i] = other.visitedNodes_var[i];
@@ -90,7 +90,7 @@ void KBRTestMessage::parsimUnpack(cCommBuffer *b)
     if (visitedNodes_arraysize==0) {
         this->visitedNodes_var = 0;
     } else {
-        this->visitedNodes_var = new IPvXAddress[visitedNodes_arraysize];
+        this->visitedNodes_var = new ::IPvXAddress[visitedNodes_arraysize];
         doUnpacking(b,this->visitedNodes_var,visitedNodes_arraysize);
     }
 }
@@ -127,7 +127,7 @@ void KBRTestMessage::setMeasurementPhase(bool measurementPhase_var)
 
 void KBRTestMessage::setVisitedNodesArraySize(unsigned int size)
 {
-    IPvXAddress *visitedNodes_var2 = (size==0) ? NULL : new IPvXAddress[size];
+    ::IPvXAddress *visitedNodes_var2 = (size==0) ? NULL : new ::IPvXAddress[size];
     unsigned int sz = visitedNodes_arraysize < size ? visitedNodes_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         visitedNodes_var2[i] = this->visitedNodes_var[i];
@@ -163,12 +163,13 @@ class KBRTestMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -210,13 +211,13 @@ unsigned int KBRTestMessageDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *KBRTestMessageDescriptor::getFieldName(void *object, int field) const
@@ -227,13 +228,24 @@ const char *KBRTestMessageDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "id";
-        case 1: return "seqNum";
-        case 2: return "measurementPhase";
-        case 3: return "visitedNodes";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "id",
+        "seqNum",
+        "measurementPhase",
+        "visitedNodes",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int KBRTestMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "id")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "seqNum")==0) return base+1;
+    if (fieldName[0]=='m' && strcmp(fieldName, "measurementPhase")==0) return base+2;
+    if (fieldName[0]=='v' && strcmp(fieldName, "visitedNodes")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *KBRTestMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -244,13 +256,13 @@ const char *KBRTestMessageDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        case 2: return "bool";
-        case 3: return "IPvXAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+        "bool",
+        "IPvXAddress",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *KBRTestMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -281,21 +293,21 @@ int KBRTestMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool KBRTestMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string KBRTestMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     KBRTestMessage *pp = (KBRTestMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getSeqNum(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getMeasurementPhase(),resultbuf,bufsize); return true;
-        case 3: {std::stringstream out; out << pp->getVisitedNodes(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getId());
+        case 1: return long2string(pp->getSeqNum());
+        case 2: return bool2string(pp->getMeasurementPhase());
+        case 3: {std::stringstream out; out << pp->getVisitedNodes(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -324,10 +336,13 @@ const char *KBRTestMessageDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 3: return "IPvXAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        "IPvXAddress",
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *KBRTestMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -388,12 +403,13 @@ class KbrTestCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -435,9 +451,7 @@ unsigned int KbrTestCallDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *KbrTestCallDescriptor::getFieldName(void *object, int field) const
@@ -448,9 +462,13 @@ const char *KbrTestCallDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int KbrTestCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *KbrTestCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -461,9 +479,7 @@ const char *KbrTestCallDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *KbrTestCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -493,17 +509,17 @@ int KbrTestCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool KbrTestCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string KbrTestCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     KbrTestCall *pp = (KbrTestCall *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -529,9 +545,7 @@ const char *KbrTestCallDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *KbrTestCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -591,12 +605,13 @@ class KbrTestResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -638,9 +653,7 @@ unsigned int KbrTestResponseDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *KbrTestResponseDescriptor::getFieldName(void *object, int field) const
@@ -651,9 +664,13 @@ const char *KbrTestResponseDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int KbrTestResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *KbrTestResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -664,9 +681,7 @@ const char *KbrTestResponseDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *KbrTestResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -696,17 +711,17 @@ int KbrTestResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool KbrTestResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string KbrTestResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     KbrTestResponse *pp = (KbrTestResponse *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -732,9 +747,7 @@ const char *KbrTestResponseDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *KbrTestResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -818,12 +831,13 @@ class KbrRpcContextDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -865,11 +879,11 @@ unsigned int KbrRpcContextDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *KbrRpcContextDescriptor::getFieldName(void *object, int field) const
@@ -880,11 +894,20 @@ const char *KbrRpcContextDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "destKey";
-        case 1: return "measurementPhase";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "destKey",
+        "measurementPhase",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int KbrRpcContextDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destKey")==0) return base+0;
+    if (fieldName[0]=='m' && strcmp(fieldName, "measurementPhase")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *KbrRpcContextDescriptor::getFieldTypeString(void *object, int field) const
@@ -895,11 +918,11 @@ const char *KbrRpcContextDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "bool",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *KbrRpcContextDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -929,19 +952,19 @@ int KbrRpcContextDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool KbrRpcContextDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string KbrRpcContextDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     KbrRpcContext *pp = (KbrRpcContext *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getDestKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: bool2string(pp->getMeasurementPhase(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getDestKey(); return out.str();}
+        case 1: return bool2string(pp->getMeasurementPhase());
+        default: return "";
     }
 }
 
@@ -968,10 +991,11 @@ const char *KbrRpcContextDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *KbrRpcContextDescriptor::getFieldStructPointer(void *object, int field, int i) const

@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from applications/i3/I3Message.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from applications/i3/I3Message.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -96,12 +96,13 @@ class I3MessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -143,10 +144,10 @@ unsigned int I3MessageDescriptor::getFieldTypeFlags(void *object, int field) con
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *I3MessageDescriptor::getFieldName(void *object, int field) const
@@ -157,10 +158,18 @@ const char *I3MessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "type";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "type",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int I3MessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "type")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *I3MessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -171,10 +180,10 @@ const char *I3MessageDescriptor::getFieldTypeString(void *object, int field) con
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *I3MessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -207,18 +216,18 @@ int I3MessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool I3MessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string I3MessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     I3Message *pp = (I3Message *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getType(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getType());
+        default: return "";
     }
 }
 
@@ -245,9 +254,10 @@ const char *I3MessageDescriptor::getFieldStructName(void *object, int field) con
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *I3MessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -345,12 +355,13 @@ class I3InsertTriggerMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -393,12 +404,12 @@ unsigned int I3InsertTriggerMessageDescriptor::getFieldTypeFlags(void *object, i
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *I3InsertTriggerMessageDescriptor::getFieldName(void *object, int field) const
@@ -409,12 +420,22 @@ const char *I3InsertTriggerMessageDescriptor::getFieldName(void *object, int fie
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "sendReply";
-        case 1: return "trigger";
-        case 2: return "source";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "sendReply",
+        "trigger",
+        "source",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int I3InsertTriggerMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sendReply")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "trigger")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "source")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *I3InsertTriggerMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -425,12 +446,12 @@ const char *I3InsertTriggerMessageDescriptor::getFieldTypeString(void *object, i
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        case 1: return "I3Trigger";
-        case 2: return "I3IPAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+        "I3Trigger",
+        "I3IPAddress",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *I3InsertTriggerMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -460,20 +481,20 @@ int I3InsertTriggerMessageDescriptor::getArraySize(void *object, int field) cons
     }
 }
 
-bool I3InsertTriggerMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string I3InsertTriggerMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     I3InsertTriggerMessage_Base *pp = (I3InsertTriggerMessage_Base *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->getSendReply(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getTrigger(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getSource(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return bool2string(pp->getSendReply());
+        case 1: {std::stringstream out; out << pp->getTrigger(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getSource(); return out.str();}
+        default: return "";
     }
 }
 
@@ -500,11 +521,12 @@ const char *I3InsertTriggerMessageDescriptor::getFieldStructName(void *object, i
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "I3Trigger"; break;
-        case 2: return "I3IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "I3Trigger",
+        "I3IPAddress",
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *I3InsertTriggerMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -604,12 +626,13 @@ class I3QueryReplyMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -652,12 +675,12 @@ unsigned int I3QueryReplyMessageDescriptor::getFieldTypeFlags(void *object, int 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *I3QueryReplyMessageDescriptor::getFieldName(void *object, int field) const
@@ -668,12 +691,22 @@ const char *I3QueryReplyMessageDescriptor::getFieldName(void *object, int field)
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "source";
-        case 1: return "identifier";
-        case 2: return "sendingTime";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "source",
+        "identifier",
+        "sendingTime",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int I3QueryReplyMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "source")==0) return base+0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "identifier")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sendingTime")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *I3QueryReplyMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -684,12 +717,12 @@ const char *I3QueryReplyMessageDescriptor::getFieldTypeString(void *object, int 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "I3IPAddress";
-        case 1: return "I3Identifier";
-        case 2: return "simtime_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "I3IPAddress",
+        "I3Identifier",
+        "simtime_t",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *I3QueryReplyMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -719,20 +752,20 @@ int I3QueryReplyMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool I3QueryReplyMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string I3QueryReplyMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     I3QueryReplyMessage_Base *pp = (I3QueryReplyMessage_Base *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSource(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getIdentifier(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: double2string(pp->getSendingTime(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSource(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getIdentifier(); return out.str();}
+        case 2: return double2string(pp->getSendingTime());
+        default: return "";
     }
 }
 
@@ -759,11 +792,12 @@ const char *I3QueryReplyMessageDescriptor::getFieldStructName(void *object, int 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "I3IPAddress"; break;
-        case 1: return "I3Identifier"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "I3IPAddress",
+        "I3Identifier",
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *I3QueryReplyMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -836,12 +870,13 @@ class I3RemoveTriggerMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -884,10 +919,10 @@ unsigned int I3RemoveTriggerMessageDescriptor::getFieldTypeFlags(void *object, i
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *I3RemoveTriggerMessageDescriptor::getFieldName(void *object, int field) const
@@ -898,10 +933,18 @@ const char *I3RemoveTriggerMessageDescriptor::getFieldName(void *object, int fie
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "trigger";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "trigger",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int I3RemoveTriggerMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "trigger")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *I3RemoveTriggerMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -912,10 +955,10 @@ const char *I3RemoveTriggerMessageDescriptor::getFieldTypeString(void *object, i
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "I3Trigger";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "I3Trigger",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *I3RemoveTriggerMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -945,18 +988,18 @@ int I3RemoveTriggerMessageDescriptor::getArraySize(void *object, int field) cons
     }
 }
 
-bool I3RemoveTriggerMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string I3RemoveTriggerMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     I3RemoveTriggerMessage_Base *pp = (I3RemoveTriggerMessage_Base *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getTrigger(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getTrigger(); return out.str();}
+        default: return "";
     }
 }
 
@@ -982,10 +1025,10 @@ const char *I3RemoveTriggerMessageDescriptor::getFieldStructName(void *object, i
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "I3Trigger"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "I3Trigger",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *I3RemoveTriggerMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1097,12 +1140,13 @@ class I3SendPacketMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1145,13 +1189,13 @@ unsigned int I3SendPacketMessageDescriptor::getFieldTypeFlags(void *object, int 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *I3SendPacketMessageDescriptor::getFieldName(void *object, int field) const
@@ -1162,13 +1206,24 @@ const char *I3SendPacketMessageDescriptor::getFieldName(void *object, int field)
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "identifierStack";
-        case 1: return "matchedTrigger";
-        case 2: return "sendReply";
-        case 3: return "source";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "identifierStack",
+        "matchedTrigger",
+        "sendReply",
+        "source",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int I3SendPacketMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "identifierStack")==0) return base+0;
+    if (fieldName[0]=='m' && strcmp(fieldName, "matchedTrigger")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sendReply")==0) return base+2;
+    if (fieldName[0]=='s' && strcmp(fieldName, "source")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *I3SendPacketMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1179,13 +1234,13 @@ const char *I3SendPacketMessageDescriptor::getFieldTypeString(void *object, int 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "I3IdentifierStack";
-        case 1: return "I3Trigger";
-        case 2: return "bool";
-        case 3: return "I3IPAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "I3IdentifierStack",
+        "I3Trigger",
+        "bool",
+        "I3IPAddress",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *I3SendPacketMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1215,21 +1270,21 @@ int I3SendPacketMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool I3SendPacketMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string I3SendPacketMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     I3SendPacketMessage_Base *pp = (I3SendPacketMessage_Base *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getIdentifierStack(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getMatchedTrigger(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: bool2string(pp->getSendReply(),resultbuf,bufsize); return true;
-        case 3: {std::stringstream out; out << pp->getSource(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getIdentifierStack(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getMatchedTrigger(); return out.str();}
+        case 2: return bool2string(pp->getSendReply());
+        case 3: {std::stringstream out; out << pp->getSource(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1256,12 +1311,13 @@ const char *I3SendPacketMessageDescriptor::getFieldStructName(void *object, int 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "I3IdentifierStack"; break;
-        case 1: return "I3Trigger"; break;
-        case 3: return "I3IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "I3IdentifierStack",
+        "I3Trigger",
+        NULL,
+        "I3IPAddress",
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *I3SendPacketMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

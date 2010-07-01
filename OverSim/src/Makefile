@@ -370,10 +370,10 @@ LIBS += -L/sw/lib
 all: $(TARGET)
 
 $(TARGET) : $O/$(TARGET)
-	ln -s -f $O/$(TARGET) .
+	$(LN) $O/$(TARGET) .
 
 $O/$(TARGET): $(OBJS)  $(wildcard $(EXTRA_OBJS)) Makefile
-	@mkdir -p $O
+	@$(MKPATH) $O
 	$(CXX) $(LDFLAGS) -o $O/$(TARGET)  $(OBJS) $(EXTRA_OBJS) $(WHOLE_ARCHIVE_ON) $(LIBS) $(WHOLE_ARCHIVE_OFF) $(OMNETPP_LIBS)
 
 .PHONY:
@@ -381,7 +381,7 @@ $O/$(TARGET): $(OBJS)  $(wildcard $(EXTRA_OBJS)) Makefile
 .SUFFIXES: .cc
 
 $O/%.o: %.cc
-	@mkdir -p $(dir $@)
+	@$(MKPATH) $(dir $@)
 	$(CXX) -c $(COPTS) -o $@ $<
 
 %_m.cc %_m.h: %.msg

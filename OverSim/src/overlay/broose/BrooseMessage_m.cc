@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from overlay/broose/BrooseMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from overlay/broose/BrooseMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -132,12 +132,13 @@ class BucketCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -179,12 +180,12 @@ unsigned int BucketCallDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *BucketCallDescriptor::getFieldName(void *object, int field) const
@@ -195,12 +196,22 @@ const char *BucketCallDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bucketType";
-        case 1: return "bucketIndex";
-        case 2: return "proState";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "bucketType",
+        "bucketIndex",
+        "proState",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int BucketCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='b' && strcmp(fieldName, "bucketType")==0) return base+0;
+    if (fieldName[0]=='b' && strcmp(fieldName, "bucketIndex")==0) return base+1;
+    if (fieldName[0]=='p' && strcmp(fieldName, "proState")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *BucketCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -211,12 +222,12 @@ const char *BucketCallDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        case 2: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+        "int",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *BucketCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -252,20 +263,20 @@ int BucketCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool BucketCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string BucketCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     BucketCall *pp = (BucketCall *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getBucketType(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getBucketIndex(),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getProState(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getBucketType());
+        case 1: return long2string(pp->getBucketIndex());
+        case 2: return long2string(pp->getProState());
+        default: return "";
     }
 }
 
@@ -294,9 +305,12 @@ const char *BucketCallDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *BucketCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -339,7 +353,7 @@ BucketResponse& BucketResponse::operator=(const BucketResponse& other)
     if (this==&other) return *this;
     BaseResponseMessage::operator=(other);
     delete [] this->nodes_var;
-    this->nodes_var = (other.nodes_arraysize==0) ? NULL : new NodeHandle[other.nodes_arraysize];
+    this->nodes_var = (other.nodes_arraysize==0) ? NULL : new ::NodeHandle[other.nodes_arraysize];
     nodes_arraysize = other.nodes_arraysize;
     for (unsigned int i=0; i<nodes_arraysize; i++)
         this->nodes_var[i] = other.nodes_var[i];
@@ -361,14 +375,14 @@ void BucketResponse::parsimUnpack(cCommBuffer *b)
     if (nodes_arraysize==0) {
         this->nodes_var = 0;
     } else {
-        this->nodes_var = new NodeHandle[nodes_arraysize];
+        this->nodes_var = new ::NodeHandle[nodes_arraysize];
         doUnpacking(b,this->nodes_var,nodes_arraysize);
     }
 }
 
 void BucketResponse::setNodesArraySize(unsigned int size)
 {
-    NodeHandle *nodes_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *nodes_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = nodes_arraysize < size ? nodes_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         nodes_var2[i] = this->nodes_var[i];
@@ -404,12 +418,13 @@ class BucketResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -451,10 +466,10 @@ unsigned int BucketResponseDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *BucketResponseDescriptor::getFieldName(void *object, int field) const
@@ -465,10 +480,18 @@ const char *BucketResponseDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "nodes";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "nodes",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int BucketResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "nodes")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *BucketResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -479,10 +502,10 @@ const char *BucketResponseDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *BucketResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -513,18 +536,18 @@ int BucketResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool BucketResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string BucketResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     BucketResponse *pp = (BucketResponse *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNodes(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNodes(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -550,10 +573,10 @@ const char *BucketResponseDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *BucketResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -682,12 +705,13 @@ class BrooseFindNodeExtMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -729,14 +753,14 @@ unsigned int BrooseFindNodeExtMessageDescriptor::getFieldTypeFlags(void *object,
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *BrooseFindNodeExtMessageDescriptor::getFieldName(void *object, int field) const
@@ -747,14 +771,26 @@ const char *BrooseFindNodeExtMessageDescriptor::getFieldName(void *object, int f
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "routeKey";
-        case 1: return "step";
-        case 2: return "maxDistance";
-        case 3: return "rightShifting";
-        case 4: return "lastNode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "routeKey",
+        "step",
+        "maxDistance",
+        "rightShifting",
+        "lastNode",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int BrooseFindNodeExtMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "routeKey")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "step")==0) return base+1;
+    if (fieldName[0]=='m' && strcmp(fieldName, "maxDistance")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rightShifting")==0) return base+3;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lastNode")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *BrooseFindNodeExtMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -765,14 +801,14 @@ const char *BrooseFindNodeExtMessageDescriptor::getFieldTypeString(void *object,
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "int";
-        case 2: return "int";
-        case 3: return "bool";
-        case 4: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "int",
+        "int",
+        "bool",
+        "NodeHandle",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *BrooseFindNodeExtMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -802,22 +838,22 @@ int BrooseFindNodeExtMessageDescriptor::getArraySize(void *object, int field) co
     }
 }
 
-bool BrooseFindNodeExtMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string BrooseFindNodeExtMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     BrooseFindNodeExtMessage *pp = (BrooseFindNodeExtMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getRouteKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getStep(),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getMaxDistance(),resultbuf,bufsize); return true;
-        case 3: bool2string(pp->getRightShifting(),resultbuf,bufsize); return true;
-        case 4: {std::stringstream out; out << pp->getLastNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getRouteKey(); return out.str();}
+        case 1: return long2string(pp->getStep());
+        case 2: return long2string(pp->getMaxDistance());
+        case 3: return bool2string(pp->getRightShifting());
+        case 4: {std::stringstream out; out << pp->getLastNode(); return out.str();}
+        default: return "";
     }
 }
 
@@ -846,11 +882,14 @@ const char *BrooseFindNodeExtMessageDescriptor::getFieldStructName(void *object,
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        case 4: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        NULL,
+        NULL,
+        NULL,
+        "NodeHandle",
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *BrooseFindNodeExtMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

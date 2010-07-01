@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from linklayer/mf80211/macLayer/Mac80211Pkt.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from linklayer/mf80211/macLayer/Mac80211Pkt.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -157,12 +157,13 @@ class Mac80211PktDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -204,15 +205,15 @@ unsigned int Mac80211PktDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<6) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Mac80211PktDescriptor::getFieldName(void *object, int field) const
@@ -223,15 +224,28 @@ const char *Mac80211PktDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "address3";
-        case 1: return "address4";
-        case 2: return "duration";
-        case 3: return "fragmentation";
-        case 4: return "informationDS";
-        case 5: return "sequenceControl";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "address3",
+        "address4",
+        "duration",
+        "fragmentation",
+        "informationDS",
+        "sequenceControl",
+    };
+    return (field>=0 && field<6) ? fieldNames[field] : NULL;
+}
+
+int Mac80211PktDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "address3")==0) return base+0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "address4")==0) return base+1;
+    if (fieldName[0]=='d' && strcmp(fieldName, "duration")==0) return base+2;
+    if (fieldName[0]=='f' && strcmp(fieldName, "fragmentation")==0) return base+3;
+    if (fieldName[0]=='i' && strcmp(fieldName, "informationDS")==0) return base+4;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sequenceControl")==0) return base+5;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Mac80211PktDescriptor::getFieldTypeString(void *object, int field) const
@@ -242,15 +256,15 @@ const char *Mac80211PktDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        case 2: return "simtime_t";
-        case 3: return "int";
-        case 4: return "int";
-        case 5: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+        "simtime_t",
+        "int",
+        "int",
+        "int",
+    };
+    return (field>=0 && field<6) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Mac80211PktDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -280,23 +294,23 @@ int Mac80211PktDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool Mac80211PktDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Mac80211PktDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Mac80211Pkt *pp = (Mac80211Pkt *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getAddress3(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getAddress4(),resultbuf,bufsize); return true;
-        case 2: double2string(pp->getDuration(),resultbuf,bufsize); return true;
-        case 3: long2string(pp->getFragmentation(),resultbuf,bufsize); return true;
-        case 4: long2string(pp->getInformationDS(),resultbuf,bufsize); return true;
-        case 5: long2string(pp->getSequenceControl(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getAddress3());
+        case 1: return long2string(pp->getAddress4());
+        case 2: return double2string(pp->getDuration());
+        case 3: return long2string(pp->getFragmentation());
+        case 4: return long2string(pp->getInformationDS());
+        case 5: return long2string(pp->getSequenceControl());
+        default: return "";
     }
 }
 
@@ -328,9 +342,15 @@ const char *Mac80211PktDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<6) ? fieldStructNames[field] : NULL;
 }
 
 void *Mac80211PktDescriptor::getFieldStructPointer(void *object, int field, int i) const

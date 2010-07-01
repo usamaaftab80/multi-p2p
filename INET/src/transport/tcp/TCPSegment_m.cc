@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from transport/tcp/TCPSegment.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from transport/tcp/TCPSegment.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -57,12 +57,13 @@ class TCPPayloadMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -104,11 +105,11 @@ unsigned int TCPPayloadMessageDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TCPPayloadMessageDescriptor::getFieldName(void *object, int field) const
@@ -119,11 +120,20 @@ const char *TCPPayloadMessageDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "endSequenceNo";
-        case 1: return "msg";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "endSequenceNo",
+        "msg",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int TCPPayloadMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='e' && strcmp(fieldName, "endSequenceNo")==0) return base+0;
+    if (fieldName[0]=='m' && strcmp(fieldName, "msg")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TCPPayloadMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -134,11 +144,11 @@ const char *TCPPayloadMessageDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "unsigned int";
-        case 1: return "cPacketPtr";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "unsigned int",
+        "cPacketPtr",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TCPPayloadMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -168,19 +178,19 @@ int TCPPayloadMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TCPPayloadMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TCPPayloadMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TCPPayloadMessage *pp = (TCPPayloadMessage *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->endSequenceNo,resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->msg; opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return ulong2string(pp->endSequenceNo);
+        case 1: {std::stringstream out; out << pp->msg; return out.str();}
+        default: return "";
     }
 }
 
@@ -207,10 +217,11 @@ const char *TCPPayloadMessageDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "cPacketPtr"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "cPacketPtr",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *TCPPayloadMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -453,12 +464,13 @@ class TCPSegmentDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -501,23 +513,23 @@ unsigned int TCPSegmentDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        case 8: return FD_ISEDITABLE;
-        case 9: return FD_ISEDITABLE;
-        case 10: return FD_ISEDITABLE;
-        case 11: return FD_ISEDITABLE;
-        case 12: return FD_ISEDITABLE;
-        case 13: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<14) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TCPSegmentDescriptor::getFieldName(void *object, int field) const
@@ -528,23 +540,44 @@ const char *TCPSegmentDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "srcPort";
-        case 1: return "destPort";
-        case 2: return "sequenceNo";
-        case 3: return "ackNo";
-        case 4: return "urgBit";
-        case 5: return "ackBit";
-        case 6: return "pshBit";
-        case 7: return "rstBit";
-        case 8: return "synBit";
-        case 9: return "finBit";
-        case 10: return "window";
-        case 11: return "urgentPointer";
-        case 12: return "payloadLength";
-        case 13: return "payload";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "srcPort",
+        "destPort",
+        "sequenceNo",
+        "ackNo",
+        "urgBit",
+        "ackBit",
+        "pshBit",
+        "rstBit",
+        "synBit",
+        "finBit",
+        "window",
+        "urgentPointer",
+        "payloadLength",
+        "payload",
+    };
+    return (field>=0 && field<14) ? fieldNames[field] : NULL;
+}
+
+int TCPSegmentDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcPort")==0) return base+0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destPort")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sequenceNo")==0) return base+2;
+    if (fieldName[0]=='a' && strcmp(fieldName, "ackNo")==0) return base+3;
+    if (fieldName[0]=='u' && strcmp(fieldName, "urgBit")==0) return base+4;
+    if (fieldName[0]=='a' && strcmp(fieldName, "ackBit")==0) return base+5;
+    if (fieldName[0]=='p' && strcmp(fieldName, "pshBit")==0) return base+6;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rstBit")==0) return base+7;
+    if (fieldName[0]=='s' && strcmp(fieldName, "synBit")==0) return base+8;
+    if (fieldName[0]=='f' && strcmp(fieldName, "finBit")==0) return base+9;
+    if (fieldName[0]=='w' && strcmp(fieldName, "window")==0) return base+10;
+    if (fieldName[0]=='u' && strcmp(fieldName, "urgentPointer")==0) return base+11;
+    if (fieldName[0]=='p' && strcmp(fieldName, "payloadLength")==0) return base+12;
+    if (fieldName[0]=='p' && strcmp(fieldName, "payload")==0) return base+13;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TCPSegmentDescriptor::getFieldTypeString(void *object, int field) const
@@ -555,23 +588,23 @@ const char *TCPSegmentDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "short";
-        case 1: return "short";
-        case 2: return "unsigned int";
-        case 3: return "unsigned int";
-        case 4: return "bool";
-        case 5: return "bool";
-        case 6: return "bool";
-        case 7: return "bool";
-        case 8: return "bool";
-        case 9: return "bool";
-        case 10: return "unsigned long";
-        case 11: return "unsigned long";
-        case 12: return "int";
-        case 13: return "TCPPayloadMessage";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "short",
+        "short",
+        "unsigned int",
+        "unsigned int",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "unsigned long",
+        "unsigned long",
+        "int",
+        "TCPPayloadMessage",
+    };
+    return (field>=0 && field<14) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TCPSegmentDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -602,31 +635,31 @@ int TCPSegmentDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TCPSegmentDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TCPSegmentDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TCPSegment_Base *pp = (TCPSegment_Base *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSrcPort(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getDestPort(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getSequenceNo(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getAckNo(),resultbuf,bufsize); return true;
-        case 4: bool2string(pp->getUrgBit(),resultbuf,bufsize); return true;
-        case 5: bool2string(pp->getAckBit(),resultbuf,bufsize); return true;
-        case 6: bool2string(pp->getPshBit(),resultbuf,bufsize); return true;
-        case 7: bool2string(pp->getRstBit(),resultbuf,bufsize); return true;
-        case 8: bool2string(pp->getSynBit(),resultbuf,bufsize); return true;
-        case 9: bool2string(pp->getFinBit(),resultbuf,bufsize); return true;
-        case 10: ulong2string(pp->getWindow(),resultbuf,bufsize); return true;
-        case 11: ulong2string(pp->getUrgentPointer(),resultbuf,bufsize); return true;
-        case 12: long2string(pp->getPayloadLength(),resultbuf,bufsize); return true;
-        case 13: {std::stringstream out; out << pp->getPayload(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSrcPort());
+        case 1: return long2string(pp->getDestPort());
+        case 2: return ulong2string(pp->getSequenceNo());
+        case 3: return ulong2string(pp->getAckNo());
+        case 4: return bool2string(pp->getUrgBit());
+        case 5: return bool2string(pp->getAckBit());
+        case 6: return bool2string(pp->getPshBit());
+        case 7: return bool2string(pp->getRstBit());
+        case 8: return bool2string(pp->getSynBit());
+        case 9: return bool2string(pp->getFinBit());
+        case 10: return ulong2string(pp->getWindow());
+        case 11: return ulong2string(pp->getUrgentPointer());
+        case 12: return long2string(pp->getPayloadLength());
+        case 13: {std::stringstream out; out << pp->getPayload(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -665,10 +698,23 @@ const char *TCPSegmentDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 13: return "TCPPayloadMessage"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        "TCPPayloadMessage",
+    };
+    return (field>=0 && field<14) ? fieldStructNames[field] : NULL;
 }
 
 void *TCPSegmentDescriptor::getFieldStructPointer(void *object, int field, int i) const

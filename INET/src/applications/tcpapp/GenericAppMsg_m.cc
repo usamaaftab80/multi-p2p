@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from applications/tcpapp/GenericAppMsg.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from applications/tcpapp/GenericAppMsg.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -115,12 +115,13 @@ class GenericAppMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -162,12 +163,12 @@ unsigned int GenericAppMsgDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *GenericAppMsgDescriptor::getFieldName(void *object, int field) const
@@ -178,12 +179,22 @@ const char *GenericAppMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "expectedReplyLength";
-        case 1: return "replyDelay";
-        case 2: return "serverClose";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "expectedReplyLength",
+        "replyDelay",
+        "serverClose",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int GenericAppMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='e' && strcmp(fieldName, "expectedReplyLength")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "replyDelay")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "serverClose")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *GenericAppMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -194,12 +205,12 @@ const char *GenericAppMsgDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "double";
-        case 2: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "double",
+        "bool",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *GenericAppMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -229,20 +240,20 @@ int GenericAppMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool GenericAppMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string GenericAppMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     GenericAppMsg *pp = (GenericAppMsg *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getExpectedReplyLength(),resultbuf,bufsize); return true;
-        case 1: double2string(pp->getReplyDelay(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getServerClose(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getExpectedReplyLength());
+        case 1: return double2string(pp->getReplyDelay());
+        case 2: return bool2string(pp->getServerClose());
+        default: return "";
     }
 }
 
@@ -271,9 +282,12 @@ const char *GenericAppMsgDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *GenericAppMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const

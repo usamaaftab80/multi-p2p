@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/ipv4/ICMPMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/ipv4/ICMPMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -114,12 +114,13 @@ class ICMPMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -161,11 +162,11 @@ unsigned int ICMPMessageDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ICMPMessageDescriptor::getFieldName(void *object, int field) const
@@ -176,11 +177,20 @@ const char *ICMPMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "type";
-        case 1: return "code";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "type",
+        "code",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int ICMPMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "type")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "code")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ICMPMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -191,11 +201,11 @@ const char *ICMPMessageDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ICMPMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -228,19 +238,19 @@ int ICMPMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ICMPMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ICMPMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ICMPMessage *pp = (ICMPMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getType(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getCode(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getType());
+        case 1: return long2string(pp->getCode());
+        default: return "";
     }
 }
 
@@ -268,9 +278,11 @@ const char *ICMPMessageDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *ICMPMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

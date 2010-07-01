@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/arp/ARPPacket.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/arp/ARPPacket.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -148,12 +148,13 @@ class ARPPacketDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -195,14 +196,14 @@ unsigned int ARPPacketDescriptor::getFieldTypeFlags(void *object, int field) con
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ARPPacketDescriptor::getFieldName(void *object, int field) const
@@ -213,14 +214,26 @@ const char *ARPPacketDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "opcode";
-        case 1: return "srcMACAddress";
-        case 2: return "destMACAddress";
-        case 3: return "srcIPAddress";
-        case 4: return "destIPAddress";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "opcode",
+        "srcMACAddress",
+        "destMACAddress",
+        "srcIPAddress",
+        "destIPAddress",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int ARPPacketDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='o' && strcmp(fieldName, "opcode")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcMACAddress")==0) return base+1;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destMACAddress")==0) return base+2;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcIPAddress")==0) return base+3;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destIPAddress")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ARPPacketDescriptor::getFieldTypeString(void *object, int field) const
@@ -231,14 +244,14 @@ const char *ARPPacketDescriptor::getFieldTypeString(void *object, int field) con
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "MACAddress";
-        case 2: return "MACAddress";
-        case 3: return "IPAddress";
-        case 4: return "IPAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "MACAddress",
+        "MACAddress",
+        "IPAddress",
+        "IPAddress",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ARPPacketDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -271,22 +284,22 @@ int ARPPacketDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ARPPacketDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ARPPacketDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ARPPacket *pp = (ARPPacket *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getOpcode(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getSrcMACAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getDestMACAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getSrcIPAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: {std::stringstream out; out << pp->getDestIPAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getOpcode());
+        case 1: {std::stringstream out; out << pp->getSrcMACAddress(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getDestMACAddress(); return out.str();}
+        case 3: {std::stringstream out; out << pp->getSrcIPAddress(); return out.str();}
+        case 4: {std::stringstream out; out << pp->getDestIPAddress(); return out.str();}
+        default: return "";
     }
 }
 
@@ -313,13 +326,14 @@ const char *ARPPacketDescriptor::getFieldStructName(void *object, int field) con
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "MACAddress"; break;
-        case 2: return "MACAddress"; break;
-        case 3: return "IPAddress"; break;
-        case 4: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "MACAddress",
+        "MACAddress",
+        "IPAddress",
+        "IPAddress",
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *ARPPacketDescriptor::getFieldStructPointer(void *object, int field, int i) const

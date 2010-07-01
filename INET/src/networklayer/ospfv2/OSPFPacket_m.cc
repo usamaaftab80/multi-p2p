@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/ospfv2/OSPFPacket.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/ospfv2/OSPFPacket.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -105,12 +105,13 @@ class OSPFOptionsDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -152,17 +153,17 @@ unsigned int OSPFOptionsDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFOptionsDescriptor::getFieldName(void *object, int field) const
@@ -173,17 +174,32 @@ const char *OSPFOptionsDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "unused_1";
-        case 1: return "E_ExternalRoutingCapability";
-        case 2: return "MC_MulticastForwarding";
-        case 3: return "NP_Type7LSA";
-        case 4: return "EA_ForwardExternalLSAs";
-        case 5: return "DC_DemandCircuits";
-        case 6: return "unused_2";
-        case 7: return "unused_3";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "unused_1",
+        "E_ExternalRoutingCapability",
+        "MC_MulticastForwarding",
+        "NP_Type7LSA",
+        "EA_ForwardExternalLSAs",
+        "DC_DemandCircuits",
+        "unused_2",
+        "unused_3",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int OSPFOptionsDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='u' && strcmp(fieldName, "unused_1")==0) return base+0;
+    if (fieldName[0]=='E' && strcmp(fieldName, "E_ExternalRoutingCapability")==0) return base+1;
+    if (fieldName[0]=='M' && strcmp(fieldName, "MC_MulticastForwarding")==0) return base+2;
+    if (fieldName[0]=='N' && strcmp(fieldName, "NP_Type7LSA")==0) return base+3;
+    if (fieldName[0]=='E' && strcmp(fieldName, "EA_ForwardExternalLSAs")==0) return base+4;
+    if (fieldName[0]=='D' && strcmp(fieldName, "DC_DemandCircuits")==0) return base+5;
+    if (fieldName[0]=='u' && strcmp(fieldName, "unused_2")==0) return base+6;
+    if (fieldName[0]=='u' && strcmp(fieldName, "unused_3")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFOptionsDescriptor::getFieldTypeString(void *object, int field) const
@@ -194,17 +210,17 @@ const char *OSPFOptionsDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        case 1: return "bool";
-        case 2: return "bool";
-        case 3: return "bool";
-        case 4: return "bool";
-        case 5: return "bool";
-        case 6: return "bool";
-        case 7: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFOptionsDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -234,25 +250,25 @@ int OSPFOptionsDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool OSPFOptionsDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFOptionsDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFOptions *pp = (OSPFOptions *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->unused_1,resultbuf,bufsize); return true;
-        case 1: bool2string(pp->E_ExternalRoutingCapability,resultbuf,bufsize); return true;
-        case 2: bool2string(pp->MC_MulticastForwarding,resultbuf,bufsize); return true;
-        case 3: bool2string(pp->NP_Type7LSA,resultbuf,bufsize); return true;
-        case 4: bool2string(pp->EA_ForwardExternalLSAs,resultbuf,bufsize); return true;
-        case 5: bool2string(pp->DC_DemandCircuits,resultbuf,bufsize); return true;
-        case 6: bool2string(pp->unused_2,resultbuf,bufsize); return true;
-        case 7: bool2string(pp->unused_3,resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return bool2string(pp->unused_1);
+        case 1: return bool2string(pp->E_ExternalRoutingCapability);
+        case 2: return bool2string(pp->MC_MulticastForwarding);
+        case 3: return bool2string(pp->NP_Type7LSA);
+        case 4: return bool2string(pp->EA_ForwardExternalLSAs);
+        case 5: return bool2string(pp->DC_DemandCircuits);
+        case 6: return bool2string(pp->unused_2);
+        case 7: return bool2string(pp->unused_3);
+        default: return "";
     }
 }
 
@@ -286,9 +302,17 @@ const char *OSPFOptionsDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFOptionsDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -447,13 +471,13 @@ unsigned int OSPFPacket::getAuthenticationArraySize() const
 
 char OSPFPacket::getAuthentication(unsigned int k) const
 {
-    if (k>=8) throw cRuntimeError("Array of size 8 indexed by %d", k);
+    if (k>=8) throw cRuntimeError("Array of size 8 indexed by %lu", (unsigned long)k);
     return authentication_var[k];
 }
 
 void OSPFPacket::setAuthentication(unsigned int k, char authentication_var)
 {
-    if (k>=8) throw cRuntimeError("Array of size 8 indexed by %d", k);
+    if (k>=8) throw cRuntimeError("Array of size 8 indexed by %lu", (unsigned long)k);
     this->authentication_var[k] = authentication_var;
 }
 
@@ -467,12 +491,13 @@ class OSPFPacketDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -514,17 +539,17 @@ unsigned int OSPFPacketDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISCOMPOUND;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFPacketDescriptor::getFieldName(void *object, int field) const
@@ -535,17 +560,32 @@ const char *OSPFPacketDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "version";
-        case 1: return "type";
-        case 2: return "packetLength";
-        case 3: return "routerID";
-        case 4: return "areaID";
-        case 5: return "checksum";
-        case 6: return "authenticationType";
-        case 7: return "authentication";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "version",
+        "type",
+        "packetLength",
+        "routerID",
+        "areaID",
+        "checksum",
+        "authenticationType",
+        "authentication",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int OSPFPacketDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='v' && strcmp(fieldName, "version")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "type")==0) return base+1;
+    if (fieldName[0]=='p' && strcmp(fieldName, "packetLength")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "routerID")==0) return base+3;
+    if (fieldName[0]=='a' && strcmp(fieldName, "areaID")==0) return base+4;
+    if (fieldName[0]=='c' && strcmp(fieldName, "checksum")==0) return base+5;
+    if (fieldName[0]=='a' && strcmp(fieldName, "authenticationType")==0) return base+6;
+    if (fieldName[0]=='a' && strcmp(fieldName, "authentication")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFPacketDescriptor::getFieldTypeString(void *object, int field) const
@@ -556,17 +596,17 @@ const char *OSPFPacketDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "char";
-        case 1: return "char";
-        case 2: return "short";
-        case 3: return "IPAddress";
-        case 4: return "IPAddress";
-        case 5: return "short";
-        case 6: return "short";
-        case 7: return "char";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "char",
+        "char",
+        "short",
+        "IPAddress",
+        "IPAddress",
+        "short",
+        "short",
+        "char",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFPacketDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -600,25 +640,25 @@ int OSPFPacketDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool OSPFPacketDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFPacketDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFPacket *pp = (OSPFPacket *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getVersion(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getType(),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getPacketLength(),resultbuf,bufsize); return true;
-        case 3: {std::stringstream out; out << pp->getRouterID(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: {std::stringstream out; out << pp->getAreaID(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 5: long2string(pp->getChecksum(),resultbuf,bufsize); return true;
-        case 6: long2string(pp->getAuthenticationType(),resultbuf,bufsize); return true;
-        case 7: long2string(pp->getAuthentication(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getVersion());
+        case 1: return long2string(pp->getType());
+        case 2: return long2string(pp->getPacketLength());
+        case 3: {std::stringstream out; out << pp->getRouterID(); return out.str();}
+        case 4: {std::stringstream out; out << pp->getAreaID(); return out.str();}
+        case 5: return long2string(pp->getChecksum());
+        case 6: return long2string(pp->getAuthenticationType());
+        case 7: return long2string(pp->getAuthentication(i));
+        default: return "";
     }
 }
 
@@ -650,11 +690,17 @@ const char *OSPFPacketDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 3: return "IPAddress"; break;
-        case 4: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        "IPAddress",
+        "IPAddress",
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFPacketDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -709,7 +755,7 @@ OSPFHelloPacket& OSPFHelloPacket::operator=(const OSPFHelloPacket& other)
     this->designatedRouter_var = other.designatedRouter_var;
     this->backupDesignatedRouter_var = other.backupDesignatedRouter_var;
     delete [] this->neighbor_var;
-    this->neighbor_var = (other.neighbor_arraysize==0) ? NULL : new IPAddress[other.neighbor_arraysize];
+    this->neighbor_var = (other.neighbor_arraysize==0) ? NULL : new ::IPAddress[other.neighbor_arraysize];
     neighbor_arraysize = other.neighbor_arraysize;
     for (unsigned int i=0; i<neighbor_arraysize; i++)
         this->neighbor_var[i] = other.neighbor_var[i];
@@ -745,7 +791,7 @@ void OSPFHelloPacket::parsimUnpack(cCommBuffer *b)
     if (neighbor_arraysize==0) {
         this->neighbor_var = 0;
     } else {
-        this->neighbor_var = new IPAddress[neighbor_arraysize];
+        this->neighbor_var = new ::IPAddress[neighbor_arraysize];
         doUnpacking(b,this->neighbor_var,neighbor_arraysize);
     }
 }
@@ -822,7 +868,7 @@ void OSPFHelloPacket::setBackupDesignatedRouter(const IPAddress& backupDesignate
 
 void OSPFHelloPacket::setNeighborArraySize(unsigned int size)
 {
-    IPAddress *neighbor_var2 = (size==0) ? NULL : new IPAddress[size];
+    ::IPAddress *neighbor_var2 = (size==0) ? NULL : new ::IPAddress[size];
     unsigned int sz = neighbor_arraysize < size ? neighbor_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         neighbor_var2[i] = this->neighbor_var[i];
@@ -858,12 +904,13 @@ class OSPFHelloPacketDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -905,17 +952,17 @@ unsigned int OSPFHelloPacketDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISCOMPOUND;
-        case 6: return FD_ISCOMPOUND;
-        case 7: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFHelloPacketDescriptor::getFieldName(void *object, int field) const
@@ -926,17 +973,32 @@ const char *OSPFHelloPacketDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "networkMask";
-        case 1: return "helloInterval";
-        case 2: return "options";
-        case 3: return "routerPriority";
-        case 4: return "routerDeadInterval";
-        case 5: return "designatedRouter";
-        case 6: return "backupDesignatedRouter";
-        case 7: return "neighbor";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "networkMask",
+        "helloInterval",
+        "options",
+        "routerPriority",
+        "routerDeadInterval",
+        "designatedRouter",
+        "backupDesignatedRouter",
+        "neighbor",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int OSPFHelloPacketDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "networkMask")==0) return base+0;
+    if (fieldName[0]=='h' && strcmp(fieldName, "helloInterval")==0) return base+1;
+    if (fieldName[0]=='o' && strcmp(fieldName, "options")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "routerPriority")==0) return base+3;
+    if (fieldName[0]=='r' && strcmp(fieldName, "routerDeadInterval")==0) return base+4;
+    if (fieldName[0]=='d' && strcmp(fieldName, "designatedRouter")==0) return base+5;
+    if (fieldName[0]=='b' && strcmp(fieldName, "backupDesignatedRouter")==0) return base+6;
+    if (fieldName[0]=='n' && strcmp(fieldName, "neighbor")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFHelloPacketDescriptor::getFieldTypeString(void *object, int field) const
@@ -947,17 +1009,17 @@ const char *OSPFHelloPacketDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "short";
-        case 2: return "OSPFOptions";
-        case 3: return "char";
-        case 4: return "long";
-        case 5: return "IPAddress";
-        case 6: return "IPAddress";
-        case 7: return "IPAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "short",
+        "OSPFOptions",
+        "char",
+        "long",
+        "IPAddress",
+        "IPAddress",
+        "IPAddress",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFHelloPacketDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -988,25 +1050,25 @@ int OSPFHelloPacketDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool OSPFHelloPacketDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFHelloPacketDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFHelloPacket *pp = (OSPFHelloPacket *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNetworkMask(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getHelloInterval(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getOptions(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: long2string(pp->getRouterPriority(),resultbuf,bufsize); return true;
-        case 4: long2string(pp->getRouterDeadInterval(),resultbuf,bufsize); return true;
-        case 5: {std::stringstream out; out << pp->getDesignatedRouter(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 6: {std::stringstream out; out << pp->getBackupDesignatedRouter(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 7: {std::stringstream out; out << pp->getNeighbor(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNetworkMask(); return out.str();}
+        case 1: return long2string(pp->getHelloInterval());
+        case 2: {std::stringstream out; out << pp->getOptions(); return out.str();}
+        case 3: return long2string(pp->getRouterPriority());
+        case 4: return long2string(pp->getRouterDeadInterval());
+        case 5: {std::stringstream out; out << pp->getDesignatedRouter(); return out.str();}
+        case 6: {std::stringstream out; out << pp->getBackupDesignatedRouter(); return out.str();}
+        case 7: {std::stringstream out; out << pp->getNeighbor(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -1035,14 +1097,17 @@ const char *OSPFHelloPacketDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        case 2: return "OSPFOptions"; break;
-        case 5: return "IPAddress"; break;
-        case 6: return "IPAddress"; break;
-        case 7: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        NULL,
+        "OSPFOptions",
+        NULL,
+        NULL,
+        "IPAddress",
+        "IPAddress",
+        "IPAddress",
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFHelloPacketDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1214,12 +1279,13 @@ class OSPFLSAHeaderDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1261,17 +1327,17 @@ unsigned int OSPFLSAHeaderDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISCOMPOUND;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFLSAHeaderDescriptor::getFieldName(void *object, int field) const
@@ -1282,17 +1348,32 @@ const char *OSPFLSAHeaderDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "lsAge";
-        case 1: return "lsOptions";
-        case 2: return "lsType";
-        case 3: return "linkStateID";
-        case 4: return "advertisingRouter";
-        case 5: return "lsSequenceNumber";
-        case 6: return "lsChecksum";
-        case 7: return "lsaLength";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "lsAge",
+        "lsOptions",
+        "lsType",
+        "linkStateID",
+        "advertisingRouter",
+        "lsSequenceNumber",
+        "lsChecksum",
+        "lsaLength",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int OSPFLSAHeaderDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lsAge")==0) return base+0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lsOptions")==0) return base+1;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lsType")==0) return base+2;
+    if (fieldName[0]=='l' && strcmp(fieldName, "linkStateID")==0) return base+3;
+    if (fieldName[0]=='a' && strcmp(fieldName, "advertisingRouter")==0) return base+4;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lsSequenceNumber")==0) return base+5;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lsChecksum")==0) return base+6;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lsaLength")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFLSAHeaderDescriptor::getFieldTypeString(void *object, int field) const
@@ -1303,17 +1384,17 @@ const char *OSPFLSAHeaderDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "unsigned short";
-        case 1: return "OSPFOptions";
-        case 2: return "char";
-        case 3: return "unsigned long";
-        case 4: return "IPAddress";
-        case 5: return "long";
-        case 6: return "short";
-        case 7: return "unsigned short";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "unsigned short",
+        "OSPFOptions",
+        "char",
+        "unsigned long",
+        "IPAddress",
+        "long",
+        "short",
+        "unsigned short",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFLSAHeaderDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1346,25 +1427,25 @@ int OSPFLSAHeaderDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool OSPFLSAHeaderDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFLSAHeaderDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFLSAHeader *pp = (OSPFLSAHeader *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getLsAge(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getLsOptions(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: long2string(pp->getLsType(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getLinkStateID(),resultbuf,bufsize); return true;
-        case 4: {std::stringstream out; out << pp->getAdvertisingRouter(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 5: long2string(pp->getLsSequenceNumber(),resultbuf,bufsize); return true;
-        case 6: long2string(pp->getLsChecksum(),resultbuf,bufsize); return true;
-        case 7: ulong2string(pp->getLsaLength(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return ulong2string(pp->getLsAge());
+        case 1: {std::stringstream out; out << pp->getLsOptions(); return out.str();}
+        case 2: return long2string(pp->getLsType());
+        case 3: return ulong2string(pp->getLinkStateID());
+        case 4: {std::stringstream out; out << pp->getAdvertisingRouter(); return out.str();}
+        case 5: return long2string(pp->getLsSequenceNumber());
+        case 6: return long2string(pp->getLsChecksum());
+        case 7: return ulong2string(pp->getLsaLength());
+        default: return "";
     }
 }
 
@@ -1396,11 +1477,17 @@ const char *OSPFLSAHeaderDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "OSPFOptions"; break;
-        case 4: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "OSPFOptions",
+        NULL,
+        NULL,
+        "IPAddress",
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFLSAHeaderDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1472,12 +1559,13 @@ class OSPFLSADescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1519,10 +1607,10 @@ unsigned int OSPFLSADescriptor::getFieldTypeFlags(void *object, int field) const
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND | FD_ISCOBJECT,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFLSADescriptor::getFieldName(void *object, int field) const
@@ -1533,10 +1621,18 @@ const char *OSPFLSADescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "header";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "header",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int OSPFLSADescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='h' && strcmp(fieldName, "header")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFLSADescriptor::getFieldTypeString(void *object, int field) const
@@ -1547,10 +1643,10 @@ const char *OSPFLSADescriptor::getFieldTypeString(void *object, int field) const
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OSPFLSAHeader";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OSPFLSAHeader",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFLSADescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1580,18 +1676,18 @@ int OSPFLSADescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool OSPFLSADescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFLSADescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFLSA *pp = (OSPFLSA *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getHeader(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getHeader(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1617,10 +1713,10 @@ const char *OSPFLSADescriptor::getFieldStructName(void *object, int field) const
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OSPFLSAHeader"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OSPFLSAHeader",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFLSADescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1667,12 +1763,13 @@ class TOSDataDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1714,11 +1811,11 @@ unsigned int TOSDataDescriptor::getFieldTypeFlags(void *object, int field) const
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TOSDataDescriptor::getFieldName(void *object, int field) const
@@ -1729,11 +1826,20 @@ const char *TOSDataDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "tos";
-        case 1: return "tosMetric";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "tos",
+        "tosMetric",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int TOSDataDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "tos")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "tosMetric")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TOSDataDescriptor::getFieldTypeString(void *object, int field) const
@@ -1744,11 +1850,11 @@ const char *TOSDataDescriptor::getFieldTypeString(void *object, int field) const
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "unsigned char";
-        case 1: return "unsigned char";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "unsigned char",
+        "unsigned char",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TOSDataDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1779,20 +1885,20 @@ int TOSDataDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TOSDataDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TOSDataDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TOSData *pp = (TOSData *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->tos,resultbuf,bufsize); return true;
-        case 1: if (i>=3) return false;
-                ulong2string(pp->tosMetric[i],resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return ulong2string(pp->tos);
+        case 1: if (i>=3) return "";
+                return ulong2string(pp->tosMetric[i]);
+        default: return "";
     }
 }
 
@@ -1821,9 +1927,11 @@ const char *TOSDataDescriptor::getFieldStructName(void *object, int field) const
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *TOSDataDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1874,7 +1982,7 @@ Link& Link::operator=(const Link& other)
     this->numberOfTOS_var = other.numberOfTOS_var;
     this->linkCost_var = other.linkCost_var;
     delete [] this->tosData_var;
-    this->tosData_var = (other.tosData_arraysize==0) ? NULL : new TOSData[other.tosData_arraysize];
+    this->tosData_var = (other.tosData_arraysize==0) ? NULL : new ::TOSData[other.tosData_arraysize];
     tosData_arraysize = other.tosData_arraysize;
     for (unsigned int i=0; i<tosData_arraysize; i++)
         this->tosData_var[i] = other.tosData_var[i];
@@ -1904,7 +2012,7 @@ void Link::parsimUnpack(cCommBuffer *b)
     if (tosData_arraysize==0) {
         this->tosData_var = 0;
     } else {
-        this->tosData_var = new TOSData[tosData_arraysize];
+        this->tosData_var = new ::TOSData[tosData_arraysize];
         doUnpacking(b,this->tosData_var,tosData_arraysize);
     }
 }
@@ -1961,7 +2069,7 @@ void Link::setLinkCost(unsigned long linkCost_var)
 
 void Link::setTosDataArraySize(unsigned int size)
 {
-    TOSData *tosData_var2 = (size==0) ? NULL : new TOSData[size];
+    ::TOSData *tosData_var2 = (size==0) ? NULL : new ::TOSData[size];
     unsigned int sz = tosData_arraysize < size ? tosData_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         tosData_var2[i] = this->tosData_var[i];
@@ -1997,12 +2105,13 @@ class LinkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2044,15 +2153,15 @@ unsigned int LinkDescriptor::getFieldTypeFlags(void *object, int field) const
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<6) ? fieldTypeFlags[field] : 0;
 }
 
 const char *LinkDescriptor::getFieldName(void *object, int field) const
@@ -2063,15 +2172,28 @@ const char *LinkDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "linkID";
-        case 1: return "linkData";
-        case 2: return "type";
-        case 3: return "numberOfTOS";
-        case 4: return "linkCost";
-        case 5: return "tosData";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "linkID",
+        "linkData",
+        "type",
+        "numberOfTOS",
+        "linkCost",
+        "tosData",
+    };
+    return (field>=0 && field<6) ? fieldNames[field] : NULL;
+}
+
+int LinkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "linkID")==0) return base+0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "linkData")==0) return base+1;
+    if (fieldName[0]=='t' && strcmp(fieldName, "type")==0) return base+2;
+    if (fieldName[0]=='n' && strcmp(fieldName, "numberOfTOS")==0) return base+3;
+    if (fieldName[0]=='l' && strcmp(fieldName, "linkCost")==0) return base+4;
+    if (fieldName[0]=='t' && strcmp(fieldName, "tosData")==0) return base+5;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *LinkDescriptor::getFieldTypeString(void *object, int field) const
@@ -2082,15 +2204,15 @@ const char *LinkDescriptor::getFieldTypeString(void *object, int field) const
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "unsigned long";
-        case 2: return "unsigned char";
-        case 3: return "unsigned char";
-        case 4: return "unsigned long";
-        case 5: return "TOSData";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "unsigned long",
+        "unsigned char",
+        "unsigned char",
+        "unsigned long",
+        "TOSData",
+    };
+    return (field>=0 && field<6) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *LinkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2124,23 +2246,23 @@ int LinkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool LinkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string LinkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Link *pp = (Link *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getLinkID(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: ulong2string(pp->getLinkData(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getType(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getNumberOfTOS(),resultbuf,bufsize); return true;
-        case 4: ulong2string(pp->getLinkCost(),resultbuf,bufsize); return true;
-        case 5: {std::stringstream out; out << pp->getTosData(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getLinkID(); return out.str();}
+        case 1: return ulong2string(pp->getLinkData());
+        case 2: return ulong2string(pp->getType());
+        case 3: return ulong2string(pp->getNumberOfTOS());
+        case 4: return ulong2string(pp->getLinkCost());
+        case 5: {std::stringstream out; out << pp->getTosData(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -2170,11 +2292,15 @@ const char *LinkDescriptor::getFieldStructName(void *object, int field) const
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        case 5: return "TOSData"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        "TOSData",
+    };
+    return (field>=0 && field<6) ? fieldStructNames[field] : NULL;
 }
 
 void *LinkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2226,7 +2352,7 @@ OSPFRouterLSA& OSPFRouterLSA::operator=(const OSPFRouterLSA& other)
     this->B_AreaBorderRouter_var = other.B_AreaBorderRouter_var;
     this->numberOfLinks_var = other.numberOfLinks_var;
     delete [] this->links_var;
-    this->links_var = (other.links_arraysize==0) ? NULL : new Link[other.links_arraysize];
+    this->links_var = (other.links_arraysize==0) ? NULL : new ::Link[other.links_arraysize];
     links_arraysize = other.links_arraysize;
     for (unsigned int i=0; i<links_arraysize; i++)
         this->links_var[i] = other.links_var[i];
@@ -2256,7 +2382,7 @@ void OSPFRouterLSA::parsimUnpack(cCommBuffer *b)
     if (links_arraysize==0) {
         this->links_var = 0;
     } else {
-        this->links_var = new Link[links_arraysize];
+        this->links_var = new ::Link[links_arraysize];
         doUnpacking(b,this->links_var,links_arraysize);
     }
 }
@@ -2303,7 +2429,7 @@ void OSPFRouterLSA::setNumberOfLinks(unsigned short numberOfLinks_var)
 
 void OSPFRouterLSA::setLinksArraySize(unsigned int size)
 {
-    Link *links_var2 = (size==0) ? NULL : new Link[size];
+    ::Link *links_var2 = (size==0) ? NULL : new ::Link[size];
     unsigned int sz = links_arraysize < size ? links_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         links_var2[i] = this->links_var[i];
@@ -2339,12 +2465,13 @@ class OSPFRouterLSADescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2386,14 +2513,14 @@ unsigned int OSPFRouterLSADescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISARRAY | FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND | FD_ISCOBJECT,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFRouterLSADescriptor::getFieldName(void *object, int field) const
@@ -2404,14 +2531,26 @@ const char *OSPFRouterLSADescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "V_VirtualLinkEndpoint";
-        case 1: return "E_ASBoundaryRouter";
-        case 2: return "B_AreaBorderRouter";
-        case 3: return "numberOfLinks";
-        case 4: return "links";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "V_VirtualLinkEndpoint",
+        "E_ASBoundaryRouter",
+        "B_AreaBorderRouter",
+        "numberOfLinks",
+        "links",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int OSPFRouterLSADescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='V' && strcmp(fieldName, "V_VirtualLinkEndpoint")==0) return base+0;
+    if (fieldName[0]=='E' && strcmp(fieldName, "E_ASBoundaryRouter")==0) return base+1;
+    if (fieldName[0]=='B' && strcmp(fieldName, "B_AreaBorderRouter")==0) return base+2;
+    if (fieldName[0]=='n' && strcmp(fieldName, "numberOfLinks")==0) return base+3;
+    if (fieldName[0]=='l' && strcmp(fieldName, "links")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFRouterLSADescriptor::getFieldTypeString(void *object, int field) const
@@ -2422,14 +2561,14 @@ const char *OSPFRouterLSADescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        case 1: return "bool";
-        case 2: return "bool";
-        case 3: return "unsigned short";
-        case 4: return "Link";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+        "bool",
+        "bool",
+        "unsigned short",
+        "Link",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFRouterLSADescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2460,22 +2599,22 @@ int OSPFRouterLSADescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool OSPFRouterLSADescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFRouterLSADescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFRouterLSA *pp = (OSPFRouterLSA *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->getV_VirtualLinkEndpoint(),resultbuf,bufsize); return true;
-        case 1: bool2string(pp->getE_ASBoundaryRouter(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getB_AreaBorderRouter(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getNumberOfLinks(),resultbuf,bufsize); return true;
-        case 4: {std::stringstream out; out << pp->getLinks(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return bool2string(pp->getV_VirtualLinkEndpoint());
+        case 1: return bool2string(pp->getE_ASBoundaryRouter());
+        case 2: return bool2string(pp->getB_AreaBorderRouter());
+        case 3: return ulong2string(pp->getNumberOfLinks());
+        case 4: {std::stringstream out; out << pp->getLinks(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -2505,10 +2644,14 @@ const char *OSPFRouterLSADescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 4: return "Link"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        "Link",
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFRouterLSADescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2552,7 +2695,7 @@ OSPFNetworkLSA& OSPFNetworkLSA::operator=(const OSPFNetworkLSA& other)
     OSPFLSA::operator=(other);
     this->networkMask_var = other.networkMask_var;
     delete [] this->attachedRouters_var;
-    this->attachedRouters_var = (other.attachedRouters_arraysize==0) ? NULL : new IPAddress[other.attachedRouters_arraysize];
+    this->attachedRouters_var = (other.attachedRouters_arraysize==0) ? NULL : new ::IPAddress[other.attachedRouters_arraysize];
     attachedRouters_arraysize = other.attachedRouters_arraysize;
     for (unsigned int i=0; i<attachedRouters_arraysize; i++)
         this->attachedRouters_var[i] = other.attachedRouters_var[i];
@@ -2576,7 +2719,7 @@ void OSPFNetworkLSA::parsimUnpack(cCommBuffer *b)
     if (attachedRouters_arraysize==0) {
         this->attachedRouters_var = 0;
     } else {
-        this->attachedRouters_var = new IPAddress[attachedRouters_arraysize];
+        this->attachedRouters_var = new ::IPAddress[attachedRouters_arraysize];
         doUnpacking(b,this->attachedRouters_var,attachedRouters_arraysize);
     }
 }
@@ -2593,7 +2736,7 @@ void OSPFNetworkLSA::setNetworkMask(const IPAddress& networkMask_var)
 
 void OSPFNetworkLSA::setAttachedRoutersArraySize(unsigned int size)
 {
-    IPAddress *attachedRouters_var2 = (size==0) ? NULL : new IPAddress[size];
+    ::IPAddress *attachedRouters_var2 = (size==0) ? NULL : new ::IPAddress[size];
     unsigned int sz = attachedRouters_arraysize < size ? attachedRouters_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         attachedRouters_var2[i] = this->attachedRouters_var[i];
@@ -2629,12 +2772,13 @@ class OSPFNetworkLSADescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2676,11 +2820,11 @@ unsigned int OSPFNetworkLSADescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFNetworkLSADescriptor::getFieldName(void *object, int field) const
@@ -2691,11 +2835,20 @@ const char *OSPFNetworkLSADescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "networkMask";
-        case 1: return "attachedRouters";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "networkMask",
+        "attachedRouters",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int OSPFNetworkLSADescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "networkMask")==0) return base+0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "attachedRouters")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFNetworkLSADescriptor::getFieldTypeString(void *object, int field) const
@@ -2706,11 +2859,11 @@ const char *OSPFNetworkLSADescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "IPAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "IPAddress",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFNetworkLSADescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2741,19 +2894,19 @@ int OSPFNetworkLSADescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool OSPFNetworkLSADescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFNetworkLSADescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFNetworkLSA *pp = (OSPFNetworkLSA *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNetworkMask(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getAttachedRouters(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNetworkMask(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getAttachedRouters(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -2779,11 +2932,11 @@ const char *OSPFNetworkLSADescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        case 1: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        "IPAddress",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFNetworkLSADescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2830,7 +2983,7 @@ OSPFSummaryLSA& OSPFSummaryLSA::operator=(const OSPFSummaryLSA& other)
     this->networkMask_var = other.networkMask_var;
     this->routeCost_var = other.routeCost_var;
     delete [] this->tosData_var;
-    this->tosData_var = (other.tosData_arraysize==0) ? NULL : new TOSData[other.tosData_arraysize];
+    this->tosData_var = (other.tosData_arraysize==0) ? NULL : new ::TOSData[other.tosData_arraysize];
     tosData_arraysize = other.tosData_arraysize;
     for (unsigned int i=0; i<tosData_arraysize; i++)
         this->tosData_var[i] = other.tosData_var[i];
@@ -2856,7 +3009,7 @@ void OSPFSummaryLSA::parsimUnpack(cCommBuffer *b)
     if (tosData_arraysize==0) {
         this->tosData_var = 0;
     } else {
-        this->tosData_var = new TOSData[tosData_arraysize];
+        this->tosData_var = new ::TOSData[tosData_arraysize];
         doUnpacking(b,this->tosData_var,tosData_arraysize);
     }
 }
@@ -2883,7 +3036,7 @@ void OSPFSummaryLSA::setRouteCost(unsigned long routeCost_var)
 
 void OSPFSummaryLSA::setTosDataArraySize(unsigned int size)
 {
-    TOSData *tosData_var2 = (size==0) ? NULL : new TOSData[size];
+    ::TOSData *tosData_var2 = (size==0) ? NULL : new ::TOSData[size];
     unsigned int sz = tosData_arraysize < size ? tosData_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         tosData_var2[i] = this->tosData_var[i];
@@ -2919,12 +3072,13 @@ class OSPFSummaryLSADescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2966,12 +3120,12 @@ unsigned int OSPFSummaryLSADescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFSummaryLSADescriptor::getFieldName(void *object, int field) const
@@ -2982,12 +3136,22 @@ const char *OSPFSummaryLSADescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "networkMask";
-        case 1: return "routeCost";
-        case 2: return "tosData";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "networkMask",
+        "routeCost",
+        "tosData",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int OSPFSummaryLSADescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "networkMask")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "routeCost")==0) return base+1;
+    if (fieldName[0]=='t' && strcmp(fieldName, "tosData")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFSummaryLSADescriptor::getFieldTypeString(void *object, int field) const
@@ -2998,12 +3162,12 @@ const char *OSPFSummaryLSADescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "unsigned long";
-        case 2: return "TOSData";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "unsigned long",
+        "TOSData",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFSummaryLSADescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -3034,20 +3198,20 @@ int OSPFSummaryLSADescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool OSPFSummaryLSADescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFSummaryLSADescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFSummaryLSA *pp = (OSPFSummaryLSA *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNetworkMask(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: ulong2string(pp->getRouteCost(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getTosData(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNetworkMask(); return out.str();}
+        case 1: return ulong2string(pp->getRouteCost());
+        case 2: {std::stringstream out; out << pp->getTosData(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -3074,11 +3238,12 @@ const char *OSPFSummaryLSADescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        case 2: return "TOSData"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        NULL,
+        "TOSData",
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFSummaryLSADescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -3129,12 +3294,13 @@ class ExternalTOSInfoDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -3176,13 +3342,13 @@ unsigned int ExternalTOSInfoDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ExternalTOSInfoDescriptor::getFieldName(void *object, int field) const
@@ -3193,13 +3359,24 @@ const char *ExternalTOSInfoDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "tosData";
-        case 1: return "E_ExternalMetricType";
-        case 2: return "forwardingAddress";
-        case 3: return "externalRouteTag";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "tosData",
+        "E_ExternalMetricType",
+        "forwardingAddress",
+        "externalRouteTag",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int ExternalTOSInfoDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "tosData")==0) return base+0;
+    if (fieldName[0]=='E' && strcmp(fieldName, "E_ExternalMetricType")==0) return base+1;
+    if (fieldName[0]=='f' && strcmp(fieldName, "forwardingAddress")==0) return base+2;
+    if (fieldName[0]=='e' && strcmp(fieldName, "externalRouteTag")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ExternalTOSInfoDescriptor::getFieldTypeString(void *object, int field) const
@@ -3210,13 +3387,13 @@ const char *ExternalTOSInfoDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TOSData";
-        case 1: return "bool";
-        case 2: return "IPAddress";
-        case 3: return "long";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TOSData",
+        "bool",
+        "IPAddress",
+        "long",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ExternalTOSInfoDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -3246,21 +3423,21 @@ int ExternalTOSInfoDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ExternalTOSInfoDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ExternalTOSInfoDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ExternalTOSInfo *pp = (ExternalTOSInfo *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->tosData; opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: bool2string(pp->E_ExternalMetricType,resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->forwardingAddress; opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: long2string(pp->externalRouteTag,resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->tosData; return out.str();}
+        case 1: return bool2string(pp->E_ExternalMetricType);
+        case 2: {std::stringstream out; out << pp->forwardingAddress; return out.str();}
+        case 3: return long2string(pp->externalRouteTag);
+        default: return "";
     }
 }
 
@@ -3288,11 +3465,13 @@ const char *ExternalTOSInfoDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TOSData"; break;
-        case 2: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TOSData",
+        NULL,
+        "IPAddress",
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *ExternalTOSInfoDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -3344,7 +3523,7 @@ OSPFASExternalLSAContents& OSPFASExternalLSAContents::operator=(const OSPFASExte
     this->forwardingAddress_var = other.forwardingAddress_var;
     this->externalRouteTag_var = other.externalRouteTag_var;
     delete [] this->externalTOSInfo_var;
-    this->externalTOSInfo_var = (other.externalTOSInfo_arraysize==0) ? NULL : new ExternalTOSInfo[other.externalTOSInfo_arraysize];
+    this->externalTOSInfo_var = (other.externalTOSInfo_arraysize==0) ? NULL : new ::ExternalTOSInfo[other.externalTOSInfo_arraysize];
     externalTOSInfo_arraysize = other.externalTOSInfo_arraysize;
     for (unsigned int i=0; i<externalTOSInfo_arraysize; i++)
         this->externalTOSInfo_var[i] = other.externalTOSInfo_var[i];
@@ -3374,7 +3553,7 @@ void OSPFASExternalLSAContents::parsimUnpack(cCommBuffer *b)
     if (externalTOSInfo_arraysize==0) {
         this->externalTOSInfo_var = 0;
     } else {
-        this->externalTOSInfo_var = new ExternalTOSInfo[externalTOSInfo_arraysize];
+        this->externalTOSInfo_var = new ::ExternalTOSInfo[externalTOSInfo_arraysize];
         doUnpacking(b,this->externalTOSInfo_var,externalTOSInfo_arraysize);
     }
 }
@@ -3431,7 +3610,7 @@ void OSPFASExternalLSAContents::setExternalRouteTag(long externalRouteTag_var)
 
 void OSPFASExternalLSAContents::setExternalTOSInfoArraySize(unsigned int size)
 {
-    ExternalTOSInfo *externalTOSInfo_var2 = (size==0) ? NULL : new ExternalTOSInfo[size];
+    ::ExternalTOSInfo *externalTOSInfo_var2 = (size==0) ? NULL : new ::ExternalTOSInfo[size];
     unsigned int sz = externalTOSInfo_arraysize < size ? externalTOSInfo_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         externalTOSInfo_var2[i] = this->externalTOSInfo_var[i];
@@ -3467,12 +3646,13 @@ class OSPFASExternalLSAContentsDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -3514,15 +3694,15 @@ unsigned int OSPFASExternalLSAContentsDescriptor::getFieldTypeFlags(void *object
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<6) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFASExternalLSAContentsDescriptor::getFieldName(void *object, int field) const
@@ -3533,15 +3713,28 @@ const char *OSPFASExternalLSAContentsDescriptor::getFieldName(void *object, int 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "networkMask";
-        case 1: return "E_ExternalMetricType";
-        case 2: return "routeCost";
-        case 3: return "forwardingAddress";
-        case 4: return "externalRouteTag";
-        case 5: return "externalTOSInfo";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "networkMask",
+        "E_ExternalMetricType",
+        "routeCost",
+        "forwardingAddress",
+        "externalRouteTag",
+        "externalTOSInfo",
+    };
+    return (field>=0 && field<6) ? fieldNames[field] : NULL;
+}
+
+int OSPFASExternalLSAContentsDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "networkMask")==0) return base+0;
+    if (fieldName[0]=='E' && strcmp(fieldName, "E_ExternalMetricType")==0) return base+1;
+    if (fieldName[0]=='r' && strcmp(fieldName, "routeCost")==0) return base+2;
+    if (fieldName[0]=='f' && strcmp(fieldName, "forwardingAddress")==0) return base+3;
+    if (fieldName[0]=='e' && strcmp(fieldName, "externalRouteTag")==0) return base+4;
+    if (fieldName[0]=='e' && strcmp(fieldName, "externalTOSInfo")==0) return base+5;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFASExternalLSAContentsDescriptor::getFieldTypeString(void *object, int field) const
@@ -3552,15 +3745,15 @@ const char *OSPFASExternalLSAContentsDescriptor::getFieldTypeString(void *object
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "bool";
-        case 2: return "unsigned long";
-        case 3: return "IPAddress";
-        case 4: return "long";
-        case 5: return "ExternalTOSInfo";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "bool",
+        "unsigned long",
+        "IPAddress",
+        "long",
+        "ExternalTOSInfo",
+    };
+    return (field>=0 && field<6) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFASExternalLSAContentsDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -3591,23 +3784,23 @@ int OSPFASExternalLSAContentsDescriptor::getArraySize(void *object, int field) c
     }
 }
 
-bool OSPFASExternalLSAContentsDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFASExternalLSAContentsDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFASExternalLSAContents *pp = (OSPFASExternalLSAContents *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNetworkMask(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: bool2string(pp->getE_ExternalMetricType(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getRouteCost(),resultbuf,bufsize); return true;
-        case 3: {std::stringstream out; out << pp->getForwardingAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: long2string(pp->getExternalRouteTag(),resultbuf,bufsize); return true;
-        case 5: {std::stringstream out; out << pp->getExternalTOSInfo(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNetworkMask(); return out.str();}
+        case 1: return bool2string(pp->getE_ExternalMetricType());
+        case 2: return ulong2string(pp->getRouteCost());
+        case 3: {std::stringstream out; out << pp->getForwardingAddress(); return out.str();}
+        case 4: return long2string(pp->getExternalRouteTag());
+        case 5: {std::stringstream out; out << pp->getExternalTOSInfo(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -3636,12 +3829,15 @@ const char *OSPFASExternalLSAContentsDescriptor::getFieldStructName(void *object
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        case 3: return "IPAddress"; break;
-        case 5: return "ExternalTOSInfo"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        NULL,
+        NULL,
+        "IPAddress",
+        NULL,
+        "ExternalTOSInfo",
+    };
+    return (field>=0 && field<6) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFASExternalLSAContentsDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -3716,12 +3912,13 @@ class OSPFASExternalLSADescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -3763,10 +3960,10 @@ unsigned int OSPFASExternalLSADescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND | FD_ISCOBJECT,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFASExternalLSADescriptor::getFieldName(void *object, int field) const
@@ -3777,10 +3974,18 @@ const char *OSPFASExternalLSADescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "contents";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "contents",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int OSPFASExternalLSADescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "contents")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFASExternalLSADescriptor::getFieldTypeString(void *object, int field) const
@@ -3791,10 +3996,10 @@ const char *OSPFASExternalLSADescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OSPFASExternalLSAContents";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OSPFASExternalLSAContents",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFASExternalLSADescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -3824,18 +4029,18 @@ int OSPFASExternalLSADescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool OSPFASExternalLSADescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFASExternalLSADescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFASExternalLSA *pp = (OSPFASExternalLSA *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getContents(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getContents(); return out.str();}
+        default: return "";
     }
 }
 
@@ -3861,10 +4066,10 @@ const char *OSPFASExternalLSADescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OSPFASExternalLSAContents"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OSPFASExternalLSAContents",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFASExternalLSADescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -3928,12 +4133,13 @@ class OSPFDDOptionsDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -3975,17 +4181,17 @@ unsigned int OSPFDDOptionsDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFDDOptionsDescriptor::getFieldName(void *object, int field) const
@@ -3996,17 +4202,32 @@ const char *OSPFDDOptionsDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "unused_1";
-        case 1: return "unused_2";
-        case 2: return "unused_3";
-        case 3: return "unused_4";
-        case 4: return "unused_5";
-        case 5: return "I_Init";
-        case 6: return "M_More";
-        case 7: return "MS_MasterSlave";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "unused_1",
+        "unused_2",
+        "unused_3",
+        "unused_4",
+        "unused_5",
+        "I_Init",
+        "M_More",
+        "MS_MasterSlave",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int OSPFDDOptionsDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='u' && strcmp(fieldName, "unused_1")==0) return base+0;
+    if (fieldName[0]=='u' && strcmp(fieldName, "unused_2")==0) return base+1;
+    if (fieldName[0]=='u' && strcmp(fieldName, "unused_3")==0) return base+2;
+    if (fieldName[0]=='u' && strcmp(fieldName, "unused_4")==0) return base+3;
+    if (fieldName[0]=='u' && strcmp(fieldName, "unused_5")==0) return base+4;
+    if (fieldName[0]=='I' && strcmp(fieldName, "I_Init")==0) return base+5;
+    if (fieldName[0]=='M' && strcmp(fieldName, "M_More")==0) return base+6;
+    if (fieldName[0]=='M' && strcmp(fieldName, "MS_MasterSlave")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFDDOptionsDescriptor::getFieldTypeString(void *object, int field) const
@@ -4017,17 +4238,17 @@ const char *OSPFDDOptionsDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        case 1: return "bool";
-        case 2: return "bool";
-        case 3: return "bool";
-        case 4: return "bool";
-        case 5: return "bool";
-        case 6: return "bool";
-        case 7: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFDDOptionsDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4057,25 +4278,25 @@ int OSPFDDOptionsDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool OSPFDDOptionsDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFDDOptionsDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFDDOptions *pp = (OSPFDDOptions *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->unused_1,resultbuf,bufsize); return true;
-        case 1: bool2string(pp->unused_2,resultbuf,bufsize); return true;
-        case 2: bool2string(pp->unused_3,resultbuf,bufsize); return true;
-        case 3: bool2string(pp->unused_4,resultbuf,bufsize); return true;
-        case 4: bool2string(pp->unused_5,resultbuf,bufsize); return true;
-        case 5: bool2string(pp->I_Init,resultbuf,bufsize); return true;
-        case 6: bool2string(pp->M_More,resultbuf,bufsize); return true;
-        case 7: bool2string(pp->MS_MasterSlave,resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return bool2string(pp->unused_1);
+        case 1: return bool2string(pp->unused_2);
+        case 2: return bool2string(pp->unused_3);
+        case 3: return bool2string(pp->unused_4);
+        case 4: return bool2string(pp->unused_5);
+        case 5: return bool2string(pp->I_Init);
+        case 6: return bool2string(pp->M_More);
+        case 7: return bool2string(pp->MS_MasterSlave);
+        default: return "";
     }
 }
 
@@ -4109,9 +4330,17 @@ const char *OSPFDDOptionsDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFDDOptionsDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4160,7 +4389,7 @@ OSPFDatabaseDescriptionPacket& OSPFDatabaseDescriptionPacket::operator=(const OS
     this->ddOptions_var = other.ddOptions_var;
     this->ddSequenceNumber_var = other.ddSequenceNumber_var;
     delete [] this->lsaHeaders_var;
-    this->lsaHeaders_var = (other.lsaHeaders_arraysize==0) ? NULL : new OSPFLSAHeader[other.lsaHeaders_arraysize];
+    this->lsaHeaders_var = (other.lsaHeaders_arraysize==0) ? NULL : new ::OSPFLSAHeader[other.lsaHeaders_arraysize];
     lsaHeaders_arraysize = other.lsaHeaders_arraysize;
     for (unsigned int i=0; i<lsaHeaders_arraysize; i++)
         this->lsaHeaders_var[i] = other.lsaHeaders_var[i];
@@ -4190,7 +4419,7 @@ void OSPFDatabaseDescriptionPacket::parsimUnpack(cCommBuffer *b)
     if (lsaHeaders_arraysize==0) {
         this->lsaHeaders_var = 0;
     } else {
-        this->lsaHeaders_var = new OSPFLSAHeader[lsaHeaders_arraysize];
+        this->lsaHeaders_var = new ::OSPFLSAHeader[lsaHeaders_arraysize];
         doUnpacking(b,this->lsaHeaders_var,lsaHeaders_arraysize);
     }
 }
@@ -4237,7 +4466,7 @@ void OSPFDatabaseDescriptionPacket::setDdSequenceNumber(unsigned long ddSequence
 
 void OSPFDatabaseDescriptionPacket::setLsaHeadersArraySize(unsigned int size)
 {
-    OSPFLSAHeader *lsaHeaders_var2 = (size==0) ? NULL : new OSPFLSAHeader[size];
+    ::OSPFLSAHeader *lsaHeaders_var2 = (size==0) ? NULL : new ::OSPFLSAHeader[size];
     unsigned int sz = lsaHeaders_arraysize < size ? lsaHeaders_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         lsaHeaders_var2[i] = this->lsaHeaders_var[i];
@@ -4273,12 +4502,13 @@ class OSPFDatabaseDescriptionPacketDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4320,14 +4550,14 @@ unsigned int OSPFDatabaseDescriptionPacketDescriptor::getFieldTypeFlags(void *ob
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISARRAY | FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND | FD_ISCOBJECT,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFDatabaseDescriptionPacketDescriptor::getFieldName(void *object, int field) const
@@ -4338,14 +4568,26 @@ const char *OSPFDatabaseDescriptionPacketDescriptor::getFieldName(void *object, 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "interfaceMTU";
-        case 1: return "options";
-        case 2: return "ddOptions";
-        case 3: return "ddSequenceNumber";
-        case 4: return "lsaHeaders";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "interfaceMTU",
+        "options",
+        "ddOptions",
+        "ddSequenceNumber",
+        "lsaHeaders",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int OSPFDatabaseDescriptionPacketDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "interfaceMTU")==0) return base+0;
+    if (fieldName[0]=='o' && strcmp(fieldName, "options")==0) return base+1;
+    if (fieldName[0]=='d' && strcmp(fieldName, "ddOptions")==0) return base+2;
+    if (fieldName[0]=='d' && strcmp(fieldName, "ddSequenceNumber")==0) return base+3;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lsaHeaders")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFDatabaseDescriptionPacketDescriptor::getFieldTypeString(void *object, int field) const
@@ -4356,14 +4598,14 @@ const char *OSPFDatabaseDescriptionPacketDescriptor::getFieldTypeString(void *ob
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "unsigned short";
-        case 1: return "OSPFOptions";
-        case 2: return "OSPFDDOptions";
-        case 3: return "unsigned long";
-        case 4: return "OSPFLSAHeader";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "unsigned short",
+        "OSPFOptions",
+        "OSPFDDOptions",
+        "unsigned long",
+        "OSPFLSAHeader",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFDatabaseDescriptionPacketDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4394,22 +4636,22 @@ int OSPFDatabaseDescriptionPacketDescriptor::getArraySize(void *object, int fiel
     }
 }
 
-bool OSPFDatabaseDescriptionPacketDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFDatabaseDescriptionPacketDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFDatabaseDescriptionPacket *pp = (OSPFDatabaseDescriptionPacket *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getInterfaceMTU(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getOptions(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getDdOptions(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: ulong2string(pp->getDdSequenceNumber(),resultbuf,bufsize); return true;
-        case 4: {std::stringstream out; out << pp->getLsaHeaders(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return ulong2string(pp->getInterfaceMTU());
+        case 1: {std::stringstream out; out << pp->getOptions(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getDdOptions(); return out.str();}
+        case 3: return ulong2string(pp->getDdSequenceNumber());
+        case 4: {std::stringstream out; out << pp->getLsaHeaders(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -4437,12 +4679,14 @@ const char *OSPFDatabaseDescriptionPacketDescriptor::getFieldStructName(void *ob
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "OSPFOptions"; break;
-        case 2: return "OSPFDDOptions"; break;
-        case 4: return "OSPFLSAHeader"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "OSPFOptions",
+        "OSPFDDOptions",
+        NULL,
+        "OSPFLSAHeader",
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFDatabaseDescriptionPacketDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4492,12 +4736,13 @@ class LSARequestDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4539,12 +4784,12 @@ unsigned int LSARequestDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *LSARequestDescriptor::getFieldName(void *object, int field) const
@@ -4555,12 +4800,22 @@ const char *LSARequestDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "lsType";
-        case 1: return "linkStateID";
-        case 2: return "advertisingRouter";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "lsType",
+        "linkStateID",
+        "advertisingRouter",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int LSARequestDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lsType")==0) return base+0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "linkStateID")==0) return base+1;
+    if (fieldName[0]=='a' && strcmp(fieldName, "advertisingRouter")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *LSARequestDescriptor::getFieldTypeString(void *object, int field) const
@@ -4571,12 +4826,12 @@ const char *LSARequestDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "unsigned long";
-        case 1: return "unsigned long";
-        case 2: return "IPAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "unsigned long",
+        "unsigned long",
+        "IPAddress",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *LSARequestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4606,20 +4861,20 @@ int LSARequestDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool LSARequestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string LSARequestDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     LSARequest *pp = (LSARequest *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->lsType,resultbuf,bufsize); return true;
-        case 1: ulong2string(pp->linkStateID,resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->advertisingRouter; opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return ulong2string(pp->lsType);
+        case 1: return ulong2string(pp->linkStateID);
+        case 2: {std::stringstream out; out << pp->advertisingRouter; return out.str();}
+        default: return "";
     }
 }
 
@@ -4647,10 +4902,12 @@ const char *LSARequestDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 2: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        "IPAddress",
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *LSARequestDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4694,7 +4951,7 @@ OSPFLinkStateRequestPacket& OSPFLinkStateRequestPacket::operator=(const OSPFLink
     if (this==&other) return *this;
     OSPFPacket::operator=(other);
     delete [] this->requests_var;
-    this->requests_var = (other.requests_arraysize==0) ? NULL : new LSARequest[other.requests_arraysize];
+    this->requests_var = (other.requests_arraysize==0) ? NULL : new ::LSARequest[other.requests_arraysize];
     requests_arraysize = other.requests_arraysize;
     for (unsigned int i=0; i<requests_arraysize; i++)
         this->requests_var[i] = other.requests_var[i];
@@ -4716,14 +4973,14 @@ void OSPFLinkStateRequestPacket::parsimUnpack(cCommBuffer *b)
     if (requests_arraysize==0) {
         this->requests_var = 0;
     } else {
-        this->requests_var = new LSARequest[requests_arraysize];
+        this->requests_var = new ::LSARequest[requests_arraysize];
         doUnpacking(b,this->requests_var,requests_arraysize);
     }
 }
 
 void OSPFLinkStateRequestPacket::setRequestsArraySize(unsigned int size)
 {
-    LSARequest *requests_var2 = (size==0) ? NULL : new LSARequest[size];
+    ::LSARequest *requests_var2 = (size==0) ? NULL : new ::LSARequest[size];
     unsigned int sz = requests_arraysize < size ? requests_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         requests_var2[i] = this->requests_var[i];
@@ -4759,12 +5016,13 @@ class OSPFLinkStateRequestPacketDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4806,10 +5064,10 @@ unsigned int OSPFLinkStateRequestPacketDescriptor::getFieldTypeFlags(void *objec
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFLinkStateRequestPacketDescriptor::getFieldName(void *object, int field) const
@@ -4820,10 +5078,18 @@ const char *OSPFLinkStateRequestPacketDescriptor::getFieldName(void *object, int
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "requests";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "requests",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int OSPFLinkStateRequestPacketDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "requests")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFLinkStateRequestPacketDescriptor::getFieldTypeString(void *object, int field) const
@@ -4834,10 +5100,10 @@ const char *OSPFLinkStateRequestPacketDescriptor::getFieldTypeString(void *objec
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "LSARequest";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "LSARequest",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFLinkStateRequestPacketDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4868,18 +5134,18 @@ int OSPFLinkStateRequestPacketDescriptor::getArraySize(void *object, int field) 
     }
 }
 
-bool OSPFLinkStateRequestPacketDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFLinkStateRequestPacketDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFLinkStateRequestPacket *pp = (OSPFLinkStateRequestPacket *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getRequests(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getRequests(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -4905,10 +5171,10 @@ const char *OSPFLinkStateRequestPacketDescriptor::getFieldStructName(void *objec
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "LSARequest"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "LSARequest",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFLinkStateRequestPacketDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4969,22 +5235,22 @@ OSPFLinkStateUpdatePacket& OSPFLinkStateUpdatePacket::operator=(const OSPFLinkSt
     OSPFPacket::operator=(other);
     this->numberOfLSAs_var = other.numberOfLSAs_var;
     delete [] this->routerLSAs_var;
-    this->routerLSAs_var = (other.routerLSAs_arraysize==0) ? NULL : new OSPFRouterLSA[other.routerLSAs_arraysize];
+    this->routerLSAs_var = (other.routerLSAs_arraysize==0) ? NULL : new ::OSPFRouterLSA[other.routerLSAs_arraysize];
     routerLSAs_arraysize = other.routerLSAs_arraysize;
     for (unsigned int i=0; i<routerLSAs_arraysize; i++)
         this->routerLSAs_var[i] = other.routerLSAs_var[i];
     delete [] this->networkLSAs_var;
-    this->networkLSAs_var = (other.networkLSAs_arraysize==0) ? NULL : new OSPFNetworkLSA[other.networkLSAs_arraysize];
+    this->networkLSAs_var = (other.networkLSAs_arraysize==0) ? NULL : new ::OSPFNetworkLSA[other.networkLSAs_arraysize];
     networkLSAs_arraysize = other.networkLSAs_arraysize;
     for (unsigned int i=0; i<networkLSAs_arraysize; i++)
         this->networkLSAs_var[i] = other.networkLSAs_var[i];
     delete [] this->summaryLSAs_var;
-    this->summaryLSAs_var = (other.summaryLSAs_arraysize==0) ? NULL : new OSPFSummaryLSA[other.summaryLSAs_arraysize];
+    this->summaryLSAs_var = (other.summaryLSAs_arraysize==0) ? NULL : new ::OSPFSummaryLSA[other.summaryLSAs_arraysize];
     summaryLSAs_arraysize = other.summaryLSAs_arraysize;
     for (unsigned int i=0; i<summaryLSAs_arraysize; i++)
         this->summaryLSAs_var[i] = other.summaryLSAs_var[i];
     delete [] this->asExternalLSAs_var;
-    this->asExternalLSAs_var = (other.asExternalLSAs_arraysize==0) ? NULL : new OSPFASExternalLSA[other.asExternalLSAs_arraysize];
+    this->asExternalLSAs_var = (other.asExternalLSAs_arraysize==0) ? NULL : new ::OSPFASExternalLSA[other.asExternalLSAs_arraysize];
     asExternalLSAs_arraysize = other.asExternalLSAs_arraysize;
     for (unsigned int i=0; i<asExternalLSAs_arraysize; i++)
         this->asExternalLSAs_var[i] = other.asExternalLSAs_var[i];
@@ -5014,7 +5280,7 @@ void OSPFLinkStateUpdatePacket::parsimUnpack(cCommBuffer *b)
     if (routerLSAs_arraysize==0) {
         this->routerLSAs_var = 0;
     } else {
-        this->routerLSAs_var = new OSPFRouterLSA[routerLSAs_arraysize];
+        this->routerLSAs_var = new ::OSPFRouterLSA[routerLSAs_arraysize];
         doUnpacking(b,this->routerLSAs_var,routerLSAs_arraysize);
     }
     delete [] this->networkLSAs_var;
@@ -5022,7 +5288,7 @@ void OSPFLinkStateUpdatePacket::parsimUnpack(cCommBuffer *b)
     if (networkLSAs_arraysize==0) {
         this->networkLSAs_var = 0;
     } else {
-        this->networkLSAs_var = new OSPFNetworkLSA[networkLSAs_arraysize];
+        this->networkLSAs_var = new ::OSPFNetworkLSA[networkLSAs_arraysize];
         doUnpacking(b,this->networkLSAs_var,networkLSAs_arraysize);
     }
     delete [] this->summaryLSAs_var;
@@ -5030,7 +5296,7 @@ void OSPFLinkStateUpdatePacket::parsimUnpack(cCommBuffer *b)
     if (summaryLSAs_arraysize==0) {
         this->summaryLSAs_var = 0;
     } else {
-        this->summaryLSAs_var = new OSPFSummaryLSA[summaryLSAs_arraysize];
+        this->summaryLSAs_var = new ::OSPFSummaryLSA[summaryLSAs_arraysize];
         doUnpacking(b,this->summaryLSAs_var,summaryLSAs_arraysize);
     }
     delete [] this->asExternalLSAs_var;
@@ -5038,7 +5304,7 @@ void OSPFLinkStateUpdatePacket::parsimUnpack(cCommBuffer *b)
     if (asExternalLSAs_arraysize==0) {
         this->asExternalLSAs_var = 0;
     } else {
-        this->asExternalLSAs_var = new OSPFASExternalLSA[asExternalLSAs_arraysize];
+        this->asExternalLSAs_var = new ::OSPFASExternalLSA[asExternalLSAs_arraysize];
         doUnpacking(b,this->asExternalLSAs_var,asExternalLSAs_arraysize);
     }
 }
@@ -5055,7 +5321,7 @@ void OSPFLinkStateUpdatePacket::setNumberOfLSAs(unsigned long numberOfLSAs_var)
 
 void OSPFLinkStateUpdatePacket::setRouterLSAsArraySize(unsigned int size)
 {
-    OSPFRouterLSA *routerLSAs_var2 = (size==0) ? NULL : new OSPFRouterLSA[size];
+    ::OSPFRouterLSA *routerLSAs_var2 = (size==0) ? NULL : new ::OSPFRouterLSA[size];
     unsigned int sz = routerLSAs_arraysize < size ? routerLSAs_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         routerLSAs_var2[i] = this->routerLSAs_var[i];
@@ -5083,7 +5349,7 @@ void OSPFLinkStateUpdatePacket::setRouterLSAs(unsigned int k, const OSPFRouterLS
 
 void OSPFLinkStateUpdatePacket::setNetworkLSAsArraySize(unsigned int size)
 {
-    OSPFNetworkLSA *networkLSAs_var2 = (size==0) ? NULL : new OSPFNetworkLSA[size];
+    ::OSPFNetworkLSA *networkLSAs_var2 = (size==0) ? NULL : new ::OSPFNetworkLSA[size];
     unsigned int sz = networkLSAs_arraysize < size ? networkLSAs_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         networkLSAs_var2[i] = this->networkLSAs_var[i];
@@ -5111,7 +5377,7 @@ void OSPFLinkStateUpdatePacket::setNetworkLSAs(unsigned int k, const OSPFNetwork
 
 void OSPFLinkStateUpdatePacket::setSummaryLSAsArraySize(unsigned int size)
 {
-    OSPFSummaryLSA *summaryLSAs_var2 = (size==0) ? NULL : new OSPFSummaryLSA[size];
+    ::OSPFSummaryLSA *summaryLSAs_var2 = (size==0) ? NULL : new ::OSPFSummaryLSA[size];
     unsigned int sz = summaryLSAs_arraysize < size ? summaryLSAs_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         summaryLSAs_var2[i] = this->summaryLSAs_var[i];
@@ -5139,7 +5405,7 @@ void OSPFLinkStateUpdatePacket::setSummaryLSAs(unsigned int k, const OSPFSummary
 
 void OSPFLinkStateUpdatePacket::setAsExternalLSAsArraySize(unsigned int size)
 {
-    OSPFASExternalLSA *asExternalLSAs_var2 = (size==0) ? NULL : new OSPFASExternalLSA[size];
+    ::OSPFASExternalLSA *asExternalLSAs_var2 = (size==0) ? NULL : new ::OSPFASExternalLSA[size];
     unsigned int sz = asExternalLSAs_arraysize < size ? asExternalLSAs_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         asExternalLSAs_var2[i] = this->asExternalLSAs_var[i];
@@ -5175,12 +5441,13 @@ class OSPFLinkStateUpdatePacketDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -5222,14 +5489,14 @@ unsigned int OSPFLinkStateUpdatePacketDescriptor::getFieldTypeFlags(void *object
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISARRAY | FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        case 2: return FD_ISARRAY | FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        case 3: return FD_ISARRAY | FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        case 4: return FD_ISARRAY | FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND | FD_ISCOBJECT,
+        FD_ISARRAY | FD_ISCOMPOUND | FD_ISCOBJECT,
+        FD_ISARRAY | FD_ISCOMPOUND | FD_ISCOBJECT,
+        FD_ISARRAY | FD_ISCOMPOUND | FD_ISCOBJECT,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFLinkStateUpdatePacketDescriptor::getFieldName(void *object, int field) const
@@ -5240,14 +5507,26 @@ const char *OSPFLinkStateUpdatePacketDescriptor::getFieldName(void *object, int 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "numberOfLSAs";
-        case 1: return "routerLSAs";
-        case 2: return "networkLSAs";
-        case 3: return "summaryLSAs";
-        case 4: return "asExternalLSAs";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "numberOfLSAs",
+        "routerLSAs",
+        "networkLSAs",
+        "summaryLSAs",
+        "asExternalLSAs",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int OSPFLinkStateUpdatePacketDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "numberOfLSAs")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "routerLSAs")==0) return base+1;
+    if (fieldName[0]=='n' && strcmp(fieldName, "networkLSAs")==0) return base+2;
+    if (fieldName[0]=='s' && strcmp(fieldName, "summaryLSAs")==0) return base+3;
+    if (fieldName[0]=='a' && strcmp(fieldName, "asExternalLSAs")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFLinkStateUpdatePacketDescriptor::getFieldTypeString(void *object, int field) const
@@ -5258,14 +5537,14 @@ const char *OSPFLinkStateUpdatePacketDescriptor::getFieldTypeString(void *object
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "unsigned long";
-        case 1: return "OSPFRouterLSA";
-        case 2: return "OSPFNetworkLSA";
-        case 3: return "OSPFSummaryLSA";
-        case 4: return "OSPFASExternalLSA";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "unsigned long",
+        "OSPFRouterLSA",
+        "OSPFNetworkLSA",
+        "OSPFSummaryLSA",
+        "OSPFASExternalLSA",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFLinkStateUpdatePacketDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -5299,22 +5578,22 @@ int OSPFLinkStateUpdatePacketDescriptor::getArraySize(void *object, int field) c
     }
 }
 
-bool OSPFLinkStateUpdatePacketDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFLinkStateUpdatePacketDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFLinkStateUpdatePacket *pp = (OSPFLinkStateUpdatePacket *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getNumberOfLSAs(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getRouterLSAs(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getNetworkLSAs(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getSummaryLSAs(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: {std::stringstream out; out << pp->getAsExternalLSAs(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return ulong2string(pp->getNumberOfLSAs());
+        case 1: {std::stringstream out; out << pp->getRouterLSAs(i); return out.str();}
+        case 2: {std::stringstream out; out << pp->getNetworkLSAs(i); return out.str();}
+        case 3: {std::stringstream out; out << pp->getSummaryLSAs(i); return out.str();}
+        case 4: {std::stringstream out; out << pp->getAsExternalLSAs(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -5341,13 +5620,14 @@ const char *OSPFLinkStateUpdatePacketDescriptor::getFieldStructName(void *object
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "OSPFRouterLSA"; break;
-        case 2: return "OSPFNetworkLSA"; break;
-        case 3: return "OSPFSummaryLSA"; break;
-        case 4: return "OSPFASExternalLSA"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "OSPFRouterLSA",
+        "OSPFNetworkLSA",
+        "OSPFSummaryLSA",
+        "OSPFASExternalLSA",
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFLinkStateUpdatePacketDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -5394,7 +5674,7 @@ OSPFLinkStateAcknowledgementPacket& OSPFLinkStateAcknowledgementPacket::operator
     if (this==&other) return *this;
     OSPFPacket::operator=(other);
     delete [] this->lsaHeaders_var;
-    this->lsaHeaders_var = (other.lsaHeaders_arraysize==0) ? NULL : new OSPFLSAHeader[other.lsaHeaders_arraysize];
+    this->lsaHeaders_var = (other.lsaHeaders_arraysize==0) ? NULL : new ::OSPFLSAHeader[other.lsaHeaders_arraysize];
     lsaHeaders_arraysize = other.lsaHeaders_arraysize;
     for (unsigned int i=0; i<lsaHeaders_arraysize; i++)
         this->lsaHeaders_var[i] = other.lsaHeaders_var[i];
@@ -5416,14 +5696,14 @@ void OSPFLinkStateAcknowledgementPacket::parsimUnpack(cCommBuffer *b)
     if (lsaHeaders_arraysize==0) {
         this->lsaHeaders_var = 0;
     } else {
-        this->lsaHeaders_var = new OSPFLSAHeader[lsaHeaders_arraysize];
+        this->lsaHeaders_var = new ::OSPFLSAHeader[lsaHeaders_arraysize];
         doUnpacking(b,this->lsaHeaders_var,lsaHeaders_arraysize);
     }
 }
 
 void OSPFLinkStateAcknowledgementPacket::setLsaHeadersArraySize(unsigned int size)
 {
-    OSPFLSAHeader *lsaHeaders_var2 = (size==0) ? NULL : new OSPFLSAHeader[size];
+    ::OSPFLSAHeader *lsaHeaders_var2 = (size==0) ? NULL : new ::OSPFLSAHeader[size];
     unsigned int sz = lsaHeaders_arraysize < size ? lsaHeaders_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         lsaHeaders_var2[i] = this->lsaHeaders_var[i];
@@ -5459,12 +5739,13 @@ class OSPFLinkStateAcknowledgementPacketDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -5506,10 +5787,10 @@ unsigned int OSPFLinkStateAcknowledgementPacketDescriptor::getFieldTypeFlags(voi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND | FD_ISCOBJECT,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *OSPFLinkStateAcknowledgementPacketDescriptor::getFieldName(void *object, int field) const
@@ -5520,10 +5801,18 @@ const char *OSPFLinkStateAcknowledgementPacketDescriptor::getFieldName(void *obj
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "lsaHeaders";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "lsaHeaders",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int OSPFLinkStateAcknowledgementPacketDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lsaHeaders")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *OSPFLinkStateAcknowledgementPacketDescriptor::getFieldTypeString(void *object, int field) const
@@ -5534,10 +5823,10 @@ const char *OSPFLinkStateAcknowledgementPacketDescriptor::getFieldTypeString(voi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OSPFLSAHeader";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OSPFLSAHeader",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *OSPFLinkStateAcknowledgementPacketDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -5568,18 +5857,18 @@ int OSPFLinkStateAcknowledgementPacketDescriptor::getArraySize(void *object, int
     }
 }
 
-bool OSPFLinkStateAcknowledgementPacketDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string OSPFLinkStateAcknowledgementPacketDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     OSPFLinkStateAcknowledgementPacket *pp = (OSPFLinkStateAcknowledgementPacket *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getLsaHeaders(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getLsaHeaders(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -5605,10 +5894,10 @@ const char *OSPFLinkStateAcknowledgementPacketDescriptor::getFieldStructName(voi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OSPFLSAHeader"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OSPFLSAHeader",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *OSPFLinkStateAcknowledgementPacketDescriptor::getFieldStructPointer(void *object, int field, int i) const

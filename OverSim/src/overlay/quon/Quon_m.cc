@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from overlay/quon/Quon.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from overlay/quon/Quon.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -97,12 +97,13 @@ class QuonSelfMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -144,10 +145,10 @@ unsigned int QuonSelfMessageDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *QuonSelfMessageDescriptor::getFieldName(void *object, int field) const
@@ -158,10 +159,18 @@ const char *QuonSelfMessageDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "key";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "key",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int QuonSelfMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "key")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *QuonSelfMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -172,10 +181,10 @@ const char *QuonSelfMessageDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *QuonSelfMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -205,18 +214,18 @@ int QuonSelfMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool QuonSelfMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string QuonSelfMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     QuonSelfMessage *pp = (QuonSelfMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getKey(); return out.str();}
+        default: return "";
     }
 }
 
@@ -242,10 +251,10 @@ const char *QuonSelfMessageDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *QuonSelfMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -360,12 +369,13 @@ class QuonMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -407,13 +417,13 @@ unsigned int QuonMessageDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *QuonMessageDescriptor::getFieldName(void *object, int field) const
@@ -424,13 +434,24 @@ const char *QuonMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "command";
-        case 1: return "sender";
-        case 2: return "position";
-        case 3: return "AOIsize";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "command",
+        "sender",
+        "position",
+        "AOIsize",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int QuonMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sender")==0) return base+1;
+    if (fieldName[0]=='p' && strcmp(fieldName, "position")==0) return base+2;
+    if (fieldName[0]=='A' && strcmp(fieldName, "AOIsize")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *QuonMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -441,13 +462,13 @@ const char *QuonMessageDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        case 2: return "Vector2D";
-        case 3: return "double";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+        "Vector2D",
+        "double",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *QuonMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -480,21 +501,21 @@ int QuonMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool QuonMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string QuonMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     QuonMessage *pp = (QuonMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getSender(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getPosition(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: double2string(pp->getAOIsize(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getCommand());
+        case 1: {std::stringstream out; out << pp->getSender(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getPosition(); return out.str();}
+        case 3: return double2string(pp->getAOIsize());
+        default: return "";
     }
 }
 
@@ -522,11 +543,13 @@ const char *QuonMessageDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        case 2: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+        "Vector2D",
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *QuonMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -576,12 +599,12 @@ QuonListMessage& QuonListMessage::operator=(const QuonListMessage& other)
     if (this==&other) return *this;
     QuonMessage::operator=(other);
     delete [] this->neighborHandle_var;
-    this->neighborHandle_var = (other.neighborHandle_arraysize==0) ? NULL : new NodeHandle[other.neighborHandle_arraysize];
+    this->neighborHandle_var = (other.neighborHandle_arraysize==0) ? NULL : new ::NodeHandle[other.neighborHandle_arraysize];
     neighborHandle_arraysize = other.neighborHandle_arraysize;
     for (unsigned int i=0; i<neighborHandle_arraysize; i++)
         this->neighborHandle_var[i] = other.neighborHandle_var[i];
     delete [] this->neighborPosition_var;
-    this->neighborPosition_var = (other.neighborPosition_arraysize==0) ? NULL : new Vector2D[other.neighborPosition_arraysize];
+    this->neighborPosition_var = (other.neighborPosition_arraysize==0) ? NULL : new ::Vector2D[other.neighborPosition_arraysize];
     neighborPosition_arraysize = other.neighborPosition_arraysize;
     for (unsigned int i=0; i<neighborPosition_arraysize; i++)
         this->neighborPosition_var[i] = other.neighborPosition_var[i];
@@ -605,7 +628,7 @@ void QuonListMessage::parsimUnpack(cCommBuffer *b)
     if (neighborHandle_arraysize==0) {
         this->neighborHandle_var = 0;
     } else {
-        this->neighborHandle_var = new NodeHandle[neighborHandle_arraysize];
+        this->neighborHandle_var = new ::NodeHandle[neighborHandle_arraysize];
         doUnpacking(b,this->neighborHandle_var,neighborHandle_arraysize);
     }
     delete [] this->neighborPosition_var;
@@ -613,14 +636,14 @@ void QuonListMessage::parsimUnpack(cCommBuffer *b)
     if (neighborPosition_arraysize==0) {
         this->neighborPosition_var = 0;
     } else {
-        this->neighborPosition_var = new Vector2D[neighborPosition_arraysize];
+        this->neighborPosition_var = new ::Vector2D[neighborPosition_arraysize];
         doUnpacking(b,this->neighborPosition_var,neighborPosition_arraysize);
     }
 }
 
 void QuonListMessage::setNeighborHandleArraySize(unsigned int size)
 {
-    NodeHandle *neighborHandle_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *neighborHandle_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = neighborHandle_arraysize < size ? neighborHandle_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         neighborHandle_var2[i] = this->neighborHandle_var[i];
@@ -648,7 +671,7 @@ void QuonListMessage::setNeighborHandle(unsigned int k, const NodeHandle& neighb
 
 void QuonListMessage::setNeighborPositionArraySize(unsigned int size)
 {
-    Vector2D *neighborPosition_var2 = (size==0) ? NULL : new Vector2D[size];
+    ::Vector2D *neighborPosition_var2 = (size==0) ? NULL : new ::Vector2D[size];
     unsigned int sz = neighborPosition_arraysize < size ? neighborPosition_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         neighborPosition_var2[i] = this->neighborPosition_var[i];
@@ -684,12 +707,13 @@ class QuonListMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -731,11 +755,11 @@ unsigned int QuonListMessageDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 1: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *QuonListMessageDescriptor::getFieldName(void *object, int field) const
@@ -746,11 +770,20 @@ const char *QuonListMessageDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "neighborHandle";
-        case 1: return "neighborPosition";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "neighborHandle",
+        "neighborPosition",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int QuonListMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "neighborHandle")==0) return base+0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "neighborPosition")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *QuonListMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -761,11 +794,11 @@ const char *QuonListMessageDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        case 1: return "Vector2D";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+        "Vector2D",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *QuonListMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -797,19 +830,19 @@ int QuonListMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool QuonListMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string QuonListMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     QuonListMessage *pp = (QuonListMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNeighborHandle(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getNeighborPosition(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNeighborHandle(i); return out.str();}
+        case 1: {std::stringstream out; out << pp->getNeighborPosition(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -835,11 +868,11 @@ const char *QuonListMessageDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        case 1: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+        "Vector2D",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *QuonListMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -928,12 +961,13 @@ class QuonMoveMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -975,11 +1009,11 @@ unsigned int QuonMoveMessageDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *QuonMoveMessageDescriptor::getFieldName(void *object, int field) const
@@ -990,11 +1024,20 @@ const char *QuonMoveMessageDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "newPosition";
-        case 1: return "isBinding";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "newPosition",
+        "isBinding",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int QuonMoveMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "newPosition")==0) return base+0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "isBinding")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *QuonMoveMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1005,11 +1048,11 @@ const char *QuonMoveMessageDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D";
-        case 1: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "Vector2D",
+        "bool",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *QuonMoveMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1039,19 +1082,19 @@ int QuonMoveMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool QuonMoveMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string QuonMoveMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     QuonMoveMessage *pp = (QuonMoveMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNewPosition(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: bool2string(pp->getIsBinding(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNewPosition(); return out.str();}
+        case 1: return bool2string(pp->getIsBinding());
+        default: return "";
     }
 }
 
@@ -1078,10 +1121,11 @@ const char *QuonMoveMessageDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "Vector2D",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *QuonMoveMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1142,12 +1186,13 @@ class QuonEventMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1189,9 +1234,7 @@ unsigned int QuonEventMessageDescriptor::getFieldTypeFlags(void *object, int fie
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *QuonEventMessageDescriptor::getFieldName(void *object, int field) const
@@ -1202,9 +1245,13 @@ const char *QuonEventMessageDescriptor::getFieldName(void *object, int field) co
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int QuonEventMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *QuonEventMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1215,9 +1262,7 @@ const char *QuonEventMessageDescriptor::getFieldTypeString(void *object, int fie
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *QuonEventMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1247,17 +1292,17 @@ int QuonEventMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool QuonEventMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string QuonEventMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     QuonEventMessage *pp = (QuonEventMessage *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -1283,9 +1328,7 @@ const char *QuonEventMessageDescriptor::getFieldStructName(void *object, int fie
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *QuonEventMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

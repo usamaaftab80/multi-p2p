@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from applications/ethernet/EtherApp.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from applications/ethernet/EtherApp.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -101,12 +101,13 @@ class EtherAppReqDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -148,11 +149,11 @@ unsigned int EtherAppReqDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *EtherAppReqDescriptor::getFieldName(void *object, int field) const
@@ -163,11 +164,20 @@ const char *EtherAppReqDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "requestId";
-        case 1: return "responseBytes";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "requestId",
+        "responseBytes",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int EtherAppReqDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "requestId")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "responseBytes")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *EtherAppReqDescriptor::getFieldTypeString(void *object, int field) const
@@ -178,11 +188,11 @@ const char *EtherAppReqDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "long";
-        case 1: return "long";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "long",
+        "long",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *EtherAppReqDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -212,19 +222,19 @@ int EtherAppReqDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool EtherAppReqDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string EtherAppReqDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     EtherAppReq *pp = (EtherAppReq *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getRequestId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getResponseBytes(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getRequestId());
+        case 1: return long2string(pp->getResponseBytes());
+        default: return "";
     }
 }
 
@@ -252,9 +262,11 @@ const char *EtherAppReqDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *EtherAppReqDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -342,12 +354,13 @@ class EtherAppRespDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -389,11 +402,11 @@ unsigned int EtherAppRespDescriptor::getFieldTypeFlags(void *object, int field) 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *EtherAppRespDescriptor::getFieldName(void *object, int field) const
@@ -404,11 +417,20 @@ const char *EtherAppRespDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "requestId";
-        case 1: return "numFrames";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "requestId",
+        "numFrames",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int EtherAppRespDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "requestId")==0) return base+0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "numFrames")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *EtherAppRespDescriptor::getFieldTypeString(void *object, int field) const
@@ -419,11 +441,11 @@ const char *EtherAppRespDescriptor::getFieldTypeString(void *object, int field) 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *EtherAppRespDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -453,19 +475,19 @@ int EtherAppRespDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool EtherAppRespDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string EtherAppRespDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     EtherAppResp *pp = (EtherAppResp *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getRequestId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getNumFrames(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getRequestId());
+        case 1: return long2string(pp->getNumFrames());
+        default: return "";
     }
 }
 
@@ -493,9 +515,11 @@ const char *EtherAppRespDescriptor::getFieldStructName(void *object, int field) 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *EtherAppRespDescriptor::getFieldStructPointer(void *object, int field, int i) const

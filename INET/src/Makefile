@@ -455,10 +455,10 @@ MSGCOPTS = $(INCLUDE_PATH) -PINET_API
 all: $(TARGET)
 
 $(TARGET) : $O/$(TARGET)
-	ln -s -f $O/$(TARGET) .
+	$(LN) $O/$(TARGET) .
 
 $O/$(TARGET): $(OBJS)  $(wildcard $(EXTRA_OBJS)) Makefile
-	@mkdir -p $O
+	@$(MKPATH) $O
 	$(AR) $O/$(TARGET)  $(OBJS) $(EXTRA_OBJS)
 
 .PHONY:
@@ -466,7 +466,7 @@ $O/$(TARGET): $(OBJS)  $(wildcard $(EXTRA_OBJS)) Makefile
 .SUFFIXES: .cc
 
 $O/%.o: %.cc
-	@mkdir -p $(dir $@)
+	@$(MKPATH) $(dir $@)
 	$(CXX) -c $(COPTS) -o $@ $<
 
 %_m.cc %_m.h: %.msg

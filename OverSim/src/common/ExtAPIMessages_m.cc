@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from common/ExtAPIMessages.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from common/ExtAPIMessages.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -95,12 +95,13 @@ class GIASearchAppMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -142,10 +143,10 @@ unsigned int GIASearchAppMessageDescriptor::getFieldTypeFlags(void *object, int 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *GIASearchAppMessageDescriptor::getFieldName(void *object, int field) const
@@ -156,10 +157,18 @@ const char *GIASearchAppMessageDescriptor::getFieldName(void *object, int field)
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "command";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "command",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int GIASearchAppMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *GIASearchAppMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -170,10 +179,10 @@ const char *GIASearchAppMessageDescriptor::getFieldTypeString(void *object, int 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *GIASearchAppMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -206,18 +215,18 @@ int GIASearchAppMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool GIASearchAppMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string GIASearchAppMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     GIASearchAppMessage *pp = (GIASearchAppMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getCommand());
+        default: return "";
     }
 }
 
@@ -244,9 +253,10 @@ const char *GIASearchAppMessageDescriptor::getFieldStructName(void *object, int 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *GIASearchAppMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -289,7 +299,7 @@ GIAput& GIAput::operator=(const GIAput& other)
     if (this==&other) return *this;
     GIASearchAppMessage::operator=(other);
     delete [] this->keys_var;
-    this->keys_var = (other.keys_arraysize==0) ? NULL : new OverlayKey[other.keys_arraysize];
+    this->keys_var = (other.keys_arraysize==0) ? NULL : new ::OverlayKey[other.keys_arraysize];
     keys_arraysize = other.keys_arraysize;
     for (unsigned int i=0; i<keys_arraysize; i++)
         this->keys_var[i] = other.keys_var[i];
@@ -311,14 +321,14 @@ void GIAput::parsimUnpack(cCommBuffer *b)
     if (keys_arraysize==0) {
         this->keys_var = 0;
     } else {
-        this->keys_var = new OverlayKey[keys_arraysize];
+        this->keys_var = new ::OverlayKey[keys_arraysize];
         doUnpacking(b,this->keys_var,keys_arraysize);
     }
 }
 
 void GIAput::setKeysArraySize(unsigned int size)
 {
-    OverlayKey *keys_var2 = (size==0) ? NULL : new OverlayKey[size];
+    ::OverlayKey *keys_var2 = (size==0) ? NULL : new ::OverlayKey[size];
     unsigned int sz = keys_arraysize < size ? keys_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         keys_var2[i] = this->keys_var[i];
@@ -354,12 +364,13 @@ class GIAputDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -401,10 +412,10 @@ unsigned int GIAputDescriptor::getFieldTypeFlags(void *object, int field) const
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *GIAputDescriptor::getFieldName(void *object, int field) const
@@ -415,10 +426,18 @@ const char *GIAputDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "keys";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "keys",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int GIAputDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "keys")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *GIAputDescriptor::getFieldTypeString(void *object, int field) const
@@ -429,10 +448,10 @@ const char *GIAputDescriptor::getFieldTypeString(void *object, int field) const
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *GIAputDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -463,18 +482,18 @@ int GIAputDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool GIAputDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string GIAputDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     GIAput *pp = (GIAput *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getKeys(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getKeys(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -500,10 +519,10 @@ const char *GIAputDescriptor::getFieldStructName(void *object, int field) const
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *GIAputDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -564,12 +583,13 @@ class GIAremoveDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -611,9 +631,7 @@ unsigned int GIAremoveDescriptor::getFieldTypeFlags(void *object, int field) con
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *GIAremoveDescriptor::getFieldName(void *object, int field) const
@@ -624,9 +642,13 @@ const char *GIAremoveDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int GIAremoveDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *GIAremoveDescriptor::getFieldTypeString(void *object, int field) const
@@ -637,9 +659,7 @@ const char *GIAremoveDescriptor::getFieldTypeString(void *object, int field) con
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *GIAremoveDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -669,17 +689,17 @@ int GIAremoveDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool GIAremoveDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string GIAremoveDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     GIAremove *pp = (GIAremove *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -705,9 +725,7 @@ const char *GIAremoveDescriptor::getFieldStructName(void *object, int field) con
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *GIAremoveDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -794,12 +812,13 @@ class GIAsearchDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -841,11 +860,11 @@ unsigned int GIAsearchDescriptor::getFieldTypeFlags(void *object, int field) con
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *GIAsearchDescriptor::getFieldName(void *object, int field) const
@@ -856,11 +875,20 @@ const char *GIAsearchDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "searchKey";
-        case 1: return "maxResponses";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "searchKey",
+        "maxResponses",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int GIAsearchDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "searchKey")==0) return base+0;
+    if (fieldName[0]=='m' && strcmp(fieldName, "maxResponses")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *GIAsearchDescriptor::getFieldTypeString(void *object, int field) const
@@ -871,11 +899,11 @@ const char *GIAsearchDescriptor::getFieldTypeString(void *object, int field) con
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *GIAsearchDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -905,19 +933,19 @@ int GIAsearchDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool GIAsearchDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string GIAsearchDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     GIAsearch *pp = (GIAsearch *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSearchKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getMaxResponses(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSearchKey(); return out.str();}
+        case 1: return long2string(pp->getMaxResponses());
+        default: return "";
     }
 }
 
@@ -944,10 +972,11 @@ const char *GIAsearchDescriptor::getFieldStructName(void *object, int field) con
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *GIAsearchDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1034,12 +1063,13 @@ class GIAanswerDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1081,11 +1111,11 @@ unsigned int GIAanswerDescriptor::getFieldTypeFlags(void *object, int field) con
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *GIAanswerDescriptor::getFieldName(void *object, int field) const
@@ -1096,11 +1126,20 @@ const char *GIAanswerDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "searchKey";
-        case 1: return "node";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "searchKey",
+        "node",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int GIAanswerDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "searchKey")==0) return base+0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "node")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *GIAanswerDescriptor::getFieldTypeString(void *object, int field) const
@@ -1111,11 +1150,11 @@ const char *GIAanswerDescriptor::getFieldTypeString(void *object, int field) con
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *GIAanswerDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1145,19 +1184,19 @@ int GIAanswerDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool GIAanswerDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string GIAanswerDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     GIAanswer *pp = (GIAanswer *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSearchKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSearchKey(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getNode(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1183,11 +1222,11 @@ const char *GIAanswerDescriptor::getFieldStructName(void *object, int field) con
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        case 1: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *GIAanswerDescriptor::getFieldStructPointer(void *object, int field, int i) const

@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from overlay/pubsubmmog/PubSubMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from overlay/pubsubmmog/PubSubMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -126,12 +126,13 @@ class PubSubTimerDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -173,11 +174,11 @@ unsigned int PubSubTimerDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubTimerDescriptor::getFieldName(void *object, int field) const
@@ -188,11 +189,20 @@ const char *PubSubTimerDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "type";
-        case 1: return "subspaceId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "type",
+        "subspaceId",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PubSubTimerDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "type")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubTimerDescriptor::getFieldTypeString(void *object, int field) const
@@ -203,11 +213,11 @@ const char *PubSubTimerDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubTimerDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -240,19 +250,19 @@ int PubSubTimerDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubTimerDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubTimerDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubTimer *pp = (PubSubTimer *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getType(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getType());
+        case 1: return long2string(pp->getSubspaceId());
+        default: return "";
     }
 }
 
@@ -280,9 +290,11 @@ const char *PubSubTimerDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubTimerDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -369,12 +381,13 @@ class PubSubJoinCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -416,11 +429,11 @@ unsigned int PubSubJoinCallDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubJoinCallDescriptor::getFieldName(void *object, int field) const
@@ -431,11 +444,20 @@ const char *PubSubJoinCallDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "position";
-        case 1: return "ressources";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "position",
+        "ressources",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PubSubJoinCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "position")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "ressources")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubJoinCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -446,11 +468,11 @@ const char *PubSubJoinCallDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "Vector2D",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubJoinCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -480,19 +502,19 @@ int PubSubJoinCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubJoinCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubJoinCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubJoinCall *pp = (PubSubJoinCall *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getPosition(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getRessources(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getPosition(); return out.str();}
+        case 1: return long2string(pp->getRessources());
+        default: return "";
     }
 }
 
@@ -519,10 +541,11 @@ const char *PubSubJoinCallDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "Vector2D",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubJoinCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -596,12 +619,13 @@ class PubSubJoinResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -643,10 +667,10 @@ unsigned int PubSubJoinResponseDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubJoinResponseDescriptor::getFieldName(void *object, int field) const
@@ -657,10 +681,18 @@ const char *PubSubJoinResponseDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "responsibleNode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "responsibleNode",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubJoinResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "responsibleNode")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubJoinResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -671,10 +703,10 @@ const char *PubSubJoinResponseDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubJoinResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -704,18 +736,18 @@ int PubSubJoinResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubJoinResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubJoinResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubJoinResponse *pp = (PubSubJoinResponse *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getResponsibleNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getResponsibleNode(); return out.str();}
+        default: return "";
     }
 }
 
@@ -741,10 +773,10 @@ const char *PubSubJoinResponseDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubJoinResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -818,12 +850,13 @@ class PubSubResponsibleNodeCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -865,10 +898,10 @@ unsigned int PubSubResponsibleNodeCallDescriptor::getFieldTypeFlags(void *object
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubResponsibleNodeCallDescriptor::getFieldName(void *object, int field) const
@@ -879,10 +912,18 @@ const char *PubSubResponsibleNodeCallDescriptor::getFieldName(void *object, int 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspacePos";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspacePos",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubResponsibleNodeCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspacePos")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubResponsibleNodeCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -893,10 +934,10 @@ const char *PubSubResponsibleNodeCallDescriptor::getFieldTypeString(void *object
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "Vector2D",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubResponsibleNodeCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -926,18 +967,18 @@ int PubSubResponsibleNodeCallDescriptor::getArraySize(void *object, int field) c
     }
 }
 
-bool PubSubResponsibleNodeCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubResponsibleNodeCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubResponsibleNodeCall *pp = (PubSubResponsibleNodeCall *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSubspacePos(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSubspacePos(); return out.str();}
+        default: return "";
     }
 }
 
@@ -963,10 +1004,10 @@ const char *PubSubResponsibleNodeCallDescriptor::getFieldStructName(void *object
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "Vector2D",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubResponsibleNodeCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1054,12 +1095,13 @@ class PubSubResponsibleNodeResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1101,11 +1143,11 @@ unsigned int PubSubResponsibleNodeResponseDescriptor::getFieldTypeFlags(void *ob
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubResponsibleNodeResponseDescriptor::getFieldName(void *object, int field) const
@@ -1116,11 +1158,20 @@ const char *PubSubResponsibleNodeResponseDescriptor::getFieldName(void *object, 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "responsibleNode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "responsibleNode",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PubSubResponsibleNodeResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "responsibleNode")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubResponsibleNodeResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -1131,11 +1182,11 @@ const char *PubSubResponsibleNodeResponseDescriptor::getFieldTypeString(void *ob
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubResponsibleNodeResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1165,19 +1216,19 @@ int PubSubResponsibleNodeResponseDescriptor::getArraySize(void *object, int fiel
     }
 }
 
-bool PubSubResponsibleNodeResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubResponsibleNodeResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubResponsibleNodeResponse *pp = (PubSubResponsibleNodeResponse *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getResponsibleNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: {std::stringstream out; out << pp->getResponsibleNode(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1204,10 +1255,11 @@ const char *PubSubResponsibleNodeResponseDescriptor::getFieldStructName(void *ob
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubResponsibleNodeResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1281,12 +1333,13 @@ class PubSubTakeOverSubspaceCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1328,10 +1381,10 @@ unsigned int PubSubTakeOverSubspaceCallDescriptor::getFieldTypeFlags(void *objec
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubTakeOverSubspaceCallDescriptor::getFieldName(void *object, int field) const
@@ -1342,10 +1395,18 @@ const char *PubSubTakeOverSubspaceCallDescriptor::getFieldName(void *object, int
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspacePos";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspacePos",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubTakeOverSubspaceCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspacePos")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubTakeOverSubspaceCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -1356,10 +1417,10 @@ const char *PubSubTakeOverSubspaceCallDescriptor::getFieldTypeString(void *objec
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "Vector2D",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubTakeOverSubspaceCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1389,18 +1450,18 @@ int PubSubTakeOverSubspaceCallDescriptor::getArraySize(void *object, int field) 
     }
 }
 
-bool PubSubTakeOverSubspaceCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubTakeOverSubspaceCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubTakeOverSubspaceCall *pp = (PubSubTakeOverSubspaceCall *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSubspacePos(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSubspacePos(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1426,10 +1487,10 @@ const char *PubSubTakeOverSubspaceCallDescriptor::getFieldStructName(void *objec
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "Vector2D",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubTakeOverSubspaceCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1503,12 +1564,13 @@ class PubSubTakeOverSubspaceResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1550,10 +1612,10 @@ unsigned int PubSubTakeOverSubspaceResponseDescriptor::getFieldTypeFlags(void *o
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubTakeOverSubspaceResponseDescriptor::getFieldName(void *object, int field) const
@@ -1564,10 +1626,18 @@ const char *PubSubTakeOverSubspaceResponseDescriptor::getFieldName(void *object,
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspacePos";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspacePos",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubTakeOverSubspaceResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspacePos")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubTakeOverSubspaceResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -1578,10 +1648,10 @@ const char *PubSubTakeOverSubspaceResponseDescriptor::getFieldTypeString(void *o
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "Vector2D",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubTakeOverSubspaceResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1611,18 +1681,18 @@ int PubSubTakeOverSubspaceResponseDescriptor::getArraySize(void *object, int fie
     }
 }
 
-bool PubSubTakeOverSubspaceResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubTakeOverSubspaceResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubTakeOverSubspaceResponse *pp = (PubSubTakeOverSubspaceResponse *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSubspacePos(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSubspacePos(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1648,10 +1718,10 @@ const char *PubSubTakeOverSubspaceResponseDescriptor::getFieldStructName(void *o
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "Vector2D",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubTakeOverSubspaceResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1726,12 +1796,13 @@ class PubSubSubscriptionCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1773,10 +1844,10 @@ unsigned int PubSubSubscriptionCallDescriptor::getFieldTypeFlags(void *object, i
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubSubscriptionCallDescriptor::getFieldName(void *object, int field) const
@@ -1787,10 +1858,18 @@ const char *PubSubSubscriptionCallDescriptor::getFieldName(void *object, int fie
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubSubscriptionCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubSubscriptionCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -1801,10 +1880,10 @@ const char *PubSubSubscriptionCallDescriptor::getFieldTypeString(void *object, i
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubSubscriptionCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1834,18 +1913,18 @@ int PubSubSubscriptionCallDescriptor::getArraySize(void *object, int field) cons
     }
 }
 
-bool PubSubSubscriptionCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubSubscriptionCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubSubscriptionCall *pp = (PubSubSubscriptionCall *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        default: return "";
     }
 }
 
@@ -1872,9 +1951,10 @@ const char *PubSubSubscriptionCallDescriptor::getFieldStructName(void *object, i
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubSubscriptionCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1948,12 +2028,13 @@ class PubSubSubscriptionResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1995,10 +2076,10 @@ unsigned int PubSubSubscriptionResponseDescriptor::getFieldTypeFlags(void *objec
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubSubscriptionResponseDescriptor::getFieldName(void *object, int field) const
@@ -2009,10 +2090,18 @@ const char *PubSubSubscriptionResponseDescriptor::getFieldName(void *object, int
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "failed";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "failed",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubSubscriptionResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='f' && strcmp(fieldName, "failed")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubSubscriptionResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -2023,10 +2112,10 @@ const char *PubSubSubscriptionResponseDescriptor::getFieldTypeString(void *objec
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubSubscriptionResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2056,18 +2145,18 @@ int PubSubSubscriptionResponseDescriptor::getArraySize(void *object, int field) 
     }
 }
 
-bool PubSubSubscriptionResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubSubscriptionResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubSubscriptionResponse *pp = (PubSubSubscriptionResponse *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->getFailed(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return bool2string(pp->getFailed());
+        default: return "";
     }
 }
 
@@ -2094,9 +2183,10 @@ const char *PubSubSubscriptionResponseDescriptor::getFieldStructName(void *objec
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubSubscriptionResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2183,12 +2273,13 @@ class PubSubUnsubscriptionMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2230,11 +2321,11 @@ unsigned int PubSubUnsubscriptionMessageDescriptor::getFieldTypeFlags(void *obje
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubUnsubscriptionMessageDescriptor::getFieldName(void *object, int field) const
@@ -2245,11 +2336,20 @@ const char *PubSubUnsubscriptionMessageDescriptor::getFieldName(void *object, in
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "src";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "src",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PubSubUnsubscriptionMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "src")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubUnsubscriptionMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -2260,11 +2360,11 @@ const char *PubSubUnsubscriptionMessageDescriptor::getFieldTypeString(void *obje
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubUnsubscriptionMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2294,19 +2394,19 @@ int PubSubUnsubscriptionMessageDescriptor::getArraySize(void *object, int field)
     }
 }
 
-bool PubSubUnsubscriptionMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubUnsubscriptionMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubUnsubscriptionMessage *pp = (PubSubUnsubscriptionMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getSrc(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: {std::stringstream out; out << pp->getSrc(); return out.str();}
+        default: return "";
     }
 }
 
@@ -2333,10 +2433,11 @@ const char *PubSubUnsubscriptionMessageDescriptor::getFieldStructName(void *obje
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubUnsubscriptionMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2425,12 +2526,13 @@ class PubSubHelpCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2472,11 +2574,11 @@ unsigned int PubSubHelpCallDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubHelpCallDescriptor::getFieldName(void *object, int field) const
@@ -2487,11 +2589,20 @@ const char *PubSubHelpCallDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "helpType";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "helpType",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PubSubHelpCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='h' && strcmp(fieldName, "helpType")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubHelpCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -2502,11 +2613,11 @@ const char *PubSubHelpCallDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubHelpCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2539,19 +2650,19 @@ int PubSubHelpCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubHelpCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubHelpCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubHelpCall *pp = (PubSubHelpCall *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getHelpType(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: return long2string(pp->getHelpType());
+        default: return "";
     }
 }
 
@@ -2579,9 +2690,11 @@ const char *PubSubHelpCallDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubHelpCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2682,12 +2795,13 @@ class PubSubHelpResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2729,12 +2843,12 @@ unsigned int PubSubHelpResponseDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubHelpResponseDescriptor::getFieldName(void *object, int field) const
@@ -2745,12 +2859,22 @@ const char *PubSubHelpResponseDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "helpType";
-        case 2: return "node";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "helpType",
+        "node",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int PubSubHelpResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='h' && strcmp(fieldName, "helpType")==0) return base+1;
+    if (fieldName[0]=='n' && strcmp(fieldName, "node")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubHelpResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -2761,12 +2885,12 @@ const char *PubSubHelpResponseDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        case 2: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+        "NodeHandle",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubHelpResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2799,20 +2923,20 @@ int PubSubHelpResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubHelpResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubHelpResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubHelpResponse *pp = (PubSubHelpResponse *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getHelpType(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: return long2string(pp->getHelpType());
+        case 2: {std::stringstream out; out << pp->getNode(); return out.str();}
+        default: return "";
     }
 }
 
@@ -2840,10 +2964,12 @@ const char *PubSubHelpResponseDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 2: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        "NodeHandle",
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubHelpResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2918,12 +3044,13 @@ class PubSubIntermediateCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2965,10 +3092,10 @@ unsigned int PubSubIntermediateCallDescriptor::getFieldTypeFlags(void *object, i
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubIntermediateCallDescriptor::getFieldName(void *object, int field) const
@@ -2979,10 +3106,18 @@ const char *PubSubIntermediateCallDescriptor::getFieldName(void *object, int fie
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubIntermediateCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubIntermediateCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -2993,10 +3128,10 @@ const char *PubSubIntermediateCallDescriptor::getFieldTypeString(void *object, i
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubIntermediateCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -3026,18 +3161,18 @@ int PubSubIntermediateCallDescriptor::getArraySize(void *object, int field) cons
     }
 }
 
-bool PubSubIntermediateCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubIntermediateCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubIntermediateCall *pp = (PubSubIntermediateCall *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        default: return "";
     }
 }
 
@@ -3064,9 +3199,10 @@ const char *PubSubIntermediateCallDescriptor::getFieldStructName(void *object, i
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubIntermediateCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -3140,12 +3276,13 @@ class PubSubIntermediateResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -3187,10 +3324,10 @@ unsigned int PubSubIntermediateResponseDescriptor::getFieldTypeFlags(void *objec
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubIntermediateResponseDescriptor::getFieldName(void *object, int field) const
@@ -3201,10 +3338,18 @@ const char *PubSubIntermediateResponseDescriptor::getFieldName(void *object, int
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubIntermediateResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubIntermediateResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -3215,10 +3360,10 @@ const char *PubSubIntermediateResponseDescriptor::getFieldTypeString(void *objec
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubIntermediateResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -3248,18 +3393,18 @@ int PubSubIntermediateResponseDescriptor::getArraySize(void *object, int field) 
     }
 }
 
-bool PubSubIntermediateResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubIntermediateResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubIntermediateResponse *pp = (PubSubIntermediateResponse *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        default: return "";
     }
 }
 
@@ -3286,9 +3431,10 @@ const char *PubSubIntermediateResponseDescriptor::getFieldStructName(void *objec
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubIntermediateResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -3343,12 +3489,12 @@ PubSubBackupCall& PubSubBackupCall::operator=(const PubSubBackupCall& other)
     BaseCallMessage::operator=(other);
     this->subspaceId_var = other.subspaceId_var;
     delete [] this->intermediates_var;
-    this->intermediates_var = (other.intermediates_arraysize==0) ? NULL : new NodeHandle[other.intermediates_arraysize];
+    this->intermediates_var = (other.intermediates_arraysize==0) ? NULL : new ::NodeHandle[other.intermediates_arraysize];
     intermediates_arraysize = other.intermediates_arraysize;
     for (unsigned int i=0; i<intermediates_arraysize; i++)
         this->intermediates_var[i] = other.intermediates_var[i];
     delete [] this->children_var;
-    this->children_var = (other.children_arraysize==0) ? NULL : new NodeHandle[other.children_arraysize];
+    this->children_var = (other.children_arraysize==0) ? NULL : new ::NodeHandle[other.children_arraysize];
     children_arraysize = other.children_arraysize;
     for (unsigned int i=0; i<children_arraysize; i++)
         this->children_var[i] = other.children_var[i];
@@ -3381,7 +3527,7 @@ void PubSubBackupCall::parsimUnpack(cCommBuffer *b)
     if (intermediates_arraysize==0) {
         this->intermediates_var = 0;
     } else {
-        this->intermediates_var = new NodeHandle[intermediates_arraysize];
+        this->intermediates_var = new ::NodeHandle[intermediates_arraysize];
         doUnpacking(b,this->intermediates_var,intermediates_arraysize);
     }
     delete [] this->children_var;
@@ -3389,7 +3535,7 @@ void PubSubBackupCall::parsimUnpack(cCommBuffer *b)
     if (children_arraysize==0) {
         this->children_var = 0;
     } else {
-        this->children_var = new NodeHandle[children_arraysize];
+        this->children_var = new ::NodeHandle[children_arraysize];
         doUnpacking(b,this->children_var,children_arraysize);
     }
     delete [] this->childrenPos_var;
@@ -3414,7 +3560,7 @@ void PubSubBackupCall::setSubspaceId(int subspaceId_var)
 
 void PubSubBackupCall::setIntermediatesArraySize(unsigned int size)
 {
-    NodeHandle *intermediates_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *intermediates_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = intermediates_arraysize < size ? intermediates_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         intermediates_var2[i] = this->intermediates_var[i];
@@ -3442,7 +3588,7 @@ void PubSubBackupCall::setIntermediates(unsigned int k, const NodeHandle& interm
 
 void PubSubBackupCall::setChildrenArraySize(unsigned int size)
 {
-    NodeHandle *children_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *children_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = children_arraysize < size ? children_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         children_var2[i] = this->children_var[i];
@@ -3508,12 +3654,13 @@ class PubSubBackupCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -3555,13 +3702,13 @@ unsigned int PubSubBackupCallDescriptor::getFieldTypeFlags(void *object, int fie
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 2: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 3: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubBackupCallDescriptor::getFieldName(void *object, int field) const
@@ -3572,13 +3719,24 @@ const char *PubSubBackupCallDescriptor::getFieldName(void *object, int field) co
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "intermediates";
-        case 2: return "children";
-        case 3: return "childrenPos";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "intermediates",
+        "children",
+        "childrenPos",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int PubSubBackupCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "intermediates")==0) return base+1;
+    if (fieldName[0]=='c' && strcmp(fieldName, "children")==0) return base+2;
+    if (fieldName[0]=='c' && strcmp(fieldName, "childrenPos")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubBackupCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -3589,13 +3747,13 @@ const char *PubSubBackupCallDescriptor::getFieldTypeString(void *object, int fie
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        case 2: return "NodeHandle";
-        case 3: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+        "NodeHandle",
+        "int",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubBackupCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -3628,21 +3786,21 @@ int PubSubBackupCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubBackupCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubBackupCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubBackupCall *pp = (PubSubBackupCall *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getIntermediates(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getChildren(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: long2string(pp->getChildrenPos(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: {std::stringstream out; out << pp->getIntermediates(i); return out.str();}
+        case 2: {std::stringstream out; out << pp->getChildren(i); return out.str();}
+        case 3: return long2string(pp->getChildrenPos(i));
+        default: return "";
     }
 }
 
@@ -3670,11 +3828,13 @@ const char *PubSubBackupCallDescriptor::getFieldStructName(void *object, int fie
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        case 2: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+        "NodeHandle",
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubBackupCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -3750,12 +3910,13 @@ class PubSubBackupResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -3797,10 +3958,10 @@ unsigned int PubSubBackupResponseDescriptor::getFieldTypeFlags(void *object, int
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubBackupResponseDescriptor::getFieldName(void *object, int field) const
@@ -3811,10 +3972,18 @@ const char *PubSubBackupResponseDescriptor::getFieldName(void *object, int field
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubBackupResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubBackupResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -3825,10 +3994,10 @@ const char *PubSubBackupResponseDescriptor::getFieldTypeString(void *object, int
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubBackupResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -3858,18 +4027,18 @@ int PubSubBackupResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubBackupResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubBackupResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubBackupResponse *pp = (PubSubBackupResponse *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        default: return "";
     }
 }
 
@@ -3896,9 +4065,10 @@ const char *PubSubBackupResponseDescriptor::getFieldStructName(void *object, int
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubBackupResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -3986,12 +4156,13 @@ class PubSubPingCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4033,11 +4204,11 @@ unsigned int PubSubPingCallDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubPingCallDescriptor::getFieldName(void *object, int field) const
@@ -4048,11 +4219,20 @@ const char *PubSubPingCallDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "pingType";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "pingType",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PubSubPingCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "pingType")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubPingCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -4063,11 +4243,11 @@ const char *PubSubPingCallDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubPingCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4100,19 +4280,19 @@ int PubSubPingCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubPingCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubPingCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubPingCall *pp = (PubSubPingCall *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getPingType(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: return long2string(pp->getPingType());
+        default: return "";
     }
 }
 
@@ -4140,9 +4320,11 @@ const char *PubSubPingCallDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubPingCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4216,12 +4398,13 @@ class PubSubPingResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4263,10 +4446,10 @@ unsigned int PubSubPingResponseDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubPingResponseDescriptor::getFieldName(void *object, int field) const
@@ -4277,10 +4460,18 @@ const char *PubSubPingResponseDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubPingResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubPingResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -4291,10 +4482,10 @@ const char *PubSubPingResponseDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubPingResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4324,18 +4515,18 @@ int PubSubPingResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubPingResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubPingResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubPingResponse *pp = (PubSubPingResponse *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        default: return "";
     }
 }
 
@@ -4362,9 +4553,10 @@ const char *PubSubPingResponseDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubPingResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4451,12 +4643,13 @@ class PubSubReplacementMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4498,11 +4691,11 @@ unsigned int PubSubReplacementMessageDescriptor::getFieldTypeFlags(void *object,
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubReplacementMessageDescriptor::getFieldName(void *object, int field) const
@@ -4513,11 +4706,20 @@ const char *PubSubReplacementMessageDescriptor::getFieldName(void *object, int f
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "newResponsibleNode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "newResponsibleNode",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PubSubReplacementMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "newResponsibleNode")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubReplacementMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -4528,11 +4730,11 @@ const char *PubSubReplacementMessageDescriptor::getFieldTypeString(void *object,
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubReplacementMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4562,19 +4764,19 @@ int PubSubReplacementMessageDescriptor::getArraySize(void *object, int field) co
     }
 }
 
-bool PubSubReplacementMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubReplacementMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubReplacementMessage *pp = (PubSubReplacementMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getNewResponsibleNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: {std::stringstream out; out << pp->getNewResponsibleNode(); return out.str();}
+        default: return "";
     }
 }
 
@@ -4601,10 +4803,11 @@ const char *PubSubReplacementMessageDescriptor::getFieldStructName(void *object,
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubReplacementMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4678,12 +4881,13 @@ class PubSubFailedNodeMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4725,10 +4929,10 @@ unsigned int PubSubFailedNodeMessageDescriptor::getFieldTypeFlags(void *object, 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubFailedNodeMessageDescriptor::getFieldName(void *object, int field) const
@@ -4739,10 +4943,18 @@ const char *PubSubFailedNodeMessageDescriptor::getFieldName(void *object, int fi
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "failedNode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "failedNode",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubFailedNodeMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='f' && strcmp(fieldName, "failedNode")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubFailedNodeMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -4753,10 +4965,10 @@ const char *PubSubFailedNodeMessageDescriptor::getFieldTypeString(void *object, 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubFailedNodeMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4786,18 +4998,18 @@ int PubSubFailedNodeMessageDescriptor::getArraySize(void *object, int field) con
     }
 }
 
-bool PubSubFailedNodeMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubFailedNodeMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubFailedNodeMessage *pp = (PubSubFailedNodeMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getFailedNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getFailedNode(); return out.str();}
+        default: return "";
     }
 }
 
@@ -4823,10 +5035,10 @@ const char *PubSubFailedNodeMessageDescriptor::getFieldStructName(void *object, 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubFailedNodeMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4914,12 +5126,13 @@ class PubSubNodeLeftMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4961,11 +5174,11 @@ unsigned int PubSubNodeLeftMessageDescriptor::getFieldTypeFlags(void *object, in
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubNodeLeftMessageDescriptor::getFieldName(void *object, int field) const
@@ -4976,11 +5189,20 @@ const char *PubSubNodeLeftMessageDescriptor::getFieldName(void *object, int fiel
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "node";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "node",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PubSubNodeLeftMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "node")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubNodeLeftMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -4991,11 +5213,11 @@ const char *PubSubNodeLeftMessageDescriptor::getFieldTypeString(void *object, in
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubNodeLeftMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -5025,19 +5247,19 @@ int PubSubNodeLeftMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubNodeLeftMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubNodeLeftMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubNodeLeftMessage *pp = (PubSubNodeLeftMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: {std::stringstream out; out << pp->getNode(); return out.str();}
+        default: return "";
     }
 }
 
@@ -5064,10 +5286,11 @@ const char *PubSubNodeLeftMessageDescriptor::getFieldStructName(void *object, in
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubNodeLeftMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -5155,12 +5378,13 @@ class PubSubAdoptChildCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -5202,11 +5426,11 @@ unsigned int PubSubAdoptChildCallDescriptor::getFieldTypeFlags(void *object, int
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubAdoptChildCallDescriptor::getFieldName(void *object, int field) const
@@ -5217,11 +5441,20 @@ const char *PubSubAdoptChildCallDescriptor::getFieldName(void *object, int field
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "child";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "child",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PubSubAdoptChildCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "child")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubAdoptChildCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -5232,11 +5465,11 @@ const char *PubSubAdoptChildCallDescriptor::getFieldTypeString(void *object, int
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubAdoptChildCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -5266,19 +5499,19 @@ int PubSubAdoptChildCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubAdoptChildCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubAdoptChildCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubAdoptChildCall *pp = (PubSubAdoptChildCall *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getChild(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: {std::stringstream out; out << pp->getChild(); return out.str();}
+        default: return "";
     }
 }
 
@@ -5305,10 +5538,11 @@ const char *PubSubAdoptChildCallDescriptor::getFieldStructName(void *object, int
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubAdoptChildCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -5396,12 +5630,13 @@ class PubSubAdoptChildResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -5443,11 +5678,11 @@ unsigned int PubSubAdoptChildResponseDescriptor::getFieldTypeFlags(void *object,
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubAdoptChildResponseDescriptor::getFieldName(void *object, int field) const
@@ -5458,11 +5693,20 @@ const char *PubSubAdoptChildResponseDescriptor::getFieldName(void *object, int f
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "child";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "child",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PubSubAdoptChildResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "child")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubAdoptChildResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -5473,11 +5717,11 @@ const char *PubSubAdoptChildResponseDescriptor::getFieldTypeString(void *object,
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubAdoptChildResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -5507,19 +5751,19 @@ int PubSubAdoptChildResponseDescriptor::getArraySize(void *object, int field) co
     }
 }
 
-bool PubSubAdoptChildResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubAdoptChildResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubAdoptChildResponse *pp = (PubSubAdoptChildResponse *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getChild(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: {std::stringstream out; out << pp->getChild(); return out.str();}
+        default: return "";
     }
 }
 
@@ -5546,10 +5790,11 @@ const char *PubSubAdoptChildResponseDescriptor::getFieldStructName(void *object,
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubAdoptChildResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -5624,12 +5869,13 @@ class PubSubReleaseIntermediateMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -5671,10 +5917,10 @@ unsigned int PubSubReleaseIntermediateMessageDescriptor::getFieldTypeFlags(void 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubReleaseIntermediateMessageDescriptor::getFieldName(void *object, int field) const
@@ -5685,10 +5931,18 @@ const char *PubSubReleaseIntermediateMessageDescriptor::getFieldName(void *objec
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PubSubReleaseIntermediateMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubReleaseIntermediateMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -5699,10 +5953,10 @@ const char *PubSubReleaseIntermediateMessageDescriptor::getFieldTypeString(void 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubReleaseIntermediateMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -5732,18 +5986,18 @@ int PubSubReleaseIntermediateMessageDescriptor::getArraySize(void *object, int f
     }
 }
 
-bool PubSubReleaseIntermediateMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubReleaseIntermediateMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubReleaseIntermediateMessage *pp = (PubSubReleaseIntermediateMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        default: return "";
     }
 }
 
@@ -5770,9 +6024,10 @@ const char *PubSubReleaseIntermediateMessageDescriptor::getFieldStructName(void 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubReleaseIntermediateMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -5859,12 +6114,13 @@ class PubSubHelpReleaseMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -5906,11 +6162,11 @@ unsigned int PubSubHelpReleaseMessageDescriptor::getFieldTypeFlags(void *object,
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubHelpReleaseMessageDescriptor::getFieldName(void *object, int field) const
@@ -5921,11 +6177,20 @@ const char *PubSubHelpReleaseMessageDescriptor::getFieldName(void *object, int f
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "node";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "node",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PubSubHelpReleaseMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "node")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubHelpReleaseMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -5936,11 +6201,11 @@ const char *PubSubHelpReleaseMessageDescriptor::getFieldTypeString(void *object,
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubHelpReleaseMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -5970,19 +6235,19 @@ int PubSubHelpReleaseMessageDescriptor::getArraySize(void *object, int field) co
     }
 }
 
-bool PubSubHelpReleaseMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubHelpReleaseMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubHelpReleaseMessage *pp = (PubSubHelpReleaseMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: {std::stringstream out; out << pp->getNode(); return out.str();}
+        default: return "";
     }
 }
 
@@ -6009,10 +6274,11 @@ const char *PubSubHelpReleaseMessageDescriptor::getFieldStructName(void *object,
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubHelpReleaseMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -6126,12 +6392,13 @@ class PubSubBackupSubscriptionMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -6173,13 +6440,13 @@ unsigned int PubSubBackupSubscriptionMessageDescriptor::getFieldTypeFlags(void *
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubBackupSubscriptionMessageDescriptor::getFieldName(void *object, int field) const
@@ -6190,13 +6457,24 @@ const char *PubSubBackupSubscriptionMessageDescriptor::getFieldName(void *object
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "child";
-        case 2: return "parent";
-        case 3: return "oldParent";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "child",
+        "parent",
+        "oldParent",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int PubSubBackupSubscriptionMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "child")==0) return base+1;
+    if (fieldName[0]=='p' && strcmp(fieldName, "parent")==0) return base+2;
+    if (fieldName[0]=='o' && strcmp(fieldName, "oldParent")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubBackupSubscriptionMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -6207,13 +6485,13 @@ const char *PubSubBackupSubscriptionMessageDescriptor::getFieldTypeString(void *
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        case 2: return "NodeHandle";
-        case 3: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+        "NodeHandle",
+        "NodeHandle",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubBackupSubscriptionMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -6243,21 +6521,21 @@ int PubSubBackupSubscriptionMessageDescriptor::getArraySize(void *object, int fi
     }
 }
 
-bool PubSubBackupSubscriptionMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubBackupSubscriptionMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubBackupSubscriptionMessage *pp = (PubSubBackupSubscriptionMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getChild(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getParent(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getOldParent(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: {std::stringstream out; out << pp->getChild(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getParent(); return out.str();}
+        case 3: {std::stringstream out; out << pp->getOldParent(); return out.str();}
+        default: return "";
     }
 }
 
@@ -6284,12 +6562,13 @@ const char *PubSubBackupSubscriptionMessageDescriptor::getFieldStructName(void *
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        case 2: return "NodeHandle"; break;
-        case 3: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+        "NodeHandle",
+        "NodeHandle",
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubBackupSubscriptionMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -6393,12 +6672,13 @@ class PubSubBackupIntermediateMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -6440,12 +6720,12 @@ unsigned int PubSubBackupIntermediateMessageDescriptor::getFieldTypeFlags(void *
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubBackupIntermediateMessageDescriptor::getFieldName(void *object, int field) const
@@ -6456,12 +6736,22 @@ const char *PubSubBackupIntermediateMessageDescriptor::getFieldName(void *object
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "node";
-        case 2: return "pos";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "node",
+        "pos",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int PubSubBackupIntermediateMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "node")==0) return base+1;
+    if (fieldName[0]=='p' && strcmp(fieldName, "pos")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubBackupIntermediateMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -6472,12 +6762,12 @@ const char *PubSubBackupIntermediateMessageDescriptor::getFieldTypeString(void *
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        case 2: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+        "int",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubBackupIntermediateMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -6507,20 +6797,20 @@ int PubSubBackupIntermediateMessageDescriptor::getArraySize(void *object, int fi
     }
 }
 
-bool PubSubBackupIntermediateMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubBackupIntermediateMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubBackupIntermediateMessage *pp = (PubSubBackupIntermediateMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: long2string(pp->getPos(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: {std::stringstream out; out << pp->getNode(); return out.str();}
+        case 2: return long2string(pp->getPos());
+        default: return "";
     }
 }
 
@@ -6548,10 +6838,12 @@ const char *PubSubBackupIntermediateMessageDescriptor::getFieldStructName(void *
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubBackupIntermediateMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -6652,12 +6944,13 @@ class PubSubBackupUnsubscribeMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -6699,12 +6992,12 @@ unsigned int PubSubBackupUnsubscribeMessageDescriptor::getFieldTypeFlags(void *o
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubBackupUnsubscribeMessageDescriptor::getFieldName(void *object, int field) const
@@ -6715,12 +7008,22 @@ const char *PubSubBackupUnsubscribeMessageDescriptor::getFieldName(void *object,
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "child";
-        case 2: return "intermediate";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "child",
+        "intermediate",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int PubSubBackupUnsubscribeMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "child")==0) return base+1;
+    if (fieldName[0]=='i' && strcmp(fieldName, "intermediate")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubBackupUnsubscribeMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -6731,12 +7034,12 @@ const char *PubSubBackupUnsubscribeMessageDescriptor::getFieldTypeString(void *o
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        case 2: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+        "NodeHandle",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubBackupUnsubscribeMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -6766,20 +7069,20 @@ int PubSubBackupUnsubscribeMessageDescriptor::getArraySize(void *object, int fie
     }
 }
 
-bool PubSubBackupUnsubscribeMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubBackupUnsubscribeMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubBackupUnsubscribeMessage *pp = (PubSubBackupUnsubscribeMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getChild(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getIntermediate(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: {std::stringstream out; out << pp->getChild(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getIntermediate(); return out.str();}
+        default: return "";
     }
 }
 
@@ -6806,11 +7109,12 @@ const char *PubSubBackupUnsubscribeMessageDescriptor::getFieldStructName(void *o
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        case 2: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+        "NodeHandle",
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubBackupUnsubscribeMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -6926,12 +7230,13 @@ class PubSubMoveMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -6973,13 +7278,13 @@ unsigned int PubSubMoveMessageDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubMoveMessageDescriptor::getFieldName(void *object, int field) const
@@ -6990,13 +7295,24 @@ const char *PubSubMoveMessageDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "timestamp";
-        case 2: return "player";
-        case 3: return "position";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "timestamp",
+        "player",
+        "position",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int PubSubMoveMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timestamp")==0) return base+1;
+    if (fieldName[0]=='p' && strcmp(fieldName, "player")==0) return base+2;
+    if (fieldName[0]=='p' && strcmp(fieldName, "position")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubMoveMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -7007,13 +7323,13 @@ const char *PubSubMoveMessageDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "simtime_t";
-        case 2: return "NodeHandle";
-        case 3: return "Vector2D";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "simtime_t",
+        "NodeHandle",
+        "Vector2D",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubMoveMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -7043,21 +7359,21 @@ int PubSubMoveMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubMoveMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubMoveMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubMoveMessage *pp = (PubSubMoveMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: double2string(pp->getTimestamp(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getPlayer(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getPosition(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: return double2string(pp->getTimestamp());
+        case 2: {std::stringstream out; out << pp->getPlayer(); return out.str();}
+        case 3: {std::stringstream out; out << pp->getPosition(); return out.str();}
+        default: return "";
     }
 }
 
@@ -7085,11 +7401,13 @@ const char *PubSubMoveMessageDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 2: return "NodeHandle"; break;
-        case 3: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        "NodeHandle",
+        "Vector2D",
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubMoveMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -7148,12 +7466,12 @@ PubSubMoveListMessage& PubSubMoveListMessage::operator=(const PubSubMoveListMess
     this->subspaceId_var = other.subspaceId_var;
     this->timestamp_var = other.timestamp_var;
     delete [] this->player_var;
-    this->player_var = (other.player_arraysize==0) ? NULL : new NodeHandle[other.player_arraysize];
+    this->player_var = (other.player_arraysize==0) ? NULL : new ::NodeHandle[other.player_arraysize];
     player_arraysize = other.player_arraysize;
     for (unsigned int i=0; i<player_arraysize; i++)
         this->player_var[i] = other.player_var[i];
     delete [] this->position_var;
-    this->position_var = (other.position_arraysize==0) ? NULL : new Vector2D[other.position_arraysize];
+    this->position_var = (other.position_arraysize==0) ? NULL : new ::Vector2D[other.position_arraysize];
     position_arraysize = other.position_arraysize;
     for (unsigned int i=0; i<position_arraysize; i++)
         this->position_var[i] = other.position_var[i];
@@ -7188,7 +7506,7 @@ void PubSubMoveListMessage::parsimUnpack(cCommBuffer *b)
     if (player_arraysize==0) {
         this->player_var = 0;
     } else {
-        this->player_var = new NodeHandle[player_arraysize];
+        this->player_var = new ::NodeHandle[player_arraysize];
         doUnpacking(b,this->player_var,player_arraysize);
     }
     delete [] this->position_var;
@@ -7196,7 +7514,7 @@ void PubSubMoveListMessage::parsimUnpack(cCommBuffer *b)
     if (position_arraysize==0) {
         this->position_var = 0;
     } else {
-        this->position_var = new Vector2D[position_arraysize];
+        this->position_var = new ::Vector2D[position_arraysize];
         doUnpacking(b,this->position_var,position_arraysize);
     }
     delete [] this->positionAge_var;
@@ -7231,7 +7549,7 @@ void PubSubMoveListMessage::setTimestamp(simtime_t timestamp_var)
 
 void PubSubMoveListMessage::setPlayerArraySize(unsigned int size)
 {
-    NodeHandle *player_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *player_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = player_arraysize < size ? player_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         player_var2[i] = this->player_var[i];
@@ -7259,7 +7577,7 @@ void PubSubMoveListMessage::setPlayer(unsigned int k, const NodeHandle& player_v
 
 void PubSubMoveListMessage::setPositionArraySize(unsigned int size)
 {
-    Vector2D *position_var2 = (size==0) ? NULL : new Vector2D[size];
+    ::Vector2D *position_var2 = (size==0) ? NULL : new ::Vector2D[size];
     unsigned int sz = position_arraysize < size ? position_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         position_var2[i] = this->position_var[i];
@@ -7325,12 +7643,13 @@ class PubSubMoveListMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -7372,14 +7691,14 @@ unsigned int PubSubMoveListMessageDescriptor::getFieldTypeFlags(void *object, in
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 3: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 4: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PubSubMoveListMessageDescriptor::getFieldName(void *object, int field) const
@@ -7390,14 +7709,26 @@ const char *PubSubMoveListMessageDescriptor::getFieldName(void *object, int fiel
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "subspaceId";
-        case 1: return "timestamp";
-        case 2: return "player";
-        case 3: return "position";
-        case 4: return "positionAge";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "subspaceId",
+        "timestamp",
+        "player",
+        "position",
+        "positionAge",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int PubSubMoveListMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "subspaceId")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timestamp")==0) return base+1;
+    if (fieldName[0]=='p' && strcmp(fieldName, "player")==0) return base+2;
+    if (fieldName[0]=='p' && strcmp(fieldName, "position")==0) return base+3;
+    if (fieldName[0]=='p' && strcmp(fieldName, "positionAge")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PubSubMoveListMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -7408,14 +7739,14 @@ const char *PubSubMoveListMessageDescriptor::getFieldTypeString(void *object, in
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "simtime_t";
-        case 2: return "NodeHandle";
-        case 3: return "Vector2D";
-        case 4: return "simtime_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "simtime_t",
+        "NodeHandle",
+        "Vector2D",
+        "simtime_t",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PubSubMoveListMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -7448,22 +7779,22 @@ int PubSubMoveListMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PubSubMoveListMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PubSubMoveListMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PubSubMoveListMessage *pp = (PubSubMoveListMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSubspaceId(),resultbuf,bufsize); return true;
-        case 1: double2string(pp->getTimestamp(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getPlayer(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getPosition(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: double2string(pp->getPositionAge(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSubspaceId());
+        case 1: return double2string(pp->getTimestamp());
+        case 2: {std::stringstream out; out << pp->getPlayer(i); return out.str();}
+        case 3: {std::stringstream out; out << pp->getPosition(i); return out.str();}
+        case 4: return double2string(pp->getPositionAge(i));
+        default: return "";
     }
 }
 
@@ -7492,11 +7823,14 @@ const char *PubSubMoveListMessageDescriptor::getFieldStructName(void *object, in
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 2: return "NodeHandle"; break;
-        case 3: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        "NodeHandle",
+        "Vector2D",
+        NULL,
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *PubSubMoveListMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

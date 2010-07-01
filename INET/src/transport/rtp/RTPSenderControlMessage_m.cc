@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from transport/rtp/RTPSenderControlMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from transport/rtp/RTPSenderControlMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -115,12 +115,13 @@ class RTPSenderControlMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -162,12 +163,12 @@ unsigned int RTPSenderControlMessageDescriptor::getFieldTypeFlags(void *object, 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RTPSenderControlMessageDescriptor::getFieldName(void *object, int field) const
@@ -178,12 +179,22 @@ const char *RTPSenderControlMessageDescriptor::getFieldName(void *object, int fi
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "command";
-        case 1: return "commandParameter1";
-        case 2: return "commandParameter2";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "command",
+        "commandParameter1",
+        "commandParameter2",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int RTPSenderControlMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "commandParameter1")==0) return base+1;
+    if (fieldName[0]=='c' && strcmp(fieldName, "commandParameter2")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RTPSenderControlMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -194,12 +205,12 @@ const char *RTPSenderControlMessageDescriptor::getFieldTypeString(void *object, 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "string";
-        case 1: return "float";
-        case 2: return "float";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "string",
+        "float",
+        "float",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RTPSenderControlMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -229,20 +240,20 @@ int RTPSenderControlMessageDescriptor::getArraySize(void *object, int field) con
     }
 }
 
-bool RTPSenderControlMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RTPSenderControlMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RTPSenderControlMessage *pp = (RTPSenderControlMessage *)object; (void)pp;
     switch (field) {
-        case 0: oppstring2string(pp->getCommand(),resultbuf,bufsize); return true;
-        case 1: double2string(pp->getCommandParameter1(),resultbuf,bufsize); return true;
-        case 2: double2string(pp->getCommandParameter2(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return oppstring2string(pp->getCommand());
+        case 1: return double2string(pp->getCommandParameter1());
+        case 2: return double2string(pp->getCommandParameter2());
+        default: return "";
     }
 }
 
@@ -271,9 +282,12 @@ const char *RTPSenderControlMessageDescriptor::getFieldStructName(void *object, 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *RTPSenderControlMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

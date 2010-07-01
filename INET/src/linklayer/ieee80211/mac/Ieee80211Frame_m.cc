@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from linklayer/ieee80211/mac/Ieee80211Frame.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from linklayer/ieee80211/mac/Ieee80211Frame.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -207,12 +207,13 @@ class Ieee80211FrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -254,17 +255,17 @@ unsigned int Ieee80211FrameDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211FrameDescriptor::getFieldName(void *object, int field) const
@@ -275,17 +276,32 @@ const char *Ieee80211FrameDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "type";
-        case 1: return "toDS";
-        case 2: return "fromDS";
-        case 3: return "retry";
-        case 4: return "moreFragments";
-        case 5: return "duration";
-        case 6: return "AID";
-        case 7: return "receiverAddress";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "type",
+        "toDS",
+        "fromDS",
+        "retry",
+        "moreFragments",
+        "duration",
+        "AID",
+        "receiverAddress",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211FrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "type")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "toDS")==0) return base+1;
+    if (fieldName[0]=='f' && strcmp(fieldName, "fromDS")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "retry")==0) return base+3;
+    if (fieldName[0]=='m' && strcmp(fieldName, "moreFragments")==0) return base+4;
+    if (fieldName[0]=='d' && strcmp(fieldName, "duration")==0) return base+5;
+    if (fieldName[0]=='A' && strcmp(fieldName, "AID")==0) return base+6;
+    if (fieldName[0]=='r' && strcmp(fieldName, "receiverAddress")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211FrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -296,17 +312,17 @@ const char *Ieee80211FrameDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "short";
-        case 1: return "bool";
-        case 2: return "bool";
-        case 3: return "bool";
-        case 4: return "bool";
-        case 5: return "simtime_t";
-        case 6: return "short";
-        case 7: return "MACAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "short",
+        "bool",
+        "bool",
+        "bool",
+        "bool",
+        "simtime_t",
+        "short",
+        "MACAddress",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211FrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -339,25 +355,25 @@ int Ieee80211FrameDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool Ieee80211FrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211FrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Frame *pp = (Ieee80211Frame *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getType(),resultbuf,bufsize); return true;
-        case 1: bool2string(pp->getToDS(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getFromDS(),resultbuf,bufsize); return true;
-        case 3: bool2string(pp->getRetry(),resultbuf,bufsize); return true;
-        case 4: bool2string(pp->getMoreFragments(),resultbuf,bufsize); return true;
-        case 5: double2string(pp->getDuration(),resultbuf,bufsize); return true;
-        case 6: long2string(pp->getAID(),resultbuf,bufsize); return true;
-        case 7: {std::stringstream out; out << pp->getReceiverAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getType());
+        case 1: return bool2string(pp->getToDS());
+        case 2: return bool2string(pp->getFromDS());
+        case 3: return bool2string(pp->getRetry());
+        case 4: return bool2string(pp->getMoreFragments());
+        case 5: return double2string(pp->getDuration());
+        case 6: return long2string(pp->getAID());
+        case 7: {std::stringstream out; out << pp->getReceiverAddress(); return out.str();}
+        default: return "";
     }
 }
 
@@ -390,10 +406,17 @@ const char *Ieee80211FrameDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 7: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        "MACAddress",
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211FrameDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -454,12 +477,13 @@ class Ieee80211OneAddressFrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -501,9 +525,7 @@ unsigned int Ieee80211OneAddressFrameDescriptor::getFieldTypeFlags(void *object,
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *Ieee80211OneAddressFrameDescriptor::getFieldName(void *object, int field) const
@@ -514,9 +536,13 @@ const char *Ieee80211OneAddressFrameDescriptor::getFieldName(void *object, int f
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int Ieee80211OneAddressFrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211OneAddressFrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -527,9 +553,7 @@ const char *Ieee80211OneAddressFrameDescriptor::getFieldTypeString(void *object,
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *Ieee80211OneAddressFrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -559,17 +583,17 @@ int Ieee80211OneAddressFrameDescriptor::getArraySize(void *object, int field) co
     }
 }
 
-bool Ieee80211OneAddressFrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211OneAddressFrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211OneAddressFrame *pp = (Ieee80211OneAddressFrame *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -595,9 +619,7 @@ const char *Ieee80211OneAddressFrameDescriptor::getFieldStructName(void *object,
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *Ieee80211OneAddressFrameDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -658,12 +680,13 @@ class Ieee80211ACKFrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -705,9 +728,7 @@ unsigned int Ieee80211ACKFrameDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *Ieee80211ACKFrameDescriptor::getFieldName(void *object, int field) const
@@ -718,9 +739,13 @@ const char *Ieee80211ACKFrameDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int Ieee80211ACKFrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211ACKFrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -731,9 +756,7 @@ const char *Ieee80211ACKFrameDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *Ieee80211ACKFrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -763,17 +786,17 @@ int Ieee80211ACKFrameDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool Ieee80211ACKFrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211ACKFrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211ACKFrame *pp = (Ieee80211ACKFrame *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -799,9 +822,7 @@ const char *Ieee80211ACKFrameDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *Ieee80211ACKFrameDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -876,12 +897,13 @@ class Ieee80211TwoAddressFrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -923,10 +945,10 @@ unsigned int Ieee80211TwoAddressFrameDescriptor::getFieldTypeFlags(void *object,
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211TwoAddressFrameDescriptor::getFieldName(void *object, int field) const
@@ -937,10 +959,18 @@ const char *Ieee80211TwoAddressFrameDescriptor::getFieldName(void *object, int f
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "transmitterAddress";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "transmitterAddress",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211TwoAddressFrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "transmitterAddress")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211TwoAddressFrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -951,10 +981,10 @@ const char *Ieee80211TwoAddressFrameDescriptor::getFieldTypeString(void *object,
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211TwoAddressFrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -984,18 +1014,18 @@ int Ieee80211TwoAddressFrameDescriptor::getArraySize(void *object, int field) co
     }
 }
 
-bool Ieee80211TwoAddressFrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211TwoAddressFrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211TwoAddressFrame *pp = (Ieee80211TwoAddressFrame *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getTransmitterAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getTransmitterAddress(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1021,10 +1051,10 @@ const char *Ieee80211TwoAddressFrameDescriptor::getFieldStructName(void *object,
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211TwoAddressFrameDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1086,12 +1116,13 @@ class Ieee80211RTSFrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1133,9 +1164,7 @@ unsigned int Ieee80211RTSFrameDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *Ieee80211RTSFrameDescriptor::getFieldName(void *object, int field) const
@@ -1146,9 +1175,13 @@ const char *Ieee80211RTSFrameDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int Ieee80211RTSFrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211RTSFrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -1159,9 +1192,7 @@ const char *Ieee80211RTSFrameDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *Ieee80211RTSFrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1191,17 +1222,17 @@ int Ieee80211RTSFrameDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool Ieee80211RTSFrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211RTSFrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211RTSFrame *pp = (Ieee80211RTSFrame *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -1227,9 +1258,7 @@ const char *Ieee80211RTSFrameDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *Ieee80211RTSFrameDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1290,12 +1319,13 @@ class Ieee80211CTSFrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1337,9 +1367,7 @@ unsigned int Ieee80211CTSFrameDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *Ieee80211CTSFrameDescriptor::getFieldName(void *object, int field) const
@@ -1350,9 +1378,13 @@ const char *Ieee80211CTSFrameDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int Ieee80211CTSFrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211CTSFrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -1363,9 +1395,7 @@ const char *Ieee80211CTSFrameDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *Ieee80211CTSFrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1395,17 +1425,17 @@ int Ieee80211CTSFrameDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool Ieee80211CTSFrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211CTSFrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211CTSFrame *pp = (Ieee80211CTSFrame *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -1431,9 +1461,7 @@ const char *Ieee80211CTSFrameDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *Ieee80211CTSFrameDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1536,12 +1564,13 @@ class Ieee80211DataOrMgmtFrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1583,12 +1612,12 @@ unsigned int Ieee80211DataOrMgmtFrameDescriptor::getFieldTypeFlags(void *object,
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211DataOrMgmtFrameDescriptor::getFieldName(void *object, int field) const
@@ -1599,12 +1628,22 @@ const char *Ieee80211DataOrMgmtFrameDescriptor::getFieldName(void *object, int f
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "address3";
-        case 1: return "fragmentNumber";
-        case 2: return "sequenceNumber";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "address3",
+        "fragmentNumber",
+        "sequenceNumber",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211DataOrMgmtFrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "address3")==0) return base+0;
+    if (fieldName[0]=='f' && strcmp(fieldName, "fragmentNumber")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sequenceNumber")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211DataOrMgmtFrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -1615,12 +1654,12 @@ const char *Ieee80211DataOrMgmtFrameDescriptor::getFieldTypeString(void *object,
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        case 1: return "short";
-        case 2: return "short";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+        "short",
+        "short",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211DataOrMgmtFrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1650,20 +1689,20 @@ int Ieee80211DataOrMgmtFrameDescriptor::getArraySize(void *object, int field) co
     }
 }
 
-bool Ieee80211DataOrMgmtFrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211DataOrMgmtFrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211DataOrMgmtFrame *pp = (Ieee80211DataOrMgmtFrame *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getAddress3(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getFragmentNumber(),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getSequenceNumber(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getAddress3(); return out.str();}
+        case 1: return long2string(pp->getFragmentNumber());
+        case 2: return long2string(pp->getSequenceNumber());
+        default: return "";
     }
 }
 
@@ -1691,10 +1730,12 @@ const char *Ieee80211DataOrMgmtFrameDescriptor::getFieldStructName(void *object,
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211DataOrMgmtFrameDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1771,12 +1812,13 @@ class Ieee80211DataFrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1818,10 +1860,10 @@ unsigned int Ieee80211DataFrameDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211DataFrameDescriptor::getFieldName(void *object, int field) const
@@ -1832,10 +1874,18 @@ const char *Ieee80211DataFrameDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "address4";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "address4",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211DataFrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "address4")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211DataFrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -1846,10 +1896,10 @@ const char *Ieee80211DataFrameDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211DataFrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1879,18 +1929,18 @@ int Ieee80211DataFrameDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool Ieee80211DataFrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211DataFrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211DataFrame *pp = (Ieee80211DataFrame *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getAddress4(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getAddress4(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1916,10 +1966,10 @@ const char *Ieee80211DataFrameDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211DataFrameDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1980,12 +2030,13 @@ class Ieee80211ManagementFrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2027,9 +2078,7 @@ unsigned int Ieee80211ManagementFrameDescriptor::getFieldTypeFlags(void *object,
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *Ieee80211ManagementFrameDescriptor::getFieldName(void *object, int field) const
@@ -2040,9 +2089,13 @@ const char *Ieee80211ManagementFrameDescriptor::getFieldName(void *object, int f
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int Ieee80211ManagementFrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211ManagementFrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -2053,9 +2106,7 @@ const char *Ieee80211ManagementFrameDescriptor::getFieldTypeString(void *object,
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *Ieee80211ManagementFrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2085,17 +2136,17 @@ int Ieee80211ManagementFrameDescriptor::getArraySize(void *object, int field) co
     }
 }
 
-bool Ieee80211ManagementFrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211ManagementFrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211ManagementFrame *pp = (Ieee80211ManagementFrame *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -2121,9 +2172,7 @@ const char *Ieee80211ManagementFrameDescriptor::getFieldStructName(void *object,
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *Ieee80211ManagementFrameDescriptor::getFieldStructPointer(void *object, int field, int i) const

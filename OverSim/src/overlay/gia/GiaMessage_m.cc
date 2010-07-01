@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from overlay/gia/GiaMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from overlay/gia/GiaMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -158,12 +158,13 @@ class GiaMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -205,14 +206,14 @@ unsigned int GiaMessageDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *GiaMessageDescriptor::getFieldName(void *object, int field) const
@@ -223,14 +224,26 @@ const char *GiaMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "srcNode";
-        case 1: return "hopCount";
-        case 2: return "command";
-        case 3: return "srcCapacity";
-        case 4: return "srcDegree";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "srcNode",
+        "hopCount",
+        "command",
+        "srcCapacity",
+        "srcDegree",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int GiaMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcNode")==0) return base+0;
+    if (fieldName[0]=='h' && strcmp(fieldName, "hopCount")==0) return base+1;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+2;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcCapacity")==0) return base+3;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcDegree")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *GiaMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -241,14 +254,14 @@ const char *GiaMessageDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        case 1: return "int";
-        case 2: return "int";
-        case 3: return "double";
-        case 4: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+        "int",
+        "int",
+        "double",
+        "int",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *GiaMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -281,22 +294,22 @@ int GiaMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool GiaMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string GiaMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     GiaMessage *pp = (GiaMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSrcNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getHopCount(),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        case 3: double2string(pp->getSrcCapacity(),resultbuf,bufsize); return true;
-        case 4: long2string(pp->getSrcDegree(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSrcNode(); return out.str();}
+        case 1: return long2string(pp->getHopCount());
+        case 2: return long2string(pp->getCommand());
+        case 3: return double2string(pp->getSrcCapacity());
+        case 4: return long2string(pp->getSrcDegree());
+        default: return "";
     }
 }
 
@@ -326,10 +339,14 @@ const char *GiaMessageDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *GiaMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -373,7 +390,7 @@ GiaNeighborMessage& GiaNeighborMessage::operator=(const GiaNeighborMessage& othe
     if (this==&other) return *this;
     GiaMessage::operator=(other);
     delete [] this->neighbors_var;
-    this->neighbors_var = (other.neighbors_arraysize==0) ? NULL : new GiaNode[other.neighbors_arraysize];
+    this->neighbors_var = (other.neighbors_arraysize==0) ? NULL : new ::GiaNode[other.neighbors_arraysize];
     neighbors_arraysize = other.neighbors_arraysize;
     for (unsigned int i=0; i<neighbors_arraysize; i++)
         this->neighbors_var[i] = other.neighbors_var[i];
@@ -395,14 +412,14 @@ void GiaNeighborMessage::parsimUnpack(cCommBuffer *b)
     if (neighbors_arraysize==0) {
         this->neighbors_var = 0;
     } else {
-        this->neighbors_var = new GiaNode[neighbors_arraysize];
+        this->neighbors_var = new ::GiaNode[neighbors_arraysize];
         doUnpacking(b,this->neighbors_var,neighbors_arraysize);
     }
 }
 
 void GiaNeighborMessage::setNeighborsArraySize(unsigned int size)
 {
-    GiaNode *neighbors_var2 = (size==0) ? NULL : new GiaNode[size];
+    ::GiaNode *neighbors_var2 = (size==0) ? NULL : new ::GiaNode[size];
     unsigned int sz = neighbors_arraysize < size ? neighbors_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         neighbors_var2[i] = this->neighbors_var[i];
@@ -438,12 +455,13 @@ class GiaNeighborMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -485,10 +503,10 @@ unsigned int GiaNeighborMessageDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *GiaNeighborMessageDescriptor::getFieldName(void *object, int field) const
@@ -499,10 +517,18 @@ const char *GiaNeighborMessageDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "neighbors";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "neighbors",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int GiaNeighborMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "neighbors")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *GiaNeighborMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -513,10 +539,10 @@ const char *GiaNeighborMessageDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "GiaNode";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "GiaNode",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *GiaNeighborMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -547,18 +573,18 @@ int GiaNeighborMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool GiaNeighborMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string GiaNeighborMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     GiaNeighborMessage *pp = (GiaNeighborMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNeighbors(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNeighbors(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -584,10 +610,10 @@ const char *GiaNeighborMessageDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "GiaNode"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "GiaNode",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *GiaNeighborMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -676,12 +702,13 @@ class TokenMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -723,11 +750,11 @@ unsigned int TokenMessageDescriptor::getFieldTypeFlags(void *object, int field) 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TokenMessageDescriptor::getFieldName(void *object, int field) const
@@ -738,11 +765,20 @@ const char *TokenMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "srcTokenNr";
-        case 1: return "dstTokenNr";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "srcTokenNr",
+        "dstTokenNr",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int TokenMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcTokenNr")==0) return base+0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dstTokenNr")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TokenMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -753,11 +789,11 @@ const char *TokenMessageDescriptor::getFieldTypeString(void *object, int field) 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TokenMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -787,19 +823,19 @@ int TokenMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TokenMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TokenMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TokenMessage *pp = (TokenMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSrcTokenNr(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getDstTokenNr(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSrcTokenNr());
+        case 1: return long2string(pp->getDstTokenNr());
+        default: return "";
     }
 }
 
@@ -827,9 +863,11 @@ const char *TokenMessageDescriptor::getFieldStructName(void *object, int field) 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *TokenMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -915,12 +953,13 @@ class GiaIDMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -962,11 +1001,11 @@ unsigned int GiaIDMessageDescriptor::getFieldTypeFlags(void *object, int field) 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *GiaIDMessageDescriptor::getFieldName(void *object, int field) const
@@ -977,11 +1016,20 @@ const char *GiaIDMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "destKey";
-        case 1: return "ID";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "destKey",
+        "ID",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int GiaIDMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destKey")==0) return base+0;
+    if (fieldName[0]=='I' && strcmp(fieldName, "ID")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *GiaIDMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -992,11 +1040,11 @@ const char *GiaIDMessageDescriptor::getFieldTypeString(void *object, int field) 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "OverlayKey",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *GiaIDMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1026,19 +1074,19 @@ int GiaIDMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool GiaIDMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string GiaIDMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     GiaIDMessage *pp = (GiaIDMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getDestKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getID(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getDestKey(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getID(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1064,11 +1112,11 @@ const char *GiaIDMessageDescriptor::getFieldStructName(void *object, int field) 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        case 1: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        "OverlayKey",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *GiaIDMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1170,12 +1218,13 @@ class GiaRouteMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1217,12 +1266,12 @@ unsigned int GiaRouteMessageDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *GiaRouteMessageDescriptor::getFieldName(void *object, int field) const
@@ -1233,12 +1282,22 @@ const char *GiaRouteMessageDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "originatorKey";
-        case 1: return "originatorIP";
-        case 2: return "originatorPort";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "originatorKey",
+        "originatorIP",
+        "originatorPort",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int GiaRouteMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='o' && strcmp(fieldName, "originatorKey")==0) return base+0;
+    if (fieldName[0]=='o' && strcmp(fieldName, "originatorIP")==0) return base+1;
+    if (fieldName[0]=='o' && strcmp(fieldName, "originatorPort")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *GiaRouteMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1249,12 +1308,12 @@ const char *GiaRouteMessageDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "IPvXAddress";
-        case 2: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "IPvXAddress",
+        "int",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *GiaRouteMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1284,20 +1343,20 @@ int GiaRouteMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool GiaRouteMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string GiaRouteMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     GiaRouteMessage *pp = (GiaRouteMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getOriginatorKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getOriginatorIP(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: long2string(pp->getOriginatorPort(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getOriginatorKey(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getOriginatorIP(); return out.str();}
+        case 2: return long2string(pp->getOriginatorPort());
+        default: return "";
     }
 }
 
@@ -1324,11 +1383,12 @@ const char *GiaRouteMessageDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        case 1: return "IPvXAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        "IPvXAddress",
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *GiaRouteMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1373,7 +1433,7 @@ KeyListMessage& KeyListMessage::operator=(const KeyListMessage& other)
     if (this==&other) return *this;
     GiaMessage::operator=(other);
     delete [] this->keys_var;
-    this->keys_var = (other.keys_arraysize==0) ? NULL : new OverlayKey[other.keys_arraysize];
+    this->keys_var = (other.keys_arraysize==0) ? NULL : new ::OverlayKey[other.keys_arraysize];
     keys_arraysize = other.keys_arraysize;
     for (unsigned int i=0; i<keys_arraysize; i++)
         this->keys_var[i] = other.keys_var[i];
@@ -1395,14 +1455,14 @@ void KeyListMessage::parsimUnpack(cCommBuffer *b)
     if (keys_arraysize==0) {
         this->keys_var = 0;
     } else {
-        this->keys_var = new OverlayKey[keys_arraysize];
+        this->keys_var = new ::OverlayKey[keys_arraysize];
         doUnpacking(b,this->keys_var,keys_arraysize);
     }
 }
 
 void KeyListMessage::setKeysArraySize(unsigned int size)
 {
-    OverlayKey *keys_var2 = (size==0) ? NULL : new OverlayKey[size];
+    ::OverlayKey *keys_var2 = (size==0) ? NULL : new ::OverlayKey[size];
     unsigned int sz = keys_arraysize < size ? keys_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         keys_var2[i] = this->keys_var[i];
@@ -1438,12 +1498,13 @@ class KeyListMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1485,10 +1546,10 @@ unsigned int KeyListMessageDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *KeyListMessageDescriptor::getFieldName(void *object, int field) const
@@ -1499,10 +1560,18 @@ const char *KeyListMessageDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "keys";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "keys",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int KeyListMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "keys")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *KeyListMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1513,10 +1582,10 @@ const char *KeyListMessageDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *KeyListMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1547,18 +1616,18 @@ int KeyListMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool KeyListMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string KeyListMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     KeyListMessage *pp = (KeyListMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getKeys(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getKeys(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -1584,10 +1653,10 @@ const char *KeyListMessageDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *KeyListMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1639,12 +1708,12 @@ SearchMessage& SearchMessage::operator=(const SearchMessage& other)
     this->searchKey_var = other.searchKey_var;
     this->maxResponses_var = other.maxResponses_var;
     delete [] this->reversePath_var;
-    this->reversePath_var = (other.reversePath_arraysize==0) ? NULL : new OverlayKey[other.reversePath_arraysize];
+    this->reversePath_var = (other.reversePath_arraysize==0) ? NULL : new ::OverlayKey[other.reversePath_arraysize];
     reversePath_arraysize = other.reversePath_arraysize;
     for (unsigned int i=0; i<reversePath_arraysize; i++)
         this->reversePath_var[i] = other.reversePath_var[i];
     delete [] this->foundNode_var;
-    this->foundNode_var = (other.foundNode_arraysize==0) ? NULL : new OverlayKey[other.foundNode_arraysize];
+    this->foundNode_var = (other.foundNode_arraysize==0) ? NULL : new ::OverlayKey[other.foundNode_arraysize];
     foundNode_arraysize = other.foundNode_arraysize;
     for (unsigned int i=0; i<foundNode_arraysize; i++)
         this->foundNode_var[i] = other.foundNode_var[i];
@@ -1672,7 +1741,7 @@ void SearchMessage::parsimUnpack(cCommBuffer *b)
     if (reversePath_arraysize==0) {
         this->reversePath_var = 0;
     } else {
-        this->reversePath_var = new OverlayKey[reversePath_arraysize];
+        this->reversePath_var = new ::OverlayKey[reversePath_arraysize];
         doUnpacking(b,this->reversePath_var,reversePath_arraysize);
     }
     delete [] this->foundNode_var;
@@ -1680,7 +1749,7 @@ void SearchMessage::parsimUnpack(cCommBuffer *b)
     if (foundNode_arraysize==0) {
         this->foundNode_var = 0;
     } else {
-        this->foundNode_var = new OverlayKey[foundNode_arraysize];
+        this->foundNode_var = new ::OverlayKey[foundNode_arraysize];
         doUnpacking(b,this->foundNode_var,foundNode_arraysize);
     }
 }
@@ -1707,7 +1776,7 @@ void SearchMessage::setMaxResponses(int maxResponses_var)
 
 void SearchMessage::setReversePathArraySize(unsigned int size)
 {
-    OverlayKey *reversePath_var2 = (size==0) ? NULL : new OverlayKey[size];
+    ::OverlayKey *reversePath_var2 = (size==0) ? NULL : new ::OverlayKey[size];
     unsigned int sz = reversePath_arraysize < size ? reversePath_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         reversePath_var2[i] = this->reversePath_var[i];
@@ -1735,7 +1804,7 @@ void SearchMessage::setReversePath(unsigned int k, const OverlayKey& reversePath
 
 void SearchMessage::setFoundNodeArraySize(unsigned int size)
 {
-    OverlayKey *foundNode_var2 = (size==0) ? NULL : new OverlayKey[size];
+    ::OverlayKey *foundNode_var2 = (size==0) ? NULL : new ::OverlayKey[size];
     unsigned int sz = foundNode_arraysize < size ? foundNode_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         foundNode_var2[i] = this->foundNode_var[i];
@@ -1771,12 +1840,13 @@ class SearchMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1818,13 +1888,13 @@ unsigned int SearchMessageDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 3: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SearchMessageDescriptor::getFieldName(void *object, int field) const
@@ -1835,13 +1905,24 @@ const char *SearchMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "searchKey";
-        case 1: return "maxResponses";
-        case 2: return "reversePath";
-        case 3: return "foundNode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "searchKey",
+        "maxResponses",
+        "reversePath",
+        "foundNode",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int SearchMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "searchKey")==0) return base+0;
+    if (fieldName[0]=='m' && strcmp(fieldName, "maxResponses")==0) return base+1;
+    if (fieldName[0]=='r' && strcmp(fieldName, "reversePath")==0) return base+2;
+    if (fieldName[0]=='f' && strcmp(fieldName, "foundNode")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SearchMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1852,13 +1933,13 @@ const char *SearchMessageDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "int";
-        case 2: return "OverlayKey";
-        case 3: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "int",
+        "OverlayKey",
+        "OverlayKey",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SearchMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1890,21 +1971,21 @@ int SearchMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SearchMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SearchMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SearchMessage *pp = (SearchMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSearchKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getMaxResponses(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getReversePath(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getFoundNode(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSearchKey(); return out.str();}
+        case 1: return long2string(pp->getMaxResponses());
+        case 2: {std::stringstream out; out << pp->getReversePath(i); return out.str();}
+        case 3: {std::stringstream out; out << pp->getFoundNode(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -1931,12 +2012,13 @@ const char *SearchMessageDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        case 2: return "OverlayKey"; break;
-        case 3: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        NULL,
+        "OverlayKey",
+        "OverlayKey",
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *SearchMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1984,7 +2066,7 @@ SearchResponseMessage& SearchResponseMessage::operator=(const SearchResponseMess
     GiaIDMessage::operator=(other);
     this->searchKey_var = other.searchKey_var;
     delete [] this->reversePath_var;
-    this->reversePath_var = (other.reversePath_arraysize==0) ? NULL : new OverlayKey[other.reversePath_arraysize];
+    this->reversePath_var = (other.reversePath_arraysize==0) ? NULL : new ::OverlayKey[other.reversePath_arraysize];
     reversePath_arraysize = other.reversePath_arraysize;
     for (unsigned int i=0; i<reversePath_arraysize; i++)
         this->reversePath_var[i] = other.reversePath_var[i];
@@ -2012,7 +2094,7 @@ void SearchResponseMessage::parsimUnpack(cCommBuffer *b)
     if (reversePath_arraysize==0) {
         this->reversePath_var = 0;
     } else {
-        this->reversePath_var = new OverlayKey[reversePath_arraysize];
+        this->reversePath_var = new ::OverlayKey[reversePath_arraysize];
         doUnpacking(b,this->reversePath_var,reversePath_arraysize);
     }
     doUnpacking(b,this->foundNode_var);
@@ -2031,7 +2113,7 @@ void SearchResponseMessage::setSearchKey(const OverlayKey& searchKey_var)
 
 void SearchResponseMessage::setReversePathArraySize(unsigned int size)
 {
-    OverlayKey *reversePath_var2 = (size==0) ? NULL : new OverlayKey[size];
+    ::OverlayKey *reversePath_var2 = (size==0) ? NULL : new ::OverlayKey[size];
     unsigned int sz = reversePath_arraysize < size ? reversePath_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         reversePath_var2[i] = this->reversePath_var[i];
@@ -2087,12 +2169,13 @@ class SearchResponseMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2134,13 +2217,13 @@ unsigned int SearchResponseMessageDescriptor::getFieldTypeFlags(void *object, in
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SearchResponseMessageDescriptor::getFieldName(void *object, int field) const
@@ -2151,13 +2234,24 @@ const char *SearchResponseMessageDescriptor::getFieldName(void *object, int fiel
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "searchKey";
-        case 1: return "reversePath";
-        case 2: return "foundNode";
-        case 3: return "searchHopCount";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "searchKey",
+        "reversePath",
+        "foundNode",
+        "searchHopCount",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int SearchResponseMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "searchKey")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "reversePath")==0) return base+1;
+    if (fieldName[0]=='f' && strcmp(fieldName, "foundNode")==0) return base+2;
+    if (fieldName[0]=='s' && strcmp(fieldName, "searchHopCount")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SearchResponseMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -2168,13 +2262,13 @@ const char *SearchResponseMessageDescriptor::getFieldTypeString(void *object, in
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "OverlayKey";
-        case 2: return "GiaNode";
-        case 3: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "OverlayKey",
+        "GiaNode",
+        "int",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SearchResponseMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2205,21 +2299,21 @@ int SearchResponseMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SearchResponseMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SearchResponseMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SearchResponseMessage *pp = (SearchResponseMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSearchKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getReversePath(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getFoundNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: long2string(pp->getSearchHopCount(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSearchKey(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getReversePath(i); return out.str();}
+        case 2: {std::stringstream out; out << pp->getFoundNode(); return out.str();}
+        case 3: return long2string(pp->getSearchHopCount());
+        default: return "";
     }
 }
 
@@ -2246,12 +2340,13 @@ const char *SearchResponseMessageDescriptor::getFieldStructName(void *object, in
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        case 1: return "OverlayKey"; break;
-        case 2: return "GiaNode"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        "OverlayKey",
+        "GiaNode",
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *SearchResponseMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

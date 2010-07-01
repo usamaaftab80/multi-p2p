@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from linklayer/ieee80211/mgmt/Ieee80211Primitives.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from linklayer/ieee80211/mgmt/Ieee80211Primitives.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -110,12 +110,13 @@ class Ieee80211PrimRequestDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -157,9 +158,7 @@ unsigned int Ieee80211PrimRequestDescriptor::getFieldTypeFlags(void *object, int
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *Ieee80211PrimRequestDescriptor::getFieldName(void *object, int field) const
@@ -170,9 +169,13 @@ const char *Ieee80211PrimRequestDescriptor::getFieldName(void *object, int field
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int Ieee80211PrimRequestDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211PrimRequestDescriptor::getFieldTypeString(void *object, int field) const
@@ -183,9 +186,7 @@ const char *Ieee80211PrimRequestDescriptor::getFieldTypeString(void *object, int
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *Ieee80211PrimRequestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -215,17 +216,17 @@ int Ieee80211PrimRequestDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool Ieee80211PrimRequestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211PrimRequestDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211PrimRequest *pp = (Ieee80211PrimRequest *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -251,9 +252,7 @@ const char *Ieee80211PrimRequestDescriptor::getFieldStructName(void *object, int
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *Ieee80211PrimRequestDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -324,12 +323,13 @@ class Ieee80211PrimConfirmDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -371,10 +371,10 @@ unsigned int Ieee80211PrimConfirmDescriptor::getFieldTypeFlags(void *object, int
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211PrimConfirmDescriptor::getFieldName(void *object, int field) const
@@ -385,10 +385,18 @@ const char *Ieee80211PrimConfirmDescriptor::getFieldName(void *object, int field
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "resultCode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "resultCode",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211PrimConfirmDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "resultCode")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211PrimConfirmDescriptor::getFieldTypeString(void *object, int field) const
@@ -399,10 +407,10 @@ const char *Ieee80211PrimConfirmDescriptor::getFieldTypeString(void *object, int
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211PrimConfirmDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -435,18 +443,18 @@ int Ieee80211PrimConfirmDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool Ieee80211PrimConfirmDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211PrimConfirmDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211PrimConfirm *pp = (Ieee80211PrimConfirm *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getResultCode(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getResultCode());
+        default: return "";
     }
 }
 
@@ -473,9 +481,10 @@ const char *Ieee80211PrimConfirmDescriptor::getFieldStructName(void *object, int
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211PrimConfirmDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -681,12 +690,13 @@ class Ieee80211Prim_ScanRequestDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -728,17 +738,17 @@ unsigned int Ieee80211Prim_ScanRequestDescriptor::getFieldTypeFlags(void *object
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISARRAY | FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211Prim_ScanRequestDescriptor::getFieldName(void *object, int field) const
@@ -749,17 +759,32 @@ const char *Ieee80211Prim_ScanRequestDescriptor::getFieldName(void *object, int 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "BSSType";
-        case 1: return "BSSID";
-        case 2: return "SSID";
-        case 3: return "activeScan";
-        case 4: return "probeDelay";
-        case 5: return "channelList";
-        case 6: return "minChannelTime";
-        case 7: return "maxChannelTime";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "BSSType",
+        "BSSID",
+        "SSID",
+        "activeScan",
+        "probeDelay",
+        "channelList",
+        "minChannelTime",
+        "maxChannelTime",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211Prim_ScanRequestDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='B' && strcmp(fieldName, "BSSType")==0) return base+0;
+    if (fieldName[0]=='B' && strcmp(fieldName, "BSSID")==0) return base+1;
+    if (fieldName[0]=='S' && strcmp(fieldName, "SSID")==0) return base+2;
+    if (fieldName[0]=='a' && strcmp(fieldName, "activeScan")==0) return base+3;
+    if (fieldName[0]=='p' && strcmp(fieldName, "probeDelay")==0) return base+4;
+    if (fieldName[0]=='c' && strcmp(fieldName, "channelList")==0) return base+5;
+    if (fieldName[0]=='m' && strcmp(fieldName, "minChannelTime")==0) return base+6;
+    if (fieldName[0]=='m' && strcmp(fieldName, "maxChannelTime")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211Prim_ScanRequestDescriptor::getFieldTypeString(void *object, int field) const
@@ -770,17 +795,17 @@ const char *Ieee80211Prim_ScanRequestDescriptor::getFieldTypeString(void *object
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "MACAddress";
-        case 2: return "string";
-        case 3: return "bool";
-        case 4: return "simtime_t";
-        case 5: return "int";
-        case 6: return "simtime_t";
-        case 7: return "simtime_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "MACAddress",
+        "string",
+        "bool",
+        "simtime_t",
+        "int",
+        "simtime_t",
+        "simtime_t",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211Prim_ScanRequestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -814,25 +839,25 @@ int Ieee80211Prim_ScanRequestDescriptor::getArraySize(void *object, int field) c
     }
 }
 
-bool Ieee80211Prim_ScanRequestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211Prim_ScanRequestDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Prim_ScanRequest *pp = (Ieee80211Prim_ScanRequest *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getBSSType(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getBSSID(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: oppstring2string(pp->getSSID(),resultbuf,bufsize); return true;
-        case 3: bool2string(pp->getActiveScan(),resultbuf,bufsize); return true;
-        case 4: double2string(pp->getProbeDelay(),resultbuf,bufsize); return true;
-        case 5: long2string(pp->getChannelList(i),resultbuf,bufsize); return true;
-        case 6: double2string(pp->getMinChannelTime(),resultbuf,bufsize); return true;
-        case 7: double2string(pp->getMaxChannelTime(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getBSSType());
+        case 1: {std::stringstream out; out << pp->getBSSID(); return out.str();}
+        case 2: return oppstring2string(pp->getSSID());
+        case 3: return bool2string(pp->getActiveScan());
+        case 4: return double2string(pp->getProbeDelay());
+        case 5: return long2string(pp->getChannelList(i));
+        case 6: return double2string(pp->getMinChannelTime());
+        case 7: return double2string(pp->getMaxChannelTime());
+        default: return "";
     }
 }
 
@@ -865,10 +890,17 @@ const char *Ieee80211Prim_ScanRequestDescriptor::getFieldStructName(void *object
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "MACAddress",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211Prim_ScanRequestDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1008,12 +1040,13 @@ class Ieee80211Prim_BSSDescriptionDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1055,15 +1088,15 @@ unsigned int Ieee80211Prim_BSSDescriptionDescriptor::getFieldTypeFlags(void *obj
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<6) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211Prim_BSSDescriptionDescriptor::getFieldName(void *object, int field) const
@@ -1074,15 +1107,28 @@ const char *Ieee80211Prim_BSSDescriptionDescriptor::getFieldName(void *object, i
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "channelNumber";
-        case 1: return "BSSID";
-        case 2: return "SSID";
-        case 3: return "supportedRates";
-        case 4: return "beaconInterval";
-        case 5: return "rxPower";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "channelNumber",
+        "BSSID",
+        "SSID",
+        "supportedRates",
+        "beaconInterval",
+        "rxPower",
+    };
+    return (field>=0 && field<6) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211Prim_BSSDescriptionDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "channelNumber")==0) return base+0;
+    if (fieldName[0]=='B' && strcmp(fieldName, "BSSID")==0) return base+1;
+    if (fieldName[0]=='S' && strcmp(fieldName, "SSID")==0) return base+2;
+    if (fieldName[0]=='s' && strcmp(fieldName, "supportedRates")==0) return base+3;
+    if (fieldName[0]=='b' && strcmp(fieldName, "beaconInterval")==0) return base+4;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rxPower")==0) return base+5;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211Prim_BSSDescriptionDescriptor::getFieldTypeString(void *object, int field) const
@@ -1093,15 +1139,15 @@ const char *Ieee80211Prim_BSSDescriptionDescriptor::getFieldTypeString(void *obj
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "MACAddress";
-        case 2: return "string";
-        case 3: return "Ieee80211SupportedRatesElement";
-        case 4: return "simtime_t";
-        case 5: return "double";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "MACAddress",
+        "string",
+        "Ieee80211SupportedRatesElement",
+        "simtime_t",
+        "double",
+    };
+    return (field>=0 && field<6) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211Prim_BSSDescriptionDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1131,23 +1177,23 @@ int Ieee80211Prim_BSSDescriptionDescriptor::getArraySize(void *object, int field
     }
 }
 
-bool Ieee80211Prim_BSSDescriptionDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211Prim_BSSDescriptionDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Prim_BSSDescription *pp = (Ieee80211Prim_BSSDescription *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getChannelNumber(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getBSSID(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: oppstring2string(pp->getSSID(),resultbuf,bufsize); return true;
-        case 3: {std::stringstream out; out << pp->getSupportedRates(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: double2string(pp->getBeaconInterval(),resultbuf,bufsize); return true;
-        case 5: double2string(pp->getRxPower(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getChannelNumber());
+        case 1: {std::stringstream out; out << pp->getBSSID(); return out.str();}
+        case 2: return oppstring2string(pp->getSSID());
+        case 3: {std::stringstream out; out << pp->getSupportedRates(); return out.str();}
+        case 4: return double2string(pp->getBeaconInterval());
+        case 5: return double2string(pp->getRxPower());
+        default: return "";
     }
 }
 
@@ -1177,11 +1223,15 @@ const char *Ieee80211Prim_BSSDescriptionDescriptor::getFieldStructName(void *obj
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "MACAddress"; break;
-        case 3: return "Ieee80211SupportedRatesElement"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "MACAddress",
+        NULL,
+        "Ieee80211SupportedRatesElement",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<6) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211Prim_BSSDescriptionDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1225,7 +1275,7 @@ Ieee80211Prim_ScanConfirm& Ieee80211Prim_ScanConfirm::operator=(const Ieee80211P
     if (this==&other) return *this;
     Ieee80211PrimConfirm::operator=(other);
     delete [] this->bssList_var;
-    this->bssList_var = (other.bssList_arraysize==0) ? NULL : new Ieee80211Prim_BSSDescription[other.bssList_arraysize];
+    this->bssList_var = (other.bssList_arraysize==0) ? NULL : new ::Ieee80211Prim_BSSDescription[other.bssList_arraysize];
     bssList_arraysize = other.bssList_arraysize;
     for (unsigned int i=0; i<bssList_arraysize; i++)
         this->bssList_var[i] = other.bssList_var[i];
@@ -1247,14 +1297,14 @@ void Ieee80211Prim_ScanConfirm::parsimUnpack(cCommBuffer *b)
     if (bssList_arraysize==0) {
         this->bssList_var = 0;
     } else {
-        this->bssList_var = new Ieee80211Prim_BSSDescription[bssList_arraysize];
+        this->bssList_var = new ::Ieee80211Prim_BSSDescription[bssList_arraysize];
         doUnpacking(b,this->bssList_var,bssList_arraysize);
     }
 }
 
 void Ieee80211Prim_ScanConfirm::setBssListArraySize(unsigned int size)
 {
-    Ieee80211Prim_BSSDescription *bssList_var2 = (size==0) ? NULL : new Ieee80211Prim_BSSDescription[size];
+    ::Ieee80211Prim_BSSDescription *bssList_var2 = (size==0) ? NULL : new ::Ieee80211Prim_BSSDescription[size];
     unsigned int sz = bssList_arraysize < size ? bssList_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         bssList_var2[i] = this->bssList_var[i];
@@ -1290,12 +1340,13 @@ class Ieee80211Prim_ScanConfirmDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1337,10 +1388,10 @@ unsigned int Ieee80211Prim_ScanConfirmDescriptor::getFieldTypeFlags(void *object
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND | FD_ISCOBJECT,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211Prim_ScanConfirmDescriptor::getFieldName(void *object, int field) const
@@ -1351,10 +1402,18 @@ const char *Ieee80211Prim_ScanConfirmDescriptor::getFieldName(void *object, int 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bssList";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "bssList",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211Prim_ScanConfirmDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='b' && strcmp(fieldName, "bssList")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211Prim_ScanConfirmDescriptor::getFieldTypeString(void *object, int field) const
@@ -1365,10 +1424,10 @@ const char *Ieee80211Prim_ScanConfirmDescriptor::getFieldTypeString(void *object
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Ieee80211Prim_BSSDescription";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "Ieee80211Prim_BSSDescription",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211Prim_ScanConfirmDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1399,18 +1458,18 @@ int Ieee80211Prim_ScanConfirmDescriptor::getArraySize(void *object, int field) c
     }
 }
 
-bool Ieee80211Prim_ScanConfirmDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211Prim_ScanConfirmDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Prim_ScanConfirm *pp = (Ieee80211Prim_ScanConfirm *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getBssList(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getBssList(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -1436,10 +1495,10 @@ const char *Ieee80211Prim_ScanConfirmDescriptor::getFieldStructName(void *object
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Ieee80211Prim_BSSDescription"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "Ieee80211Prim_BSSDescription",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211Prim_ScanConfirmDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1526,12 +1585,13 @@ class Ieee80211Prim_AuthenticateRequestDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1573,11 +1633,11 @@ unsigned int Ieee80211Prim_AuthenticateRequestDescriptor::getFieldTypeFlags(void
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211Prim_AuthenticateRequestDescriptor::getFieldName(void *object, int field) const
@@ -1588,11 +1648,20 @@ const char *Ieee80211Prim_AuthenticateRequestDescriptor::getFieldName(void *obje
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "address";
-        case 1: return "timeout";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "address",
+        "timeout",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211Prim_AuthenticateRequestDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "address")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timeout")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211Prim_AuthenticateRequestDescriptor::getFieldTypeString(void *object, int field) const
@@ -1603,11 +1672,11 @@ const char *Ieee80211Prim_AuthenticateRequestDescriptor::getFieldTypeString(void
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        case 1: return "simtime_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+        "simtime_t",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211Prim_AuthenticateRequestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1637,19 +1706,19 @@ int Ieee80211Prim_AuthenticateRequestDescriptor::getArraySize(void *object, int 
     }
 }
 
-bool Ieee80211Prim_AuthenticateRequestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211Prim_AuthenticateRequestDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Prim_AuthenticateRequest *pp = (Ieee80211Prim_AuthenticateRequest *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: double2string(pp->getTimeout(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getAddress(); return out.str();}
+        case 1: return double2string(pp->getTimeout());
+        default: return "";
     }
 }
 
@@ -1676,10 +1745,11 @@ const char *Ieee80211Prim_AuthenticateRequestDescriptor::getFieldStructName(void
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211Prim_AuthenticateRequestDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1752,12 +1822,13 @@ class Ieee80211Prim_AuthenticateConfirmDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1799,10 +1870,10 @@ unsigned int Ieee80211Prim_AuthenticateConfirmDescriptor::getFieldTypeFlags(void
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211Prim_AuthenticateConfirmDescriptor::getFieldName(void *object, int field) const
@@ -1813,10 +1884,18 @@ const char *Ieee80211Prim_AuthenticateConfirmDescriptor::getFieldName(void *obje
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "address";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "address",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211Prim_AuthenticateConfirmDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "address")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211Prim_AuthenticateConfirmDescriptor::getFieldTypeString(void *object, int field) const
@@ -1827,10 +1906,10 @@ const char *Ieee80211Prim_AuthenticateConfirmDescriptor::getFieldTypeString(void
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211Prim_AuthenticateConfirmDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1860,18 +1939,18 @@ int Ieee80211Prim_AuthenticateConfirmDescriptor::getArraySize(void *object, int 
     }
 }
 
-bool Ieee80211Prim_AuthenticateConfirmDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211Prim_AuthenticateConfirmDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Prim_AuthenticateConfirm *pp = (Ieee80211Prim_AuthenticateConfirm *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getAddress(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1897,10 +1976,10 @@ const char *Ieee80211Prim_AuthenticateConfirmDescriptor::getFieldStructName(void
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211Prim_AuthenticateConfirmDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1987,12 +2066,13 @@ class Ieee80211Prim_DeauthenticateRequestDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2034,11 +2114,11 @@ unsigned int Ieee80211Prim_DeauthenticateRequestDescriptor::getFieldTypeFlags(vo
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211Prim_DeauthenticateRequestDescriptor::getFieldName(void *object, int field) const
@@ -2049,11 +2129,20 @@ const char *Ieee80211Prim_DeauthenticateRequestDescriptor::getFieldName(void *ob
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "address";
-        case 1: return "reasonCode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "address",
+        "reasonCode",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211Prim_DeauthenticateRequestDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "address")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "reasonCode")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211Prim_DeauthenticateRequestDescriptor::getFieldTypeString(void *object, int field) const
@@ -2064,11 +2153,11 @@ const char *Ieee80211Prim_DeauthenticateRequestDescriptor::getFieldTypeString(vo
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211Prim_DeauthenticateRequestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2101,19 +2190,19 @@ int Ieee80211Prim_DeauthenticateRequestDescriptor::getArraySize(void *object, in
     }
 }
 
-bool Ieee80211Prim_DeauthenticateRequestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211Prim_DeauthenticateRequestDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Prim_DeauthenticateRequest *pp = (Ieee80211Prim_DeauthenticateRequest *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getReasonCode(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getAddress(); return out.str();}
+        case 1: return long2string(pp->getReasonCode());
+        default: return "";
     }
 }
 
@@ -2140,10 +2229,11 @@ const char *Ieee80211Prim_DeauthenticateRequestDescriptor::getFieldStructName(vo
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211Prim_DeauthenticateRequestDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2230,12 +2320,13 @@ class Ieee80211Prim_AssociateRequestDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2277,11 +2368,11 @@ unsigned int Ieee80211Prim_AssociateRequestDescriptor::getFieldTypeFlags(void *o
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211Prim_AssociateRequestDescriptor::getFieldName(void *object, int field) const
@@ -2292,11 +2383,20 @@ const char *Ieee80211Prim_AssociateRequestDescriptor::getFieldName(void *object,
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "address";
-        case 1: return "timeout";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "address",
+        "timeout",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211Prim_AssociateRequestDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "address")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timeout")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211Prim_AssociateRequestDescriptor::getFieldTypeString(void *object, int field) const
@@ -2307,11 +2407,11 @@ const char *Ieee80211Prim_AssociateRequestDescriptor::getFieldTypeString(void *o
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        case 1: return "simtime_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+        "simtime_t",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211Prim_AssociateRequestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2341,19 +2441,19 @@ int Ieee80211Prim_AssociateRequestDescriptor::getArraySize(void *object, int fie
     }
 }
 
-bool Ieee80211Prim_AssociateRequestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211Prim_AssociateRequestDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Prim_AssociateRequest *pp = (Ieee80211Prim_AssociateRequest *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: double2string(pp->getTimeout(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getAddress(); return out.str();}
+        case 1: return double2string(pp->getTimeout());
+        default: return "";
     }
 }
 
@@ -2380,10 +2480,11 @@ const char *Ieee80211Prim_AssociateRequestDescriptor::getFieldStructName(void *o
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211Prim_AssociateRequestDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2443,12 +2544,13 @@ class Ieee80211Prim_AssociateConfirmDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2490,9 +2592,7 @@ unsigned int Ieee80211Prim_AssociateConfirmDescriptor::getFieldTypeFlags(void *o
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *Ieee80211Prim_AssociateConfirmDescriptor::getFieldName(void *object, int field) const
@@ -2503,9 +2603,13 @@ const char *Ieee80211Prim_AssociateConfirmDescriptor::getFieldName(void *object,
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int Ieee80211Prim_AssociateConfirmDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211Prim_AssociateConfirmDescriptor::getFieldTypeString(void *object, int field) const
@@ -2516,9 +2620,7 @@ const char *Ieee80211Prim_AssociateConfirmDescriptor::getFieldTypeString(void *o
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *Ieee80211Prim_AssociateConfirmDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2548,17 +2650,17 @@ int Ieee80211Prim_AssociateConfirmDescriptor::getArraySize(void *object, int fie
     }
 }
 
-bool Ieee80211Prim_AssociateConfirmDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211Prim_AssociateConfirmDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Prim_AssociateConfirm *pp = (Ieee80211Prim_AssociateConfirm *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -2584,9 +2686,7 @@ const char *Ieee80211Prim_AssociateConfirmDescriptor::getFieldStructName(void *o
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *Ieee80211Prim_AssociateConfirmDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2645,12 +2745,13 @@ class Ieee80211Prim_ReassociateRequestDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2692,9 +2793,7 @@ unsigned int Ieee80211Prim_ReassociateRequestDescriptor::getFieldTypeFlags(void 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *Ieee80211Prim_ReassociateRequestDescriptor::getFieldName(void *object, int field) const
@@ -2705,9 +2804,13 @@ const char *Ieee80211Prim_ReassociateRequestDescriptor::getFieldName(void *objec
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int Ieee80211Prim_ReassociateRequestDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211Prim_ReassociateRequestDescriptor::getFieldTypeString(void *object, int field) const
@@ -2718,9 +2821,7 @@ const char *Ieee80211Prim_ReassociateRequestDescriptor::getFieldTypeString(void 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *Ieee80211Prim_ReassociateRequestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2750,17 +2851,17 @@ int Ieee80211Prim_ReassociateRequestDescriptor::getArraySize(void *object, int f
     }
 }
 
-bool Ieee80211Prim_ReassociateRequestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211Prim_ReassociateRequestDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Prim_ReassociateRequest *pp = (Ieee80211Prim_ReassociateRequest *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -2786,9 +2887,7 @@ const char *Ieee80211Prim_ReassociateRequestDescriptor::getFieldStructName(void 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *Ieee80211Prim_ReassociateRequestDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2847,12 +2946,13 @@ class Ieee80211Prim_ReassociateConfirmDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2894,9 +2994,7 @@ unsigned int Ieee80211Prim_ReassociateConfirmDescriptor::getFieldTypeFlags(void 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *Ieee80211Prim_ReassociateConfirmDescriptor::getFieldName(void *object, int field) const
@@ -2907,9 +3005,13 @@ const char *Ieee80211Prim_ReassociateConfirmDescriptor::getFieldName(void *objec
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int Ieee80211Prim_ReassociateConfirmDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211Prim_ReassociateConfirmDescriptor::getFieldTypeString(void *object, int field) const
@@ -2920,9 +3022,7 @@ const char *Ieee80211Prim_ReassociateConfirmDescriptor::getFieldTypeString(void 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *Ieee80211Prim_ReassociateConfirmDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2952,17 +3052,17 @@ int Ieee80211Prim_ReassociateConfirmDescriptor::getArraySize(void *object, int f
     }
 }
 
-bool Ieee80211Prim_ReassociateConfirmDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211Prim_ReassociateConfirmDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Prim_ReassociateConfirm *pp = (Ieee80211Prim_ReassociateConfirm *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -2988,9 +3088,7 @@ const char *Ieee80211Prim_ReassociateConfirmDescriptor::getFieldStructName(void 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *Ieee80211Prim_ReassociateConfirmDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -3076,12 +3174,13 @@ class Ieee80211Prim_DisassociateRequestDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -3123,11 +3222,11 @@ unsigned int Ieee80211Prim_DisassociateRequestDescriptor::getFieldTypeFlags(void
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Ieee80211Prim_DisassociateRequestDescriptor::getFieldName(void *object, int field) const
@@ -3138,11 +3237,20 @@ const char *Ieee80211Prim_DisassociateRequestDescriptor::getFieldName(void *obje
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "address";
-        case 1: return "reasonCode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "address",
+        "reasonCode",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int Ieee80211Prim_DisassociateRequestDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "address")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "reasonCode")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *Ieee80211Prim_DisassociateRequestDescriptor::getFieldTypeString(void *object, int field) const
@@ -3153,11 +3261,11 @@ const char *Ieee80211Prim_DisassociateRequestDescriptor::getFieldTypeString(void
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *Ieee80211Prim_DisassociateRequestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -3190,19 +3298,19 @@ int Ieee80211Prim_DisassociateRequestDescriptor::getArraySize(void *object, int 
     }
 }
 
-bool Ieee80211Prim_DisassociateRequestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string Ieee80211Prim_DisassociateRequestDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     Ieee80211Prim_DisassociateRequest *pp = (Ieee80211Prim_DisassociateRequest *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getReasonCode(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getAddress(); return out.str();}
+        case 1: return long2string(pp->getReasonCode());
+        default: return "";
     }
 }
 
@@ -3229,10 +3337,11 @@ const char *Ieee80211Prim_DisassociateRequestDescriptor::getFieldStructName(void
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *Ieee80211Prim_DisassociateRequestDescriptor::getFieldStructPointer(void *object, int field, int i) const

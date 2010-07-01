@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/rsvp_te/RSVPHello.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/rsvp_te/RSVPHello.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -141,12 +141,13 @@ class RSVPHelloMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -189,14 +190,14 @@ unsigned int RSVPHelloMsgDescriptor::getFieldTypeFlags(void *object, int field) 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RSVPHelloMsgDescriptor::getFieldName(void *object, int field) const
@@ -207,14 +208,26 @@ const char *RSVPHelloMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "request";
-        case 1: return "ack";
-        case 2: return "srcInstance";
-        case 3: return "dstInstance";
-        case 4: return "rsvpKind";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "request",
+        "ack",
+        "srcInstance",
+        "dstInstance",
+        "rsvpKind",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int RSVPHelloMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "request")==0) return base+0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "ack")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcInstance")==0) return base+2;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dstInstance")==0) return base+3;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rsvpKind")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RSVPHelloMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -225,14 +238,14 @@ const char *RSVPHelloMsgDescriptor::getFieldTypeString(void *object, int field) 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        case 1: return "bool";
-        case 2: return "int";
-        case 3: return "int";
-        case 4: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+        "bool",
+        "int",
+        "int",
+        "int",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RSVPHelloMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -262,22 +275,22 @@ int RSVPHelloMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RSVPHelloMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RSVPHelloMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RSVPHelloMsg_Base *pp = (RSVPHelloMsg_Base *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->getRequest(),resultbuf,bufsize); return true;
-        case 1: bool2string(pp->getAck(),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getSrcInstance(),resultbuf,bufsize); return true;
-        case 3: long2string(pp->getDstInstance(),resultbuf,bufsize); return true;
-        case 4: long2string(pp->getRsvpKind(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return bool2string(pp->getRequest());
+        case 1: return bool2string(pp->getAck());
+        case 2: return long2string(pp->getSrcInstance());
+        case 3: return long2string(pp->getDstInstance());
+        case 4: return long2string(pp->getRsvpKind());
+        default: return "";
     }
 }
 
@@ -308,9 +321,14 @@ const char *RSVPHelloMsgDescriptor::getFieldStructName(void *object, int field) 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *RSVPHelloMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
