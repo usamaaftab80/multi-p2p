@@ -124,7 +124,6 @@ message CbrAppMessage extends BaseOverlayMessage
     double bigKD;
     double lastHopKd;
     int nodeID;
-    int ttl;
 }
 
 

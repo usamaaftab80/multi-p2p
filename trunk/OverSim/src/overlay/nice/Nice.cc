@@ -776,6 +776,8 @@ void Nice::becomeRendevouzPoint()
 
     RendevouzPoint = thisNode;
     EV << simTime() << " : " << thisNode.getAddress() << " : Set RP to " << thisNode.getAddress() << endl;
+    //hoang
+    global->updateRP(thisNode.getAddress());
 
     /* Mark node as new RP (star symbol) */
     getParentModule()->getParentModule()->getDisplayString().
