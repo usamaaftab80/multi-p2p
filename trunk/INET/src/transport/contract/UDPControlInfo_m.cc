@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from transport/contract/UDPControlInfo.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from transport/contract/UDPControlInfo.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -224,12 +224,13 @@ class UDPControlInfoDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -271,19 +272,19 @@ unsigned int UDPControlInfoDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        case 8: return FD_ISEDITABLE;
-        case 9: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<10) ? fieldTypeFlags[field] : 0;
 }
 
 const char *UDPControlInfoDescriptor::getFieldName(void *object, int field) const
@@ -294,19 +295,36 @@ const char *UDPControlInfoDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "sockId";
-        case 1: return "userId";
-        case 2: return "srcAddr";
-        case 3: return "destAddr";
-        case 4: return "srcPort";
-        case 5: return "destPort";
-        case 6: return "interfaceId";
-        case 7: return "timeToLive";
-        case 8: return "minBW";
-        case 9: return "delayInfo";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "sockId",
+        "userId",
+        "srcAddr",
+        "destAddr",
+        "srcPort",
+        "destPort",
+        "interfaceId",
+        "timeToLive",
+        "minBW",
+        "delayInfo",
+    };
+    return (field>=0 && field<10) ? fieldNames[field] : NULL;
+}
+
+int UDPControlInfoDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sockId")==0) return base+0;
+    if (fieldName[0]=='u' && strcmp(fieldName, "userId")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcAddr")==0) return base+2;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destAddr")==0) return base+3;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcPort")==0) return base+4;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destPort")==0) return base+5;
+    if (fieldName[0]=='i' && strcmp(fieldName, "interfaceId")==0) return base+6;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timeToLive")==0) return base+7;
+    if (fieldName[0]=='m' && strcmp(fieldName, "minBW")==0) return base+8;
+    if (fieldName[0]=='d' && strcmp(fieldName, "delayInfo")==0) return base+9;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *UDPControlInfoDescriptor::getFieldTypeString(void *object, int field) const
@@ -317,19 +335,19 @@ const char *UDPControlInfoDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        case 2: return "IPvXAddress";
-        case 3: return "IPvXAddress";
-        case 4: return "int";
-        case 5: return "int";
-        case 6: return "int";
-        case 7: return "int";
-        case 8: return "double";
-        case 9: return "double";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+        "IPvXAddress",
+        "IPvXAddress",
+        "int",
+        "int",
+        "int",
+        "int",
+        "double",
+        "double",
+    };
+    return (field>=0 && field<10) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *UDPControlInfoDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -359,27 +377,27 @@ int UDPControlInfoDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool UDPControlInfoDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string UDPControlInfoDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     UDPControlInfo *pp = (UDPControlInfo *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSockId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getUserId(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getSrcAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getDestAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: long2string(pp->getSrcPort(),resultbuf,bufsize); return true;
-        case 5: long2string(pp->getDestPort(),resultbuf,bufsize); return true;
-        case 6: long2string(pp->getInterfaceId(),resultbuf,bufsize); return true;
-        case 7: long2string(pp->getTimeToLive(),resultbuf,bufsize); return true;
-        case 8: double2string(pp->getMinBW(),resultbuf,bufsize); return true;
-        case 9: double2string(pp->getDelayInfo(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSockId());
+        case 1: return long2string(pp->getUserId());
+        case 2: {std::stringstream out; out << pp->getSrcAddr(); return out.str();}
+        case 3: {std::stringstream out; out << pp->getDestAddr(); return out.str();}
+        case 4: return long2string(pp->getSrcPort());
+        case 5: return long2string(pp->getDestPort());
+        case 6: return long2string(pp->getInterfaceId());
+        case 7: return long2string(pp->getTimeToLive());
+        case 8: return double2string(pp->getMinBW());
+        case 9: return double2string(pp->getDelayInfo());
+        default: return "";
     }
 }
 
@@ -413,11 +431,19 @@ const char *UDPControlInfoDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 2: return "IPvXAddress"; break;
-        case 3: return "IPvXAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        "IPvXAddress",
+        "IPvXAddress",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<10) ? fieldStructNames[field] : NULL;
 }
 
 void *UDPControlInfoDescriptor::getFieldStructPointer(void *object, int field, int i) const

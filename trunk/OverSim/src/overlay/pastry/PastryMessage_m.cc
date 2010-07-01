@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from overlay/pastry/PastryMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from overlay/pastry/PastryMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -113,12 +113,13 @@ class PastryMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -160,10 +161,10 @@ unsigned int PastryMessageDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PastryMessageDescriptor::getFieldName(void *object, int field) const
@@ -174,10 +175,18 @@ const char *PastryMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "pastryMsgType";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "pastryMsgType",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PastryMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "pastryMsgType")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PastryMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -188,10 +197,10 @@ const char *PastryMessageDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PastryMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -221,18 +230,18 @@ int PastryMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PastryMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PastryMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PastryMessage *pp = (PastryMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getPastryMsgType(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getPastryMsgType());
+        default: return "";
     }
 }
 
@@ -259,9 +268,10 @@ const char *PastryMessageDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PastryMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -335,12 +345,13 @@ class PastryJoinMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -382,10 +393,10 @@ unsigned int PastryJoinMessageDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PastryJoinMessageDescriptor::getFieldName(void *object, int field) const
@@ -396,10 +407,18 @@ const char *PastryJoinMessageDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "sendStateTo";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "sendStateTo",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PastryJoinMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sendStateTo")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PastryJoinMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -410,10 +429,10 @@ const char *PastryJoinMessageDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PastryJoinMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -443,18 +462,18 @@ int PastryJoinMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PastryJoinMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PastryJoinMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PastryJoinMessage *pp = (PastryJoinMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSendStateTo(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSendStateTo(); return out.str();}
+        default: return "";
     }
 }
 
@@ -480,10 +499,10 @@ const char *PastryJoinMessageDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PastryJoinMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -544,17 +563,17 @@ PastryStateMessage& PastryStateMessage::operator=(const PastryStateMessage& othe
     this->pastryStateMsgType_var = other.pastryStateMsgType_var;
     this->sender_var = other.sender_var;
     delete [] this->routingTable_var;
-    this->routingTable_var = (other.routingTable_arraysize==0) ? NULL : new NodeHandle[other.routingTable_arraysize];
+    this->routingTable_var = (other.routingTable_arraysize==0) ? NULL : new ::NodeHandle[other.routingTable_arraysize];
     routingTable_arraysize = other.routingTable_arraysize;
     for (unsigned int i=0; i<routingTable_arraysize; i++)
         this->routingTable_var[i] = other.routingTable_var[i];
     delete [] this->leafSet_var;
-    this->leafSet_var = (other.leafSet_arraysize==0) ? NULL : new NodeHandle[other.leafSet_arraysize];
+    this->leafSet_var = (other.leafSet_arraysize==0) ? NULL : new ::NodeHandle[other.leafSet_arraysize];
     leafSet_arraysize = other.leafSet_arraysize;
     for (unsigned int i=0; i<leafSet_arraysize; i++)
         this->leafSet_var[i] = other.leafSet_var[i];
     delete [] this->neighborhoodSet_var;
-    this->neighborhoodSet_var = (other.neighborhoodSet_arraysize==0) ? NULL : new NodeHandle[other.neighborhoodSet_arraysize];
+    this->neighborhoodSet_var = (other.neighborhoodSet_arraysize==0) ? NULL : new ::NodeHandle[other.neighborhoodSet_arraysize];
     neighborhoodSet_arraysize = other.neighborhoodSet_arraysize;
     for (unsigned int i=0; i<neighborhoodSet_arraysize; i++)
         this->neighborhoodSet_var[i] = other.neighborhoodSet_var[i];
@@ -590,7 +609,7 @@ void PastryStateMessage::parsimUnpack(cCommBuffer *b)
     if (routingTable_arraysize==0) {
         this->routingTable_var = 0;
     } else {
-        this->routingTable_var = new NodeHandle[routingTable_arraysize];
+        this->routingTable_var = new ::NodeHandle[routingTable_arraysize];
         doUnpacking(b,this->routingTable_var,routingTable_arraysize);
     }
     delete [] this->leafSet_var;
@@ -598,7 +617,7 @@ void PastryStateMessage::parsimUnpack(cCommBuffer *b)
     if (leafSet_arraysize==0) {
         this->leafSet_var = 0;
     } else {
-        this->leafSet_var = new NodeHandle[leafSet_arraysize];
+        this->leafSet_var = new ::NodeHandle[leafSet_arraysize];
         doUnpacking(b,this->leafSet_var,leafSet_arraysize);
     }
     delete [] this->neighborhoodSet_var;
@@ -606,7 +625,7 @@ void PastryStateMessage::parsimUnpack(cCommBuffer *b)
     if (neighborhoodSet_arraysize==0) {
         this->neighborhoodSet_var = 0;
     } else {
-        this->neighborhoodSet_var = new NodeHandle[neighborhoodSet_arraysize];
+        this->neighborhoodSet_var = new ::NodeHandle[neighborhoodSet_arraysize];
         doUnpacking(b,this->neighborhoodSet_var,neighborhoodSet_arraysize);
     }
     doUnpacking(b,this->joinHopCount_var);
@@ -636,7 +655,7 @@ void PastryStateMessage::setSender(const NodeHandle& sender_var)
 
 void PastryStateMessage::setRoutingTableArraySize(unsigned int size)
 {
-    NodeHandle *routingTable_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *routingTable_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = routingTable_arraysize < size ? routingTable_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         routingTable_var2[i] = this->routingTable_var[i];
@@ -664,7 +683,7 @@ void PastryStateMessage::setRoutingTable(unsigned int k, const NodeHandle& routi
 
 void PastryStateMessage::setLeafSetArraySize(unsigned int size)
 {
-    NodeHandle *leafSet_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *leafSet_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = leafSet_arraysize < size ? leafSet_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         leafSet_var2[i] = this->leafSet_var[i];
@@ -692,7 +711,7 @@ void PastryStateMessage::setLeafSet(unsigned int k, const NodeHandle& leafSet_va
 
 void PastryStateMessage::setNeighborhoodSetArraySize(unsigned int size)
 {
-    NodeHandle *neighborhoodSet_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *neighborhoodSet_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = neighborhoodSet_arraysize < size ? neighborhoodSet_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         neighborhoodSet_var2[i] = this->neighborhoodSet_var[i];
@@ -758,12 +777,13 @@ class PastryStateMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -805,17 +825,17 @@ unsigned int PastryStateMessageDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 3: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 4: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PastryStateMessageDescriptor::getFieldName(void *object, int field) const
@@ -826,17 +846,32 @@ const char *PastryStateMessageDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "pastryStateMsgType";
-        case 1: return "sender";
-        case 2: return "routingTable";
-        case 3: return "leafSet";
-        case 4: return "neighborhoodSet";
-        case 5: return "joinHopCount";
-        case 6: return "lastHop";
-        case 7: return "timestamp";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "pastryStateMsgType",
+        "sender",
+        "routingTable",
+        "leafSet",
+        "neighborhoodSet",
+        "joinHopCount",
+        "lastHop",
+        "timestamp",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int PastryStateMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "pastryStateMsgType")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sender")==0) return base+1;
+    if (fieldName[0]=='r' && strcmp(fieldName, "routingTable")==0) return base+2;
+    if (fieldName[0]=='l' && strcmp(fieldName, "leafSet")==0) return base+3;
+    if (fieldName[0]=='n' && strcmp(fieldName, "neighborhoodSet")==0) return base+4;
+    if (fieldName[0]=='j' && strcmp(fieldName, "joinHopCount")==0) return base+5;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lastHop")==0) return base+6;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timestamp")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PastryStateMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -847,17 +882,17 @@ const char *PastryStateMessageDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        case 2: return "NodeHandle";
-        case 3: return "NodeHandle";
-        case 4: return "NodeHandle";
-        case 5: return "int";
-        case 6: return "bool";
-        case 7: return "simtime_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+        "NodeHandle",
+        "NodeHandle",
+        "NodeHandle",
+        "int",
+        "bool",
+        "simtime_t",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PastryStateMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -890,25 +925,25 @@ int PastryStateMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PastryStateMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PastryStateMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PastryStateMessage *pp = (PastryStateMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getPastryStateMsgType(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getSender(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getRoutingTable(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getLeafSet(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: {std::stringstream out; out << pp->getNeighborhoodSet(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 5: long2string(pp->getJoinHopCount(),resultbuf,bufsize); return true;
-        case 6: bool2string(pp->getLastHop(),resultbuf,bufsize); return true;
-        case 7: double2string(pp->getTimestamp(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getPastryStateMsgType());
+        case 1: {std::stringstream out; out << pp->getSender(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getRoutingTable(i); return out.str();}
+        case 3: {std::stringstream out; out << pp->getLeafSet(i); return out.str();}
+        case 4: {std::stringstream out; out << pp->getNeighborhoodSet(i); return out.str();}
+        case 5: return long2string(pp->getJoinHopCount());
+        case 6: return bool2string(pp->getLastHop());
+        case 7: return double2string(pp->getTimestamp());
+        default: return "";
     }
 }
 
@@ -938,13 +973,17 @@ const char *PastryStateMessageDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        case 2: return "NodeHandle"; break;
-        case 3: return "NodeHandle"; break;
-        case 4: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+        "NodeHandle",
+        "NodeHandle",
+        "NodeHandle",
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *PastryStateMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1036,12 +1075,13 @@ class PastryFindNodeExtDataDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1083,11 +1123,11 @@ unsigned int PastryFindNodeExtDataDescriptor::getFieldTypeFlags(void *object, in
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PastryFindNodeExtDataDescriptor::getFieldName(void *object, int field) const
@@ -1098,11 +1138,20 @@ const char *PastryFindNodeExtDataDescriptor::getFieldName(void *object, int fiel
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "sendStateTo";
-        case 1: return "joinHopCount";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "sendStateTo",
+        "joinHopCount",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PastryFindNodeExtDataDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sendStateTo")==0) return base+0;
+    if (fieldName[0]=='j' && strcmp(fieldName, "joinHopCount")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PastryFindNodeExtDataDescriptor::getFieldTypeString(void *object, int field) const
@@ -1113,11 +1162,11 @@ const char *PastryFindNodeExtDataDescriptor::getFieldTypeString(void *object, in
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TransportAddress",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PastryFindNodeExtDataDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1147,19 +1196,19 @@ int PastryFindNodeExtDataDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PastryFindNodeExtDataDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PastryFindNodeExtDataDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PastryFindNodeExtData *pp = (PastryFindNodeExtData *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSendStateTo(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getJoinHopCount(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSendStateTo(); return out.str();}
+        case 1: return long2string(pp->getJoinHopCount());
+        default: return "";
     }
 }
 
@@ -1186,10 +1235,11 @@ const char *PastryFindNodeExtDataDescriptor::getFieldStructName(void *object, in
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TransportAddress",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PastryFindNodeExtDataDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1233,7 +1283,7 @@ PastryNewLeafsMessage& PastryNewLeafsMessage::operator=(const PastryNewLeafsMess
     if (this==&other) return *this;
     cPacket::operator=(other);
     delete [] this->leafs_var;
-    this->leafs_var = (other.leafs_arraysize==0) ? NULL : new NodeHandle[other.leafs_arraysize];
+    this->leafs_var = (other.leafs_arraysize==0) ? NULL : new ::NodeHandle[other.leafs_arraysize];
     leafs_arraysize = other.leafs_arraysize;
     for (unsigned int i=0; i<leafs_arraysize; i++)
         this->leafs_var[i] = other.leafs_var[i];
@@ -1255,14 +1305,14 @@ void PastryNewLeafsMessage::parsimUnpack(cCommBuffer *b)
     if (leafs_arraysize==0) {
         this->leafs_var = 0;
     } else {
-        this->leafs_var = new NodeHandle[leafs_arraysize];
+        this->leafs_var = new ::NodeHandle[leafs_arraysize];
         doUnpacking(b,this->leafs_var,leafs_arraysize);
     }
 }
 
 void PastryNewLeafsMessage::setLeafsArraySize(unsigned int size)
 {
-    NodeHandle *leafs_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *leafs_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = leafs_arraysize < size ? leafs_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         leafs_var2[i] = this->leafs_var[i];
@@ -1298,12 +1348,13 @@ class PastryNewLeafsMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1345,10 +1396,10 @@ unsigned int PastryNewLeafsMessageDescriptor::getFieldTypeFlags(void *object, in
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PastryNewLeafsMessageDescriptor::getFieldName(void *object, int field) const
@@ -1359,10 +1410,18 @@ const char *PastryNewLeafsMessageDescriptor::getFieldName(void *object, int fiel
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "leafs";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "leafs",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PastryNewLeafsMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "leafs")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PastryNewLeafsMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1373,10 +1432,10 @@ const char *PastryNewLeafsMessageDescriptor::getFieldTypeString(void *object, in
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PastryNewLeafsMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1407,18 +1466,18 @@ int PastryNewLeafsMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PastryNewLeafsMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PastryNewLeafsMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PastryNewLeafsMessage *pp = (PastryNewLeafsMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getLeafs(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getLeafs(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -1444,10 +1503,10 @@ const char *PastryNewLeafsMessageDescriptor::getFieldStructName(void *object, in
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PastryNewLeafsMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1522,12 +1581,13 @@ class PastrySendStateDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1569,10 +1629,10 @@ unsigned int PastrySendStateDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PastrySendStateDescriptor::getFieldName(void *object, int field) const
@@ -1583,10 +1643,18 @@ const char *PastrySendStateDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "dest";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "dest",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int PastrySendStateDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dest")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PastrySendStateDescriptor::getFieldTypeString(void *object, int field) const
@@ -1597,10 +1665,10 @@ const char *PastrySendStateDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PastrySendStateDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1630,18 +1698,18 @@ int PastrySendStateDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PastrySendStateDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PastrySendStateDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PastrySendState *pp = (PastrySendState *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getDest(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getDest(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1667,10 +1735,10 @@ const char *PastrySendStateDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *PastrySendStateDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1719,7 +1787,7 @@ PastryLeafsetMessage& PastryLeafsetMessage::operator=(const PastryLeafsetMessage
     this->sender_var = other.sender_var;
     this->sendStateTo_var = other.sendStateTo_var;
     delete [] this->leafSet_var;
-    this->leafSet_var = (other.leafSet_arraysize==0) ? NULL : new NodeHandle[other.leafSet_arraysize];
+    this->leafSet_var = (other.leafSet_arraysize==0) ? NULL : new ::NodeHandle[other.leafSet_arraysize];
     leafSet_arraysize = other.leafSet_arraysize;
     for (unsigned int i=0; i<leafSet_arraysize; i++)
         this->leafSet_var[i] = other.leafSet_var[i];
@@ -1747,7 +1815,7 @@ void PastryLeafsetMessage::parsimUnpack(cCommBuffer *b)
     if (leafSet_arraysize==0) {
         this->leafSet_var = 0;
     } else {
-        this->leafSet_var = new NodeHandle[leafSet_arraysize];
+        this->leafSet_var = new ::NodeHandle[leafSet_arraysize];
         doUnpacking(b,this->leafSet_var,leafSet_arraysize);
     }
     doUnpacking(b,this->timestamp_var);
@@ -1775,7 +1843,7 @@ void PastryLeafsetMessage::setSendStateTo(const TransportAddress& sendStateTo_va
 
 void PastryLeafsetMessage::setLeafSetArraySize(unsigned int size)
 {
-    NodeHandle *leafSet_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *leafSet_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = leafSet_arraysize < size ? leafSet_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         leafSet_var2[i] = this->leafSet_var[i];
@@ -1821,12 +1889,13 @@ class PastryLeafsetMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1868,13 +1937,13 @@ unsigned int PastryLeafsetMessageDescriptor::getFieldTypeFlags(void *object, int
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PastryLeafsetMessageDescriptor::getFieldName(void *object, int field) const
@@ -1885,13 +1954,24 @@ const char *PastryLeafsetMessageDescriptor::getFieldName(void *object, int field
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "sender";
-        case 1: return "sendStateTo";
-        case 2: return "leafSet";
-        case 3: return "timestamp";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "sender",
+        "sendStateTo",
+        "leafSet",
+        "timestamp",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int PastryLeafsetMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sender")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sendStateTo")==0) return base+1;
+    if (fieldName[0]=='l' && strcmp(fieldName, "leafSet")==0) return base+2;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timestamp")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PastryLeafsetMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1902,13 +1982,13 @@ const char *PastryLeafsetMessageDescriptor::getFieldTypeString(void *object, int
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        case 1: return "TransportAddress";
-        case 2: return "NodeHandle";
-        case 3: return "simtime_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+        "TransportAddress",
+        "NodeHandle",
+        "simtime_t",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PastryLeafsetMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1939,21 +2019,21 @@ int PastryLeafsetMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PastryLeafsetMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PastryLeafsetMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PastryLeafsetMessage *pp = (PastryLeafsetMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSender(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getSendStateTo(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getLeafSet(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: double2string(pp->getTimestamp(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSender(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getSendStateTo(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getLeafSet(i); return out.str();}
+        case 3: return double2string(pp->getTimestamp());
+        default: return "";
     }
 }
 
@@ -1980,12 +2060,13 @@ const char *PastryLeafsetMessageDescriptor::getFieldStructName(void *object, int
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        case 1: return "TransportAddress"; break;
-        case 2: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+        "TransportAddress",
+        "NodeHandle",
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *PastryLeafsetMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2076,12 +2157,13 @@ class PastryRoutingRowRequestMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2123,11 +2205,11 @@ unsigned int PastryRoutingRowRequestMessageDescriptor::getFieldTypeFlags(void *o
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PastryRoutingRowRequestMessageDescriptor::getFieldName(void *object, int field) const
@@ -2138,11 +2220,20 @@ const char *PastryRoutingRowRequestMessageDescriptor::getFieldName(void *object,
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "sendStateTo";
-        case 1: return "row";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "sendStateTo",
+        "row",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PastryRoutingRowRequestMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sendStateTo")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "row")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PastryRoutingRowRequestMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -2153,11 +2244,11 @@ const char *PastryRoutingRowRequestMessageDescriptor::getFieldTypeString(void *o
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TransportAddress",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PastryRoutingRowRequestMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2187,19 +2278,19 @@ int PastryRoutingRowRequestMessageDescriptor::getArraySize(void *object, int fie
     }
 }
 
-bool PastryRoutingRowRequestMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PastryRoutingRowRequestMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PastryRoutingRowRequestMessage *pp = (PastryRoutingRowRequestMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSendStateTo(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getRow(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSendStateTo(); return out.str();}
+        case 1: return long2string(pp->getRow());
+        default: return "";
     }
 }
 
@@ -2226,10 +2317,11 @@ const char *PastryRoutingRowRequestMessageDescriptor::getFieldStructName(void *o
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TransportAddress",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PastryRoutingRowRequestMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2277,7 +2369,7 @@ PastryRoutingRowMessage& PastryRoutingRowMessage::operator=(const PastryRoutingR
     PastryMessage::operator=(other);
     this->sender_var = other.sender_var;
     delete [] this->routingTable_var;
-    this->routingTable_var = (other.routingTable_arraysize==0) ? NULL : new NodeHandle[other.routingTable_arraysize];
+    this->routingTable_var = (other.routingTable_arraysize==0) ? NULL : new ::NodeHandle[other.routingTable_arraysize];
     routingTable_arraysize = other.routingTable_arraysize;
     for (unsigned int i=0; i<routingTable_arraysize; i++)
         this->routingTable_var[i] = other.routingTable_var[i];
@@ -2305,7 +2397,7 @@ void PastryRoutingRowMessage::parsimUnpack(cCommBuffer *b)
     if (routingTable_arraysize==0) {
         this->routingTable_var = 0;
     } else {
-        this->routingTable_var = new NodeHandle[routingTable_arraysize];
+        this->routingTable_var = new ::NodeHandle[routingTable_arraysize];
         doUnpacking(b,this->routingTable_var,routingTable_arraysize);
     }
     doUnpacking(b,this->row_var);
@@ -2324,7 +2416,7 @@ void PastryRoutingRowMessage::setSender(const NodeHandle& sender_var)
 
 void PastryRoutingRowMessage::setRoutingTableArraySize(unsigned int size)
 {
-    NodeHandle *routingTable_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *routingTable_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = routingTable_arraysize < size ? routingTable_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         routingTable_var2[i] = this->routingTable_var[i];
@@ -2380,12 +2472,13 @@ class PastryRoutingRowMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2427,13 +2520,13 @@ unsigned int PastryRoutingRowMessageDescriptor::getFieldTypeFlags(void *object, 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PastryRoutingRowMessageDescriptor::getFieldName(void *object, int field) const
@@ -2444,13 +2537,24 @@ const char *PastryRoutingRowMessageDescriptor::getFieldName(void *object, int fi
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "sender";
-        case 1: return "routingTable";
-        case 2: return "row";
-        case 3: return "timestamp";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "sender",
+        "routingTable",
+        "row",
+        "timestamp",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int PastryRoutingRowMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sender")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "routingTable")==0) return base+1;
+    if (fieldName[0]=='r' && strcmp(fieldName, "row")==0) return base+2;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timestamp")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PastryRoutingRowMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -2461,13 +2565,13 @@ const char *PastryRoutingRowMessageDescriptor::getFieldTypeString(void *object, 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        case 1: return "NodeHandle";
-        case 2: return "int";
-        case 3: return "simtime_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+        "NodeHandle",
+        "int",
+        "simtime_t",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PastryRoutingRowMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2498,21 +2602,21 @@ int PastryRoutingRowMessageDescriptor::getArraySize(void *object, int field) con
     }
 }
 
-bool PastryRoutingRowMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PastryRoutingRowMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PastryRoutingRowMessage *pp = (PastryRoutingRowMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSender(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getRoutingTable(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: long2string(pp->getRow(),resultbuf,bufsize); return true;
-        case 3: double2string(pp->getTimestamp(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSender(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getRoutingTable(i); return out.str();}
+        case 2: return long2string(pp->getRow());
+        case 3: return double2string(pp->getTimestamp());
+        default: return "";
     }
 }
 
@@ -2540,11 +2644,13 @@ const char *PastryRoutingRowMessageDescriptor::getFieldStructName(void *object, 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        case 1: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+        "NodeHandle",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *PastryRoutingRowMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2634,12 +2740,13 @@ class PastryRequestMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2681,11 +2788,11 @@ unsigned int PastryRequestMessageDescriptor::getFieldTypeFlags(void *object, int
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PastryRequestMessageDescriptor::getFieldName(void *object, int field) const
@@ -2696,11 +2803,20 @@ const char *PastryRequestMessageDescriptor::getFieldName(void *object, int field
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "sendStateTo";
-        case 1: return "pastryReqType";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "sendStateTo",
+        "pastryReqType",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int PastryRequestMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sendStateTo")==0) return base+0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "pastryReqType")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PastryRequestMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -2711,11 +2827,11 @@ const char *PastryRequestMessageDescriptor::getFieldTypeString(void *object, int
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TransportAddress",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PastryRequestMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2745,19 +2861,19 @@ int PastryRequestMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PastryRequestMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PastryRequestMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PastryRequestMessage *pp = (PastryRequestMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSendStateTo(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getPastryReqType(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSendStateTo(); return out.str();}
+        case 1: return long2string(pp->getPastryReqType());
+        default: return "";
     }
 }
 
@@ -2784,10 +2900,11 @@ const char *PastryRequestMessageDescriptor::getFieldStructName(void *object, int
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TransportAddress",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *PastryRequestMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

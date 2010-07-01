@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from applications/scribe/ScribeMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from applications/scribe/ScribeMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -95,12 +95,13 @@ class ScribeJoinCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -142,10 +143,10 @@ unsigned int ScribeJoinCallDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ScribeJoinCallDescriptor::getFieldName(void *object, int field) const
@@ -156,10 +157,18 @@ const char *ScribeJoinCallDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "groupId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "groupId",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int ScribeJoinCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='g' && strcmp(fieldName, "groupId")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ScribeJoinCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -170,10 +179,10 @@ const char *ScribeJoinCallDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ScribeJoinCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -203,18 +212,18 @@ int ScribeJoinCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ScribeJoinCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ScribeJoinCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ScribeJoinCall *pp = (ScribeJoinCall *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getGroupId(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getGroupId(); return out.str();}
+        default: return "";
     }
 }
 
@@ -240,10 +249,10 @@ const char *ScribeJoinCallDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *ScribeJoinCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -317,12 +326,13 @@ class ScribeJoinResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -364,10 +374,10 @@ unsigned int ScribeJoinResponseDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ScribeJoinResponseDescriptor::getFieldName(void *object, int field) const
@@ -378,10 +388,18 @@ const char *ScribeJoinResponseDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "groupId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "groupId",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int ScribeJoinResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='g' && strcmp(fieldName, "groupId")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ScribeJoinResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -392,10 +410,10 @@ const char *ScribeJoinResponseDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ScribeJoinResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -425,18 +443,18 @@ int ScribeJoinResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ScribeJoinResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ScribeJoinResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ScribeJoinResponse *pp = (ScribeJoinResponse *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getGroupId(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getGroupId(); return out.str();}
+        default: return "";
     }
 }
 
@@ -462,10 +480,10 @@ const char *ScribeJoinResponseDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *ScribeJoinResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -539,12 +557,13 @@ class ScribePublishCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -586,10 +605,10 @@ unsigned int ScribePublishCallDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ScribePublishCallDescriptor::getFieldName(void *object, int field) const
@@ -600,10 +619,18 @@ const char *ScribePublishCallDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "groupId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "groupId",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int ScribePublishCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='g' && strcmp(fieldName, "groupId")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ScribePublishCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -614,10 +641,10 @@ const char *ScribePublishCallDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ScribePublishCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -647,18 +674,18 @@ int ScribePublishCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ScribePublishCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ScribePublishCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ScribePublishCall *pp = (ScribePublishCall *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getGroupId(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getGroupId(); return out.str();}
+        default: return "";
     }
 }
 
@@ -684,10 +711,10 @@ const char *ScribePublishCallDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *ScribePublishCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -775,12 +802,13 @@ class ScribePublishResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -822,11 +850,11 @@ unsigned int ScribePublishResponseDescriptor::getFieldTypeFlags(void *object, in
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ScribePublishResponseDescriptor::getFieldName(void *object, int field) const
@@ -837,11 +865,20 @@ const char *ScribePublishResponseDescriptor::getFieldName(void *object, int fiel
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "groupId";
-        case 1: return "wrongRoot";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "groupId",
+        "wrongRoot",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int ScribePublishResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='g' && strcmp(fieldName, "groupId")==0) return base+0;
+    if (fieldName[0]=='w' && strcmp(fieldName, "wrongRoot")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ScribePublishResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -852,11 +889,11 @@ const char *ScribePublishResponseDescriptor::getFieldTypeString(void *object, in
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "bool",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ScribePublishResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -886,19 +923,19 @@ int ScribePublishResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ScribePublishResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ScribePublishResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ScribePublishResponse *pp = (ScribePublishResponse *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getGroupId(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: bool2string(pp->getWrongRoot(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getGroupId(); return out.str();}
+        case 1: return bool2string(pp->getWrongRoot());
+        default: return "";
     }
 }
 
@@ -925,10 +962,11 @@ const char *ScribePublishResponseDescriptor::getFieldStructName(void *object, in
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *ScribePublishResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1015,12 +1053,13 @@ class ScribeSubscriptionRefreshMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1062,11 +1101,11 @@ unsigned int ScribeSubscriptionRefreshMessageDescriptor::getFieldTypeFlags(void 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ScribeSubscriptionRefreshMessageDescriptor::getFieldName(void *object, int field) const
@@ -1077,11 +1116,20 @@ const char *ScribeSubscriptionRefreshMessageDescriptor::getFieldName(void *objec
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "src";
-        case 1: return "groupId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "src",
+        "groupId",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int ScribeSubscriptionRefreshMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "src")==0) return base+0;
+    if (fieldName[0]=='g' && strcmp(fieldName, "groupId")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ScribeSubscriptionRefreshMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1092,11 +1140,11 @@ const char *ScribeSubscriptionRefreshMessageDescriptor::getFieldTypeString(void 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        case 1: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+        "OverlayKey",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ScribeSubscriptionRefreshMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1126,19 +1174,19 @@ int ScribeSubscriptionRefreshMessageDescriptor::getArraySize(void *object, int f
     }
 }
 
-bool ScribeSubscriptionRefreshMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ScribeSubscriptionRefreshMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ScribeSubscriptionRefreshMessage *pp = (ScribeSubscriptionRefreshMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSrc(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getGroupId(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSrc(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getGroupId(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1164,11 +1212,11 @@ const char *ScribeSubscriptionRefreshMessageDescriptor::getFieldStructName(void 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        case 1: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+        "OverlayKey",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *ScribeSubscriptionRefreshMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1256,12 +1304,13 @@ class ScribeLeaveMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1303,11 +1352,11 @@ unsigned int ScribeLeaveMessageDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ScribeLeaveMessageDescriptor::getFieldName(void *object, int field) const
@@ -1318,11 +1367,20 @@ const char *ScribeLeaveMessageDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "src";
-        case 1: return "groupId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "src",
+        "groupId",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int ScribeLeaveMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "src")==0) return base+0;
+    if (fieldName[0]=='g' && strcmp(fieldName, "groupId")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ScribeLeaveMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1333,11 +1391,11 @@ const char *ScribeLeaveMessageDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        case 1: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+        "OverlayKey",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ScribeLeaveMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1367,19 +1425,19 @@ int ScribeLeaveMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ScribeLeaveMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ScribeLeaveMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ScribeLeaveMessage *pp = (ScribeLeaveMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSrc(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getGroupId(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSrc(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getGroupId(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1405,11 +1463,11 @@ const char *ScribeLeaveMessageDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        case 1: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+        "OverlayKey",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *ScribeLeaveMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1511,12 +1569,13 @@ class ScribeTimerDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1558,12 +1617,12 @@ unsigned int ScribeTimerDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ScribeTimerDescriptor::getFieldName(void *object, int field) const
@@ -1574,12 +1633,22 @@ const char *ScribeTimerDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "timerType";
-        case 1: return "child";
-        case 2: return "group";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "timerType",
+        "child",
+        "group",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int ScribeTimerDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timerType")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "child")==0) return base+1;
+    if (fieldName[0]=='g' && strcmp(fieldName, "group")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ScribeTimerDescriptor::getFieldTypeString(void *object, int field) const
@@ -1590,12 +1659,12 @@ const char *ScribeTimerDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        case 2: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+        "OverlayKey",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ScribeTimerDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1628,20 +1697,20 @@ int ScribeTimerDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ScribeTimerDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ScribeTimerDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ScribeTimer *pp = (ScribeTimer *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getTimerType(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getChild(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getGroup(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getTimerType());
+        case 1: {std::stringstream out; out << pp->getChild(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getGroup(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1668,11 +1737,12 @@ const char *ScribeTimerDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        case 2: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+        "OverlayKey",
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *ScribeTimerDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1761,12 +1831,13 @@ class ScribeDataMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1808,11 +1879,11 @@ unsigned int ScribeDataMessageDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ScribeDataMessageDescriptor::getFieldName(void *object, int field) const
@@ -1823,11 +1894,20 @@ const char *ScribeDataMessageDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "groupId";
-        case 1: return "empty";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "groupId",
+        "empty",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int ScribeDataMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='g' && strcmp(fieldName, "groupId")==0) return base+0;
+    if (fieldName[0]=='e' && strcmp(fieldName, "empty")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ScribeDataMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1838,11 +1918,11 @@ const char *ScribeDataMessageDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "bool",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ScribeDataMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1872,19 +1952,19 @@ int ScribeDataMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ScribeDataMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ScribeDataMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ScribeDataMessage *pp = (ScribeDataMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getGroupId(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: bool2string(pp->getEmpty(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getGroupId(); return out.str();}
+        case 1: return bool2string(pp->getEmpty());
+        default: return "";
     }
 }
 
@@ -1911,10 +1991,11 @@ const char *ScribeDataMessageDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *ScribeDataMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

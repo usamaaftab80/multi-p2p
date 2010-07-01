@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from applications/dht/DHTMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from applications/dht/DHTMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -182,12 +182,13 @@ class DHTPutCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -229,17 +230,17 @@ unsigned int DHTPutCallDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *DHTPutCallDescriptor::getFieldName(void *object, int field) const
@@ -250,17 +251,32 @@ const char *DHTPutCallDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "key";
-        case 1: return "value";
-        case 2: return "kind";
-        case 3: return "id";
-        case 4: return "ttl";
-        case 5: return "isModifiable";
-        case 6: return "maintenance";
-        case 7: return "ownerNode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "key",
+        "value",
+        "kind",
+        "id",
+        "ttl",
+        "isModifiable",
+        "maintenance",
+        "ownerNode",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int DHTPutCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "key")==0) return base+0;
+    if (fieldName[0]=='v' && strcmp(fieldName, "value")==0) return base+1;
+    if (fieldName[0]=='k' && strcmp(fieldName, "kind")==0) return base+2;
+    if (fieldName[0]=='i' && strcmp(fieldName, "id")==0) return base+3;
+    if (fieldName[0]=='t' && strcmp(fieldName, "ttl")==0) return base+4;
+    if (fieldName[0]=='i' && strcmp(fieldName, "isModifiable")==0) return base+5;
+    if (fieldName[0]=='m' && strcmp(fieldName, "maintenance")==0) return base+6;
+    if (fieldName[0]=='o' && strcmp(fieldName, "ownerNode")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *DHTPutCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -271,17 +287,17 @@ const char *DHTPutCallDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "BinaryValue";
-        case 2: return "uint32_t";
-        case 3: return "uint32_t";
-        case 4: return "int";
-        case 5: return "bool";
-        case 6: return "bool";
-        case 7: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "BinaryValue",
+        "uint32_t",
+        "uint32_t",
+        "int",
+        "bool",
+        "bool",
+        "NodeHandle",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *DHTPutCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -311,25 +327,25 @@ int DHTPutCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool DHTPutCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string DHTPutCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     DHTPutCall *pp = (DHTPutCall *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getValue(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: ulong2string(pp->getKind(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getId(),resultbuf,bufsize); return true;
-        case 4: long2string(pp->getTtl(),resultbuf,bufsize); return true;
-        case 5: bool2string(pp->getIsModifiable(),resultbuf,bufsize); return true;
-        case 6: bool2string(pp->getMaintenance(),resultbuf,bufsize); return true;
-        case 7: {std::stringstream out; out << pp->getOwnerNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getKey(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getValue(); return out.str();}
+        case 2: return ulong2string(pp->getKind());
+        case 3: return ulong2string(pp->getId());
+        case 4: return long2string(pp->getTtl());
+        case 5: return bool2string(pp->getIsModifiable());
+        case 6: return bool2string(pp->getMaintenance());
+        case 7: {std::stringstream out; out << pp->getOwnerNode(); return out.str();}
+        default: return "";
     }
 }
 
@@ -360,12 +376,17 @@ const char *DHTPutCallDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        case 1: return "BinaryValue"; break;
-        case 7: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        "BinaryValue",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        "NodeHandle",
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *DHTPutCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -483,12 +504,13 @@ class DHTGetCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -530,13 +552,13 @@ unsigned int DHTGetCallDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *DHTGetCallDescriptor::getFieldName(void *object, int field) const
@@ -547,13 +569,24 @@ const char *DHTGetCallDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "key";
-        case 1: return "kind";
-        case 2: return "id";
-        case 3: return "isHash";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "key",
+        "kind",
+        "id",
+        "isHash",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int DHTGetCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "key")==0) return base+0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "kind")==0) return base+1;
+    if (fieldName[0]=='i' && strcmp(fieldName, "id")==0) return base+2;
+    if (fieldName[0]=='i' && strcmp(fieldName, "isHash")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *DHTGetCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -564,13 +597,13 @@ const char *DHTGetCallDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "uint32_t";
-        case 2: return "uint32_t";
-        case 3: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "uint32_t",
+        "uint32_t",
+        "bool",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *DHTGetCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -600,21 +633,21 @@ int DHTGetCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool DHTGetCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string DHTGetCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     DHTGetCall *pp = (DHTGetCall *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: ulong2string(pp->getKind(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getId(),resultbuf,bufsize); return true;
-        case 3: bool2string(pp->getIsHash(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getKey(); return out.str();}
+        case 1: return ulong2string(pp->getKind());
+        case 2: return ulong2string(pp->getId());
+        case 3: return bool2string(pp->getIsHash());
+        default: return "";
     }
 }
 
@@ -643,10 +676,13 @@ const char *DHTGetCallDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *DHTGetCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -733,12 +769,13 @@ class DHTPutResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -780,11 +817,11 @@ unsigned int DHTPutResponseDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *DHTPutResponseDescriptor::getFieldName(void *object, int field) const
@@ -795,11 +832,20 @@ const char *DHTPutResponseDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "key";
-        case 1: return "value";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "key",
+        "value",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int DHTPutResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "key")==0) return base+0;
+    if (fieldName[0]=='v' && strcmp(fieldName, "value")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *DHTPutResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -810,11 +856,11 @@ const char *DHTPutResponseDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "BinaryValue";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "BinaryValue",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *DHTPutResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -844,19 +890,19 @@ int DHTPutResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool DHTPutResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string DHTPutResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     DHTPutResponse *pp = (DHTPutResponse *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getValue(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getKey(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getValue(); return out.str();}
+        default: return "";
     }
 }
 
@@ -882,11 +928,11 @@ const char *DHTPutResponseDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        case 1: return "BinaryValue"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        "BinaryValue",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *DHTPutResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -935,7 +981,7 @@ DHTGetResponse& DHTGetResponse::operator=(const DHTGetResponse& other)
     this->hashValue_var = other.hashValue_var;
     this->isHash_var = other.isHash_var;
     delete [] this->result_var;
-    this->result_var = (other.result_arraysize==0) ? NULL : new DhtDumpEntry[other.result_arraysize];
+    this->result_var = (other.result_arraysize==0) ? NULL : new ::DhtDumpEntry[other.result_arraysize];
     result_arraysize = other.result_arraysize;
     for (unsigned int i=0; i<result_arraysize; i++)
         this->result_var[i] = other.result_var[i];
@@ -963,7 +1009,7 @@ void DHTGetResponse::parsimUnpack(cCommBuffer *b)
     if (result_arraysize==0) {
         this->result_var = 0;
     } else {
-        this->result_var = new DhtDumpEntry[result_arraysize];
+        this->result_var = new ::DhtDumpEntry[result_arraysize];
         doUnpacking(b,this->result_var,result_arraysize);
     }
 }
@@ -1000,7 +1046,7 @@ void DHTGetResponse::setIsHash(bool isHash_var)
 
 void DHTGetResponse::setResultArraySize(unsigned int size)
 {
-    DhtDumpEntry *result_var2 = (size==0) ? NULL : new DhtDumpEntry[size];
+    ::DhtDumpEntry *result_var2 = (size==0) ? NULL : new ::DhtDumpEntry[size];
     unsigned int sz = result_arraysize < size ? result_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         result_var2[i] = this->result_var[i];
@@ -1036,12 +1082,13 @@ class DHTGetResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1083,13 +1130,13 @@ unsigned int DHTGetResponseDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *DHTGetResponseDescriptor::getFieldName(void *object, int field) const
@@ -1100,13 +1147,24 @@ const char *DHTGetResponseDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "key";
-        case 1: return "hashValue";
-        case 2: return "isHash";
-        case 3: return "result";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "key",
+        "hashValue",
+        "isHash",
+        "result",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int DHTGetResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "key")==0) return base+0;
+    if (fieldName[0]=='h' && strcmp(fieldName, "hashValue")==0) return base+1;
+    if (fieldName[0]=='i' && strcmp(fieldName, "isHash")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "result")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *DHTGetResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -1117,13 +1175,13 @@ const char *DHTGetResponseDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "BinaryValue";
-        case 2: return "bool";
-        case 3: return "DhtDumpEntry";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "BinaryValue",
+        "bool",
+        "DhtDumpEntry",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *DHTGetResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1154,21 +1212,21 @@ int DHTGetResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool DHTGetResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string DHTGetResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     DHTGetResponse *pp = (DHTGetResponse *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getHashValue(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: bool2string(pp->getIsHash(),resultbuf,bufsize); return true;
-        case 3: {std::stringstream out; out << pp->getResult(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getKey(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getHashValue(); return out.str();}
+        case 2: return bool2string(pp->getIsHash());
+        case 3: {std::stringstream out; out << pp->getResult(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -1195,12 +1253,13 @@ const char *DHTGetResponseDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        case 1: return "BinaryValue"; break;
-        case 3: return "DhtDumpEntry"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        "BinaryValue",
+        NULL,
+        "DhtDumpEntry",
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *DHTGetResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1304,12 +1363,13 @@ class DHTTtlTimerDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1351,12 +1411,12 @@ unsigned int DHTTtlTimerDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *DHTTtlTimerDescriptor::getFieldName(void *object, int field) const
@@ -1367,12 +1427,22 @@ const char *DHTTtlTimerDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "key";
-        case 1: return "kind";
-        case 2: return "id";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "key",
+        "kind",
+        "id",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int DHTTtlTimerDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "key")==0) return base+0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "kind")==0) return base+1;
+    if (fieldName[0]=='i' && strcmp(fieldName, "id")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *DHTTtlTimerDescriptor::getFieldTypeString(void *object, int field) const
@@ -1383,12 +1453,12 @@ const char *DHTTtlTimerDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "uint32_t";
-        case 2: return "uint32_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "uint32_t",
+        "uint32_t",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *DHTTtlTimerDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1418,20 +1488,20 @@ int DHTTtlTimerDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool DHTTtlTimerDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string DHTTtlTimerDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     DHTTtlTimer *pp = (DHTTtlTimer *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: ulong2string(pp->getKind(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getId(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getKey(); return out.str();}
+        case 1: return ulong2string(pp->getKind());
+        case 2: return ulong2string(pp->getId());
+        default: return "";
     }
 }
 
@@ -1459,10 +1529,12 @@ const char *DHTTtlTimerDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *DHTTtlTimerDescriptor::getFieldStructPointer(void *object, int field, int i) const

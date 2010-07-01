@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from transport/contract/TCPCommand.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from transport/contract/TCPCommand.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -128,12 +128,13 @@ class TCPCommandDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -175,11 +176,11 @@ unsigned int TCPCommandDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TCPCommandDescriptor::getFieldName(void *object, int field) const
@@ -190,11 +191,20 @@ const char *TCPCommandDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "connId";
-        case 1: return "userId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "connId",
+        "userId",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int TCPCommandDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "connId")==0) return base+0;
+    if (fieldName[0]=='u' && strcmp(fieldName, "userId")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TCPCommandDescriptor::getFieldTypeString(void *object, int field) const
@@ -205,11 +215,11 @@ const char *TCPCommandDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TCPCommandDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -239,19 +249,19 @@ int TCPCommandDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TCPCommandDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TCPCommandDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TCPCommand *pp = (TCPCommand *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getConnId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getUserId(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getConnId());
+        case 1: return long2string(pp->getUserId());
+        default: return "";
     }
 }
 
@@ -279,9 +289,11 @@ const char *TCPCommandDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *TCPCommandDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -368,12 +380,13 @@ class TCPErrorInfoDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -415,11 +428,11 @@ unsigned int TCPErrorInfoDescriptor::getFieldTypeFlags(void *object, int field) 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TCPErrorInfoDescriptor::getFieldName(void *object, int field) const
@@ -430,11 +443,20 @@ const char *TCPErrorInfoDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "errorCode";
-        case 1: return "messageText";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "errorCode",
+        "messageText",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int TCPErrorInfoDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='e' && strcmp(fieldName, "errorCode")==0) return base+0;
+    if (fieldName[0]=='m' && strcmp(fieldName, "messageText")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TCPErrorInfoDescriptor::getFieldTypeString(void *object, int field) const
@@ -445,11 +467,11 @@ const char *TCPErrorInfoDescriptor::getFieldTypeString(void *object, int field) 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "string";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "string",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TCPErrorInfoDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -482,19 +504,19 @@ int TCPErrorInfoDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TCPErrorInfoDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TCPErrorInfoDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TCPErrorInfo *pp = (TCPErrorInfo *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getErrorCode(),resultbuf,bufsize); return true;
-        case 1: oppstring2string(pp->getMessageText(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getErrorCode());
+        case 1: return oppstring2string(pp->getMessageText());
+        default: return "";
     }
 }
 
@@ -522,9 +544,11 @@ const char *TCPErrorInfoDescriptor::getFieldStructName(void *object, int field) 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *TCPErrorInfoDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -693,12 +717,13 @@ class TCPOpenCommandDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -740,17 +765,17 @@ unsigned int TCPOpenCommandDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TCPOpenCommandDescriptor::getFieldName(void *object, int field) const
@@ -761,17 +786,32 @@ const char *TCPOpenCommandDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "localAddr";
-        case 1: return "remoteAddr";
-        case 2: return "localPort";
-        case 3: return "remotePort";
-        case 4: return "fork";
-        case 5: return "sendQueueClass";
-        case 6: return "receiveQueueClass";
-        case 7: return "tcpAlgorithmClass";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "localAddr",
+        "remoteAddr",
+        "localPort",
+        "remotePort",
+        "fork",
+        "sendQueueClass",
+        "receiveQueueClass",
+        "tcpAlgorithmClass",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int TCPOpenCommandDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "localAddr")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "remoteAddr")==0) return base+1;
+    if (fieldName[0]=='l' && strcmp(fieldName, "localPort")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "remotePort")==0) return base+3;
+    if (fieldName[0]=='f' && strcmp(fieldName, "fork")==0) return base+4;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sendQueueClass")==0) return base+5;
+    if (fieldName[0]=='r' && strcmp(fieldName, "receiveQueueClass")==0) return base+6;
+    if (fieldName[0]=='t' && strcmp(fieldName, "tcpAlgorithmClass")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TCPOpenCommandDescriptor::getFieldTypeString(void *object, int field) const
@@ -782,17 +822,17 @@ const char *TCPOpenCommandDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPvXAddress";
-        case 1: return "IPvXAddress";
-        case 2: return "int";
-        case 3: return "int";
-        case 4: return "bool";
-        case 5: return "string";
-        case 6: return "string";
-        case 7: return "string";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPvXAddress",
+        "IPvXAddress",
+        "int",
+        "int",
+        "bool",
+        "string",
+        "string",
+        "string",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TCPOpenCommandDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -822,25 +862,25 @@ int TCPOpenCommandDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TCPOpenCommandDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TCPOpenCommandDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TCPOpenCommand *pp = (TCPOpenCommand *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getLocalAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getRemoteAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: long2string(pp->getLocalPort(),resultbuf,bufsize); return true;
-        case 3: long2string(pp->getRemotePort(),resultbuf,bufsize); return true;
-        case 4: bool2string(pp->getFork(),resultbuf,bufsize); return true;
-        case 5: oppstring2string(pp->getSendQueueClass(),resultbuf,bufsize); return true;
-        case 6: oppstring2string(pp->getReceiveQueueClass(),resultbuf,bufsize); return true;
-        case 7: oppstring2string(pp->getTcpAlgorithmClass(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getLocalAddr(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getRemoteAddr(); return out.str();}
+        case 2: return long2string(pp->getLocalPort());
+        case 3: return long2string(pp->getRemotePort());
+        case 4: return bool2string(pp->getFork());
+        case 5: return oppstring2string(pp->getSendQueueClass());
+        case 6: return oppstring2string(pp->getReceiveQueueClass());
+        case 7: return oppstring2string(pp->getTcpAlgorithmClass());
+        default: return "";
     }
 }
 
@@ -872,11 +912,17 @@ const char *TCPOpenCommandDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPvXAddress"; break;
-        case 1: return "IPvXAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPvXAddress",
+        "IPvXAddress",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *TCPOpenCommandDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -937,12 +983,13 @@ class TCPSendCommandDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -984,9 +1031,7 @@ unsigned int TCPSendCommandDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *TCPSendCommandDescriptor::getFieldName(void *object, int field) const
@@ -997,9 +1042,13 @@ const char *TCPSendCommandDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int TCPSendCommandDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TCPSendCommandDescriptor::getFieldTypeString(void *object, int field) const
@@ -1010,9 +1059,7 @@ const char *TCPSendCommandDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *TCPSendCommandDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1042,17 +1089,17 @@ int TCPSendCommandDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TCPSendCommandDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TCPSendCommandDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TCPSendCommand *pp = (TCPSendCommand *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -1078,9 +1125,7 @@ const char *TCPSendCommandDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *TCPSendCommandDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1193,12 +1238,13 @@ class TCPConnectInfoDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1240,13 +1286,13 @@ unsigned int TCPConnectInfoDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TCPConnectInfoDescriptor::getFieldName(void *object, int field) const
@@ -1257,13 +1303,24 @@ const char *TCPConnectInfoDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "localAddr";
-        case 1: return "remoteAddr";
-        case 2: return "localPort";
-        case 3: return "remotePort";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "localAddr",
+        "remoteAddr",
+        "localPort",
+        "remotePort",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int TCPConnectInfoDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "localAddr")==0) return base+0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "remoteAddr")==0) return base+1;
+    if (fieldName[0]=='l' && strcmp(fieldName, "localPort")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "remotePort")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TCPConnectInfoDescriptor::getFieldTypeString(void *object, int field) const
@@ -1274,13 +1331,13 @@ const char *TCPConnectInfoDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPvXAddress";
-        case 1: return "IPvXAddress";
-        case 2: return "int";
-        case 3: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPvXAddress",
+        "IPvXAddress",
+        "int",
+        "int",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TCPConnectInfoDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1310,21 +1367,21 @@ int TCPConnectInfoDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TCPConnectInfoDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TCPConnectInfoDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TCPConnectInfo *pp = (TCPConnectInfo *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getLocalAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getRemoteAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: long2string(pp->getLocalPort(),resultbuf,bufsize); return true;
-        case 3: long2string(pp->getRemotePort(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getLocalAddr(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getRemoteAddr(); return out.str();}
+        case 2: return long2string(pp->getLocalPort());
+        case 3: return long2string(pp->getRemotePort());
+        default: return "";
     }
 }
 
@@ -1352,11 +1409,13 @@ const char *TCPConnectInfoDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPvXAddress"; break;
-        case 1: return "IPvXAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPvXAddress",
+        "IPvXAddress",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *TCPConnectInfoDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1695,12 +1754,13 @@ class TCPStatusInfoDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1742,29 +1802,29 @@ unsigned int TCPStatusInfoDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        case 8: return FD_ISEDITABLE;
-        case 9: return FD_ISEDITABLE;
-        case 10: return FD_ISEDITABLE;
-        case 11: return FD_ISEDITABLE;
-        case 12: return FD_ISEDITABLE;
-        case 13: return FD_ISEDITABLE;
-        case 14: return FD_ISEDITABLE;
-        case 15: return FD_ISEDITABLE;
-        case 16: return FD_ISEDITABLE;
-        case 17: return FD_ISEDITABLE;
-        case 18: return FD_ISEDITABLE;
-        case 19: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<20) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TCPStatusInfoDescriptor::getFieldName(void *object, int field) const
@@ -1775,29 +1835,56 @@ const char *TCPStatusInfoDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "state";
-        case 1: return "stateName";
-        case 2: return "localAddr";
-        case 3: return "remoteAddr";
-        case 4: return "localPort";
-        case 5: return "remotePort";
-        case 6: return "snd_mss";
-        case 7: return "snd_una";
-        case 8: return "snd_nxt";
-        case 9: return "snd_max";
-        case 10: return "snd_wnd";
-        case 11: return "snd_up";
-        case 12: return "snd_wl1";
-        case 13: return "snd_wl2";
-        case 14: return "iss";
-        case 15: return "rcv_nxt";
-        case 16: return "rcv_wnd";
-        case 17: return "rcv_up";
-        case 18: return "irs";
-        case 19: return "fin_ack_rcvd";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "state",
+        "stateName",
+        "localAddr",
+        "remoteAddr",
+        "localPort",
+        "remotePort",
+        "snd_mss",
+        "snd_una",
+        "snd_nxt",
+        "snd_max",
+        "snd_wnd",
+        "snd_up",
+        "snd_wl1",
+        "snd_wl2",
+        "iss",
+        "rcv_nxt",
+        "rcv_wnd",
+        "rcv_up",
+        "irs",
+        "fin_ack_rcvd",
+    };
+    return (field>=0 && field<20) ? fieldNames[field] : NULL;
+}
+
+int TCPStatusInfoDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "state")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "stateName")==0) return base+1;
+    if (fieldName[0]=='l' && strcmp(fieldName, "localAddr")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "remoteAddr")==0) return base+3;
+    if (fieldName[0]=='l' && strcmp(fieldName, "localPort")==0) return base+4;
+    if (fieldName[0]=='r' && strcmp(fieldName, "remotePort")==0) return base+5;
+    if (fieldName[0]=='s' && strcmp(fieldName, "snd_mss")==0) return base+6;
+    if (fieldName[0]=='s' && strcmp(fieldName, "snd_una")==0) return base+7;
+    if (fieldName[0]=='s' && strcmp(fieldName, "snd_nxt")==0) return base+8;
+    if (fieldName[0]=='s' && strcmp(fieldName, "snd_max")==0) return base+9;
+    if (fieldName[0]=='s' && strcmp(fieldName, "snd_wnd")==0) return base+10;
+    if (fieldName[0]=='s' && strcmp(fieldName, "snd_up")==0) return base+11;
+    if (fieldName[0]=='s' && strcmp(fieldName, "snd_wl1")==0) return base+12;
+    if (fieldName[0]=='s' && strcmp(fieldName, "snd_wl2")==0) return base+13;
+    if (fieldName[0]=='i' && strcmp(fieldName, "iss")==0) return base+14;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rcv_nxt")==0) return base+15;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rcv_wnd")==0) return base+16;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rcv_up")==0) return base+17;
+    if (fieldName[0]=='i' && strcmp(fieldName, "irs")==0) return base+18;
+    if (fieldName[0]=='f' && strcmp(fieldName, "fin_ack_rcvd")==0) return base+19;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TCPStatusInfoDescriptor::getFieldTypeString(void *object, int field) const
@@ -1808,29 +1895,29 @@ const char *TCPStatusInfoDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "string";
-        case 2: return "IPvXAddress";
-        case 3: return "IPvXAddress";
-        case 4: return "int";
-        case 5: return "int";
-        case 6: return "int";
-        case 7: return "unsigned int";
-        case 8: return "unsigned int";
-        case 9: return "unsigned int";
-        case 10: return "unsigned int";
-        case 11: return "unsigned int";
-        case 12: return "unsigned int";
-        case 13: return "unsigned int";
-        case 14: return "unsigned int";
-        case 15: return "unsigned int";
-        case 16: return "unsigned int";
-        case 17: return "unsigned int";
-        case 18: return "unsigned int";
-        case 19: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "string",
+        "IPvXAddress",
+        "IPvXAddress",
+        "int",
+        "int",
+        "int",
+        "unsigned int",
+        "unsigned int",
+        "unsigned int",
+        "unsigned int",
+        "unsigned int",
+        "unsigned int",
+        "unsigned int",
+        "unsigned int",
+        "unsigned int",
+        "unsigned int",
+        "unsigned int",
+        "unsigned int",
+        "bool",
+    };
+    return (field>=0 && field<20) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TCPStatusInfoDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1860,37 +1947,37 @@ int TCPStatusInfoDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TCPStatusInfoDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TCPStatusInfoDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TCPStatusInfo *pp = (TCPStatusInfo *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getState(),resultbuf,bufsize); return true;
-        case 1: oppstring2string(pp->getStateName(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getLocalAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getRemoteAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: long2string(pp->getLocalPort(),resultbuf,bufsize); return true;
-        case 5: long2string(pp->getRemotePort(),resultbuf,bufsize); return true;
-        case 6: long2string(pp->getSnd_mss(),resultbuf,bufsize); return true;
-        case 7: ulong2string(pp->getSnd_una(),resultbuf,bufsize); return true;
-        case 8: ulong2string(pp->getSnd_nxt(),resultbuf,bufsize); return true;
-        case 9: ulong2string(pp->getSnd_max(),resultbuf,bufsize); return true;
-        case 10: ulong2string(pp->getSnd_wnd(),resultbuf,bufsize); return true;
-        case 11: ulong2string(pp->getSnd_up(),resultbuf,bufsize); return true;
-        case 12: ulong2string(pp->getSnd_wl1(),resultbuf,bufsize); return true;
-        case 13: ulong2string(pp->getSnd_wl2(),resultbuf,bufsize); return true;
-        case 14: ulong2string(pp->getIss(),resultbuf,bufsize); return true;
-        case 15: ulong2string(pp->getRcv_nxt(),resultbuf,bufsize); return true;
-        case 16: ulong2string(pp->getRcv_wnd(),resultbuf,bufsize); return true;
-        case 17: ulong2string(pp->getRcv_up(),resultbuf,bufsize); return true;
-        case 18: ulong2string(pp->getIrs(),resultbuf,bufsize); return true;
-        case 19: bool2string(pp->getFin_ack_rcvd(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getState());
+        case 1: return oppstring2string(pp->getStateName());
+        case 2: {std::stringstream out; out << pp->getLocalAddr(); return out.str();}
+        case 3: {std::stringstream out; out << pp->getRemoteAddr(); return out.str();}
+        case 4: return long2string(pp->getLocalPort());
+        case 5: return long2string(pp->getRemotePort());
+        case 6: return long2string(pp->getSnd_mss());
+        case 7: return ulong2string(pp->getSnd_una());
+        case 8: return ulong2string(pp->getSnd_nxt());
+        case 9: return ulong2string(pp->getSnd_max());
+        case 10: return ulong2string(pp->getSnd_wnd());
+        case 11: return ulong2string(pp->getSnd_up());
+        case 12: return ulong2string(pp->getSnd_wl1());
+        case 13: return ulong2string(pp->getSnd_wl2());
+        case 14: return ulong2string(pp->getIss());
+        case 15: return ulong2string(pp->getRcv_nxt());
+        case 16: return ulong2string(pp->getRcv_wnd());
+        case 17: return ulong2string(pp->getRcv_up());
+        case 18: return ulong2string(pp->getIrs());
+        case 19: return bool2string(pp->getFin_ack_rcvd());
+        default: return "";
     }
 }
 
@@ -1934,11 +2021,29 @@ const char *TCPStatusInfoDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 2: return "IPvXAddress"; break;
-        case 3: return "IPvXAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        "IPvXAddress",
+        "IPvXAddress",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<20) ? fieldStructNames[field] : NULL;
 }
 
 void *TCPStatusInfoDescriptor::getFieldStructPointer(void *object, int field, int i) const

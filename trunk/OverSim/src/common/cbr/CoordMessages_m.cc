@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from common/cbr/CoordMessages.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from common/cbr/CoordMessages.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -73,12 +73,13 @@ class CoordsOfNodeCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -120,9 +121,7 @@ unsigned int CoordsOfNodeCallDescriptor::getFieldTypeFlags(void *object, int fie
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *CoordsOfNodeCallDescriptor::getFieldName(void *object, int field) const
@@ -133,9 +132,13 @@ const char *CoordsOfNodeCallDescriptor::getFieldName(void *object, int field) co
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int CoordsOfNodeCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *CoordsOfNodeCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -146,9 +149,7 @@ const char *CoordsOfNodeCallDescriptor::getFieldTypeString(void *object, int fie
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *CoordsOfNodeCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -178,17 +179,17 @@ int CoordsOfNodeCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool CoordsOfNodeCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string CoordsOfNodeCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     CoordsOfNodeCall *pp = (CoordsOfNodeCall *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -214,9 +215,7 @@ const char *CoordsOfNodeCallDescriptor::getFieldStructName(void *object, int fie
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *CoordsOfNodeCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -289,12 +288,13 @@ class RttToNodeCallDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -336,10 +336,10 @@ unsigned int RttToNodeCallDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RttToNodeCallDescriptor::getFieldName(void *object, int field) const
@@ -350,10 +350,18 @@ const char *RttToNodeCallDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "nodeToPing";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "nodeToPing",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int RttToNodeCallDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "nodeToPing")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RttToNodeCallDescriptor::getFieldTypeString(void *object, int field) const
@@ -364,10 +372,10 @@ const char *RttToNodeCallDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RttToNodeCallDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -397,18 +405,18 @@ int RttToNodeCallDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RttToNodeCallDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RttToNodeCallDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RttToNodeCall *pp = (RttToNodeCall *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNodeToPing(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNodeToPing(); return out.str();}
+        default: return "";
     }
 }
 
@@ -434,10 +442,10 @@ const char *RttToNodeCallDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *RttToNodeCallDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -512,12 +520,13 @@ class CoordsOfNodeResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -559,10 +568,10 @@ unsigned int CoordsOfNodeResponseDescriptor::getFieldTypeFlags(void *object, int
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *CoordsOfNodeResponseDescriptor::getFieldName(void *object, int field) const
@@ -573,10 +582,18 @@ const char *CoordsOfNodeResponseDescriptor::getFieldName(void *object, int field
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "layer";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "layer",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int CoordsOfNodeResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "layer")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *CoordsOfNodeResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -587,10 +604,10 @@ const char *CoordsOfNodeResponseDescriptor::getFieldTypeString(void *object, int
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "char";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "char",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *CoordsOfNodeResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -620,18 +637,18 @@ int CoordsOfNodeResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool CoordsOfNodeResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string CoordsOfNodeResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     CoordsOfNodeResponse *pp = (CoordsOfNodeResponse *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getLayer(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getLayer());
+        default: return "";
     }
 }
 
@@ -658,9 +675,10 @@ const char *CoordsOfNodeResponseDescriptor::getFieldStructName(void *object, int
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *CoordsOfNodeResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -797,12 +815,13 @@ class RttToNodeResponseDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -844,12 +863,12 @@ unsigned int RttToNodeResponseDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISARRAY | FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RttToNodeResponseDescriptor::getFieldName(void *object, int field) const
@@ -860,12 +879,22 @@ const char *RttToNodeResponseDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "pingedNode";
-        case 1: return "ownCoordinates";
-        case 2: return "rttToNode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "pingedNode",
+        "ownCoordinates",
+        "rttToNode",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int RttToNodeResponseDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "pingedNode")==0) return base+0;
+    if (fieldName[0]=='o' && strcmp(fieldName, "ownCoordinates")==0) return base+1;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rttToNode")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RttToNodeResponseDescriptor::getFieldTypeString(void *object, int field) const
@@ -876,12 +905,12 @@ const char *RttToNodeResponseDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress";
-        case 1: return "double";
-        case 2: return "simtime_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TransportAddress",
+        "double",
+        "simtime_t",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RttToNodeResponseDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -912,20 +941,20 @@ int RttToNodeResponseDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RttToNodeResponseDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RttToNodeResponseDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RttToNodeResponse *pp = (RttToNodeResponse *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getPingedNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: double2string(pp->getOwnCoordinates(i),resultbuf,bufsize); return true;
-        case 2: double2string(pp->getRttToNode(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getPingedNode(); return out.str();}
+        case 1: return double2string(pp->getOwnCoordinates(i));
+        case 2: return double2string(pp->getRttToNode());
+        default: return "";
     }
 }
 
@@ -953,10 +982,12 @@ const char *RttToNodeResponseDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TransportAddress",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *RttToNodeResponseDescriptor::getFieldStructPointer(void *object, int field, int i) const

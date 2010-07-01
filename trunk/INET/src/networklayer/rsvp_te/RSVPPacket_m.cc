@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/rsvp_te/RSVPPacket.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/rsvp_te/RSVPPacket.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -87,12 +87,13 @@ class RSVPMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -134,10 +135,10 @@ unsigned int RSVPMessageDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RSVPMessageDescriptor::getFieldName(void *object, int field) const
@@ -148,10 +149,18 @@ const char *RSVPMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "rsvpKind";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "rsvpKind",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int RSVPMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rsvpKind")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RSVPMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -162,10 +171,10 @@ const char *RSVPMessageDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RSVPMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -195,18 +204,18 @@ int RSVPMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RSVPMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RSVPMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RSVPMessage *pp = (RSVPMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getRsvpKind(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getRsvpKind());
+        default: return "";
     }
 }
 
@@ -233,9 +242,10 @@ const char *RSVPMessageDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *RSVPMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -320,12 +330,13 @@ class RSVPPacketDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -368,11 +379,11 @@ unsigned int RSVPPacketDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RSVPPacketDescriptor::getFieldName(void *object, int field) const
@@ -383,11 +394,20 @@ const char *RSVPPacketDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "session";
-        case 1: return "checksumValid";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "session",
+        "checksumValid",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int RSVPPacketDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "session")==0) return base+0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "checksumValid")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RSVPPacketDescriptor::getFieldTypeString(void *object, int field) const
@@ -398,11 +418,11 @@ const char *RSVPPacketDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "SessionObj_t";
-        case 1: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "SessionObj_t",
+        "bool",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RSVPPacketDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -432,19 +452,19 @@ int RSVPPacketDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RSVPPacketDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RSVPPacketDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RSVPPacket_Base *pp = (RSVPPacket_Base *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSession(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: bool2string(pp->getChecksumValid(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSession(); return out.str();}
+        case 1: return bool2string(pp->getChecksumValid());
+        default: return "";
     }
 }
 
@@ -471,10 +491,11 @@ const char *RSVPPacketDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "SessionObj_t"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "SessionObj_t",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *RSVPPacketDescriptor::getFieldStructPointer(void *object, int field, int i) const

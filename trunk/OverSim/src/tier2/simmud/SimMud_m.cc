@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from tier2/simmud/SimMud.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from tier2/simmud/SimMud.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -142,12 +142,13 @@ class SimMudMoveMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -189,14 +190,14 @@ unsigned int SimMudMoveMessageDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SimMudMoveMessageDescriptor::getFieldName(void *object, int field) const
@@ -207,14 +208,26 @@ const char *SimMudMoveMessageDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "src";
-        case 1: return "posX";
-        case 2: return "posY";
-        case 3: return "timestamp";
-        case 4: return "leaveRegion";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "src",
+        "posX",
+        "posY",
+        "timestamp",
+        "leaveRegion",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int SimMudMoveMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "src")==0) return base+0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "posX")==0) return base+1;
+    if (fieldName[0]=='p' && strcmp(fieldName, "posY")==0) return base+2;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timestamp")==0) return base+3;
+    if (fieldName[0]=='l' && strcmp(fieldName, "leaveRegion")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SimMudMoveMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -225,14 +238,14 @@ const char *SimMudMoveMessageDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        case 1: return "double";
-        case 2: return "double";
-        case 3: return "simtime_t";
-        case 4: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+        "double",
+        "double",
+        "simtime_t",
+        "bool",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SimMudMoveMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -262,22 +275,22 @@ int SimMudMoveMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SimMudMoveMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SimMudMoveMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SimMudMoveMessage *pp = (SimMudMoveMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSrc(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: double2string(pp->getPosX(),resultbuf,bufsize); return true;
-        case 2: double2string(pp->getPosY(),resultbuf,bufsize); return true;
-        case 3: double2string(pp->getTimestamp(),resultbuf,bufsize); return true;
-        case 4: bool2string(pp->getLeaveRegion(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSrc(); return out.str();}
+        case 1: return double2string(pp->getPosX());
+        case 2: return double2string(pp->getPosY());
+        case 3: return double2string(pp->getTimestamp());
+        case 4: return bool2string(pp->getLeaveRegion());
+        default: return "";
     }
 }
 
@@ -307,10 +320,14 @@ const char *SimMudMoveMessageDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *SimMudMoveMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

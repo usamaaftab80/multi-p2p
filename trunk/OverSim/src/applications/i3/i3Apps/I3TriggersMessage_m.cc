@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from applications/i3/i3Apps/I3TriggersMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from applications/i3/i3Apps/I3TriggersMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -100,12 +100,13 @@ class TriggersHandshakeMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -147,11 +148,11 @@ unsigned int TriggersHandshakeMsgDescriptor::getFieldTypeFlags(void *object, int
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TriggersHandshakeMsgDescriptor::getFieldName(void *object, int field) const
@@ -162,11 +163,20 @@ const char *TriggersHandshakeMsgDescriptor::getFieldName(void *object, int field
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "value";
-        case 1: return "triggerId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "value",
+        "triggerId",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int TriggersHandshakeMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='v' && strcmp(fieldName, "value")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "triggerId")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TriggersHandshakeMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -177,11 +187,11 @@ const char *TriggersHandshakeMsgDescriptor::getFieldTypeString(void *object, int
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "I3Identifier";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "I3Identifier",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TriggersHandshakeMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -211,19 +221,19 @@ int TriggersHandshakeMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TriggersHandshakeMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TriggersHandshakeMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TriggersHandshakeMsg *pp = (TriggersHandshakeMsg *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getValue(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getTriggerId(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getValue());
+        case 1: {std::stringstream out; out << pp->getTriggerId(); return out.str();}
+        default: return "";
     }
 }
 
@@ -250,10 +260,11 @@ const char *TriggersHandshakeMsgDescriptor::getFieldStructName(void *object, int
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "I3Identifier"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "I3Identifier",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *TriggersHandshakeMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -328,12 +339,13 @@ class TriggersMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -375,10 +387,10 @@ unsigned int TriggersMsgDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TriggersMsgDescriptor::getFieldName(void *object, int field) const
@@ -389,10 +401,18 @@ const char *TriggersMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "value";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "value",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int TriggersMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='v' && strcmp(fieldName, "value")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TriggersMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -403,10 +423,10 @@ const char *TriggersMsgDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TriggersMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -436,18 +456,18 @@ int TriggersMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TriggersMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TriggersMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TriggersMsg *pp = (TriggersMsg *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getValue(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getValue());
+        default: return "";
     }
 }
 
@@ -474,9 +494,10 @@ const char *TriggersMsgDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *TriggersMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const

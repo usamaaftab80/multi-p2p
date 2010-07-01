@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/ldp/LDPPacket.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/ldp/LDPPacket.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -79,12 +79,13 @@ class FEC_TLVDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -126,11 +127,11 @@ unsigned int FEC_TLVDescriptor::getFieldTypeFlags(void *object, int field) const
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *FEC_TLVDescriptor::getFieldName(void *object, int field) const
@@ -141,11 +142,20 @@ const char *FEC_TLVDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "addr";
-        case 1: return "length";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "addr",
+        "length",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int FEC_TLVDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "addr")==0) return base+0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "length")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *FEC_TLVDescriptor::getFieldTypeString(void *object, int field) const
@@ -156,11 +166,11 @@ const char *FEC_TLVDescriptor::getFieldTypeString(void *object, int field) const
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *FEC_TLVDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -190,19 +200,19 @@ int FEC_TLVDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool FEC_TLVDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string FEC_TLVDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     FEC_TLV *pp = (FEC_TLV *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->addr; opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->length,resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->addr; return out.str();}
+        case 1: return long2string(pp->length);
+        default: return "";
     }
 }
 
@@ -229,10 +239,11 @@ const char *FEC_TLVDescriptor::getFieldStructName(void *object, int field) const
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *FEC_TLVDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -333,12 +344,13 @@ class LDPPacketDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -380,12 +392,12 @@ unsigned int LDPPacketDescriptor::getFieldTypeFlags(void *object, int field) con
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *LDPPacketDescriptor::getFieldName(void *object, int field) const
@@ -396,12 +408,22 @@ const char *LDPPacketDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "type";
-        case 1: return "senderAddress";
-        case 2: return "receiverAddress";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "type",
+        "senderAddress",
+        "receiverAddress",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int LDPPacketDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "type")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "senderAddress")==0) return base+1;
+    if (fieldName[0]=='r' && strcmp(fieldName, "receiverAddress")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *LDPPacketDescriptor::getFieldTypeString(void *object, int field) const
@@ -412,12 +434,12 @@ const char *LDPPacketDescriptor::getFieldTypeString(void *object, int field) con
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "IPAddress";
-        case 2: return "IPAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "IPAddress",
+        "IPAddress",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *LDPPacketDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -447,20 +469,20 @@ int LDPPacketDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool LDPPacketDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string LDPPacketDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     LDPPacket *pp = (LDPPacket *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getType(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getSenderAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getReceiverAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getType());
+        case 1: {std::stringstream out; out << pp->getSenderAddress(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getReceiverAddress(); return out.str();}
+        default: return "";
     }
 }
 
@@ -487,11 +509,12 @@ const char *LDPPacketDescriptor::getFieldStructName(void *object, int field) con
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "IPAddress"; break;
-        case 2: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "IPAddress",
+        "IPAddress",
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *LDPPacketDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -580,12 +603,13 @@ class LDPLabelMappingDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -627,11 +651,11 @@ unsigned int LDPLabelMappingDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *LDPLabelMappingDescriptor::getFieldName(void *object, int field) const
@@ -642,11 +666,20 @@ const char *LDPLabelMappingDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "fec";
-        case 1: return "label";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "fec",
+        "label",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int LDPLabelMappingDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='f' && strcmp(fieldName, "fec")==0) return base+0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "label")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *LDPLabelMappingDescriptor::getFieldTypeString(void *object, int field) const
@@ -657,11 +690,11 @@ const char *LDPLabelMappingDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "FEC_TLV";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "FEC_TLV",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *LDPLabelMappingDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -691,19 +724,19 @@ int LDPLabelMappingDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool LDPLabelMappingDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string LDPLabelMappingDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     LDPLabelMapping *pp = (LDPLabelMapping *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getFec(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getLabel(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getFec(); return out.str();}
+        case 1: return long2string(pp->getLabel());
+        default: return "";
     }
 }
 
@@ -730,10 +763,11 @@ const char *LDPLabelMappingDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "FEC_TLV"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "FEC_TLV",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *LDPLabelMappingDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -807,12 +841,13 @@ class LDPLabelRequestDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -854,10 +889,10 @@ unsigned int LDPLabelRequestDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *LDPLabelRequestDescriptor::getFieldName(void *object, int field) const
@@ -868,10 +903,18 @@ const char *LDPLabelRequestDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "fec";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "fec",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int LDPLabelRequestDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='f' && strcmp(fieldName, "fec")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *LDPLabelRequestDescriptor::getFieldTypeString(void *object, int field) const
@@ -882,10 +925,10 @@ const char *LDPLabelRequestDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "FEC_TLV";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "FEC_TLV",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *LDPLabelRequestDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -915,18 +958,18 @@ int LDPLabelRequestDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool LDPLabelRequestDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string LDPLabelRequestDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     LDPLabelRequest *pp = (LDPLabelRequest *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getFec(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getFec(); return out.str();}
+        default: return "";
     }
 }
 
@@ -952,10 +995,10 @@ const char *LDPLabelRequestDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "FEC_TLV"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "FEC_TLV",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *LDPLabelRequestDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1058,12 +1101,13 @@ class LDPHelloDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1105,12 +1149,12 @@ unsigned int LDPHelloDescriptor::getFieldTypeFlags(void *object, int field) cons
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *LDPHelloDescriptor::getFieldName(void *object, int field) const
@@ -1121,12 +1165,22 @@ const char *LDPHelloDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "holdTime";
-        case 1: return "tbit";
-        case 2: return "rbit";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "holdTime",
+        "tbit",
+        "rbit",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int LDPHelloDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='h' && strcmp(fieldName, "holdTime")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "tbit")==0) return base+1;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rbit")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *LDPHelloDescriptor::getFieldTypeString(void *object, int field) const
@@ -1137,12 +1191,12 @@ const char *LDPHelloDescriptor::getFieldTypeString(void *object, int field) cons
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "double";
-        case 1: return "bool";
-        case 2: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "double",
+        "bool",
+        "bool",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *LDPHelloDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1172,20 +1226,20 @@ int LDPHelloDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool LDPHelloDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string LDPHelloDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     LDPHello *pp = (LDPHello *)object; (void)pp;
     switch (field) {
-        case 0: double2string(pp->getHoldTime(),resultbuf,bufsize); return true;
-        case 1: bool2string(pp->getTbit(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getRbit(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return double2string(pp->getHoldTime());
+        case 1: return bool2string(pp->getTbit());
+        case 2: return bool2string(pp->getRbit());
+        default: return "";
     }
 }
 
@@ -1214,9 +1268,12 @@ const char *LDPHelloDescriptor::getFieldStructName(void *object, int field) cons
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *LDPHelloDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1303,12 +1360,13 @@ class LDPNotifyDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1350,11 +1408,11 @@ unsigned int LDPNotifyDescriptor::getFieldTypeFlags(void *object, int field) con
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *LDPNotifyDescriptor::getFieldName(void *object, int field) const
@@ -1365,11 +1423,20 @@ const char *LDPNotifyDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "status";
-        case 1: return "fec";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "status",
+        "fec",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int LDPNotifyDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "status")==0) return base+0;
+    if (fieldName[0]=='f' && strcmp(fieldName, "fec")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *LDPNotifyDescriptor::getFieldTypeString(void *object, int field) const
@@ -1380,11 +1447,11 @@ const char *LDPNotifyDescriptor::getFieldTypeString(void *object, int field) con
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "FEC_TLV";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "FEC_TLV",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *LDPNotifyDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1414,19 +1481,19 @@ int LDPNotifyDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool LDPNotifyDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string LDPNotifyDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     LDPNotify *pp = (LDPNotify *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getStatus(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getFec(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getStatus());
+        case 1: {std::stringstream out; out << pp->getFec(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1453,10 +1520,11 @@ const char *LDPNotifyDescriptor::getFieldStructName(void *object, int field) con
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "FEC_TLV"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "FEC_TLV",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *LDPNotifyDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1587,12 +1655,13 @@ class LDPIniDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1634,14 +1703,14 @@ unsigned int LDPIniDescriptor::getFieldTypeFlags(void *object, int field) const
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *LDPIniDescriptor::getFieldName(void *object, int field) const
@@ -1652,14 +1721,26 @@ const char *LDPIniDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "keepAliveTime";
-        case 1: return "abit";
-        case 2: return "dbit";
-        case 3: return "pvLim";
-        case 4: return "receiverLDPIdentifier";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "keepAliveTime",
+        "abit",
+        "dbit",
+        "pvLim",
+        "receiverLDPIdentifier",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int LDPIniDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "keepAliveTime")==0) return base+0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "abit")==0) return base+1;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dbit")==0) return base+2;
+    if (fieldName[0]=='p' && strcmp(fieldName, "pvLim")==0) return base+3;
+    if (fieldName[0]=='r' && strcmp(fieldName, "receiverLDPIdentifier")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *LDPIniDescriptor::getFieldTypeString(void *object, int field) const
@@ -1670,14 +1751,14 @@ const char *LDPIniDescriptor::getFieldTypeString(void *object, int field) const
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "double";
-        case 1: return "bool";
-        case 2: return "bool";
-        case 3: return "int";
-        case 4: return "string";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "double",
+        "bool",
+        "bool",
+        "int",
+        "string",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *LDPIniDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1707,22 +1788,22 @@ int LDPIniDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool LDPIniDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string LDPIniDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     LDPIni *pp = (LDPIni *)object; (void)pp;
     switch (field) {
-        case 0: double2string(pp->getKeepAliveTime(),resultbuf,bufsize); return true;
-        case 1: bool2string(pp->getAbit(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getDbit(),resultbuf,bufsize); return true;
-        case 3: long2string(pp->getPvLim(),resultbuf,bufsize); return true;
-        case 4: oppstring2string(pp->getReceiverLDPIdentifier(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return double2string(pp->getKeepAliveTime());
+        case 1: return bool2string(pp->getAbit());
+        case 2: return bool2string(pp->getDbit());
+        case 3: return long2string(pp->getPvLim());
+        case 4: return oppstring2string(pp->getReceiverLDPIdentifier());
+        default: return "";
     }
 }
 
@@ -1753,9 +1834,14 @@ const char *LDPIniDescriptor::getFieldStructName(void *object, int field) const
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *LDPIniDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1893,12 +1979,13 @@ class LDPAddressDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1940,12 +2027,12 @@ unsigned int LDPAddressDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *LDPAddressDescriptor::getFieldName(void *object, int field) const
@@ -1956,12 +2043,22 @@ const char *LDPAddressDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "isWithdraw";
-        case 1: return "family";
-        case 2: return "addresses";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "isWithdraw",
+        "family",
+        "addresses",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int LDPAddressDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "isWithdraw")==0) return base+0;
+    if (fieldName[0]=='f' && strcmp(fieldName, "family")==0) return base+1;
+    if (fieldName[0]=='a' && strcmp(fieldName, "addresses")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *LDPAddressDescriptor::getFieldTypeString(void *object, int field) const
@@ -1972,12 +2069,12 @@ const char *LDPAddressDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        case 1: return "string";
-        case 2: return "string";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+        "string",
+        "string",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *LDPAddressDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2008,20 +2105,20 @@ int LDPAddressDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool LDPAddressDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string LDPAddressDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     LDPAddress *pp = (LDPAddress *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->getIsWithdraw(),resultbuf,bufsize); return true;
-        case 1: oppstring2string(pp->getFamily(),resultbuf,bufsize); return true;
-        case 2: oppstring2string(pp->getAddresses(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return bool2string(pp->getIsWithdraw());
+        case 1: return oppstring2string(pp->getFamily());
+        case 2: return oppstring2string(pp->getAddresses(i));
+        default: return "";
     }
 }
 
@@ -2050,9 +2147,12 @@ const char *LDPAddressDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *LDPAddressDescriptor::getFieldStructPointer(void *object, int field, int i) const

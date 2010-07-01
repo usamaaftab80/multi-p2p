@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/contract/IPv6ControlInfo.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/contract/IPv6ControlInfo.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -136,12 +136,13 @@ class IPv6ControlInfoDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -184,14 +185,14 @@ unsigned int IPv6ControlInfoDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPv6ControlInfoDescriptor::getFieldName(void *object, int field) const
@@ -202,14 +203,26 @@ const char *IPv6ControlInfoDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "protocol";
-        case 1: return "destAddr";
-        case 2: return "srcAddr";
-        case 3: return "hopLimit";
-        case 4: return "interfaceId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "protocol",
+        "destAddr",
+        "srcAddr",
+        "hopLimit",
+        "interfaceId",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int IPv6ControlInfoDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "protocol")==0) return base+0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destAddr")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcAddr")==0) return base+2;
+    if (fieldName[0]=='h' && strcmp(fieldName, "hopLimit")==0) return base+3;
+    if (fieldName[0]=='i' && strcmp(fieldName, "interfaceId")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPv6ControlInfoDescriptor::getFieldTypeString(void *object, int field) const
@@ -220,14 +233,14 @@ const char *IPv6ControlInfoDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "IPv6Address";
-        case 2: return "IPv6Address";
-        case 3: return "short";
-        case 4: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "IPv6Address",
+        "IPv6Address",
+        "short",
+        "int",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPv6ControlInfoDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -260,22 +273,22 @@ int IPv6ControlInfoDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool IPv6ControlInfoDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPv6ControlInfoDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPv6ControlInfo_Base *pp = (IPv6ControlInfo_Base *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getProtocol(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getDestAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getSrcAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: long2string(pp->getHopLimit(),resultbuf,bufsize); return true;
-        case 4: long2string(pp->getInterfaceId(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getProtocol());
+        case 1: {std::stringstream out; out << pp->getDestAddr(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getSrcAddr(); return out.str();}
+        case 3: return long2string(pp->getHopLimit());
+        case 4: return long2string(pp->getInterfaceId());
+        default: return "";
     }
 }
 
@@ -304,11 +317,14 @@ const char *IPv6ControlInfoDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "IPv6Address"; break;
-        case 2: return "IPv6Address"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "IPv6Address",
+        "IPv6Address",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *IPv6ControlInfoDescriptor::getFieldStructPointer(void *object, int field, int i) const

@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/rsvp_te/RSVPPathMsg.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/rsvp_te/RSVPPathMsg.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -151,12 +151,13 @@ class RSVPPathMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -199,15 +200,15 @@ unsigned int RSVPPathMsgDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<6) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RSVPPathMsgDescriptor::getFieldName(void *object, int field) const
@@ -218,15 +219,28 @@ const char *RSVPPathMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "hop";
-        case 1: return "label_request";
-        case 2: return "sender_descriptor";
-        case 3: return "ERO";
-        case 4: return "color";
-        case 5: return "rsvpKind";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "hop",
+        "label_request",
+        "sender_descriptor",
+        "ERO",
+        "color",
+        "rsvpKind",
+    };
+    return (field>=0 && field<6) ? fieldNames[field] : NULL;
+}
+
+int RSVPPathMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='h' && strcmp(fieldName, "hop")==0) return base+0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "label_request")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sender_descriptor")==0) return base+2;
+    if (fieldName[0]=='E' && strcmp(fieldName, "ERO")==0) return base+3;
+    if (fieldName[0]=='c' && strcmp(fieldName, "color")==0) return base+4;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rsvpKind")==0) return base+5;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RSVPPathMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -237,15 +251,15 @@ const char *RSVPPathMsgDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "RsvpHopObj_t";
-        case 1: return "LabelRequestObj_t";
-        case 2: return "SenderDescriptor_t";
-        case 3: return "EroVector";
-        case 4: return "int";
-        case 5: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "RsvpHopObj_t",
+        "LabelRequestObj_t",
+        "SenderDescriptor_t",
+        "EroVector",
+        "int",
+        "int",
+    };
+    return (field>=0 && field<6) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RSVPPathMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -275,23 +289,23 @@ int RSVPPathMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RSVPPathMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RSVPPathMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RSVPPathMsg_Base *pp = (RSVPPathMsg_Base *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getHop(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getLabel_request(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getSender_descriptor(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getERO(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: long2string(pp->getColor(),resultbuf,bufsize); return true;
-        case 5: long2string(pp->getRsvpKind(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getHop(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getLabel_request(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getSender_descriptor(); return out.str();}
+        case 3: {std::stringstream out; out << pp->getERO(); return out.str();}
+        case 4: return long2string(pp->getColor());
+        case 5: return long2string(pp->getRsvpKind());
+        default: return "";
     }
 }
 
@@ -319,13 +333,15 @@ const char *RSVPPathMsgDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "RsvpHopObj_t"; break;
-        case 1: return "LabelRequestObj_t"; break;
-        case 2: return "SenderDescriptor_t"; break;
-        case 3: return "EroVector"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "RsvpHopObj_t",
+        "LabelRequestObj_t",
+        "SenderDescriptor_t",
+        "EroVector",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<6) ? fieldStructNames[field] : NULL;
 }
 
 void *RSVPPathMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -441,12 +457,13 @@ class RSVPPathTearDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -489,13 +506,13 @@ unsigned int RSVPPathTearDescriptor::getFieldTypeFlags(void *object, int field) 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RSVPPathTearDescriptor::getFieldName(void *object, int field) const
@@ -506,13 +523,24 @@ const char *RSVPPathTearDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "hop";
-        case 1: return "senderTemplate";
-        case 2: return "force";
-        case 3: return "rsvpKind";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "hop",
+        "senderTemplate",
+        "force",
+        "rsvpKind",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int RSVPPathTearDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='h' && strcmp(fieldName, "hop")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "senderTemplate")==0) return base+1;
+    if (fieldName[0]=='f' && strcmp(fieldName, "force")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rsvpKind")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RSVPPathTearDescriptor::getFieldTypeString(void *object, int field) const
@@ -523,13 +551,13 @@ const char *RSVPPathTearDescriptor::getFieldTypeString(void *object, int field) 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "RsvpHopObj_t";
-        case 1: return "SenderTemplateObj_t";
-        case 2: return "bool";
-        case 3: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "RsvpHopObj_t",
+        "SenderTemplateObj_t",
+        "bool",
+        "int",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RSVPPathTearDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -559,21 +587,21 @@ int RSVPPathTearDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RSVPPathTearDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RSVPPathTearDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RSVPPathTear_Base *pp = (RSVPPathTear_Base *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getHop(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getSenderTemplate(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: bool2string(pp->getForce(),resultbuf,bufsize); return true;
-        case 3: long2string(pp->getRsvpKind(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getHop(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getSenderTemplate(); return out.str();}
+        case 2: return bool2string(pp->getForce());
+        case 3: return long2string(pp->getRsvpKind());
+        default: return "";
     }
 }
 
@@ -601,11 +629,13 @@ const char *RSVPPathTearDescriptor::getFieldStructName(void *object, int field) 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "RsvpHopObj_t"; break;
-        case 1: return "SenderTemplateObj_t"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "RsvpHopObj_t",
+        "SenderTemplateObj_t",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *RSVPPathTearDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -719,12 +749,13 @@ class RSVPPathErrorDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -767,13 +798,13 @@ unsigned int RSVPPathErrorDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *RSVPPathErrorDescriptor::getFieldName(void *object, int field) const
@@ -784,13 +815,24 @@ const char *RSVPPathErrorDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "errorNode";
-        case 1: return "errorCode";
-        case 2: return "sender_descriptor";
-        case 3: return "rsvpKind";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "errorNode",
+        "errorCode",
+        "sender_descriptor",
+        "rsvpKind",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int RSVPPathErrorDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='e' && strcmp(fieldName, "errorNode")==0) return base+0;
+    if (fieldName[0]=='e' && strcmp(fieldName, "errorCode")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sender_descriptor")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rsvpKind")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *RSVPPathErrorDescriptor::getFieldTypeString(void *object, int field) const
@@ -801,13 +843,13 @@ const char *RSVPPathErrorDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "int";
-        case 2: return "SenderDescriptor_t";
-        case 3: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "int",
+        "SenderDescriptor_t",
+        "int",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *RSVPPathErrorDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -837,21 +879,21 @@ int RSVPPathErrorDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool RSVPPathErrorDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string RSVPPathErrorDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     RSVPPathError_Base *pp = (RSVPPathError_Base *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getErrorNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getErrorCode(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getSender_descriptor(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: long2string(pp->getRsvpKind(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getErrorNode(); return out.str();}
+        case 1: return long2string(pp->getErrorCode());
+        case 2: {std::stringstream out; out << pp->getSender_descriptor(); return out.str();}
+        case 3: return long2string(pp->getRsvpKind());
+        default: return "";
     }
 }
 
@@ -879,11 +921,13 @@ const char *RSVPPathErrorDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        case 2: return "SenderDescriptor_t"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        NULL,
+        "SenderDescriptor_t",
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *RSVPPathErrorDescriptor::getFieldStructPointer(void *object, int field, int i) const

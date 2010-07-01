@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from applications/pingapp/PingPayload.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from applications/pingapp/PingPayload.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -151,12 +151,13 @@ class PingPayloadDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -198,12 +199,12 @@ unsigned int PingPayloadDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PingPayloadDescriptor::getFieldName(void *object, int field) const
@@ -214,12 +215,22 @@ const char *PingPayloadDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "originatorId";
-        case 1: return "seqNo";
-        case 2: return "data";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "originatorId",
+        "seqNo",
+        "data",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int PingPayloadDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='o' && strcmp(fieldName, "originatorId")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "seqNo")==0) return base+1;
+    if (fieldName[0]=='d' && strcmp(fieldName, "data")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *PingPayloadDescriptor::getFieldTypeString(void *object, int field) const
@@ -230,12 +241,12 @@ const char *PingPayloadDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "long";
-        case 1: return "long";
-        case 2: return "unsigned char";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "long",
+        "long",
+        "unsigned char",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *PingPayloadDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -266,20 +277,20 @@ int PingPayloadDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool PingPayloadDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string PingPayloadDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     PingPayload *pp = (PingPayload *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getOriginatorId(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getSeqNo(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getData(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getOriginatorId());
+        case 1: return long2string(pp->getSeqNo());
+        case 2: return ulong2string(pp->getData(i));
+        default: return "";
     }
 }
 
@@ -308,9 +319,12 @@ const char *PingPayloadDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *PingPayloadDescriptor::getFieldStructPointer(void *object, int field, int i) const

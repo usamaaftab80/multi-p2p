@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/icmpv6/IPv6NDMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/icmpv6/IPv6NDMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -153,12 +153,13 @@ class IPv6NDPrefixInformationDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -200,15 +201,15 @@ unsigned int IPv6NDPrefixInformationDescriptor::getFieldTypeFlags(void *object, 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<6) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPv6NDPrefixInformationDescriptor::getFieldName(void *object, int field) const
@@ -219,15 +220,28 @@ const char *IPv6NDPrefixInformationDescriptor::getFieldName(void *object, int fi
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "prefixLength";
-        case 1: return "onlinkFlag";
-        case 2: return "autoAddressConfFlag";
-        case 3: return "validLifetime";
-        case 4: return "preferredLifetime";
-        case 5: return "prefix";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "prefixLength",
+        "onlinkFlag",
+        "autoAddressConfFlag",
+        "validLifetime",
+        "preferredLifetime",
+        "prefix",
+    };
+    return (field>=0 && field<6) ? fieldNames[field] : NULL;
+}
+
+int IPv6NDPrefixInformationDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "prefixLength")==0) return base+0;
+    if (fieldName[0]=='o' && strcmp(fieldName, "onlinkFlag")==0) return base+1;
+    if (fieldName[0]=='a' && strcmp(fieldName, "autoAddressConfFlag")==0) return base+2;
+    if (fieldName[0]=='v' && strcmp(fieldName, "validLifetime")==0) return base+3;
+    if (fieldName[0]=='p' && strcmp(fieldName, "preferredLifetime")==0) return base+4;
+    if (fieldName[0]=='p' && strcmp(fieldName, "prefix")==0) return base+5;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPv6NDPrefixInformationDescriptor::getFieldTypeString(void *object, int field) const
@@ -238,15 +252,15 @@ const char *IPv6NDPrefixInformationDescriptor::getFieldTypeString(void *object, 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "unsigned int";
-        case 1: return "bool";
-        case 2: return "bool";
-        case 3: return "unsigned int";
-        case 4: return "unsigned int";
-        case 5: return "IPv6Address";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "unsigned int",
+        "bool",
+        "bool",
+        "unsigned int",
+        "unsigned int",
+        "IPv6Address",
+    };
+    return (field>=0 && field<6) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPv6NDPrefixInformationDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -276,23 +290,23 @@ int IPv6NDPrefixInformationDescriptor::getArraySize(void *object, int field) con
     }
 }
 
-bool IPv6NDPrefixInformationDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPv6NDPrefixInformationDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPv6NDPrefixInformation *pp = (IPv6NDPrefixInformation *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getPrefixLength(),resultbuf,bufsize); return true;
-        case 1: bool2string(pp->getOnlinkFlag(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getAutoAddressConfFlag(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getValidLifetime(),resultbuf,bufsize); return true;
-        case 4: ulong2string(pp->getPreferredLifetime(),resultbuf,bufsize); return true;
-        case 5: {std::stringstream out; out << pp->getPrefix(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return ulong2string(pp->getPrefixLength());
+        case 1: return bool2string(pp->getOnlinkFlag());
+        case 2: return bool2string(pp->getAutoAddressConfFlag());
+        case 3: return ulong2string(pp->getValidLifetime());
+        case 4: return ulong2string(pp->getPreferredLifetime());
+        case 5: {std::stringstream out; out << pp->getPrefix(); return out.str();}
+        default: return "";
     }
 }
 
@@ -323,10 +337,15 @@ const char *IPv6NDPrefixInformationDescriptor::getFieldStructName(void *object, 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 5: return "IPv6Address"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        "IPv6Address",
+    };
+    return (field>=0 && field<6) ? fieldStructNames[field] : NULL;
 }
 
 void *IPv6NDPrefixInformationDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -401,12 +420,13 @@ class IPv6NDMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -448,10 +468,10 @@ unsigned int IPv6NDMessageDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPv6NDMessageDescriptor::getFieldName(void *object, int field) const
@@ -462,10 +482,18 @@ const char *IPv6NDMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "code";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "code",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int IPv6NDMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "code")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPv6NDMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -476,10 +504,10 @@ const char *IPv6NDMessageDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPv6NDMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -509,18 +537,18 @@ int IPv6NDMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool IPv6NDMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPv6NDMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPv6NDMessage *pp = (IPv6NDMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getCode(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getCode());
+        default: return "";
     }
 }
 
@@ -547,9 +575,10 @@ const char *IPv6NDMessageDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *IPv6NDMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -622,12 +651,13 @@ class IPv6RouterSolicitationDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -669,10 +699,10 @@ unsigned int IPv6RouterSolicitationDescriptor::getFieldTypeFlags(void *object, i
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPv6RouterSolicitationDescriptor::getFieldName(void *object, int field) const
@@ -683,10 +713,18 @@ const char *IPv6RouterSolicitationDescriptor::getFieldName(void *object, int fie
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "sourceLinkLayerAddress";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "sourceLinkLayerAddress",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int IPv6RouterSolicitationDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sourceLinkLayerAddress")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPv6RouterSolicitationDescriptor::getFieldTypeString(void *object, int field) const
@@ -697,10 +735,10 @@ const char *IPv6RouterSolicitationDescriptor::getFieldTypeString(void *object, i
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPv6RouterSolicitationDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -730,18 +768,18 @@ int IPv6RouterSolicitationDescriptor::getArraySize(void *object, int field) cons
     }
 }
 
-bool IPv6RouterSolicitationDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPv6RouterSolicitationDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPv6RouterSolicitation *pp = (IPv6RouterSolicitation *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSourceLinkLayerAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSourceLinkLayerAddress(); return out.str();}
+        default: return "";
     }
 }
 
@@ -767,10 +805,10 @@ const char *IPv6RouterSolicitationDescriptor::getFieldStructName(void *object, i
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *IPv6RouterSolicitationDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -829,7 +867,7 @@ IPv6RouterAdvertisement& IPv6RouterAdvertisement::operator=(const IPv6RouterAdve
     this->sourceLinkLayerAddress_var = other.sourceLinkLayerAddress_var;
     this->MTU_var = other.MTU_var;
     delete [] this->prefixInformation_var;
-    this->prefixInformation_var = (other.prefixInformation_arraysize==0) ? NULL : new IPv6NDPrefixInformation[other.prefixInformation_arraysize];
+    this->prefixInformation_var = (other.prefixInformation_arraysize==0) ? NULL : new ::IPv6NDPrefixInformation[other.prefixInformation_arraysize];
     prefixInformation_arraysize = other.prefixInformation_arraysize;
     for (unsigned int i=0; i<prefixInformation_arraysize; i++)
         this->prefixInformation_var[i] = other.prefixInformation_var[i];
@@ -867,7 +905,7 @@ void IPv6RouterAdvertisement::parsimUnpack(cCommBuffer *b)
     if (prefixInformation_arraysize==0) {
         this->prefixInformation_var = 0;
     } else {
-        this->prefixInformation_var = new IPv6NDPrefixInformation[prefixInformation_arraysize];
+        this->prefixInformation_var = new ::IPv6NDPrefixInformation[prefixInformation_arraysize];
         doUnpacking(b,this->prefixInformation_var,prefixInformation_arraysize);
     }
 }
@@ -954,7 +992,7 @@ void IPv6RouterAdvertisement::setMTU(unsigned int MTU_var)
 
 void IPv6RouterAdvertisement::setPrefixInformationArraySize(unsigned int size)
 {
-    IPv6NDPrefixInformation *prefixInformation_var2 = (size==0) ? NULL : new IPv6NDPrefixInformation[size];
+    ::IPv6NDPrefixInformation *prefixInformation_var2 = (size==0) ? NULL : new ::IPv6NDPrefixInformation[size];
     unsigned int sz = prefixInformation_arraysize < size ? prefixInformation_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         prefixInformation_var2[i] = this->prefixInformation_var[i];
@@ -990,12 +1028,13 @@ class IPv6RouterAdvertisementDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1037,18 +1076,18 @@ unsigned int IPv6RouterAdvertisementDescriptor::getFieldTypeFlags(void *object, 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISCOMPOUND;
-        case 7: return FD_ISEDITABLE;
-        case 8: return FD_ISARRAY | FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND | FD_ISCOBJECT,
+    };
+    return (field>=0 && field<9) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPv6RouterAdvertisementDescriptor::getFieldName(void *object, int field) const
@@ -1059,18 +1098,34 @@ const char *IPv6RouterAdvertisementDescriptor::getFieldName(void *object, int fi
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "curHopLimit";
-        case 1: return "managedAddrConfFlag";
-        case 2: return "otherStatefulConfFlag";
-        case 3: return "routerLifetime";
-        case 4: return "reachableTime";
-        case 5: return "retransTimer";
-        case 6: return "sourceLinkLayerAddress";
-        case 7: return "MTU";
-        case 8: return "prefixInformation";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "curHopLimit",
+        "managedAddrConfFlag",
+        "otherStatefulConfFlag",
+        "routerLifetime",
+        "reachableTime",
+        "retransTimer",
+        "sourceLinkLayerAddress",
+        "MTU",
+        "prefixInformation",
+    };
+    return (field>=0 && field<9) ? fieldNames[field] : NULL;
+}
+
+int IPv6RouterAdvertisementDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "curHopLimit")==0) return base+0;
+    if (fieldName[0]=='m' && strcmp(fieldName, "managedAddrConfFlag")==0) return base+1;
+    if (fieldName[0]=='o' && strcmp(fieldName, "otherStatefulConfFlag")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "routerLifetime")==0) return base+3;
+    if (fieldName[0]=='r' && strcmp(fieldName, "reachableTime")==0) return base+4;
+    if (fieldName[0]=='r' && strcmp(fieldName, "retransTimer")==0) return base+5;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sourceLinkLayerAddress")==0) return base+6;
+    if (fieldName[0]=='M' && strcmp(fieldName, "MTU")==0) return base+7;
+    if (fieldName[0]=='p' && strcmp(fieldName, "prefixInformation")==0) return base+8;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPv6RouterAdvertisementDescriptor::getFieldTypeString(void *object, int field) const
@@ -1081,18 +1136,18 @@ const char *IPv6RouterAdvertisementDescriptor::getFieldTypeString(void *object, 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "unsigned int";
-        case 1: return "bool";
-        case 2: return "bool";
-        case 3: return "unsigned short";
-        case 4: return "unsigned int";
-        case 5: return "unsigned int";
-        case 6: return "MACAddress";
-        case 7: return "unsigned int";
-        case 8: return "IPv6NDPrefixInformation";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "unsigned int",
+        "bool",
+        "bool",
+        "unsigned short",
+        "unsigned int",
+        "unsigned int",
+        "MACAddress",
+        "unsigned int",
+        "IPv6NDPrefixInformation",
+    };
+    return (field>=0 && field<9) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPv6RouterAdvertisementDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1123,26 +1178,26 @@ int IPv6RouterAdvertisementDescriptor::getArraySize(void *object, int field) con
     }
 }
 
-bool IPv6RouterAdvertisementDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPv6RouterAdvertisementDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPv6RouterAdvertisement *pp = (IPv6RouterAdvertisement *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getCurHopLimit(),resultbuf,bufsize); return true;
-        case 1: bool2string(pp->getManagedAddrConfFlag(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getOtherStatefulConfFlag(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getRouterLifetime(),resultbuf,bufsize); return true;
-        case 4: ulong2string(pp->getReachableTime(),resultbuf,bufsize); return true;
-        case 5: ulong2string(pp->getRetransTimer(),resultbuf,bufsize); return true;
-        case 6: {std::stringstream out; out << pp->getSourceLinkLayerAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 7: ulong2string(pp->getMTU(),resultbuf,bufsize); return true;
-        case 8: {std::stringstream out; out << pp->getPrefixInformation(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return ulong2string(pp->getCurHopLimit());
+        case 1: return bool2string(pp->getManagedAddrConfFlag());
+        case 2: return bool2string(pp->getOtherStatefulConfFlag());
+        case 3: return ulong2string(pp->getRouterLifetime());
+        case 4: return ulong2string(pp->getReachableTime());
+        case 5: return ulong2string(pp->getRetransTimer());
+        case 6: {std::stringstream out; out << pp->getSourceLinkLayerAddress(); return out.str();}
+        case 7: return ulong2string(pp->getMTU());
+        case 8: {std::stringstream out; out << pp->getPrefixInformation(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -1175,11 +1230,18 @@ const char *IPv6RouterAdvertisementDescriptor::getFieldStructName(void *object, 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 6: return "MACAddress"; break;
-        case 8: return "IPv6NDPrefixInformation"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        "MACAddress",
+        NULL,
+        "IPv6NDPrefixInformation",
+    };
+    return (field>=0 && field<9) ? fieldStructNames[field] : NULL;
 }
 
 void *IPv6RouterAdvertisementDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1267,12 +1329,13 @@ class IPv6NeighbourSolicitationDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1314,11 +1377,11 @@ unsigned int IPv6NeighbourSolicitationDescriptor::getFieldTypeFlags(void *object
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPv6NeighbourSolicitationDescriptor::getFieldName(void *object, int field) const
@@ -1329,11 +1392,20 @@ const char *IPv6NeighbourSolicitationDescriptor::getFieldName(void *object, int 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "targetAddress";
-        case 1: return "sourceLinkLayerAddress";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "targetAddress",
+        "sourceLinkLayerAddress",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int IPv6NeighbourSolicitationDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "targetAddress")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sourceLinkLayerAddress")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPv6NeighbourSolicitationDescriptor::getFieldTypeString(void *object, int field) const
@@ -1344,11 +1416,11 @@ const char *IPv6NeighbourSolicitationDescriptor::getFieldTypeString(void *object
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPv6Address";
-        case 1: return "MACAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPv6Address",
+        "MACAddress",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPv6NeighbourSolicitationDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1378,19 +1450,19 @@ int IPv6NeighbourSolicitationDescriptor::getArraySize(void *object, int field) c
     }
 }
 
-bool IPv6NeighbourSolicitationDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPv6NeighbourSolicitationDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPv6NeighbourSolicitation *pp = (IPv6NeighbourSolicitation *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getTargetAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getSourceLinkLayerAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getTargetAddress(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getSourceLinkLayerAddress(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1416,11 +1488,11 @@ const char *IPv6NeighbourSolicitationDescriptor::getFieldStructName(void *object
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPv6Address"; break;
-        case 1: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPv6Address",
+        "MACAddress",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *IPv6NeighbourSolicitationDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1550,12 +1622,13 @@ class IPv6NeighbourAdvertisementDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1597,14 +1670,14 @@ unsigned int IPv6NeighbourAdvertisementDescriptor::getFieldTypeFlags(void *objec
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPv6NeighbourAdvertisementDescriptor::getFieldName(void *object, int field) const
@@ -1615,14 +1688,26 @@ const char *IPv6NeighbourAdvertisementDescriptor::getFieldName(void *object, int
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "routerFlag";
-        case 1: return "solicitedFlag";
-        case 2: return "overrideFlag";
-        case 3: return "targetAddress";
-        case 4: return "targetLinkLayerAddress";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "routerFlag",
+        "solicitedFlag",
+        "overrideFlag",
+        "targetAddress",
+        "targetLinkLayerAddress",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int IPv6NeighbourAdvertisementDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "routerFlag")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "solicitedFlag")==0) return base+1;
+    if (fieldName[0]=='o' && strcmp(fieldName, "overrideFlag")==0) return base+2;
+    if (fieldName[0]=='t' && strcmp(fieldName, "targetAddress")==0) return base+3;
+    if (fieldName[0]=='t' && strcmp(fieldName, "targetLinkLayerAddress")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPv6NeighbourAdvertisementDescriptor::getFieldTypeString(void *object, int field) const
@@ -1633,14 +1718,14 @@ const char *IPv6NeighbourAdvertisementDescriptor::getFieldTypeString(void *objec
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        case 1: return "bool";
-        case 2: return "bool";
-        case 3: return "IPv6Address";
-        case 4: return "MACAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+        "bool",
+        "bool",
+        "IPv6Address",
+        "MACAddress",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPv6NeighbourAdvertisementDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1670,22 +1755,22 @@ int IPv6NeighbourAdvertisementDescriptor::getArraySize(void *object, int field) 
     }
 }
 
-bool IPv6NeighbourAdvertisementDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPv6NeighbourAdvertisementDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPv6NeighbourAdvertisement *pp = (IPv6NeighbourAdvertisement *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->getRouterFlag(),resultbuf,bufsize); return true;
-        case 1: bool2string(pp->getSolicitedFlag(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getOverrideFlag(),resultbuf,bufsize); return true;
-        case 3: {std::stringstream out; out << pp->getTargetAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: {std::stringstream out; out << pp->getTargetLinkLayerAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return bool2string(pp->getRouterFlag());
+        case 1: return bool2string(pp->getSolicitedFlag());
+        case 2: return bool2string(pp->getOverrideFlag());
+        case 3: {std::stringstream out; out << pp->getTargetAddress(); return out.str();}
+        case 4: {std::stringstream out; out << pp->getTargetLinkLayerAddress(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1714,11 +1799,14 @@ const char *IPv6NeighbourAdvertisementDescriptor::getFieldStructName(void *objec
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 3: return "IPv6Address"; break;
-        case 4: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        "IPv6Address",
+        "MACAddress",
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *IPv6NeighbourAdvertisementDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1819,12 +1907,13 @@ class IPv6RedirectDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1866,12 +1955,12 @@ unsigned int IPv6RedirectDescriptor::getFieldTypeFlags(void *object, int field) 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPv6RedirectDescriptor::getFieldName(void *object, int field) const
@@ -1882,12 +1971,22 @@ const char *IPv6RedirectDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "targetAddress";
-        case 1: return "destinationAddress";
-        case 2: return "targetLinkLayerAddress";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "targetAddress",
+        "destinationAddress",
+        "targetLinkLayerAddress",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int IPv6RedirectDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "targetAddress")==0) return base+0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destinationAddress")==0) return base+1;
+    if (fieldName[0]=='t' && strcmp(fieldName, "targetLinkLayerAddress")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPv6RedirectDescriptor::getFieldTypeString(void *object, int field) const
@@ -1898,12 +1997,12 @@ const char *IPv6RedirectDescriptor::getFieldTypeString(void *object, int field) 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPv6Address";
-        case 1: return "IPv6Address";
-        case 2: return "MACAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPv6Address",
+        "IPv6Address",
+        "MACAddress",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPv6RedirectDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1933,20 +2032,20 @@ int IPv6RedirectDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool IPv6RedirectDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPv6RedirectDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPv6Redirect *pp = (IPv6Redirect *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getTargetAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getDestinationAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getTargetLinkLayerAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getTargetAddress(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getDestinationAddress(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getTargetLinkLayerAddress(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1972,12 +2071,12 @@ const char *IPv6RedirectDescriptor::getFieldStructName(void *object, int field) 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPv6Address"; break;
-        case 1: return "IPv6Address"; break;
-        case 2: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPv6Address",
+        "IPv6Address",
+        "MACAddress",
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *IPv6RedirectDescriptor::getFieldStructPointer(void *object, int field, int i) const

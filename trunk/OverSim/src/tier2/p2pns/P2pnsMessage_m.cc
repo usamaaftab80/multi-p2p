@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from tier2/p2pns/P2pnsMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from tier2/p2pns/P2pnsMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -99,12 +99,13 @@ class P2pnsTunnelMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -146,11 +147,11 @@ unsigned int P2pnsTunnelMessageDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *P2pnsTunnelMessageDescriptor::getFieldName(void *object, int field) const
@@ -161,11 +162,20 @@ const char *P2pnsTunnelMessageDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "srcId";
-        case 1: return "payload";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "srcId",
+        "payload",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int P2pnsTunnelMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcId")==0) return base+0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "payload")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *P2pnsTunnelMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -176,11 +186,11 @@ const char *P2pnsTunnelMessageDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        case 1: return "BinaryValue";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+        "BinaryValue",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *P2pnsTunnelMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -210,19 +220,19 @@ int P2pnsTunnelMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool P2pnsTunnelMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string P2pnsTunnelMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     P2pnsTunnelMessage *pp = (P2pnsTunnelMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSrcId(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getPayload(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSrcId(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getPayload(); return out.str();}
+        default: return "";
     }
 }
 
@@ -248,11 +258,11 @@ const char *P2pnsTunnelMessageDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        case 1: return "BinaryValue"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+        "BinaryValue",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *P2pnsTunnelMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -327,12 +337,13 @@ class P2pnsKeepaliveTimerDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -374,10 +385,10 @@ unsigned int P2pnsKeepaliveTimerDescriptor::getFieldTypeFlags(void *object, int 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *P2pnsKeepaliveTimerDescriptor::getFieldName(void *object, int field) const
@@ -388,10 +399,18 @@ const char *P2pnsKeepaliveTimerDescriptor::getFieldName(void *object, int field)
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "key";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "key",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int P2pnsKeepaliveTimerDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='k' && strcmp(fieldName, "key")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *P2pnsKeepaliveTimerDescriptor::getFieldTypeString(void *object, int field) const
@@ -402,10 +421,10 @@ const char *P2pnsKeepaliveTimerDescriptor::getFieldTypeString(void *object, int 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *P2pnsKeepaliveTimerDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -435,18 +454,18 @@ int P2pnsKeepaliveTimerDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool P2pnsKeepaliveTimerDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string P2pnsKeepaliveTimerDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     P2pnsKeepaliveTimer *pp = (P2pnsKeepaliveTimer *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getKey(); return out.str();}
+        default: return "";
     }
 }
 
@@ -472,10 +491,10 @@ const char *P2pnsKeepaliveTimerDescriptor::getFieldStructName(void *object, int 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "OverlayKey"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "OverlayKey",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *P2pnsKeepaliveTimerDescriptor::getFieldStructPointer(void *object, int field, int i) const

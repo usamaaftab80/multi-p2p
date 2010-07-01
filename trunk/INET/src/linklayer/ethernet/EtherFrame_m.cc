@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from linklayer/ethernet/EtherFrame.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from linklayer/ethernet/EtherFrame.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -73,12 +73,13 @@ class EtherJamDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -120,9 +121,7 @@ unsigned int EtherJamDescriptor::getFieldTypeFlags(void *object, int field) cons
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *EtherJamDescriptor::getFieldName(void *object, int field) const
@@ -133,9 +132,13 @@ const char *EtherJamDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int EtherJamDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *EtherJamDescriptor::getFieldTypeString(void *object, int field) const
@@ -146,9 +149,7 @@ const char *EtherJamDescriptor::getFieldTypeString(void *object, int field) cons
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *EtherJamDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -178,17 +179,17 @@ int EtherJamDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool EtherJamDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string EtherJamDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     EtherJam *pp = (EtherJam *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -214,9 +215,7 @@ const char *EtherJamDescriptor::getFieldStructName(void *object, int field) cons
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *EtherJamDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -302,12 +301,13 @@ class EtherFrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -349,11 +349,11 @@ unsigned int EtherFrameDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *EtherFrameDescriptor::getFieldName(void *object, int field) const
@@ -364,11 +364,20 @@ const char *EtherFrameDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "dest";
-        case 1: return "src";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "dest",
+        "src",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int EtherFrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dest")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "src")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *EtherFrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -379,11 +388,11 @@ const char *EtherFrameDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        case 1: return "MACAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+        "MACAddress",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *EtherFrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -413,19 +422,19 @@ int EtherFrameDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool EtherFrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string EtherFrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     EtherFrame *pp = (EtherFrame *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getDest(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getSrc(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getDest(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getSrc(); return out.str();}
+        default: return "";
     }
 }
 
@@ -451,11 +460,11 @@ const char *EtherFrameDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        case 1: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+        "MACAddress",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *EtherFrameDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -531,12 +540,13 @@ class EthernetIIFrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -578,10 +588,10 @@ unsigned int EthernetIIFrameDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *EthernetIIFrameDescriptor::getFieldName(void *object, int field) const
@@ -592,10 +602,18 @@ const char *EthernetIIFrameDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "etherType";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "etherType",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int EthernetIIFrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='e' && strcmp(fieldName, "etherType")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *EthernetIIFrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -606,10 +624,10 @@ const char *EthernetIIFrameDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *EthernetIIFrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -639,18 +657,18 @@ int EthernetIIFrameDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool EthernetIIFrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string EthernetIIFrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     EthernetIIFrame *pp = (EthernetIIFrame *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getEtherType(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getEtherType());
+        default: return "";
     }
 }
 
@@ -677,9 +695,10 @@ const char *EthernetIIFrameDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *EthernetIIFrameDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -781,12 +800,13 @@ class EtherFrameWithLLCDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -828,12 +848,12 @@ unsigned int EtherFrameWithLLCDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *EtherFrameWithLLCDescriptor::getFieldName(void *object, int field) const
@@ -844,12 +864,22 @@ const char *EtherFrameWithLLCDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "ssap";
-        case 1: return "dsap";
-        case 2: return "control";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "ssap",
+        "dsap",
+        "control",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int EtherFrameWithLLCDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "ssap")==0) return base+0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dsap")==0) return base+1;
+    if (fieldName[0]=='c' && strcmp(fieldName, "control")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *EtherFrameWithLLCDescriptor::getFieldTypeString(void *object, int field) const
@@ -860,12 +890,12 @@ const char *EtherFrameWithLLCDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "int";
-        case 2: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "int",
+        "int",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *EtherFrameWithLLCDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -895,20 +925,20 @@ int EtherFrameWithLLCDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool EtherFrameWithLLCDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string EtherFrameWithLLCDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     EtherFrameWithLLC *pp = (EtherFrameWithLLC *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getSsap(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getDsap(),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getControl(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getSsap());
+        case 1: return long2string(pp->getDsap());
+        case 2: return long2string(pp->getControl());
+        default: return "";
     }
 }
 
@@ -937,9 +967,12 @@ const char *EtherFrameWithLLCDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *EtherFrameWithLLCDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1027,12 +1060,13 @@ class EtherFrameWithSNAPDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1074,11 +1108,11 @@ unsigned int EtherFrameWithSNAPDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *EtherFrameWithSNAPDescriptor::getFieldName(void *object, int field) const
@@ -1089,11 +1123,20 @@ const char *EtherFrameWithSNAPDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "orgCode";
-        case 1: return "localcode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "orgCode",
+        "localcode",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int EtherFrameWithSNAPDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='o' && strcmp(fieldName, "orgCode")==0) return base+0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "localcode")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *EtherFrameWithSNAPDescriptor::getFieldTypeString(void *object, int field) const
@@ -1104,11 +1147,11 @@ const char *EtherFrameWithSNAPDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "long";
-        case 1: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "long",
+        "int",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *EtherFrameWithSNAPDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1138,19 +1181,19 @@ int EtherFrameWithSNAPDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool EtherFrameWithSNAPDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string EtherFrameWithSNAPDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     EtherFrameWithSNAP *pp = (EtherFrameWithSNAP *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getOrgCode(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getLocalcode(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getOrgCode());
+        case 1: return long2string(pp->getLocalcode());
+        default: return "";
     }
 }
 
@@ -1178,9 +1221,11 @@ const char *EtherFrameWithSNAPDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *EtherFrameWithSNAPDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1254,12 +1299,13 @@ class EtherPauseFrameDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1301,10 +1347,10 @@ unsigned int EtherPauseFrameDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *EtherPauseFrameDescriptor::getFieldName(void *object, int field) const
@@ -1315,10 +1361,18 @@ const char *EtherPauseFrameDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "pauseTime";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "pauseTime",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int EtherPauseFrameDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "pauseTime")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *EtherPauseFrameDescriptor::getFieldTypeString(void *object, int field) const
@@ -1329,10 +1383,10 @@ const char *EtherPauseFrameDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *EtherPauseFrameDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1362,18 +1416,18 @@ int EtherPauseFrameDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool EtherPauseFrameDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string EtherPauseFrameDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     EtherPauseFrame *pp = (EtherPauseFrame *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getPauseTime(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getPauseTime());
+        default: return "";
     }
 }
 
@@ -1400,9 +1454,10 @@ const char *EtherPauseFrameDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *EtherPauseFrameDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1490,12 +1545,13 @@ class EtherAutoconfigDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1537,11 +1593,11 @@ unsigned int EtherAutoconfigDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *EtherAutoconfigDescriptor::getFieldName(void *object, int field) const
@@ -1552,11 +1608,20 @@ const char *EtherAutoconfigDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "txrate";
-        case 1: return "halfDuplex";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "txrate",
+        "halfDuplex",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int EtherAutoconfigDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "txrate")==0) return base+0;
+    if (fieldName[0]=='h' && strcmp(fieldName, "halfDuplex")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *EtherAutoconfigDescriptor::getFieldTypeString(void *object, int field) const
@@ -1567,11 +1632,11 @@ const char *EtherAutoconfigDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "double";
-        case 1: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "double",
+        "bool",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *EtherAutoconfigDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1601,19 +1666,19 @@ int EtherAutoconfigDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool EtherAutoconfigDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string EtherAutoconfigDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     EtherAutoconfig *pp = (EtherAutoconfig *)object; (void)pp;
     switch (field) {
-        case 0: double2string(pp->getTxrate(),resultbuf,bufsize); return true;
-        case 1: bool2string(pp->getHalfDuplex(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return double2string(pp->getTxrate());
+        case 1: return bool2string(pp->getHalfDuplex());
+        default: return "";
     }
 }
 
@@ -1641,9 +1706,11 @@ const char *EtherAutoconfigDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *EtherAutoconfigDescriptor::getFieldStructPointer(void *object, int field, int i) const

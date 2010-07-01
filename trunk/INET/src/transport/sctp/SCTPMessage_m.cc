@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from transport/sctp/SCTPMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from transport/sctp/SCTPMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -165,12 +165,13 @@ class SCTPSimpleMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -212,13 +213,13 @@ unsigned int SCTPSimpleMessageDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISARRAY | FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPSimpleMessageDescriptor::getFieldName(void *object, int field) const
@@ -229,13 +230,24 @@ const char *SCTPSimpleMessageDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "dataLen";
-        case 1: return "data";
-        case 2: return "creationTime";
-        case 3: return "encaps";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "dataLen",
+        "data",
+        "creationTime",
+        "encaps",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int SCTPSimpleMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dataLen")==0) return base+0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "data")==0) return base+1;
+    if (fieldName[0]=='c' && strcmp(fieldName, "creationTime")==0) return base+2;
+    if (fieldName[0]=='e' && strcmp(fieldName, "encaps")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPSimpleMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -246,13 +258,13 @@ const char *SCTPSimpleMessageDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "uint32";
-        case 1: return "char";
-        case 2: return "simtime_t";
-        case 3: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "uint32",
+        "char",
+        "simtime_t",
+        "bool",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPSimpleMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -283,21 +295,21 @@ int SCTPSimpleMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPSimpleMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPSimpleMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPSimpleMessage *pp = (SCTPSimpleMessage *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getDataLen(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getData(i),resultbuf,bufsize); return true;
-        case 2: double2string(pp->getCreationTime(),resultbuf,bufsize); return true;
-        case 3: bool2string(pp->getEncaps(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return ulong2string(pp->getDataLen());
+        case 1: return long2string(pp->getData(i));
+        case 2: return double2string(pp->getCreationTime());
+        case 3: return bool2string(pp->getEncaps());
+        default: return "";
     }
 }
 
@@ -327,9 +339,13 @@ const char *SCTPSimpleMessageDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPSimpleMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -445,12 +461,13 @@ class SCTPMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -493,14 +510,14 @@ unsigned int SCTPMessageDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPMessageDescriptor::getFieldName(void *object, int field) const
@@ -511,14 +528,26 @@ const char *SCTPMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "srcPort";
-        case 1: return "destPort";
-        case 2: return "tag";
-        case 3: return "checksumOk";
-        case 4: return "chunks";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "srcPort",
+        "destPort",
+        "tag",
+        "checksumOk",
+        "chunks",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int SCTPMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcPort")==0) return base+0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destPort")==0) return base+1;
+    if (fieldName[0]=='t' && strcmp(fieldName, "tag")==0) return base+2;
+    if (fieldName[0]=='c' && strcmp(fieldName, "checksumOk")==0) return base+3;
+    if (fieldName[0]=='c' && strcmp(fieldName, "chunks")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -529,14 +558,14 @@ const char *SCTPMessageDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "uint16";
-        case 1: return "uint16";
-        case 2: return "uint32";
-        case 3: return "bool";
-        case 4: return "cPacketPtr";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "uint16",
+        "uint16",
+        "uint32",
+        "bool",
+        "cPacketPtr",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -567,22 +596,22 @@ int SCTPMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPMessage_Base *pp = (SCTPMessage_Base *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getSrcPort(),resultbuf,bufsize); return true;
-        case 1: ulong2string(pp->getDestPort(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getTag(),resultbuf,bufsize); return true;
-        case 3: bool2string(pp->getChecksumOk(),resultbuf,bufsize); return true;
-        case 4: {std::stringstream out; out << pp->getChunks(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return ulong2string(pp->getSrcPort());
+        case 1: return ulong2string(pp->getDestPort());
+        case 2: return ulong2string(pp->getTag());
+        case 3: return bool2string(pp->getChecksumOk());
+        case 4: {std::stringstream out; out << pp->getChunks(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -612,10 +641,14 @@ const char *SCTPMessageDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 4: return "cPacketPtr"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        "cPacketPtr",
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -690,12 +723,13 @@ class SCTPChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -738,10 +772,10 @@ unsigned int SCTPChunkDescriptor::getFieldTypeFlags(void *object, int field) con
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPChunkDescriptor::getFieldName(void *object, int field) const
@@ -752,10 +786,18 @@ const char *SCTPChunkDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "chunkType";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "chunkType",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int SCTPChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "chunkType")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -766,10 +808,10 @@ const char *SCTPChunkDescriptor::getFieldTypeString(void *object, int field) con
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "uint8";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "uint8",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -799,18 +841,18 @@ int SCTPChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPChunk *pp = (SCTPChunk *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getChunkType(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return ulong2string(pp->getChunkType());
+        default: return "";
     }
 }
 
@@ -837,9 +879,10 @@ const char *SCTPChunkDescriptor::getFieldStructName(void *object, int field) con
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -899,7 +942,7 @@ SCTPInitChunk& SCTPInitChunk::operator=(const SCTPInitChunk& other)
     this->initTSN_var = other.initTSN_var;
     this->forwardTsn_var = other.forwardTsn_var;
     delete [] this->addresses_var;
-    this->addresses_var = (other.addresses_arraysize==0) ? NULL : new IPvXAddress[other.addresses_arraysize];
+    this->addresses_var = (other.addresses_arraysize==0) ? NULL : new ::IPvXAddress[other.addresses_arraysize];
     addresses_arraysize = other.addresses_arraysize;
     for (unsigned int i=0; i<addresses_arraysize; i++)
         this->addresses_var[i] = other.addresses_var[i];
@@ -940,7 +983,7 @@ void SCTPInitChunk::parsimUnpack(cCommBuffer *b)
     if (addresses_arraysize==0) {
         this->addresses_var = 0;
     } else {
-        this->addresses_var = new IPvXAddress[addresses_arraysize];
+        this->addresses_var = new ::IPvXAddress[addresses_arraysize];
         doUnpacking(b,this->addresses_var,addresses_arraysize);
     }
     delete [] this->unrecognizedParameters_var;
@@ -1015,7 +1058,7 @@ void SCTPInitChunk::setForwardTsn(bool forwardTsn_var)
 
 void SCTPInitChunk::setAddressesArraySize(unsigned int size)
 {
-    IPvXAddress *addresses_var2 = (size==0) ? NULL : new IPvXAddress[size];
+    ::IPvXAddress *addresses_var2 = (size==0) ? NULL : new ::IPvXAddress[size];
     unsigned int sz = addresses_arraysize < size ? addresses_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         addresses_var2[i] = this->addresses_var[i];
@@ -1081,12 +1124,13 @@ class SCTPInitChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1128,17 +1172,17 @@ unsigned int SCTPInitChunkDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 7: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPInitChunkDescriptor::getFieldName(void *object, int field) const
@@ -1149,17 +1193,32 @@ const char *SCTPInitChunkDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "initTag";
-        case 1: return "a_rwnd";
-        case 2: return "noOutStreams";
-        case 3: return "noInStreams";
-        case 4: return "initTSN";
-        case 5: return "forwardTsn";
-        case 6: return "addresses";
-        case 7: return "unrecognizedParameters";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "initTag",
+        "a_rwnd",
+        "noOutStreams",
+        "noInStreams",
+        "initTSN",
+        "forwardTsn",
+        "addresses",
+        "unrecognizedParameters",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int SCTPInitChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "initTag")==0) return base+0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "a_rwnd")==0) return base+1;
+    if (fieldName[0]=='n' && strcmp(fieldName, "noOutStreams")==0) return base+2;
+    if (fieldName[0]=='n' && strcmp(fieldName, "noInStreams")==0) return base+3;
+    if (fieldName[0]=='i' && strcmp(fieldName, "initTSN")==0) return base+4;
+    if (fieldName[0]=='f' && strcmp(fieldName, "forwardTsn")==0) return base+5;
+    if (fieldName[0]=='a' && strcmp(fieldName, "addresses")==0) return base+6;
+    if (fieldName[0]=='u' && strcmp(fieldName, "unrecognizedParameters")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPInitChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -1170,17 +1229,17 @@ const char *SCTPInitChunkDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "uint32";
-        case 1: return "uint32";
-        case 2: return "uint16";
-        case 3: return "uint16";
-        case 4: return "uint32";
-        case 5: return "bool";
-        case 6: return "IPvXAddress";
-        case 7: return "uint8";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "uint32",
+        "uint32",
+        "uint16",
+        "uint16",
+        "uint32",
+        "bool",
+        "IPvXAddress",
+        "uint8",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPInitChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1212,25 +1271,25 @@ int SCTPInitChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPInitChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPInitChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPInitChunk *pp = (SCTPInitChunk *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getInitTag(),resultbuf,bufsize); return true;
-        case 1: ulong2string(pp->getA_rwnd(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getNoOutStreams(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getNoInStreams(),resultbuf,bufsize); return true;
-        case 4: ulong2string(pp->getInitTSN(),resultbuf,bufsize); return true;
-        case 5: bool2string(pp->getForwardTsn(),resultbuf,bufsize); return true;
-        case 6: {std::stringstream out; out << pp->getAddresses(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 7: ulong2string(pp->getUnrecognizedParameters(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return ulong2string(pp->getInitTag());
+        case 1: return ulong2string(pp->getA_rwnd());
+        case 2: return ulong2string(pp->getNoOutStreams());
+        case 3: return ulong2string(pp->getNoInStreams());
+        case 4: return ulong2string(pp->getInitTSN());
+        case 5: return bool2string(pp->getForwardTsn());
+        case 6: {std::stringstream out; out << pp->getAddresses(i); return out.str();}
+        case 7: return ulong2string(pp->getUnrecognizedParameters(i));
+        default: return "";
     }
 }
 
@@ -1263,10 +1322,17 @@ const char *SCTPInitChunkDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 6: return "IPvXAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        "IPvXAddress",
+        NULL,
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPInitChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1332,7 +1398,7 @@ SCTPInitAckChunk& SCTPInitAckChunk::operator=(const SCTPInitAckChunk& other)
     this->initTSN_var = other.initTSN_var;
     this->forwardTsn_var = other.forwardTsn_var;
     delete [] this->addresses_var;
-    this->addresses_var = (other.addresses_arraysize==0) ? NULL : new IPvXAddress[other.addresses_arraysize];
+    this->addresses_var = (other.addresses_arraysize==0) ? NULL : new ::IPvXAddress[other.addresses_arraysize];
     addresses_arraysize = other.addresses_arraysize;
     for (unsigned int i=0; i<addresses_arraysize; i++)
         this->addresses_var[i] = other.addresses_var[i];
@@ -1382,7 +1448,7 @@ void SCTPInitAckChunk::parsimUnpack(cCommBuffer *b)
     if (addresses_arraysize==0) {
         this->addresses_var = 0;
     } else {
-        this->addresses_var = new IPvXAddress[addresses_arraysize];
+        this->addresses_var = new ::IPvXAddress[addresses_arraysize];
         doUnpacking(b,this->addresses_var,addresses_arraysize);
     }
     delete [] this->cookie_var;
@@ -1466,7 +1532,7 @@ void SCTPInitAckChunk::setForwardTsn(bool forwardTsn_var)
 
 void SCTPInitAckChunk::setAddressesArraySize(unsigned int size)
 {
-    IPvXAddress *addresses_var2 = (size==0) ? NULL : new IPvXAddress[size];
+    ::IPvXAddress *addresses_var2 = (size==0) ? NULL : new ::IPvXAddress[size];
     unsigned int sz = addresses_arraysize < size ? addresses_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         addresses_var2[i] = this->addresses_var[i];
@@ -1572,12 +1638,13 @@ class SCTPInitAckChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1619,19 +1686,19 @@ unsigned int SCTPInitAckChunkDescriptor::getFieldTypeFlags(void *object, int fie
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 7: return FD_ISARRAY | FD_ISEDITABLE;
-        case 8: return FD_ISARRAY | FD_ISEDITABLE;
-        case 9: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<10) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPInitAckChunkDescriptor::getFieldName(void *object, int field) const
@@ -1642,19 +1709,36 @@ const char *SCTPInitAckChunkDescriptor::getFieldName(void *object, int field) co
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "initTag";
-        case 1: return "a_rwnd";
-        case 2: return "noOutStreams";
-        case 3: return "noInStreams";
-        case 4: return "initTSN";
-        case 5: return "forwardTsn";
-        case 6: return "addresses";
-        case 7: return "cookie";
-        case 8: return "unrecognizedParameters";
-        case 9: return "stateCookie";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "initTag",
+        "a_rwnd",
+        "noOutStreams",
+        "noInStreams",
+        "initTSN",
+        "forwardTsn",
+        "addresses",
+        "cookie",
+        "unrecognizedParameters",
+        "stateCookie",
+    };
+    return (field>=0 && field<10) ? fieldNames[field] : NULL;
+}
+
+int SCTPInitAckChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "initTag")==0) return base+0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "a_rwnd")==0) return base+1;
+    if (fieldName[0]=='n' && strcmp(fieldName, "noOutStreams")==0) return base+2;
+    if (fieldName[0]=='n' && strcmp(fieldName, "noInStreams")==0) return base+3;
+    if (fieldName[0]=='i' && strcmp(fieldName, "initTSN")==0) return base+4;
+    if (fieldName[0]=='f' && strcmp(fieldName, "forwardTsn")==0) return base+5;
+    if (fieldName[0]=='a' && strcmp(fieldName, "addresses")==0) return base+6;
+    if (fieldName[0]=='c' && strcmp(fieldName, "cookie")==0) return base+7;
+    if (fieldName[0]=='u' && strcmp(fieldName, "unrecognizedParameters")==0) return base+8;
+    if (fieldName[0]=='s' && strcmp(fieldName, "stateCookie")==0) return base+9;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPInitAckChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -1665,19 +1749,19 @@ const char *SCTPInitAckChunkDescriptor::getFieldTypeString(void *object, int fie
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "uint32";
-        case 1: return "uint32";
-        case 2: return "uint16";
-        case 3: return "uint16";
-        case 4: return "uint32";
-        case 5: return "bool";
-        case 6: return "IPvXAddress";
-        case 7: return "char";
-        case 8: return "uint8";
-        case 9: return "cPacketPtr";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "uint32",
+        "uint32",
+        "uint16",
+        "uint16",
+        "uint32",
+        "bool",
+        "IPvXAddress",
+        "char",
+        "uint8",
+        "cPacketPtr",
+    };
+    return (field>=0 && field<10) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPInitAckChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1710,27 +1794,27 @@ int SCTPInitAckChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPInitAckChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPInitAckChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPInitAckChunk *pp = (SCTPInitAckChunk *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getInitTag(),resultbuf,bufsize); return true;
-        case 1: ulong2string(pp->getA_rwnd(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getNoOutStreams(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getNoInStreams(),resultbuf,bufsize); return true;
-        case 4: ulong2string(pp->getInitTSN(),resultbuf,bufsize); return true;
-        case 5: bool2string(pp->getForwardTsn(),resultbuf,bufsize); return true;
-        case 6: {std::stringstream out; out << pp->getAddresses(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 7: long2string(pp->getCookie(i),resultbuf,bufsize); return true;
-        case 8: ulong2string(pp->getUnrecognizedParameters(i),resultbuf,bufsize); return true;
-        case 9: {std::stringstream out; out << pp->getStateCookie(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return ulong2string(pp->getInitTag());
+        case 1: return ulong2string(pp->getA_rwnd());
+        case 2: return ulong2string(pp->getNoOutStreams());
+        case 3: return ulong2string(pp->getNoInStreams());
+        case 4: return ulong2string(pp->getInitTSN());
+        case 5: return bool2string(pp->getForwardTsn());
+        case 6: {std::stringstream out; out << pp->getAddresses(i); return out.str();}
+        case 7: return long2string(pp->getCookie(i));
+        case 8: return ulong2string(pp->getUnrecognizedParameters(i));
+        case 9: {std::stringstream out; out << pp->getStateCookie(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1764,11 +1848,19 @@ const char *SCTPInitAckChunkDescriptor::getFieldStructName(void *object, int fie
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 6: return "IPvXAddress"; break;
-        case 9: return "cPacketPtr"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        "IPvXAddress",
+        NULL,
+        NULL,
+        "cPacketPtr",
+    };
+    return (field>=0 && field<10) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPInitAckChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1943,12 +2035,13 @@ class SCTPCookieEchoChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1990,12 +2083,12 @@ unsigned int SCTPCookieEchoChunkDescriptor::getFieldTypeFlags(void *object, int 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPCookieEchoChunkDescriptor::getFieldName(void *object, int field) const
@@ -2006,12 +2099,22 @@ const char *SCTPCookieEchoChunkDescriptor::getFieldName(void *object, int field)
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "cookie";
-        case 1: return "stateCookie";
-        case 2: return "unrecognizedParameters";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "cookie",
+        "stateCookie",
+        "unrecognizedParameters",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int SCTPCookieEchoChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "cookie")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "stateCookie")==0) return base+1;
+    if (fieldName[0]=='u' && strcmp(fieldName, "unrecognizedParameters")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPCookieEchoChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -2022,12 +2125,12 @@ const char *SCTPCookieEchoChunkDescriptor::getFieldTypeString(void *object, int 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "char";
-        case 1: return "cPacketPtr";
-        case 2: return "uint8";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "char",
+        "cPacketPtr",
+        "uint8",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPCookieEchoChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2059,20 +2162,20 @@ int SCTPCookieEchoChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPCookieEchoChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPCookieEchoChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPCookieEchoChunk *pp = (SCTPCookieEchoChunk *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getCookie(i),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getStateCookie(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: ulong2string(pp->getUnrecognizedParameters(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getCookie(i));
+        case 1: {std::stringstream out; out << pp->getStateCookie(); return out.str();}
+        case 2: return ulong2string(pp->getUnrecognizedParameters(i));
+        default: return "";
     }
 }
 
@@ -2100,10 +2203,12 @@ const char *SCTPCookieEchoChunkDescriptor::getFieldStructName(void *object, int 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "cPacketPtr"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "cPacketPtr",
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPCookieEchoChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2306,12 +2411,13 @@ class SCTPCookieDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2353,14 +2459,14 @@ unsigned int SCTPCookieDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISARRAY | FD_ISEDITABLE;
-        case 4: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPCookieDescriptor::getFieldName(void *object, int field) const
@@ -2371,14 +2477,26 @@ const char *SCTPCookieDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "creationTime";
-        case 1: return "localTag";
-        case 2: return "peerTag";
-        case 3: return "localTieTag";
-        case 4: return "peerTieTag";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "creationTime",
+        "localTag",
+        "peerTag",
+        "localTieTag",
+        "peerTieTag",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int SCTPCookieDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "creationTime")==0) return base+0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "localTag")==0) return base+1;
+    if (fieldName[0]=='p' && strcmp(fieldName, "peerTag")==0) return base+2;
+    if (fieldName[0]=='l' && strcmp(fieldName, "localTieTag")==0) return base+3;
+    if (fieldName[0]=='p' && strcmp(fieldName, "peerTieTag")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPCookieDescriptor::getFieldTypeString(void *object, int field) const
@@ -2389,14 +2507,14 @@ const char *SCTPCookieDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "simtime_t";
-        case 1: return "uint32";
-        case 2: return "uint32";
-        case 3: return "uint8";
-        case 4: return "uint8";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "simtime_t",
+        "uint32",
+        "uint32",
+        "uint8",
+        "uint8",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPCookieDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2428,22 +2546,22 @@ int SCTPCookieDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPCookieDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPCookieDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPCookie *pp = (SCTPCookie *)object; (void)pp;
     switch (field) {
-        case 0: double2string(pp->getCreationTime(),resultbuf,bufsize); return true;
-        case 1: ulong2string(pp->getLocalTag(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getPeerTag(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getLocalTieTag(i),resultbuf,bufsize); return true;
-        case 4: ulong2string(pp->getPeerTieTag(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return double2string(pp->getCreationTime());
+        case 1: return ulong2string(pp->getLocalTag());
+        case 2: return ulong2string(pp->getPeerTag());
+        case 3: return ulong2string(pp->getLocalTieTag(i));
+        case 4: return ulong2string(pp->getPeerTieTag(i));
+        default: return "";
     }
 }
 
@@ -2474,9 +2592,14 @@ const char *SCTPCookieDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPCookieDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2536,12 +2659,13 @@ class SCTPCookieAckChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2583,9 +2707,7 @@ unsigned int SCTPCookieAckChunkDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *SCTPCookieAckChunkDescriptor::getFieldName(void *object, int field) const
@@ -2596,9 +2718,13 @@ const char *SCTPCookieAckChunkDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int SCTPCookieAckChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPCookieAckChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -2609,9 +2735,7 @@ const char *SCTPCookieAckChunkDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *SCTPCookieAckChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2641,17 +2765,17 @@ int SCTPCookieAckChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPCookieAckChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPCookieAckChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPCookieAckChunk *pp = (SCTPCookieAckChunk *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -2677,9 +2801,7 @@ const char *SCTPCookieAckChunkDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *SCTPCookieAckChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -2864,12 +2986,13 @@ class SCTPDataMsgDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -2911,18 +3034,18 @@ unsigned int SCTPDataMsgDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        case 8: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<9) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPDataMsgDescriptor::getFieldName(void *object, int field) const
@@ -2933,18 +3056,34 @@ const char *SCTPDataMsgDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "enqueuingTime";
-        case 1: return "expiryTime";
-        case 2: return "ppid";
-        case 3: return "initialDestination";
-        case 4: return "msgNum";
-        case 5: return "sid";
-        case 6: return "ordered";
-        case 7: return "booksize";
-        case 8: return "rtx";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "enqueuingTime",
+        "expiryTime",
+        "ppid",
+        "initialDestination",
+        "msgNum",
+        "sid",
+        "ordered",
+        "booksize",
+        "rtx",
+    };
+    return (field>=0 && field<9) ? fieldNames[field] : NULL;
+}
+
+int SCTPDataMsgDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='e' && strcmp(fieldName, "enqueuingTime")==0) return base+0;
+    if (fieldName[0]=='e' && strcmp(fieldName, "expiryTime")==0) return base+1;
+    if (fieldName[0]=='p' && strcmp(fieldName, "ppid")==0) return base+2;
+    if (fieldName[0]=='i' && strcmp(fieldName, "initialDestination")==0) return base+3;
+    if (fieldName[0]=='m' && strcmp(fieldName, "msgNum")==0) return base+4;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sid")==0) return base+5;
+    if (fieldName[0]=='o' && strcmp(fieldName, "ordered")==0) return base+6;
+    if (fieldName[0]=='b' && strcmp(fieldName, "booksize")==0) return base+7;
+    if (fieldName[0]=='r' && strcmp(fieldName, "rtx")==0) return base+8;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPDataMsgDescriptor::getFieldTypeString(void *object, int field) const
@@ -2955,18 +3094,18 @@ const char *SCTPDataMsgDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "simtime_t";
-        case 1: return "simtime_t";
-        case 2: return "uint32";
-        case 3: return "IPvXAddress";
-        case 4: return "uint32";
-        case 5: return "uint16";
-        case 6: return "bool";
-        case 7: return "uint32";
-        case 8: return "uint32";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "simtime_t",
+        "simtime_t",
+        "uint32",
+        "IPvXAddress",
+        "uint32",
+        "uint16",
+        "bool",
+        "uint32",
+        "uint32",
+    };
+    return (field>=0 && field<9) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPDataMsgDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -2996,26 +3135,26 @@ int SCTPDataMsgDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPDataMsgDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPDataMsgDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPDataMsg *pp = (SCTPDataMsg *)object; (void)pp;
     switch (field) {
-        case 0: double2string(pp->getEnqueuingTime(),resultbuf,bufsize); return true;
-        case 1: double2string(pp->getExpiryTime(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getPpid(),resultbuf,bufsize); return true;
-        case 3: {std::stringstream out; out << pp->getInitialDestination(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: ulong2string(pp->getMsgNum(),resultbuf,bufsize); return true;
-        case 5: ulong2string(pp->getSid(),resultbuf,bufsize); return true;
-        case 6: bool2string(pp->getOrdered(),resultbuf,bufsize); return true;
-        case 7: ulong2string(pp->getBooksize(),resultbuf,bufsize); return true;
-        case 8: ulong2string(pp->getRtx(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return double2string(pp->getEnqueuingTime());
+        case 1: return double2string(pp->getExpiryTime());
+        case 2: return ulong2string(pp->getPpid());
+        case 3: {std::stringstream out; out << pp->getInitialDestination(); return out.str();}
+        case 4: return ulong2string(pp->getMsgNum());
+        case 5: return ulong2string(pp->getSid());
+        case 6: return bool2string(pp->getOrdered());
+        case 7: return ulong2string(pp->getBooksize());
+        case 8: return ulong2string(pp->getRtx());
+        default: return "";
     }
 }
 
@@ -3049,10 +3188,18 @@ const char *SCTPDataMsgDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 3: return "IPvXAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        "IPvXAddress",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<9) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPDataMsgDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -3225,12 +3372,13 @@ class SCTPDataChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -3272,17 +3420,17 @@ unsigned int SCTPDataChunkDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPDataChunkDescriptor::getFieldName(void *object, int field) const
@@ -3293,17 +3441,32 @@ const char *SCTPDataChunkDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "eBit";
-        case 1: return "bBit";
-        case 2: return "uBit";
-        case 3: return "tsn";
-        case 4: return "sid";
-        case 5: return "ssn";
-        case 6: return "ppid";
-        case 7: return "enqueuingTime";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "eBit",
+        "bBit",
+        "uBit",
+        "tsn",
+        "sid",
+        "ssn",
+        "ppid",
+        "enqueuingTime",
+    };
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
+}
+
+int SCTPDataChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='e' && strcmp(fieldName, "eBit")==0) return base+0;
+    if (fieldName[0]=='b' && strcmp(fieldName, "bBit")==0) return base+1;
+    if (fieldName[0]=='u' && strcmp(fieldName, "uBit")==0) return base+2;
+    if (fieldName[0]=='t' && strcmp(fieldName, "tsn")==0) return base+3;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sid")==0) return base+4;
+    if (fieldName[0]=='s' && strcmp(fieldName, "ssn")==0) return base+5;
+    if (fieldName[0]=='p' && strcmp(fieldName, "ppid")==0) return base+6;
+    if (fieldName[0]=='e' && strcmp(fieldName, "enqueuingTime")==0) return base+7;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPDataChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -3314,17 +3477,17 @@ const char *SCTPDataChunkDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        case 1: return "bool";
-        case 2: return "bool";
-        case 3: return "uint32";
-        case 4: return "uint16";
-        case 5: return "uint16";
-        case 6: return "uint32";
-        case 7: return "simtime_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+        "bool",
+        "bool",
+        "uint32",
+        "uint16",
+        "uint16",
+        "uint32",
+        "simtime_t",
+    };
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPDataChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -3354,25 +3517,25 @@ int SCTPDataChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPDataChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPDataChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPDataChunk *pp = (SCTPDataChunk *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->getEBit(),resultbuf,bufsize); return true;
-        case 1: bool2string(pp->getBBit(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getUBit(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getTsn(),resultbuf,bufsize); return true;
-        case 4: ulong2string(pp->getSid(),resultbuf,bufsize); return true;
-        case 5: ulong2string(pp->getSsn(),resultbuf,bufsize); return true;
-        case 6: ulong2string(pp->getPpid(),resultbuf,bufsize); return true;
-        case 7: double2string(pp->getEnqueuingTime(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return bool2string(pp->getEBit());
+        case 1: return bool2string(pp->getBBit());
+        case 2: return bool2string(pp->getUBit());
+        case 3: return ulong2string(pp->getTsn());
+        case 4: return ulong2string(pp->getSid());
+        case 5: return ulong2string(pp->getSsn());
+        case 6: return ulong2string(pp->getPpid());
+        case 7: return double2string(pp->getEnqueuingTime());
+        default: return "";
     }
 }
 
@@ -3406,9 +3569,17 @@ const char *SCTPDataChunkDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPDataChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -3582,12 +3753,13 @@ class SCTPForwardTsnChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -3629,12 +3801,12 @@ unsigned int SCTPForwardTsnChunkDescriptor::getFieldTypeFlags(void *object, int 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISARRAY | FD_ISEDITABLE;
-        case 2: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPForwardTsnChunkDescriptor::getFieldName(void *object, int field) const
@@ -3645,12 +3817,22 @@ const char *SCTPForwardTsnChunkDescriptor::getFieldName(void *object, int field)
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "newCumTsn";
-        case 1: return "sid";
-        case 2: return "ssn";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "newCumTsn",
+        "sid",
+        "ssn",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int SCTPForwardTsnChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "newCumTsn")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sid")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "ssn")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPForwardTsnChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -3661,12 +3843,12 @@ const char *SCTPForwardTsnChunkDescriptor::getFieldTypeString(void *object, int 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "uint32";
-        case 1: return "uint16";
-        case 2: return "short";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "uint32",
+        "uint16",
+        "short",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPForwardTsnChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -3698,20 +3880,20 @@ int SCTPForwardTsnChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPForwardTsnChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPForwardTsnChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPForwardTsnChunk *pp = (SCTPForwardTsnChunk *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getNewCumTsn(),resultbuf,bufsize); return true;
-        case 1: ulong2string(pp->getSid(i),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getSsn(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return ulong2string(pp->getNewCumTsn());
+        case 1: return ulong2string(pp->getSid(i));
+        case 2: return long2string(pp->getSsn(i));
+        default: return "";
     }
 }
 
@@ -3740,9 +3922,12 @@ const char *SCTPForwardTsnChunkDescriptor::getFieldStructName(void *object, int 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPForwardTsnChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4008,12 +4193,13 @@ class SCTPSackChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4055,16 +4241,16 @@ unsigned int SCTPSackChunkDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISARRAY | FD_ISEDITABLE;
-        case 5: return FD_ISARRAY | FD_ISEDITABLE;
-        case 6: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<7) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPSackChunkDescriptor::getFieldName(void *object, int field) const
@@ -4075,16 +4261,30 @@ const char *SCTPSackChunkDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "cumTsnAck";
-        case 1: return "a_rwnd";
-        case 2: return "numGaps";
-        case 3: return "numDupTsns";
-        case 4: return "gapStart";
-        case 5: return "gapStop";
-        case 6: return "dupTsns";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "cumTsnAck",
+        "a_rwnd",
+        "numGaps",
+        "numDupTsns",
+        "gapStart",
+        "gapStop",
+        "dupTsns",
+    };
+    return (field>=0 && field<7) ? fieldNames[field] : NULL;
+}
+
+int SCTPSackChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "cumTsnAck")==0) return base+0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "a_rwnd")==0) return base+1;
+    if (fieldName[0]=='n' && strcmp(fieldName, "numGaps")==0) return base+2;
+    if (fieldName[0]=='n' && strcmp(fieldName, "numDupTsns")==0) return base+3;
+    if (fieldName[0]=='g' && strcmp(fieldName, "gapStart")==0) return base+4;
+    if (fieldName[0]=='g' && strcmp(fieldName, "gapStop")==0) return base+5;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dupTsns")==0) return base+6;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPSackChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -4095,16 +4295,16 @@ const char *SCTPSackChunkDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "uint32";
-        case 1: return "uint32";
-        case 2: return "uint16";
-        case 3: return "uint16";
-        case 4: return "uint32";
-        case 5: return "uint32";
-        case 6: return "uint32";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "uint32",
+        "uint32",
+        "uint16",
+        "uint16",
+        "uint32",
+        "uint32",
+        "uint32",
+    };
+    return (field>=0 && field<7) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPSackChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4137,24 +4337,24 @@ int SCTPSackChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPSackChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPSackChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPSackChunk *pp = (SCTPSackChunk *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getCumTsnAck(),resultbuf,bufsize); return true;
-        case 1: ulong2string(pp->getA_rwnd(),resultbuf,bufsize); return true;
-        case 2: ulong2string(pp->getNumGaps(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getNumDupTsns(),resultbuf,bufsize); return true;
-        case 4: ulong2string(pp->getGapStart(i),resultbuf,bufsize); return true;
-        case 5: ulong2string(pp->getGapStop(i),resultbuf,bufsize); return true;
-        case 6: ulong2string(pp->getDupTsns(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return ulong2string(pp->getCumTsnAck());
+        case 1: return ulong2string(pp->getA_rwnd());
+        case 2: return ulong2string(pp->getNumGaps());
+        case 3: return ulong2string(pp->getNumDupTsns());
+        case 4: return ulong2string(pp->getGapStart(i));
+        case 5: return ulong2string(pp->getGapStop(i));
+        case 6: return ulong2string(pp->getDupTsns(i));
+        default: return "";
     }
 }
 
@@ -4187,9 +4387,16 @@ const char *SCTPSackChunkDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<7) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPSackChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4263,12 +4470,13 @@ class SCTPAbortChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4310,10 +4518,10 @@ unsigned int SCTPAbortChunkDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPAbortChunkDescriptor::getFieldName(void *object, int field) const
@@ -4324,10 +4532,18 @@ const char *SCTPAbortChunkDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "T_Bit";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "T_Bit",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int SCTPAbortChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='T' && strcmp(fieldName, "T_Bit")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPAbortChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -4338,10 +4554,10 @@ const char *SCTPAbortChunkDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPAbortChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4371,18 +4587,18 @@ int SCTPAbortChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPAbortChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPAbortChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPAbortChunk *pp = (SCTPAbortChunk *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->getT_Bit(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return bool2string(pp->getT_Bit());
+        default: return "";
     }
 }
 
@@ -4409,9 +4625,10 @@ const char *SCTPAbortChunkDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPAbortChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4548,12 +4765,13 @@ class SCTPHeartbeatChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4595,12 +4813,12 @@ unsigned int SCTPHeartbeatChunkDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPHeartbeatChunkDescriptor::getFieldName(void *object, int field) const
@@ -4611,12 +4829,22 @@ const char *SCTPHeartbeatChunkDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "remoteAddr";
-        case 1: return "timeField";
-        case 2: return "info";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "remoteAddr",
+        "timeField",
+        "info",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int SCTPHeartbeatChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "remoteAddr")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timeField")==0) return base+1;
+    if (fieldName[0]=='i' && strcmp(fieldName, "info")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPHeartbeatChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -4627,12 +4855,12 @@ const char *SCTPHeartbeatChunkDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPvXAddress";
-        case 1: return "simtime_t";
-        case 2: return "char";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPvXAddress",
+        "simtime_t",
+        "char",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPHeartbeatChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4663,20 +4891,20 @@ int SCTPHeartbeatChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPHeartbeatChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPHeartbeatChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPHeartbeatChunk *pp = (SCTPHeartbeatChunk *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getRemoteAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: double2string(pp->getTimeField(),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getInfo(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getRemoteAddr(); return out.str();}
+        case 1: return double2string(pp->getTimeField());
+        case 2: return long2string(pp->getInfo(i));
+        default: return "";
     }
 }
 
@@ -4704,10 +4932,12 @@ const char *SCTPHeartbeatChunkDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPvXAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPvXAddress",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPHeartbeatChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -4845,12 +5075,13 @@ class SCTPHeartbeatAckChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -4892,12 +5123,12 @@ unsigned int SCTPHeartbeatAckChunkDescriptor::getFieldTypeFlags(void *object, in
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPHeartbeatAckChunkDescriptor::getFieldName(void *object, int field) const
@@ -4908,12 +5139,22 @@ const char *SCTPHeartbeatAckChunkDescriptor::getFieldName(void *object, int fiel
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "remoteAddr";
-        case 1: return "timeField";
-        case 2: return "info";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "remoteAddr",
+        "timeField",
+        "info",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int SCTPHeartbeatAckChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "remoteAddr")==0) return base+0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timeField")==0) return base+1;
+    if (fieldName[0]=='i' && strcmp(fieldName, "info")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPHeartbeatAckChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -4924,12 +5165,12 @@ const char *SCTPHeartbeatAckChunkDescriptor::getFieldTypeString(void *object, in
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPvXAddress";
-        case 1: return "simtime_t";
-        case 2: return "char";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPvXAddress",
+        "simtime_t",
+        "char",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPHeartbeatAckChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -4960,20 +5201,20 @@ int SCTPHeartbeatAckChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPHeartbeatAckChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPHeartbeatAckChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPHeartbeatAckChunk *pp = (SCTPHeartbeatAckChunk *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getRemoteAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: double2string(pp->getTimeField(),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getInfo(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getRemoteAddr(); return out.str();}
+        case 1: return double2string(pp->getTimeField());
+        case 2: return long2string(pp->getInfo(i));
+        default: return "";
     }
 }
 
@@ -5001,10 +5242,12 @@ const char *SCTPHeartbeatAckChunkDescriptor::getFieldStructName(void *object, in
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPvXAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPvXAddress",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPHeartbeatAckChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -5079,12 +5322,13 @@ class SCTPShutdownChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -5126,10 +5370,10 @@ unsigned int SCTPShutdownChunkDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPShutdownChunkDescriptor::getFieldName(void *object, int field) const
@@ -5140,10 +5384,18 @@ const char *SCTPShutdownChunkDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "cumTsnAck";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "cumTsnAck",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int SCTPShutdownChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "cumTsnAck")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPShutdownChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -5154,10 +5406,10 @@ const char *SCTPShutdownChunkDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "uint32";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "uint32",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPShutdownChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -5187,18 +5439,18 @@ int SCTPShutdownChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPShutdownChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPShutdownChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPShutdownChunk *pp = (SCTPShutdownChunk *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getCumTsnAck(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return ulong2string(pp->getCumTsnAck());
+        default: return "";
     }
 }
 
@@ -5225,9 +5477,10 @@ const char *SCTPShutdownChunkDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPShutdownChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -5287,12 +5540,13 @@ class SCTPShutdownAckChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -5334,9 +5588,7 @@ unsigned int SCTPShutdownAckChunkDescriptor::getFieldTypeFlags(void *object, int
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *SCTPShutdownAckChunkDescriptor::getFieldName(void *object, int field) const
@@ -5347,9 +5599,13 @@ const char *SCTPShutdownAckChunkDescriptor::getFieldName(void *object, int field
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int SCTPShutdownAckChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPShutdownAckChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -5360,9 +5616,7 @@ const char *SCTPShutdownAckChunkDescriptor::getFieldTypeString(void *object, int
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *SCTPShutdownAckChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -5392,17 +5646,17 @@ int SCTPShutdownAckChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPShutdownAckChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPShutdownAckChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPShutdownAckChunk *pp = (SCTPShutdownAckChunk *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -5428,9 +5682,7 @@ const char *SCTPShutdownAckChunkDescriptor::getFieldStructName(void *object, int
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *SCTPShutdownAckChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -5504,12 +5756,13 @@ class SCTPShutdownCompleteChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -5551,10 +5804,10 @@ unsigned int SCTPShutdownCompleteChunkDescriptor::getFieldTypeFlags(void *object
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPShutdownCompleteChunkDescriptor::getFieldName(void *object, int field) const
@@ -5565,10 +5818,18 @@ const char *SCTPShutdownCompleteChunkDescriptor::getFieldName(void *object, int 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TBit";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "TBit",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int SCTPShutdownCompleteChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='T' && strcmp(fieldName, "TBit")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPShutdownCompleteChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -5579,10 +5840,10 @@ const char *SCTPShutdownCompleteChunkDescriptor::getFieldTypeString(void *object
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPShutdownCompleteChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -5612,18 +5873,18 @@ int SCTPShutdownCompleteChunkDescriptor::getArraySize(void *object, int field) c
     }
 }
 
-bool SCTPShutdownCompleteChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPShutdownCompleteChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPShutdownCompleteChunk *pp = (SCTPShutdownCompleteChunk *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->getTBit(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return bool2string(pp->getTBit());
+        default: return "";
     }
 }
 
@@ -5650,9 +5911,10 @@ const char *SCTPShutdownCompleteChunkDescriptor::getFieldStructName(void *object
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPShutdownCompleteChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -5712,12 +5974,13 @@ class SCTPErrorChunkDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -5760,10 +6023,10 @@ unsigned int SCTPErrorChunkDescriptor::getFieldTypeFlags(void *object, int field
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPErrorChunkDescriptor::getFieldName(void *object, int field) const
@@ -5774,10 +6037,18 @@ const char *SCTPErrorChunkDescriptor::getFieldName(void *object, int field) cons
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "parameters";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "parameters",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int SCTPErrorChunkDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "parameters")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPErrorChunkDescriptor::getFieldTypeString(void *object, int field) const
@@ -5788,10 +6059,10 @@ const char *SCTPErrorChunkDescriptor::getFieldTypeString(void *object, int field
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "cPacketPtr";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "cPacketPtr",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPErrorChunkDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -5822,18 +6093,18 @@ int SCTPErrorChunkDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPErrorChunkDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPErrorChunkDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPErrorChunk_Base *pp = (SCTPErrorChunk_Base *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getParameters(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getParameters(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -5859,10 +6130,10 @@ const char *SCTPErrorChunkDescriptor::getFieldStructName(void *object, int field
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "cPacketPtr"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "cPacketPtr",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPErrorChunkDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -5937,12 +6208,13 @@ class SCTPParameterDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -5984,10 +6256,10 @@ unsigned int SCTPParameterDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *SCTPParameterDescriptor::getFieldName(void *object, int field) const
@@ -5998,10 +6270,18 @@ const char *SCTPParameterDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "parameterType";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "parameterType",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int SCTPParameterDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "parameterType")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *SCTPParameterDescriptor::getFieldTypeString(void *object, int field) const
@@ -6012,10 +6292,10 @@ const char *SCTPParameterDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "uint16";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "uint16",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *SCTPParameterDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -6045,18 +6325,18 @@ int SCTPParameterDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool SCTPParameterDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string SCTPParameterDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     SCTPParameter *pp = (SCTPParameter *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getParameterType(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return ulong2string(pp->getParameterType());
+        default: return "";
     }
 }
 
@@ -6083,9 +6363,10 @@ const char *SCTPParameterDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *SCTPParameterDescriptor::getFieldStructPointer(void *object, int field, int i) const

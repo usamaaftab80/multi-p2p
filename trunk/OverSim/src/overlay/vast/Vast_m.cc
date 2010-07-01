@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from overlay/vast/Vast.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from overlay/vast/Vast.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -156,12 +156,13 @@ class VastMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -203,14 +204,14 @@ unsigned int VastMessageDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *VastMessageDescriptor::getFieldName(void *object, int field) const
@@ -221,14 +222,26 @@ const char *VastMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "command";
-        case 1: return "sourceNode";
-        case 2: return "destKey";
-        case 3: return "pos";
-        case 4: return "neighborCount";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "command",
+        "sourceNode",
+        "destKey",
+        "pos",
+        "neighborCount",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int VastMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sourceNode")==0) return base+1;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destKey")==0) return base+2;
+    if (fieldName[0]=='p' && strcmp(fieldName, "pos")==0) return base+3;
+    if (fieldName[0]=='n' && strcmp(fieldName, "neighborCount")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *VastMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -239,14 +252,14 @@ const char *VastMessageDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "NodeHandle";
-        case 2: return "OverlayKey";
-        case 3: return "Vector2D";
-        case 4: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "NodeHandle",
+        "OverlayKey",
+        "Vector2D",
+        "int",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *VastMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -279,22 +292,22 @@ int VastMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool VastMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string VastMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     VastMessage *pp = (VastMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getSourceNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getDestKey(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getPos(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: long2string(pp->getNeighborCount(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getCommand());
+        case 1: {std::stringstream out; out << pp->getSourceNode(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getDestKey(); return out.str();}
+        case 3: {std::stringstream out; out << pp->getPos(); return out.str();}
+        case 4: return long2string(pp->getNeighborCount());
+        default: return "";
     }
 }
 
@@ -322,12 +335,14 @@ const char *VastMessageDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "NodeHandle"; break;
-        case 2: return "OverlayKey"; break;
-        case 3: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "NodeHandle",
+        "OverlayKey",
+        "Vector2D",
+        NULL,
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *VastMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -379,12 +394,12 @@ VastListMessage& VastListMessage::operator=(const VastListMessage& other)
     if (this==&other) return *this;
     VastMessage::operator=(other);
     delete [] this->neighborNode_var;
-    this->neighborNode_var = (other.neighborNode_arraysize==0) ? NULL : new NodeHandle[other.neighborNode_arraysize];
+    this->neighborNode_var = (other.neighborNode_arraysize==0) ? NULL : new ::NodeHandle[other.neighborNode_arraysize];
     neighborNode_arraysize = other.neighborNode_arraysize;
     for (unsigned int i=0; i<neighborNode_arraysize; i++)
         this->neighborNode_var[i] = other.neighborNode_var[i];
     delete [] this->neighborPos_var;
-    this->neighborPos_var = (other.neighborPos_arraysize==0) ? NULL : new Vector2D[other.neighborPos_arraysize];
+    this->neighborPos_var = (other.neighborPos_arraysize==0) ? NULL : new ::Vector2D[other.neighborPos_arraysize];
     neighborPos_arraysize = other.neighborPos_arraysize;
     for (unsigned int i=0; i<neighborPos_arraysize; i++)
         this->neighborPos_var[i] = other.neighborPos_var[i];
@@ -410,7 +425,7 @@ void VastListMessage::parsimUnpack(cCommBuffer *b)
     if (neighborNode_arraysize==0) {
         this->neighborNode_var = 0;
     } else {
-        this->neighborNode_var = new NodeHandle[neighborNode_arraysize];
+        this->neighborNode_var = new ::NodeHandle[neighborNode_arraysize];
         doUnpacking(b,this->neighborNode_var,neighborNode_arraysize);
     }
     delete [] this->neighborPos_var;
@@ -418,7 +433,7 @@ void VastListMessage::parsimUnpack(cCommBuffer *b)
     if (neighborPos_arraysize==0) {
         this->neighborPos_var = 0;
     } else {
-        this->neighborPos_var = new Vector2D[neighborPos_arraysize];
+        this->neighborPos_var = new ::Vector2D[neighborPos_arraysize];
         doUnpacking(b,this->neighborPos_var,neighborPos_arraysize);
     }
     doUnpacking(b,this->requestEnclosingNeighbors_var);
@@ -426,7 +441,7 @@ void VastListMessage::parsimUnpack(cCommBuffer *b)
 
 void VastListMessage::setNeighborNodeArraySize(unsigned int size)
 {
-    NodeHandle *neighborNode_var2 = (size==0) ? NULL : new NodeHandle[size];
+    ::NodeHandle *neighborNode_var2 = (size==0) ? NULL : new ::NodeHandle[size];
     unsigned int sz = neighborNode_arraysize < size ? neighborNode_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         neighborNode_var2[i] = this->neighborNode_var[i];
@@ -454,7 +469,7 @@ void VastListMessage::setNeighborNode(unsigned int k, const NodeHandle& neighbor
 
 void VastListMessage::setNeighborPosArraySize(unsigned int size)
 {
-    Vector2D *neighborPos_var2 = (size==0) ? NULL : new Vector2D[size];
+    ::Vector2D *neighborPos_var2 = (size==0) ? NULL : new ::Vector2D[size];
     unsigned int sz = neighborPos_arraysize < size ? neighborPos_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         neighborPos_var2[i] = this->neighborPos_var[i];
@@ -500,12 +515,13 @@ class VastListMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -547,12 +563,12 @@ unsigned int VastListMessageDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 1: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *VastListMessageDescriptor::getFieldName(void *object, int field) const
@@ -563,12 +579,22 @@ const char *VastListMessageDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "neighborNode";
-        case 1: return "neighborPos";
-        case 2: return "requestEnclosingNeighbors";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "neighborNode",
+        "neighborPos",
+        "requestEnclosingNeighbors",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int VastListMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "neighborNode")==0) return base+0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "neighborPos")==0) return base+1;
+    if (fieldName[0]=='r' && strcmp(fieldName, "requestEnclosingNeighbors")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *VastListMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -579,12 +605,12 @@ const char *VastListMessageDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        case 1: return "Vector2D";
-        case 2: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+        "Vector2D",
+        "bool",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *VastListMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -616,20 +642,20 @@ int VastListMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool VastListMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string VastListMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     VastListMessage *pp = (VastListMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNeighborNode(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getNeighborPos(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: bool2string(pp->getRequestEnclosingNeighbors(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNeighborNode(i); return out.str();}
+        case 1: {std::stringstream out; out << pp->getNeighborPos(i); return out.str();}
+        case 2: return bool2string(pp->getRequestEnclosingNeighbors());
+        default: return "";
     }
 }
 
@@ -656,11 +682,12 @@ const char *VastListMessageDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        case 1: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+        "Vector2D",
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *VastListMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -763,12 +790,13 @@ class VastMoveMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -810,12 +838,12 @@ unsigned int VastMoveMessageDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *VastMoveMessageDescriptor::getFieldName(void *object, int field) const
@@ -826,12 +854,22 @@ const char *VastMoveMessageDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "newPos";
-        case 1: return "is_boundary";
-        case 2: return "request_list";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "newPos",
+        "is_boundary",
+        "request_list",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int VastMoveMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "newPos")==0) return base+0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "is_boundary")==0) return base+1;
+    if (fieldName[0]=='r' && strcmp(fieldName, "request_list")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *VastMoveMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -842,12 +880,12 @@ const char *VastMoveMessageDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D";
-        case 1: return "bool";
-        case 2: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "Vector2D",
+        "bool",
+        "bool",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *VastMoveMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -877,20 +915,20 @@ int VastMoveMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool VastMoveMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string VastMoveMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     VastMoveMessage *pp = (VastMoveMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNewPos(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: bool2string(pp->getIs_boundary(),resultbuf,bufsize); return true;
-        case 2: bool2string(pp->getRequest_list(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNewPos(); return out.str();}
+        case 1: return bool2string(pp->getIs_boundary());
+        case 2: return bool2string(pp->getRequest_list());
+        default: return "";
     }
 }
 
@@ -918,10 +956,12 @@ const char *VastMoveMessageDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "Vector2D"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "Vector2D",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *VastMoveMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -995,12 +1035,13 @@ class VastDiscardMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1042,10 +1083,10 @@ unsigned int VastDiscardMessageDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *VastDiscardMessageDescriptor::getFieldName(void *object, int field) const
@@ -1056,10 +1097,18 @@ const char *VastDiscardMessageDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "discardNode";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "discardNode",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int VastDiscardMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "discardNode")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *VastDiscardMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1070,10 +1119,10 @@ const char *VastDiscardMessageDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "NodeHandle",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *VastDiscardMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1103,18 +1152,18 @@ int VastDiscardMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool VastDiscardMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string VastDiscardMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     VastDiscardMessage *pp = (VastDiscardMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getDiscardNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getDiscardNode(); return out.str();}
+        default: return "";
     }
 }
 
@@ -1140,10 +1189,10 @@ const char *VastDiscardMessageDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "NodeHandle"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "NodeHandle",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *VastDiscardMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1204,12 +1253,13 @@ class VastEventMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1251,9 +1301,7 @@ unsigned int VastEventMessageDescriptor::getFieldTypeFlags(void *object, int fie
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return 0;
-    }
+    return 0;
 }
 
 const char *VastEventMessageDescriptor::getFieldName(void *object, int field) const
@@ -1264,9 +1312,13 @@ const char *VastEventMessageDescriptor::getFieldName(void *object, int field) co
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
+}
+
+int VastEventMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *VastEventMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1277,9 +1329,7 @@ const char *VastEventMessageDescriptor::getFieldTypeString(void *object, int fie
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 const char *VastEventMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1309,17 +1359,17 @@ int VastEventMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool VastEventMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string VastEventMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     VastEventMessage *pp = (VastEventMessage *)object; (void)pp;
     switch (field) {
-        default: return false;
+        default: return "";
     }
 }
 
@@ -1345,9 +1395,7 @@ const char *VastEventMessageDescriptor::getFieldStructName(void *object, int fie
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    return NULL;
 }
 
 void *VastEventMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

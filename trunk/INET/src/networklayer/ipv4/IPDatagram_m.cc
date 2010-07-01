@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/ipv4/IPDatagram.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/ipv4/IPDatagram.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -106,13 +106,13 @@ unsigned int IPRecordRouteOption::getRecordAddressArraySize() const
 
 IPAddress& IPRecordRouteOption::getRecordAddress(unsigned int k)
 {
-    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %d", k);
+    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %lu", (unsigned long)k);
     return recordAddress_var[k];
 }
 
 void IPRecordRouteOption::setRecordAddress(unsigned int k, const IPAddress& recordAddress_var)
 {
-    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %d", k);
+    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %lu", (unsigned long)k);
     this->recordAddress_var[k] = recordAddress_var;
 }
 
@@ -136,12 +136,13 @@ class IPRecordRouteOptionDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -183,11 +184,11 @@ unsigned int IPRecordRouteOptionDescriptor::getFieldTypeFlags(void *object, int 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPRecordRouteOptionDescriptor::getFieldName(void *object, int field) const
@@ -198,11 +199,20 @@ const char *IPRecordRouteOptionDescriptor::getFieldName(void *object, int field)
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "recordAddress";
-        case 1: return "nextAddressPtr";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "recordAddress",
+        "nextAddressPtr",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int IPRecordRouteOptionDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "recordAddress")==0) return base+0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "nextAddressPtr")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPRecordRouteOptionDescriptor::getFieldTypeString(void *object, int field) const
@@ -213,11 +223,11 @@ const char *IPRecordRouteOptionDescriptor::getFieldTypeString(void *object, int 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "short";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "short",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPRecordRouteOptionDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -248,19 +258,19 @@ int IPRecordRouteOptionDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool IPRecordRouteOptionDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPRecordRouteOptionDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPRecordRouteOption *pp = (IPRecordRouteOption *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getRecordAddress(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getNextAddressPtr(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getRecordAddress(i); return out.str();}
+        case 1: return long2string(pp->getNextAddressPtr());
+        default: return "";
     }
 }
 
@@ -287,10 +297,11 @@ const char *IPRecordRouteOptionDescriptor::getFieldStructName(void *object, int 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *IPRecordRouteOptionDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -397,13 +408,13 @@ unsigned int IPTimestampOption::getRecordAddressArraySize() const
 
 IPAddress& IPTimestampOption::getRecordAddress(unsigned int k)
 {
-    if (k>=MAX_TIMESTAMP_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_TIMESTAMP_OPTION_ENTRIES indexed by %d", k);
+    if (k>=MAX_TIMESTAMP_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_TIMESTAMP_OPTION_ENTRIES indexed by %lu", (unsigned long)k);
     return recordAddress_var[k];
 }
 
 void IPTimestampOption::setRecordAddress(unsigned int k, const IPAddress& recordAddress_var)
 {
-    if (k>=MAX_TIMESTAMP_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_TIMESTAMP_OPTION_ENTRIES indexed by %d", k);
+    if (k>=MAX_TIMESTAMP_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_TIMESTAMP_OPTION_ENTRIES indexed by %lu", (unsigned long)k);
     this->recordAddress_var[k] = recordAddress_var;
 }
 
@@ -414,13 +425,13 @@ unsigned int IPTimestampOption::getRecordTimestampArraySize() const
 
 simtime_t IPTimestampOption::getRecordTimestamp(unsigned int k) const
 {
-    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %d", k);
+    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %lu", (unsigned long)k);
     return recordTimestamp_var[k];
 }
 
 void IPTimestampOption::setRecordTimestamp(unsigned int k, simtime_t recordTimestamp_var)
 {
-    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %d", k);
+    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %lu", (unsigned long)k);
     this->recordTimestamp_var[k] = recordTimestamp_var;
 }
 
@@ -434,12 +445,13 @@ class IPTimestampOptionDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -481,14 +493,14 @@ unsigned int IPTimestampOptionDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 4: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<5) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPTimestampOptionDescriptor::getFieldName(void *object, int field) const
@@ -499,14 +511,26 @@ const char *IPTimestampOptionDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "flag";
-        case 1: return "overflow";
-        case 2: return "nextAddressPtr";
-        case 3: return "recordAddress";
-        case 4: return "recordTimestamp";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "flag",
+        "overflow",
+        "nextAddressPtr",
+        "recordAddress",
+        "recordTimestamp",
+    };
+    return (field>=0 && field<5) ? fieldNames[field] : NULL;
+}
+
+int IPTimestampOptionDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='f' && strcmp(fieldName, "flag")==0) return base+0;
+    if (fieldName[0]=='o' && strcmp(fieldName, "overflow")==0) return base+1;
+    if (fieldName[0]=='n' && strcmp(fieldName, "nextAddressPtr")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "recordAddress")==0) return base+3;
+    if (fieldName[0]=='r' && strcmp(fieldName, "recordTimestamp")==0) return base+4;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPTimestampOptionDescriptor::getFieldTypeString(void *object, int field) const
@@ -517,14 +541,14 @@ const char *IPTimestampOptionDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "short";
-        case 2: return "short";
-        case 3: return "IPAddress";
-        case 4: return "simtime_t";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "short",
+        "short",
+        "IPAddress",
+        "simtime_t",
+    };
+    return (field>=0 && field<5) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPTimestampOptionDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -559,22 +583,22 @@ int IPTimestampOptionDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool IPTimestampOptionDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPTimestampOptionDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPTimestampOption *pp = (IPTimestampOption *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getFlag(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getOverflow(),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getNextAddressPtr(),resultbuf,bufsize); return true;
-        case 3: {std::stringstream out; out << pp->getRecordAddress(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: double2string(pp->getRecordTimestamp(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getFlag());
+        case 1: return long2string(pp->getOverflow());
+        case 2: return long2string(pp->getNextAddressPtr());
+        case 3: {std::stringstream out; out << pp->getRecordAddress(i); return out.str();}
+        case 4: return double2string(pp->getRecordTimestamp(i));
+        default: return "";
     }
 }
 
@@ -604,10 +628,14 @@ const char *IPTimestampOptionDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 3: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        "IPAddress",
+        NULL,
+    };
+    return (field>=0 && field<5) ? fieldStructNames[field] : NULL;
 }
 
 void *IPTimestampOptionDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -674,13 +702,13 @@ unsigned int IPSourceRoutingOption::getRecordAddressArraySize() const
 
 IPAddress& IPSourceRoutingOption::getRecordAddress(unsigned int k)
 {
-    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %d", k);
+    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %lu", (unsigned long)k);
     return recordAddress_var[k];
 }
 
 void IPSourceRoutingOption::setRecordAddress(unsigned int k, const IPAddress& recordAddress_var)
 {
-    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %d", k);
+    if (k>=MAX_IPADDR_OPTION_ENTRIES) throw cRuntimeError("Array of size MAX_IPADDR_OPTION_ENTRIES indexed by %lu", (unsigned long)k);
     this->recordAddress_var[k] = recordAddress_var;
 }
 
@@ -714,12 +742,13 @@ class IPSourceRoutingOptionDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -761,12 +790,12 @@ unsigned int IPSourceRoutingOptionDescriptor::getFieldTypeFlags(void *object, in
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPSourceRoutingOptionDescriptor::getFieldName(void *object, int field) const
@@ -777,12 +806,22 @@ const char *IPSourceRoutingOptionDescriptor::getFieldName(void *object, int fiel
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "recordAddress";
-        case 1: return "nextAddressPtr";
-        case 2: return "lastAddressPtr";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "recordAddress",
+        "nextAddressPtr",
+        "lastAddressPtr",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int IPSourceRoutingOptionDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='r' && strcmp(fieldName, "recordAddress")==0) return base+0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "nextAddressPtr")==0) return base+1;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lastAddressPtr")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPSourceRoutingOptionDescriptor::getFieldTypeString(void *object, int field) const
@@ -793,12 +832,12 @@ const char *IPSourceRoutingOptionDescriptor::getFieldTypeString(void *object, in
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "short";
-        case 2: return "short";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "short",
+        "short",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPSourceRoutingOptionDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -829,20 +868,20 @@ int IPSourceRoutingOptionDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool IPSourceRoutingOptionDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPSourceRoutingOptionDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPSourceRoutingOption *pp = (IPSourceRoutingOption *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getRecordAddress(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: long2string(pp->getNextAddressPtr(),resultbuf,bufsize); return true;
-        case 2: long2string(pp->getLastAddressPtr(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getRecordAddress(i); return out.str();}
+        case 1: return long2string(pp->getNextAddressPtr());
+        case 2: return long2string(pp->getLastAddressPtr());
+        default: return "";
     }
 }
 
@@ -870,10 +909,12 @@ const char *IPSourceRoutingOptionDescriptor::getFieldStructName(void *object, in
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *IPSourceRoutingOptionDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1167,12 +1208,13 @@ class IPDatagramDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1214,26 +1256,26 @@ unsigned int IPDatagramDescriptor::getFieldTypeFlags(void *object, int field) co
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        case 8: return FD_ISEDITABLE;
-        case 9: return FD_ISEDITABLE;
-        case 10: return FD_ISEDITABLE;
-        case 11: return FD_ISEDITABLE;
-        case 12: return FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        case 13: return FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        case 14: return FD_ISCOMPOUND | FD_ISCPOLYMORPHIC;
-        case 15: return FD_ISEDITABLE;
-        case 16: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND | FD_ISCOBJECT,
+        FD_ISCOMPOUND | FD_ISCOBJECT,
+        FD_ISCOMPOUND | FD_ISCOBJECT,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<17) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPDatagramDescriptor::getFieldName(void *object, int field) const
@@ -1244,26 +1286,50 @@ const char *IPDatagramDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "version";
-        case 1: return "headerLength";
-        case 2: return "srcAddress";
-        case 3: return "destAddress";
-        case 4: return "transportProtocol";
-        case 5: return "timeToLive";
-        case 6: return "identification";
-        case 7: return "moreFragments";
-        case 8: return "dontFragment";
-        case 9: return "fragmentOffset";
-        case 10: return "diffServCodePoint";
-        case 11: return "optionCode";
-        case 12: return "recordRoute";
-        case 13: return "timestampOption";
-        case 14: return "sourceRoutingOption";
-        case 15: return "minBW";
-        case 16: return "delayInfo";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "version",
+        "headerLength",
+        "srcAddress",
+        "destAddress",
+        "transportProtocol",
+        "timeToLive",
+        "identification",
+        "moreFragments",
+        "dontFragment",
+        "fragmentOffset",
+        "diffServCodePoint",
+        "optionCode",
+        "recordRoute",
+        "timestampOption",
+        "sourceRoutingOption",
+        "minBW",
+        "delayInfo",
+    };
+    return (field>=0 && field<17) ? fieldNames[field] : NULL;
+}
+
+int IPDatagramDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='v' && strcmp(fieldName, "version")==0) return base+0;
+    if (fieldName[0]=='h' && strcmp(fieldName, "headerLength")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcAddress")==0) return base+2;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destAddress")==0) return base+3;
+    if (fieldName[0]=='t' && strcmp(fieldName, "transportProtocol")==0) return base+4;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timeToLive")==0) return base+5;
+    if (fieldName[0]=='i' && strcmp(fieldName, "identification")==0) return base+6;
+    if (fieldName[0]=='m' && strcmp(fieldName, "moreFragments")==0) return base+7;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dontFragment")==0) return base+8;
+    if (fieldName[0]=='f' && strcmp(fieldName, "fragmentOffset")==0) return base+9;
+    if (fieldName[0]=='d' && strcmp(fieldName, "diffServCodePoint")==0) return base+10;
+    if (fieldName[0]=='o' && strcmp(fieldName, "optionCode")==0) return base+11;
+    if (fieldName[0]=='r' && strcmp(fieldName, "recordRoute")==0) return base+12;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timestampOption")==0) return base+13;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sourceRoutingOption")==0) return base+14;
+    if (fieldName[0]=='m' && strcmp(fieldName, "minBW")==0) return base+15;
+    if (fieldName[0]=='d' && strcmp(fieldName, "delayInfo")==0) return base+16;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPDatagramDescriptor::getFieldTypeString(void *object, int field) const
@@ -1274,26 +1340,26 @@ const char *IPDatagramDescriptor::getFieldTypeString(void *object, int field) co
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "short";
-        case 1: return "short";
-        case 2: return "IPAddress";
-        case 3: return "IPAddress";
-        case 4: return "int";
-        case 5: return "short";
-        case 6: return "int";
-        case 7: return "bool";
-        case 8: return "bool";
-        case 9: return "int";
-        case 10: return "unsigned char";
-        case 11: return "int";
-        case 12: return "IPRecordRouteOption";
-        case 13: return "IPTimestampOption";
-        case 14: return "IPSourceRoutingOption";
-        case 15: return "double";
-        case 16: return "double";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "short",
+        "short",
+        "IPAddress",
+        "IPAddress",
+        "int",
+        "short",
+        "int",
+        "bool",
+        "bool",
+        "int",
+        "unsigned char",
+        "int",
+        "IPRecordRouteOption",
+        "IPTimestampOption",
+        "IPSourceRoutingOption",
+        "double",
+        "double",
+    };
+    return (field>=0 && field<17) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPDatagramDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1329,34 +1395,34 @@ int IPDatagramDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool IPDatagramDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPDatagramDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPDatagram *pp = (IPDatagram *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getVersion(),resultbuf,bufsize); return true;
-        case 1: long2string(pp->getHeaderLength(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getSrcAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->getDestAddress(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: long2string(pp->getTransportProtocol(),resultbuf,bufsize); return true;
-        case 5: long2string(pp->getTimeToLive(),resultbuf,bufsize); return true;
-        case 6: long2string(pp->getIdentification(),resultbuf,bufsize); return true;
-        case 7: bool2string(pp->getMoreFragments(),resultbuf,bufsize); return true;
-        case 8: bool2string(pp->getDontFragment(),resultbuf,bufsize); return true;
-        case 9: long2string(pp->getFragmentOffset(),resultbuf,bufsize); return true;
-        case 10: ulong2string(pp->getDiffServCodePoint(),resultbuf,bufsize); return true;
-        case 11: long2string(pp->getOptionCode(),resultbuf,bufsize); return true;
-        case 12: {std::stringstream out; out << pp->getRecordRoute(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 13: {std::stringstream out; out << pp->getTimestampOption(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 14: {std::stringstream out; out << pp->getSourceRoutingOption(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 15: double2string(pp->getMinBW(),resultbuf,bufsize); return true;
-        case 16: double2string(pp->getDelayInfo(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getVersion());
+        case 1: return long2string(pp->getHeaderLength());
+        case 2: {std::stringstream out; out << pp->getSrcAddress(); return out.str();}
+        case 3: {std::stringstream out; out << pp->getDestAddress(); return out.str();}
+        case 4: return long2string(pp->getTransportProtocol());
+        case 5: return long2string(pp->getTimeToLive());
+        case 6: return long2string(pp->getIdentification());
+        case 7: return bool2string(pp->getMoreFragments());
+        case 8: return bool2string(pp->getDontFragment());
+        case 9: return long2string(pp->getFragmentOffset());
+        case 10: return ulong2string(pp->getDiffServCodePoint());
+        case 11: return long2string(pp->getOptionCode());
+        case 12: {std::stringstream out; out << pp->getRecordRoute(); return out.str();}
+        case 13: {std::stringstream out; out << pp->getTimestampOption(); return out.str();}
+        case 14: {std::stringstream out; out << pp->getSourceRoutingOption(); return out.str();}
+        case 15: return double2string(pp->getMinBW());
+        case 16: return double2string(pp->getDelayInfo());
+        default: return "";
     }
 }
 
@@ -1394,14 +1460,26 @@ const char *IPDatagramDescriptor::getFieldStructName(void *object, int field) co
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 2: return "IPAddress"; break;
-        case 3: return "IPAddress"; break;
-        case 12: return "IPRecordRouteOption"; break;
-        case 13: return "IPTimestampOption"; break;
-        case 14: return "IPSourceRoutingOption"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        "IPAddress",
+        "IPAddress",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        "IPRecordRouteOption",
+        "IPTimestampOption",
+        "IPSourceRoutingOption",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<17) ? fieldStructNames[field] : NULL;
 }
 
 void *IPDatagramDescriptor::getFieldStructPointer(void *object, int field, int i) const

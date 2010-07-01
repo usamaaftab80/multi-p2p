@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/contract/IPControlInfo.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/contract/IPControlInfo.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -192,12 +192,13 @@ class IPControlInfoDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -240,18 +241,18 @@ unsigned int IPControlInfoDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        case 8: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<9) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPControlInfoDescriptor::getFieldName(void *object, int field) const
@@ -262,18 +263,34 @@ const char *IPControlInfoDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "destAddr";
-        case 1: return "srcAddr";
-        case 2: return "interfaceId";
-        case 3: return "protocol";
-        case 4: return "diffServCodePoint";
-        case 5: return "timeToLive";
-        case 6: return "dontFragment";
-        case 7: return "minBW";
-        case 8: return "delayInfo";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "destAddr",
+        "srcAddr",
+        "interfaceId",
+        "protocol",
+        "diffServCodePoint",
+        "timeToLive",
+        "dontFragment",
+        "minBW",
+        "delayInfo",
+    };
+    return (field>=0 && field<9) ? fieldNames[field] : NULL;
+}
+
+int IPControlInfoDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destAddr")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcAddr")==0) return base+1;
+    if (fieldName[0]=='i' && strcmp(fieldName, "interfaceId")==0) return base+2;
+    if (fieldName[0]=='p' && strcmp(fieldName, "protocol")==0) return base+3;
+    if (fieldName[0]=='d' && strcmp(fieldName, "diffServCodePoint")==0) return base+4;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timeToLive")==0) return base+5;
+    if (fieldName[0]=='d' && strcmp(fieldName, "dontFragment")==0) return base+6;
+    if (fieldName[0]=='m' && strcmp(fieldName, "minBW")==0) return base+7;
+    if (fieldName[0]=='d' && strcmp(fieldName, "delayInfo")==0) return base+8;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPControlInfoDescriptor::getFieldTypeString(void *object, int field) const
@@ -284,18 +301,18 @@ const char *IPControlInfoDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "IPAddress";
-        case 2: return "int";
-        case 3: return "short";
-        case 4: return "unsigned char";
-        case 5: return "short";
-        case 6: return "bool";
-        case 7: return "double";
-        case 8: return "double";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "IPAddress",
+        "int",
+        "short",
+        "unsigned char",
+        "short",
+        "bool",
+        "double",
+        "double",
+    };
+    return (field>=0 && field<9) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPControlInfoDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -328,26 +345,26 @@ int IPControlInfoDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool IPControlInfoDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPControlInfoDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPControlInfo_Base *pp = (IPControlInfo_Base *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getDestAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getSrcAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: long2string(pp->getInterfaceId(),resultbuf,bufsize); return true;
-        case 3: long2string(pp->getProtocol(),resultbuf,bufsize); return true;
-        case 4: ulong2string(pp->getDiffServCodePoint(),resultbuf,bufsize); return true;
-        case 5: long2string(pp->getTimeToLive(),resultbuf,bufsize); return true;
-        case 6: bool2string(pp->getDontFragment(),resultbuf,bufsize); return true;
-        case 7: double2string(pp->getMinBW(),resultbuf,bufsize); return true;
-        case 8: double2string(pp->getDelayInfo(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getDestAddr(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getSrcAddr(); return out.str();}
+        case 2: return long2string(pp->getInterfaceId());
+        case 3: return long2string(pp->getProtocol());
+        case 4: return ulong2string(pp->getDiffServCodePoint());
+        case 5: return long2string(pp->getTimeToLive());
+        case 6: return bool2string(pp->getDontFragment());
+        case 7: return double2string(pp->getMinBW());
+        case 8: return double2string(pp->getDelayInfo());
+        default: return "";
     }
 }
 
@@ -380,11 +397,18 @@ const char *IPControlInfoDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        case 1: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        "IPAddress",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<9) ? fieldStructNames[field] : NULL;
 }
 
 void *IPControlInfoDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -470,12 +494,13 @@ class IPRoutingDecisionDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -517,11 +542,11 @@ unsigned int IPRoutingDecisionDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *IPRoutingDecisionDescriptor::getFieldName(void *object, int field) const
@@ -532,11 +557,20 @@ const char *IPRoutingDecisionDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "interfaceId";
-        case 1: return "nextHopAddr";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "interfaceId",
+        "nextHopAddr",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int IPRoutingDecisionDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='i' && strcmp(fieldName, "interfaceId")==0) return base+0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "nextHopAddr")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *IPRoutingDecisionDescriptor::getFieldTypeString(void *object, int field) const
@@ -547,11 +581,11 @@ const char *IPRoutingDecisionDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "IPAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "IPAddress",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *IPRoutingDecisionDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -581,19 +615,19 @@ int IPRoutingDecisionDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool IPRoutingDecisionDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string IPRoutingDecisionDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     IPRoutingDecision *pp = (IPRoutingDecision *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getInterfaceId(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getNextHopAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return long2string(pp->getInterfaceId());
+        case 1: {std::stringstream out; out << pp->getNextHopAddr(); return out.str();}
+        default: return "";
     }
 }
 
@@ -620,10 +654,11 @@ const char *IPRoutingDecisionDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "IPAddress",
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *IPRoutingDecisionDescriptor::getFieldStructPointer(void *object, int field, int i) const

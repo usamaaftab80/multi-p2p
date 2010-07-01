@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from networklayer/ted/TED.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from networklayer/ted/TED.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -82,12 +82,13 @@ class TELinkStateInfoDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -129,20 +130,20 @@ unsigned int TELinkStateInfoDescriptor::getFieldTypeFlags(void *object, int fiel
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISCOMPOUND;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISARRAY | FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        case 8: return FD_ISEDITABLE;
-        case 9: return FD_ISEDITABLE;
-        case 10: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<11) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TELinkStateInfoDescriptor::getFieldName(void *object, int field) const
@@ -153,20 +154,38 @@ const char *TELinkStateInfoDescriptor::getFieldName(void *object, int field) con
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "advrouter";
-        case 1: return "linkid";
-        case 2: return "local";
-        case 3: return "remote";
-        case 4: return "metric";
-        case 5: return "MaxBandwidth";
-        case 6: return "UnResvBandwidth";
-        case 7: return "timestamp";
-        case 8: return "sourceId";
-        case 9: return "messageId";
-        case 10: return "state";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "advrouter",
+        "linkid",
+        "local",
+        "remote",
+        "metric",
+        "MaxBandwidth",
+        "UnResvBandwidth",
+        "timestamp",
+        "sourceId",
+        "messageId",
+        "state",
+    };
+    return (field>=0 && field<11) ? fieldNames[field] : NULL;
+}
+
+int TELinkStateInfoDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='a' && strcmp(fieldName, "advrouter")==0) return base+0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "linkid")==0) return base+1;
+    if (fieldName[0]=='l' && strcmp(fieldName, "local")==0) return base+2;
+    if (fieldName[0]=='r' && strcmp(fieldName, "remote")==0) return base+3;
+    if (fieldName[0]=='m' && strcmp(fieldName, "metric")==0) return base+4;
+    if (fieldName[0]=='M' && strcmp(fieldName, "MaxBandwidth")==0) return base+5;
+    if (fieldName[0]=='U' && strcmp(fieldName, "UnResvBandwidth")==0) return base+6;
+    if (fieldName[0]=='t' && strcmp(fieldName, "timestamp")==0) return base+7;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sourceId")==0) return base+8;
+    if (fieldName[0]=='m' && strcmp(fieldName, "messageId")==0) return base+9;
+    if (fieldName[0]=='s' && strcmp(fieldName, "state")==0) return base+10;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TELinkStateInfoDescriptor::getFieldTypeString(void *object, int field) const
@@ -177,20 +196,20 @@ const char *TELinkStateInfoDescriptor::getFieldTypeString(void *object, int fiel
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress";
-        case 1: return "IPAddress";
-        case 2: return "IPAddress";
-        case 3: return "IPAddress";
-        case 4: return "double";
-        case 5: return "double";
-        case 6: return "double";
-        case 7: return "simtime_t";
-        case 8: return "unsigned int";
-        case 9: return "unsigned int";
-        case 10: return "bool";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "IPAddress",
+        "IPAddress",
+        "IPAddress",
+        "IPAddress",
+        "double",
+        "double",
+        "double",
+        "simtime_t",
+        "unsigned int",
+        "unsigned int",
+        "bool",
+    };
+    return (field>=0 && field<11) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TELinkStateInfoDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -221,29 +240,29 @@ int TELinkStateInfoDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TELinkStateInfoDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TELinkStateInfoDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TELinkStateInfo *pp = (TELinkStateInfo *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->advrouter; opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->linkid; opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->local; opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: {std::stringstream out; out << pp->remote; opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 4: double2string(pp->metric,resultbuf,bufsize); return true;
-        case 5: double2string(pp->MaxBandwidth,resultbuf,bufsize); return true;
-        case 6: if (i>=8) return false;
-                double2string(pp->UnResvBandwidth[i],resultbuf,bufsize); return true;
-        case 7: double2string(pp->timestamp,resultbuf,bufsize); return true;
-        case 8: ulong2string(pp->sourceId,resultbuf,bufsize); return true;
-        case 9: ulong2string(pp->messageId,resultbuf,bufsize); return true;
-        case 10: bool2string(pp->state,resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->advrouter; return out.str();}
+        case 1: {std::stringstream out; out << pp->linkid; return out.str();}
+        case 2: {std::stringstream out; out << pp->local; return out.str();}
+        case 3: {std::stringstream out; out << pp->remote; return out.str();}
+        case 4: return double2string(pp->metric);
+        case 5: return double2string(pp->MaxBandwidth);
+        case 6: if (i>=8) return "";
+                return double2string(pp->UnResvBandwidth[i]);
+        case 7: return double2string(pp->timestamp);
+        case 8: return ulong2string(pp->sourceId);
+        case 9: return ulong2string(pp->messageId);
+        case 10: return bool2string(pp->state);
+        default: return "";
     }
 }
 
@@ -277,13 +296,20 @@ const char *TELinkStateInfoDescriptor::getFieldStructName(void *object, int fiel
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "IPAddress"; break;
-        case 1: return "IPAddress"; break;
-        case 2: return "IPAddress"; break;
-        case 3: return "IPAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "IPAddress",
+        "IPAddress",
+        "IPAddress",
+        "IPAddress",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<11) ? fieldStructNames[field] : NULL;
 }
 
 void *TELinkStateInfoDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -394,12 +420,13 @@ class TEDChangeInfoDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -441,10 +468,10 @@ unsigned int TEDChangeInfoDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *TEDChangeInfoDescriptor::getFieldName(void *object, int field) const
@@ -455,10 +482,18 @@ const char *TEDChangeInfoDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "tedLinkIndices";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "tedLinkIndices",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int TEDChangeInfoDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='t' && strcmp(fieldName, "tedLinkIndices")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *TEDChangeInfoDescriptor::getFieldTypeString(void *object, int field) const
@@ -469,10 +504,10 @@ const char *TEDChangeInfoDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *TEDChangeInfoDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -503,18 +538,18 @@ int TEDChangeInfoDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool TEDChangeInfoDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string TEDChangeInfoDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     TEDChangeInfo *pp = (TEDChangeInfo *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getTedLinkIndices(i),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getTedLinkIndices(i));
+        default: return "";
     }
 }
 
@@ -541,9 +576,10 @@ const char *TEDChangeInfoDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *TEDChangeInfoDescriptor::getFieldStructPointer(void *object, int field, int i) const

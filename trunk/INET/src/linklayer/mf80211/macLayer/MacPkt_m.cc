@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from linklayer/mf80211/macLayer/MacPkt.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from linklayer/mf80211/macLayer/MacPkt.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -113,12 +113,13 @@ class MacPktDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -160,12 +161,12 @@ unsigned int MacPktDescriptor::getFieldTypeFlags(void *object, int field) const
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *MacPktDescriptor::getFieldName(void *object, int field) const
@@ -176,12 +177,22 @@ const char *MacPktDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "destAddr";
-        case 1: return "srcAddr";
-        case 2: return "channelId";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "destAddr",
+        "srcAddr",
+        "channelId",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int MacPktDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='d' && strcmp(fieldName, "destAddr")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcAddr")==0) return base+1;
+    if (fieldName[0]=='c' && strcmp(fieldName, "channelId")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *MacPktDescriptor::getFieldTypeString(void *object, int field) const
@@ -192,12 +203,12 @@ const char *MacPktDescriptor::getFieldTypeString(void *object, int field) const
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress";
-        case 1: return "MACAddress";
-        case 2: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "MACAddress",
+        "MACAddress",
+        "int",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *MacPktDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -227,20 +238,20 @@ int MacPktDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool MacPktDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string MacPktDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     MacPkt *pp = (MacPkt *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getDestAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getSrcAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: long2string(pp->getChannelId(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getDestAddr(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getSrcAddr(); return out.str();}
+        case 2: return long2string(pp->getChannelId());
+        default: return "";
     }
 }
 
@@ -267,11 +278,12 @@ const char *MacPktDescriptor::getFieldStructName(void *object, int field) const
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "MACAddress"; break;
-        case 1: return "MACAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "MACAddress",
+        "MACAddress",
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *MacPktDescriptor::getFieldStructPointer(void *object, int field, int i) const

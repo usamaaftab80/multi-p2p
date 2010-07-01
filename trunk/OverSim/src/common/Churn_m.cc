@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from common/Churn.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from common/Churn.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -114,12 +114,13 @@ class ChurnMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -161,12 +162,12 @@ unsigned int ChurnMessageDescriptor::getFieldTypeFlags(void *object, int field) 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ChurnMessageDescriptor::getFieldName(void *object, int field) const
@@ -177,12 +178,22 @@ const char *ChurnMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "createNode";
-        case 1: return "lifetime";
-        case 2: return "addr";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "createNode",
+        "lifetime",
+        "addr",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int ChurnMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "createNode")==0) return base+0;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lifetime")==0) return base+1;
+    if (fieldName[0]=='a' && strcmp(fieldName, "addr")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ChurnMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -193,12 +204,12 @@ const char *ChurnMessageDescriptor::getFieldTypeString(void *object, int field) 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "bool";
-        case 1: return "double";
-        case 2: return "TransportAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "bool",
+        "double",
+        "TransportAddress",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ChurnMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -228,20 +239,20 @@ int ChurnMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ChurnMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ChurnMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ChurnMessage *pp = (ChurnMessage *)object; (void)pp;
     switch (field) {
-        case 0: bool2string(pp->getCreateNode(),resultbuf,bufsize); return true;
-        case 1: double2string(pp->getLifetime(),resultbuf,bufsize); return true;
-        case 2: {std::stringstream out; out << pp->getAddr(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: return bool2string(pp->getCreateNode());
+        case 1: return double2string(pp->getLifetime());
+        case 2: {std::stringstream out; out << pp->getAddr(); return out.str();}
+        default: return "";
     }
 }
 
@@ -269,10 +280,12 @@ const char *ChurnMessageDescriptor::getFieldStructName(void *object, int field) 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 2: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        "TransportAddress",
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *ChurnMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -361,12 +374,13 @@ class ParetoChurnMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -408,11 +422,11 @@ unsigned int ParetoChurnMessageDescriptor::getFieldTypeFlags(void *object, int f
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ParetoChurnMessageDescriptor::getFieldName(void *object, int field) const
@@ -423,11 +437,20 @@ const char *ParetoChurnMessageDescriptor::getFieldName(void *object, int field) 
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "meanLifetime";
-        case 1: return "meanDeadtime";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "meanLifetime",
+        "meanDeadtime",
+    };
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+}
+
+int ParetoChurnMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='m' && strcmp(fieldName, "meanLifetime")==0) return base+0;
+    if (fieldName[0]=='m' && strcmp(fieldName, "meanDeadtime")==0) return base+1;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *ParetoChurnMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -438,11 +461,11 @@ const char *ParetoChurnMessageDescriptor::getFieldTypeString(void *object, int f
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "double";
-        case 1: return "double";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "double",
+        "double",
+    };
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ParetoChurnMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -472,19 +495,19 @@ int ParetoChurnMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool ParetoChurnMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string ParetoChurnMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     ParetoChurnMessage *pp = (ParetoChurnMessage *)object; (void)pp;
     switch (field) {
-        case 0: double2string(pp->getMeanLifetime(),resultbuf,bufsize); return true;
-        case 1: double2string(pp->getMeanDeadtime(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return double2string(pp->getMeanLifetime());
+        case 1: return double2string(pp->getMeanDeadtime());
+        default: return "";
     }
 }
 
@@ -512,9 +535,11 @@ const char *ParetoChurnMessageDescriptor::getFieldStructName(void *object, int f
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *ParetoChurnMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
