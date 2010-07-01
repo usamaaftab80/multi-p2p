@@ -44,6 +44,7 @@ class HoangGlobalObject : public cSimpleModule
 	uint16* P_sid;
 	FILE * inFile;
 	FILE * outFile;
+	FILE * receivedFile;
 
   protected:
     virtual void initialize();
@@ -84,8 +85,10 @@ class HoangGlobalObject : public cSimpleModule
 	  void setNumAccessLink(uint16 sid, int pid, uint16 val){numAccessLink[sid][pid] = val;};
 	  uint16 getNumAccessLink(uint16 sid, int pid){return numAccessLink[sid][pid];};
 
-	  void recordIn(uint nodeID,int sid,int pid);
+	  void recordIn(uint nodeID,int sid,int pid,int ttl);
 	  void recordOut(uint nodeID,int sid,int pid);
+	  void recordReceived(uint nodeID,int sid,int pid,int hopCount);
+	  void updateRP(IPvXAddress add);
 
 	  ~HoangGlobalObject();
 

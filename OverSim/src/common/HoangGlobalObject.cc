@@ -14,6 +14,8 @@
 //
 
 #include "HoangGlobalObject.h"
+#include <iostream>
+#include <fstream>
 
 Define_Module(HoangGlobalObject);
 
@@ -39,6 +41,7 @@ void HoangGlobalObject::initialize()
 
 	outFile = fopen("out.log","w");
 	inFile = fopen("in.log","w");
+	receivedFile = fopen("received.log","w");
 
 	cout << "Hoang global object initttt done" << endl;
 }
@@ -114,6 +117,7 @@ HoangGlobalObject::~HoangGlobalObject()
 
 	fclose(inFile);
 	fclose(outFile);
+	fclose(receivedFile);
 
 	delete [] linkStress;
 	delete [] numLink;
@@ -156,11 +160,11 @@ void HoangGlobalObject::updateNumLinkArray()
 	}
 }
 
-void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid)
+void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid,int ttl)
 {
 	//write to in.log
-	//at simTime() nodeID	received a packet sid,pid
-	fprintf(inFile,"%f\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid);
+	//at simTime() nodeID	received a packet sid,pid at baseOverlay
+	fprintf(inFile,"%f\t%d\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid, ttl);
 }
 
 void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid)
@@ -168,4 +172,23 @@ void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid)
 	//write to out.log
 	//at simTime() nodeID	forwarded a packet sid,pid
 	fprintf(outFile,"%f\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid);
+}
+
+void HoangGlobalObject::recordReceived(uint nodeID,int sid,int pid,int hopcount)
+{
+	//write to in.log
+	//at simTime() nodeID	received a packet sid,pid at application
+	fprintf(receivedFile,"%f\t%d\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid, hopcount);
+}
+
+void HoangGlobalObject::updateRP(IPvXAddress add)
+{
+	cout << "Rendezvous Point " << add.str() << endl;
+	ofstream RPfile;
+	RPfile.open ("rendezvous.point");
+
+	RPfile << add.str() << "\n";
+	RPfile.close();
+
+	system("cp -rf rendezvous.point /home/admin/origine_oversim/OverSim-20090908/simulations/realworld");
 }

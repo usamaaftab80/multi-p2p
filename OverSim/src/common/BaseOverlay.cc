@@ -761,9 +761,7 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
 			CbrAppMessage* cbrAppMsg = check_and_cast<CbrAppMessage*>(msg);
 
-			cbrAppMsg->setTtl(hopCount);
-
-			global->recordIn(nodeID,cbrAppMsg->getNodeID(),id);
+			global->recordIn(nodeID,cbrAppMsg->getNodeID(),id,hopCount);
 
 		}
 
