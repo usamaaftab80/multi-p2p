@@ -44,6 +44,7 @@ void HoangGlobalObject::initialize()
 	receivedFile = fopen("received.log","w");
 
 	cout << "Hoang global object initttt done" << endl;
+	system("./addroute.sh");
 }
 
 
