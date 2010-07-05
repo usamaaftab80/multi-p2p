@@ -372,9 +372,11 @@ void ConferenceApp::encapAndSendCbrAppMsg(cMessage* msg)
         cbrMsg->setCommand(0); //CBR_DATA
 
         //string pktName = "CBR_DATA " + to_string(numSent);
-        string pktName = "CBR_DATA " + to_string(sd[numSent].id);
+//        string pktName = "CBR_DATA " + to_string(sd[numSent].id);
 
-        cbrMsg->setName(pktName.c_str());
+//        cbrMsg->setName(pktName.c_str());
+
+        cbrMsg->setSeqNo(sd[numSent].id);
 
         cbrMsg->setNodeID(nodeID);
 
