@@ -95,7 +95,7 @@ void ConferenceApp::initializeApp(int stage)
 		uint P_sid; //number of packet in the dump file
 
 		switch (nodeID % 5){
-			case 1:
+			case 2:
 				sdFile = "sd_paris";
 				P_sid = 32632;
 				break;
@@ -103,7 +103,7 @@ void ConferenceApp::initializeApp(int stage)
 				sdFile = "sd_snr";
 				P_sid = 1200;
 				break;
-			case 2:
+			case 1:
 				sdFile = "sd_sl_svc";
 				P_sid = 293;
 				break;
@@ -330,9 +330,11 @@ void ConferenceApp::handleLowerMessage(cMessage* msg)
 
             cbrMsg->setCommand(-1); //not CBR_DATA anymore, prevent NiceOwnMessage
 
+            global->recordReceived(nodeID,cbrMsg->getNodeID(),cbrMsg->getSeqNo(),hopCount);
+
             /* data handle */
 
-            cPacket* hoang_msg = cbrMsg->decapsulate();
+            /*cPacket* hoang_msg = cbrMsg->decapsulate();
 
 			if(dynamic_cast<ConferenceAppMsg*> (hoang_msg)){
 
@@ -349,7 +351,7 @@ void ConferenceApp::handleLowerMessage(cMessage* msg)
 				}
 				delete myMsg; //no need anymore if not forward or reply it
 
-			}
+			}*/
 
         }
 
