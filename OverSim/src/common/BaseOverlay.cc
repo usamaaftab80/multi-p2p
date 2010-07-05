@@ -73,6 +73,12 @@ BaseOverlay::BaseOverlay()
     bootstrapList = NULL;
     //hoang
     nodeID = -1;
+
+    defaultTimeToLive = 32;
+
+    lastHopKd = kw = maxKd = maxKw = 0;
+
+
 }
 
 BaseOverlay::~BaseOverlay()
@@ -207,10 +213,6 @@ void BaseOverlay::initialize(int stage)
     	const char *globalModulePath = par("globalModulePath");
     	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
     	global = check_and_cast<HoangGlobalObject *>(modp2);
-
-        defaultTimeToLive = 32;
-
-        lastHopKd = kw = maxKd = maxKw = 0;
 
         WATCH(numAppDataSent);
         WATCH(bytesAppDataSent);
@@ -754,16 +756,12 @@ void BaseOverlay::handleMessage(cMessage* msg)
         	stats->generateXD();
         }*/
 
-        string name = msg->getName();
-
-		if(name.find("CBR_DATA") == 0){
-			int id = getIDfromName(name);
-
+        if (dynamic_cast<CbrAppMessage*>(msg) != NULL){
 			CbrAppMessage* cbrAppMsg = check_and_cast<CbrAppMessage*>(msg);
 
-			global->recordIn(nodeID,cbrAppMsg->getNodeID(),id,hopCount);
-
-		}
+			if (cbrAppMsg->getCommand() == CBR_DATA)
+				global->recordIn(nodeID,cbrAppMsg->getNodeID(),cbrAppMsg->getSeqNo(),hopCount);
+        }
 
         delete udpControlInfo;
 
@@ -1215,14 +1213,20 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
     }
 
     //hoang
-	string name = msg->getName();
-	if(name.find("CBR_DATA") == 0){
-		int id = getIDfromName(name);
-
+//	string name = msg->getName();
+//	if(name.find("CBR_DATA") == 0){
+//		int id = getIDfromName(name);
+//
+//		CbrAppMessage* cbrAppMsg = check_and_cast<CbrAppMessage*>(msg);
+//
+//		global->recordOut(nodeID,cbrAppMsg->getNodeID(),id);
+//	}
+    if (dynamic_cast<CbrAppMessage*>(msg) != NULL){
 		CbrAppMessage* cbrAppMsg = check_and_cast<CbrAppMessage*>(msg);
 
-		global->recordOut(nodeID,cbrAppMsg->getNodeID(),id);
-	}
+		if (cbrAppMsg->getCommand() == CBR_DATA)
+			global->recordOut(nodeID,cbrAppMsg->getNodeID(),cbrAppMsg->getSeqNo());
+    }
 
     send(msg, "udpOut");
 }
