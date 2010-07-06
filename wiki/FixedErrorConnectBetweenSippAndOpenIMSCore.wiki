@@ -15,7 +15,7 @@ With TLS and authentication  support, you must have installed OpenSSL library (>
    4. Modify the scripts for the S-SCSCF (file scscf.cfg)
       set the default authentication algorithm to MD5
 
-      *modparam("scscf","registration_default_algorithm","MD5")*
+      * modparam("scscf","registration_default_algorithm","MD5")*
 
       set the qop parameter to ""
 
