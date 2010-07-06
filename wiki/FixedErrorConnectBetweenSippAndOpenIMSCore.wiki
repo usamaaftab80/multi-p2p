@@ -1,0 +1,14 @@
+Installing SIPp and configuring the Open IMS Core
+
+   1. download the newest SIPp stable version (http://sipp.sourceforge.net)
+   2. compile it with MD5 authentication support
+   3. install SIPp
+   4. Modify the scripts for the S-SCSCF (file scscf.cfg)
+      set the default authentication algorithm to MD5
+
+      modparam("scscf","registration_default_algorithm","MD5")
+
+      set the qop parameter to ""
+
+      modparam("scscf","registration_qop","")
+
