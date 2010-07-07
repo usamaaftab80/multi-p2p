@@ -205,9 +205,14 @@ void ConferenceApp::initializeApp(int stage)
 		/* schedule */
 
 		sendDataTimer = new cMessage("sendDataTimer");
+		beginSendDataTime = simTime();
 
-		stateTimer = new cMessage("stateTimer");
-		scheduleAt(simTime() + stateTimerPeriod, stateTimer);
+		scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
+
+		cout<< "Node " << nodeID << " begin send data at "<< simTime() << endl;
+
+//		stateTimer = new cMessage("stateTimer");
+//		scheduleAt(simTime() + stateTimerPeriod, stateTimer);
 
     }
     bindToPort(2000);

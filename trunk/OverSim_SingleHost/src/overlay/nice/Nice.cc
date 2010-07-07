@@ -85,6 +85,7 @@ Nice::Nice()
 {
 
     /* do nothing at this point of time, OverSim calls initializeOverlay */
+	//hoang
 	FILE * rpfile;
 	rpfile = fopen("rendezvous.point","r");
 	char str[80];
