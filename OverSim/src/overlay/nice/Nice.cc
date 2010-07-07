@@ -779,6 +779,17 @@ void Nice::becomeRendevouzPoint()
     //hoang
     global->updateRP(thisNode.getAddress());
 
+    const char * ip = par("externalHostIP");
+
+    TransportAddress add = TransportAddress(IPvXAddress(ip),1024,TransportAddress::UNKNOWN_NAT);
+
+    NiceMessage * msg = new NiceMessage("NICE_RP_NOTIFY");
+
+    msg->setCommand(NICE_RP_NOTIFY);
+    msg->setSrcNode(thisNode);
+
+    sendMessageToUDP(add, msg);
+
     /* Mark node as new RP (star symbol) */
     getParentModule()->getParentModule()->getDisplayString().
     setTagArg("i2", 0, "block/star_vs");

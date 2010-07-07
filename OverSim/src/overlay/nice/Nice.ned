@@ -58,7 +58,9 @@ simple Nice extends BaseOverlay
         int targetOverlayTerminalNum;
         double startTime;
                 
-        int k;      
+        int k;
+        
+        string externalHostIP;      
 }
    
     
