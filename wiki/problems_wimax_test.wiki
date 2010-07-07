@@ -37,4 +37,3 @@ Clock Synchonizing on 2 hosts ?
 
 
 *//Bugs*
-1. Message received from external host has senderID = 0 ? (should be 1111) -> 0.25 day
