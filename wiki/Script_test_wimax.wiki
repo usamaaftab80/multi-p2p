@@ -1,0 +1,9 @@
+1. Simulation world: (Server)
+su -
+cd /home/admin/sim/OverSim-20090908/simulations/realworld
+./root_setup-world
+NOTE: wait until "tun0 up done" without errors
+
+2. External Wimax terminal
+cd /home/admin/origine_oversim/OverSim-20090908/simulations/realworld
+../../src/OverSim -f niceapp.ini

@@ -14,14 +14,11 @@ NOTE: must "add route" to get host known how to go to 10.0.0.0/8
 3. Global Statistic Object at different Oversim instances on different hosts
 -> Stand at host to statistic, export to file -> OK
 
+4. Rendez-vous Point (RP) in NICE.
+Server: add a new NICE msg NICE_RP_NOTIFY to inform SingleHost immediately when RP changed
+SingleHost: update RP by receiving NICE_RP_NOTIFY from server
+	
 *//WiP*
-
-1. Rendez-vous Point (RP) in NICE. -> 0.75 day
-- Initiate RP
-	-> update file on remote host: socket ? manual ?
-- RP can be changed during the NICE process.
-	-> how to know RP: manual ? read file on remote host ? socket ? RPC ?
-
 2. Loop video sending -> 0.25 day
 How many times for each node, each video sequence, to assure that all nodes send/receive each other?
 Finish time ?
