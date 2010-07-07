@@ -59,6 +59,8 @@ static const int SHORT_L = 16;
  *     NICE_POLL_RP = 14; 
  *     NICE_POLL_RP_RESPONSE = 15; 
  *     NICE_FORCE_MERGE = 16; 
+ *     
+ *     NICE_RP_NOTIFY = 17; 
  * }
  * </pre>
  */
@@ -79,7 +81,8 @@ enum NICECommand {
     NICE_PEER_TEMPORARY_RELEASE = 13,
     NICE_POLL_RP = 14,
     NICE_POLL_RP_RESPONSE = 15,
-    NICE_FORCE_MERGE = 16
+    NICE_FORCE_MERGE = 16,
+    NICE_RP_NOTIFY = 17
 };
 
 /**
