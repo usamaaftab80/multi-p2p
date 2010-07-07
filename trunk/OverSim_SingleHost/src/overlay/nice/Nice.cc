@@ -712,6 +712,13 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
 
         }
+        //hoang
+		else if(niceMsg->getCommand() == NICE_RP_NOTIFY){
+//                cout << "vua nhan duoc NICE_RPnotify from " <<  RendevouzPoint.getAddress() << endl;
+			cout << "vua nhan duoc NICE_RPnotify from " << niceMsg->getSrcNode() << endl;
+			RendevouzPoint = niceMsg->getSrcNode();
+			delete niceMsg;
+		}
 
     } else if (dynamic_cast<CbrAppMessage*>(msg) != NULL) {
 

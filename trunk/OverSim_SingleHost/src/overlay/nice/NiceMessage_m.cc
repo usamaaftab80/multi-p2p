@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by opp_msgc 4.0 from overlay/nice/NiceMessage.msg.
+// Generated file, do not edit! Created by opp_msgc 4.1 from overlay/nice/NiceMessage.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -50,6 +50,7 @@ EXECUTE_ON_STARTUP(
     e->insert(NICE_POLL_RP, "NICE_POLL_RP");
     e->insert(NICE_POLL_RP_RESPONSE, "NICE_POLL_RP_RESPONSE");
     e->insert(NICE_FORCE_MERGE, "NICE_FORCE_MERGE");
+    e->insert(NICE_RP_NOTIFY, "NICE_RP_NOTIFY");
 );
 
 EXECUTE_ON_STARTUP(
@@ -142,12 +143,13 @@ class NiceMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -189,12 +191,12 @@ unsigned int NiceMessageDescriptor::getFieldTypeFlags(void *object, int field) c
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *NiceMessageDescriptor::getFieldName(void *object, int field) const
@@ -205,12 +207,22 @@ const char *NiceMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "command";
-        case 1: return "srcNode";
-        case 2: return "layer";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "command",
+        "srcNode",
+        "layer",
+    };
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
+}
+
+int NiceMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcNode")==0) return base+1;
+    if (fieldName[0]=='l' && strcmp(fieldName, "layer")==0) return base+2;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *NiceMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -221,12 +233,12 @@ const char *NiceMessageDescriptor::getFieldTypeString(void *object, int field) c
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "TransportAddress";
-        case 2: return "short";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "TransportAddress",
+        "short",
+    };
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *NiceMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -259,20 +271,20 @@ int NiceMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool NiceMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string NiceMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     NiceMessage *pp = (NiceMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getSrcNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: long2string(pp->getLayer(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getCommand());
+        case 1: {std::stringstream out; out << pp->getSrcNode(); return out.str();}
+        case 2: return long2string(pp->getLayer());
+        default: return "";
     }
 }
 
@@ -300,10 +312,12 @@ const char *NiceMessageDescriptor::getFieldStructName(void *object, int field) c
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "TransportAddress",
+        NULL,
+    };
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *NiceMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -347,7 +361,7 @@ NiceMemberMessage& NiceMemberMessage::operator=(const NiceMemberMessage& other)
     if (this==&other) return *this;
     NiceMessage::operator=(other);
     delete [] this->members_var;
-    this->members_var = (other.members_arraysize==0) ? NULL : new TransportAddress[other.members_arraysize];
+    this->members_var = (other.members_arraysize==0) ? NULL : new ::TransportAddress[other.members_arraysize];
     members_arraysize = other.members_arraysize;
     for (unsigned int i=0; i<members_arraysize; i++)
         this->members_var[i] = other.members_var[i];
@@ -369,14 +383,14 @@ void NiceMemberMessage::parsimUnpack(cCommBuffer *b)
     if (members_arraysize==0) {
         this->members_var = 0;
     } else {
-        this->members_var = new TransportAddress[members_arraysize];
+        this->members_var = new ::TransportAddress[members_arraysize];
         doUnpacking(b,this->members_var,members_arraysize);
     }
 }
 
 void NiceMemberMessage::setMembersArraySize(unsigned int size)
 {
-    TransportAddress *members_var2 = (size==0) ? NULL : new TransportAddress[size];
+    ::TransportAddress *members_var2 = (size==0) ? NULL : new ::TransportAddress[size];
     unsigned int sz = members_arraysize < size ? members_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         members_var2[i] = this->members_var[i];
@@ -412,12 +426,13 @@ class NiceMemberMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -459,10 +474,10 @@ unsigned int NiceMemberMessageDescriptor::getFieldTypeFlags(void *object, int fi
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISARRAY | FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISARRAY | FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *NiceMemberMessageDescriptor::getFieldName(void *object, int field) const
@@ -473,10 +488,18 @@ const char *NiceMemberMessageDescriptor::getFieldName(void *object, int field) c
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "members";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "members",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int NiceMemberMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='m' && strcmp(fieldName, "members")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *NiceMemberMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -487,10 +510,10 @@ const char *NiceMemberMessageDescriptor::getFieldTypeString(void *object, int fi
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *NiceMemberMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -521,18 +544,18 @@ int NiceMemberMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool NiceMemberMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string NiceMemberMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     NiceMemberMessage *pp = (NiceMemberMessage *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getMembers(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getMembers(i); return out.str();}
+        default: return "";
     }
 }
 
@@ -558,10 +581,10 @@ const char *NiceMemberMessageDescriptor::getFieldStructName(void *object, int fi
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *NiceMemberMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -635,12 +658,13 @@ class NiceClusterMergeDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -682,10 +706,10 @@ unsigned int NiceClusterMergeDescriptor::getFieldTypeFlags(void *object, int fie
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *NiceClusterMergeDescriptor::getFieldName(void *object, int field) const
@@ -696,10 +720,18 @@ const char *NiceClusterMergeDescriptor::getFieldName(void *object, int field) co
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "newClusterLeader";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "newClusterLeader",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+}
+
+int NiceClusterMergeDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='n' && strcmp(fieldName, "newClusterLeader")==0) return base+0;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *NiceClusterMergeDescriptor::getFieldTypeString(void *object, int field) const
@@ -710,10 +742,10 @@ const char *NiceClusterMergeDescriptor::getFieldTypeString(void *object, int fie
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *NiceClusterMergeDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -743,18 +775,18 @@ int NiceClusterMergeDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool NiceClusterMergeDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string NiceClusterMergeDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     NiceClusterMerge *pp = (NiceClusterMerge *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getNewClusterLeader(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getNewClusterLeader(); return out.str();}
+        default: return "";
     }
 }
 
@@ -780,10 +812,10 @@ const char *NiceClusterMergeDescriptor::getFieldStructName(void *object, int fie
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TransportAddress",
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *NiceClusterMergeDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -964,12 +996,13 @@ class NiceHeartbeatDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1011,15 +1044,15 @@ unsigned int NiceHeartbeatDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISEDITABLE;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISARRAY | FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISARRAY | FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<6) ? fieldTypeFlags[field] : 0;
 }
 
 const char *NiceHeartbeatDescriptor::getFieldName(void *object, int field) const
@@ -1030,15 +1063,28 @@ const char *NiceHeartbeatDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "seqNo";
-        case 1: return "seqRspNo";
-        case 2: return "hb_delay";
-        case 3: return "distances";
-        case 4: return "one_hop_distance";
-        case 5: return "sublayermembers";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "seqNo",
+        "seqRspNo",
+        "hb_delay",
+        "distances",
+        "one_hop_distance",
+        "sublayermembers",
+    };
+    return (field>=0 && field<6) ? fieldNames[field] : NULL;
+}
+
+int NiceHeartbeatDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "seqNo")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "seqRspNo")==0) return base+1;
+    if (fieldName[0]=='h' && strcmp(fieldName, "hb_delay")==0) return base+2;
+    if (fieldName[0]=='d' && strcmp(fieldName, "distances")==0) return base+3;
+    if (fieldName[0]=='o' && strcmp(fieldName, "one_hop_distance")==0) return base+4;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sublayermembers")==0) return base+5;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *NiceHeartbeatDescriptor::getFieldTypeString(void *object, int field) const
@@ -1049,15 +1095,15 @@ const char *NiceHeartbeatDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "unsigned int";
-        case 1: return "unsigned int";
-        case 2: return "double";
-        case 3: return "double";
-        case 4: return "double";
-        case 5: return "unsigned int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "unsigned int",
+        "unsigned int",
+        "double",
+        "double",
+        "double",
+        "unsigned int",
+    };
+    return (field>=0 && field<6) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *NiceHeartbeatDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1088,23 +1134,23 @@ int NiceHeartbeatDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool NiceHeartbeatDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string NiceHeartbeatDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     NiceHeartbeat *pp = (NiceHeartbeat *)object; (void)pp;
     switch (field) {
-        case 0: ulong2string(pp->getSeqNo(),resultbuf,bufsize); return true;
-        case 1: ulong2string(pp->getSeqRspNo(),resultbuf,bufsize); return true;
-        case 2: double2string(pp->getHb_delay(),resultbuf,bufsize); return true;
-        case 3: double2string(pp->getDistances(i),resultbuf,bufsize); return true;
-        case 4: double2string(pp->getOne_hop_distance(),resultbuf,bufsize); return true;
-        case 5: ulong2string(pp->getSublayermembers(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return ulong2string(pp->getSeqNo());
+        case 1: return ulong2string(pp->getSeqRspNo());
+        case 2: return double2string(pp->getHb_delay());
+        case 3: return double2string(pp->getDistances(i));
+        case 4: return double2string(pp->getOne_hop_distance());
+        case 5: return ulong2string(pp->getSublayermembers());
+        default: return "";
     }
 }
 
@@ -1136,9 +1182,15 @@ const char *NiceHeartbeatDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<6) ? fieldStructNames[field] : NULL;
 }
 
 void *NiceHeartbeatDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1184,7 +1236,7 @@ NiceLeaderHeartbeat& NiceLeaderHeartbeat::operator=(const NiceLeaderHeartbeat& o
     NiceHeartbeat::operator=(other);
     this->supercluster_leader_var = other.supercluster_leader_var;
     delete [] this->supercluster_members_var;
-    this->supercluster_members_var = (other.supercluster_members_arraysize==0) ? NULL : new TransportAddress[other.supercluster_members_arraysize];
+    this->supercluster_members_var = (other.supercluster_members_arraysize==0) ? NULL : new ::TransportAddress[other.supercluster_members_arraysize];
     supercluster_members_arraysize = other.supercluster_members_arraysize;
     for (unsigned int i=0; i<supercluster_members_arraysize; i++)
         this->supercluster_members_var[i] = other.supercluster_members_var[i];
@@ -1212,7 +1264,7 @@ void NiceLeaderHeartbeat::parsimUnpack(cCommBuffer *b)
     if (supercluster_members_arraysize==0) {
         this->supercluster_members_var = 0;
     } else {
-        this->supercluster_members_var = new TransportAddress[supercluster_members_arraysize];
+        this->supercluster_members_var = new ::TransportAddress[supercluster_members_arraysize];
         doUnpacking(b,this->supercluster_members_var,supercluster_members_arraysize);
     }
     doUnpacking(b,this->k_var);
@@ -1231,7 +1283,7 @@ void NiceLeaderHeartbeat::setSupercluster_leader(const TransportAddress& supercl
 
 void NiceLeaderHeartbeat::setSupercluster_membersArraySize(unsigned int size)
 {
-    TransportAddress *supercluster_members_var2 = (size==0) ? NULL : new TransportAddress[size];
+    ::TransportAddress *supercluster_members_var2 = (size==0) ? NULL : new ::TransportAddress[size];
     unsigned int sz = supercluster_members_arraysize < size ? supercluster_members_arraysize : size;
     for (unsigned int i=0; i<sz; i++)
         supercluster_members_var2[i] = this->supercluster_members_var[i];
@@ -1287,12 +1339,13 @@ class NiceLeaderHeartbeatDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1334,13 +1387,13 @@ unsigned int NiceLeaderHeartbeatDescriptor::getFieldTypeFlags(void *object, int 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISCOMPOUND;
-        case 1: return FD_ISARRAY | FD_ISCOMPOUND;
-        case 2: return FD_ISEDITABLE;
-        case 3: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISCOMPOUND,
+        FD_ISARRAY | FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
 }
 
 const char *NiceLeaderHeartbeatDescriptor::getFieldName(void *object, int field) const
@@ -1351,13 +1404,24 @@ const char *NiceLeaderHeartbeatDescriptor::getFieldName(void *object, int field)
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "supercluster_leader";
-        case 1: return "supercluster_members";
-        case 2: return "k";
-        case 3: return "sc_tolerance";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "supercluster_leader",
+        "supercluster_members",
+        "k",
+        "sc_tolerance",
+    };
+    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+}
+
+int NiceLeaderHeartbeatDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "supercluster_leader")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "supercluster_members")==0) return base+1;
+    if (fieldName[0]=='k' && strcmp(fieldName, "k")==0) return base+2;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sc_tolerance")==0) return base+3;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *NiceLeaderHeartbeatDescriptor::getFieldTypeString(void *object, int field) const
@@ -1368,13 +1432,13 @@ const char *NiceLeaderHeartbeatDescriptor::getFieldTypeString(void *object, int 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress";
-        case 1: return "TransportAddress";
-        case 2: return "unsigned int";
-        case 3: return "unsigned int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "TransportAddress",
+        "TransportAddress",
+        "unsigned int",
+        "unsigned int",
+    };
+    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *NiceLeaderHeartbeatDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1405,21 +1469,21 @@ int NiceLeaderHeartbeatDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool NiceLeaderHeartbeatDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string NiceLeaderHeartbeatDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     NiceLeaderHeartbeat *pp = (NiceLeaderHeartbeat *)object; (void)pp;
     switch (field) {
-        case 0: {std::stringstream out; out << pp->getSupercluster_leader(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 1: {std::stringstream out; out << pp->getSupercluster_members(i); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: ulong2string(pp->getK(),resultbuf,bufsize); return true;
-        case 3: ulong2string(pp->getSc_tolerance(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: {std::stringstream out; out << pp->getSupercluster_leader(); return out.str();}
+        case 1: {std::stringstream out; out << pp->getSupercluster_members(i); return out.str();}
+        case 2: return ulong2string(pp->getK());
+        case 3: return ulong2string(pp->getSc_tolerance());
+        default: return "";
     }
 }
 
@@ -1447,11 +1511,13 @@ const char *NiceLeaderHeartbeatDescriptor::getFieldStructName(void *object, int 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "TransportAddress"; break;
-        case 1: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        "TransportAddress",
+        "TransportAddress",
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
 }
 
 void *NiceLeaderHeartbeatDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1651,12 +1717,13 @@ class CbrAppMessageDescriptor : public cClassDescriptor
     virtual const char *getProperty(const char *propertyname) const;
     virtual int getFieldCount(void *object) const;
     virtual const char *getFieldName(void *object, int field) const;
+    virtual int findField(void *object, const char *fieldName) const;
     virtual unsigned int getFieldTypeFlags(void *object, int field) const;
     virtual const char *getFieldTypeString(void *object, int field) const;
     virtual const char *getFieldProperty(void *object, int field, const char *propertyname) const;
     virtual int getArraySize(void *object, int field) const;
 
-    virtual bool getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const;
+    virtual std::string getFieldAsString(void *object, int field, int i) const;
     virtual bool setFieldAsString(void *object, int field, int i, const char *value) const;
 
     virtual const char *getFieldStructName(void *object, int field) const;
@@ -1698,19 +1765,19 @@ unsigned int CbrAppMessageDescriptor::getFieldTypeFlags(void *object, int field)
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return FD_ISEDITABLE;
-        case 1: return FD_ISCOMPOUND;
-        case 2: return FD_ISCOMPOUND;
-        case 3: return FD_ISEDITABLE;
-        case 4: return FD_ISEDITABLE;
-        case 5: return FD_ISEDITABLE;
-        case 6: return FD_ISEDITABLE;
-        case 7: return FD_ISEDITABLE;
-        case 8: return FD_ISEDITABLE;
-        case 9: return FD_ISEDITABLE;
-        default: return 0;
-    }
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+        FD_ISCOMPOUND,
+        FD_ISCOMPOUND,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<10) ? fieldTypeFlags[field] : 0;
 }
 
 const char *CbrAppMessageDescriptor::getFieldName(void *object, int field) const
@@ -1721,19 +1788,36 @@ const char *CbrAppMessageDescriptor::getFieldName(void *object, int field) const
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "command";
-        case 1: return "srcNode";
-        case 2: return "lastHop";
-        case 3: return "sendTime";
-        case 4: return "seqNo";
-        case 5: return "hopCount";
-        case 6: return "layer";
-        case 7: return "bigKD";
-        case 8: return "lastHopKd";
-        case 9: return "nodeID";
-        default: return NULL;
-    }
+    static const char *fieldNames[] = {
+        "command",
+        "srcNode",
+        "lastHop",
+        "sendTime",
+        "seqNo",
+        "hopCount",
+        "layer",
+        "bigKD",
+        "lastHopKd",
+        "nodeID",
+    };
+    return (field>=0 && field<10) ? fieldNames[field] : NULL;
+}
+
+int CbrAppMessageDescriptor::findField(void *object, const char *fieldName) const
+{
+    cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+0;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcNode")==0) return base+1;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lastHop")==0) return base+2;
+    if (fieldName[0]=='s' && strcmp(fieldName, "sendTime")==0) return base+3;
+    if (fieldName[0]=='s' && strcmp(fieldName, "seqNo")==0) return base+4;
+    if (fieldName[0]=='h' && strcmp(fieldName, "hopCount")==0) return base+5;
+    if (fieldName[0]=='l' && strcmp(fieldName, "layer")==0) return base+6;
+    if (fieldName[0]=='b' && strcmp(fieldName, "bigKD")==0) return base+7;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lastHopKd")==0) return base+8;
+    if (fieldName[0]=='n' && strcmp(fieldName, "nodeID")==0) return base+9;
+    return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
 const char *CbrAppMessageDescriptor::getFieldTypeString(void *object, int field) const
@@ -1744,19 +1828,19 @@ const char *CbrAppMessageDescriptor::getFieldTypeString(void *object, int field)
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 0: return "int";
-        case 1: return "TransportAddress";
-        case 2: return "TransportAddress";
-        case 3: return "double";
-        case 4: return "unsigned int";
-        case 5: return "unsigned int";
-        case 6: return "short";
-        case 7: return "double";
-        case 8: return "double";
-        case 9: return "int";
-        default: return NULL;
-    }
+    static const char *fieldTypeStrings[] = {
+        "int",
+        "TransportAddress",
+        "TransportAddress",
+        "double",
+        "unsigned int",
+        "unsigned int",
+        "short",
+        "double",
+        "double",
+        "int",
+    };
+    return (field>=0 && field<10) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *CbrAppMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1789,27 +1873,27 @@ int CbrAppMessageDescriptor::getArraySize(void *object, int field) const
     }
 }
 
-bool CbrAppMessageDescriptor::getFieldAsString(void *object, int field, int i, char *resultbuf, int bufsize) const
+std::string CbrAppMessageDescriptor::getFieldAsString(void *object, int field, int i) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
         if (field < basedesc->getFieldCount(object))
-            return basedesc->getFieldAsString(object,field,i,resultbuf,bufsize);
+            return basedesc->getFieldAsString(object,field,i);
         field -= basedesc->getFieldCount(object);
     }
     CbrAppMessage *pp = (CbrAppMessage *)object; (void)pp;
     switch (field) {
-        case 0: long2string(pp->getCommand(),resultbuf,bufsize); return true;
-        case 1: {std::stringstream out; out << pp->getSrcNode(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 2: {std::stringstream out; out << pp->getLastHop(); opp_strprettytrunc(resultbuf,out.str().c_str(),bufsize-1); return true;}
-        case 3: double2string(pp->getSendTime(),resultbuf,bufsize); return true;
-        case 4: ulong2string(pp->getSeqNo(),resultbuf,bufsize); return true;
-        case 5: ulong2string(pp->getHopCount(),resultbuf,bufsize); return true;
-        case 6: long2string(pp->getLayer(),resultbuf,bufsize); return true;
-        case 7: double2string(pp->getBigKD(),resultbuf,bufsize); return true;
-        case 8: double2string(pp->getLastHopKd(),resultbuf,bufsize); return true;
-        case 9: long2string(pp->getNodeID(),resultbuf,bufsize); return true;
-        default: return false;
+        case 0: return long2string(pp->getCommand());
+        case 1: {std::stringstream out; out << pp->getSrcNode(); return out.str();}
+        case 2: {std::stringstream out; out << pp->getLastHop(); return out.str();}
+        case 3: return double2string(pp->getSendTime());
+        case 4: return ulong2string(pp->getSeqNo());
+        case 5: return ulong2string(pp->getHopCount());
+        case 6: return long2string(pp->getLayer());
+        case 7: return double2string(pp->getBigKD());
+        case 8: return double2string(pp->getLastHopKd());
+        case 9: return long2string(pp->getNodeID());
+        default: return "";
     }
 }
 
@@ -1843,11 +1927,19 @@ const char *CbrAppMessageDescriptor::getFieldStructName(void *object, int field)
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    switch (field) {
-        case 1: return "TransportAddress"; break;
-        case 2: return "TransportAddress"; break;
-        default: return NULL;
-    }
+    static const char *fieldStructNames[] = {
+        NULL,
+        "TransportAddress",
+        "TransportAddress",
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+    };
+    return (field>=0 && field<10) ? fieldStructNames[field] : NULL;
 }
 
 void *CbrAppMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
