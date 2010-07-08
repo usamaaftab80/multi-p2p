@@ -28,6 +28,7 @@ void HoangGlobalObject::initialize()
 	beginSendDataTime = new simtime_t [numNode];
 	videoLength = new int [numNode];
 	numSent = 0;
+	numNodeSentDone = 0;
 	numNodeJoined = 0;
 	videoSize = par("videoSize");
 	loopTimes = par("loopTimes");
@@ -192,4 +193,13 @@ void HoangGlobalObject::updateRP(IPvXAddress add)
 	RPfile.close();
 
 	system("cp -rf rendezvous.point /home/admin/origine_oversim/OverSim-20090908/simulations/realworld");
+}
+
+void HoangGlobalObject::incNumNodeSentDone()
+{
+	numNodeSentDone++;
+
+	if(numNodeSentDone >= numNode ){
+		cout << "All nodes senttttttttt doneeeeeeeeeeeee. Ready to terminate !!!!!" << endl;
+	}
 }

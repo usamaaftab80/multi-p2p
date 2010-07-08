@@ -31,6 +31,7 @@ class HoangGlobalObject : public cSimpleModule
 	IPvXAddress sourceSenderAddress;
 	uint16 numNode;
 	int numSent;
+	int numNodeSentDone;
 	int senderId;
 	int videoSize;
 	int* linkStress;
@@ -89,6 +90,8 @@ class HoangGlobalObject : public cSimpleModule
 	  void recordOut(uint nodeID,int sid,int pid);
 	  void recordReceived(uint nodeID,int sid,int pid,int hopCount);
 	  void updateRP(IPvXAddress add);
+
+	  void incNumNodeSentDone();
 
 	  ~HoangGlobalObject();
 
