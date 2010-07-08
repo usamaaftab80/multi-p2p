@@ -34,6 +34,7 @@
 //#include "NiceTestApp.h"
 
 #include <string.h>
+#include "ConferenceApp.h"
 
 template <class T>
 inline std::string to_string (const T& t)
@@ -286,6 +287,13 @@ void Nice::changeState( int toState )
     case READY:
 
         state = READY;
+
+        //hoang
+        cout << "NICE state = READY" << endl;
+        cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
+		cCompoundModule* appModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("tier1"));
+		ConferenceApp* app = check_and_cast<ConferenceApp*> (appModule->getSubmodule("conferenceapp"));
+		app->set_NICE_ready();
 
         cancelEvent(heartbeatTimer);
         scheduleAt(simTime() + heartbeatInterval, heartbeatTimer);
@@ -3525,6 +3533,8 @@ void Nice::sendDataToOverlay(CbrAppMessage *appMsg)
 
                         dup->setLayer( layer );
                         dup->setLastHop(thisNode);
+                        //hoang
+                        dup->setLastHopID(nodeID);
 
                         sendMessageToUDP(member, dup);
 
@@ -3546,6 +3556,8 @@ void Nice::sendDataToOverlay(CbrAppMessage *appMsg)
         CbrAppMessage* dup = static_cast<CbrAppMessage*>(appMsg->dup());
 
         dup->setSrcNode(thisNode);
+        //hoang
+        dup->setLastHopID(nodeID);
 
         sendMessageToUDP(it->first, dup);
 

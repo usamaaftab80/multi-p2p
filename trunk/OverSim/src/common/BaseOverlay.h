@@ -824,6 +824,9 @@ protected:
 	bool hoang_debug_cost;
 	bool hoang_use_cost;
 
+	int extenalPathLength;
+	int extenalNodeID;
+
 public:
 
 	double lastHopKd;

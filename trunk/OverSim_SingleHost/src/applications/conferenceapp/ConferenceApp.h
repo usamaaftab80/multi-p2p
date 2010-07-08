@@ -72,8 +72,11 @@ private:
 
     bool beginSend;
 
+    bool NICE_is_ready;
+
 public:
 	uint16 getNodeID(){return nodeID;};
+	void set_NICE_ready(){NICE_is_ready = true;};
 
 
 };

@@ -288,7 +288,7 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
 
 //        if(!(currentLoop < loopTimes)){
     	if(totalNumSent > videoSize*loopTimes - 1){
-        	cout << "Node " << nodeID << " Truyen het " << totalNumSent << " video packets of "<< currentLoop << " loopTimes " << " at " << simTime() << endl;
+        	cout << "Node " << nodeID << " Truyennnnnnnnnnnn hettttttttttttttt " << totalNumSent << " video packets of "<< currentLoop << " loopTimes " << " at " << simTime() << endl;
 
         	global->incNumNodeSentDone();
 

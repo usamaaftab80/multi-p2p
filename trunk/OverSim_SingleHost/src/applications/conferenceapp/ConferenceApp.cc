@@ -77,6 +77,8 @@ void ConferenceApp::initializeApp(int stage)
 
     beginSend = false;
 
+    NICE_is_ready = false;
+
     numSent = 0;
 
     videoSize = 0;
@@ -92,52 +94,11 @@ void ConferenceApp::initializeApp(int stage)
 		uint length;
 		uint lengthUDP;
 
-		const char* sdFile = par("sdFile");
-		uint P_sid; //number of packet in the dump file
-
-		switch (nodeID % 5){
-			case 1:
-				sdFile = "sd_paris";
-				P_sid = 32632;
-				break;
-			case 0:
-				sdFile = "sd_snr";
-				P_sid = 1200;
-				break;
-			case 2:
-				sdFile = "sd_sl_svc";
-				P_sid = 293;
-				break;
-			case 3:
-				sdFile = "sd_combined_svc";
-				P_sid = 1696;
-				break;
-			case 4:
-				sdFile = "sd_spatial";
-				P_sid = 4385;
-				break;
-			default:
-				sdFile = "sd_sl_svc";
-				P_sid = 293;
-		}
+		const char* sdFile = "sd_paris";
+		uint P_sid = 32632; //number of packet in the dump file
 
 		const char * format;
-
-		if(strcmp(sdFile,"sd_paris") == 0){
-			format = "12548667%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.41674 > 157.159.16.152.12346: UDP, length %d\n"; //sd_paris:32632
-		}
-		else if(strcmp(sdFile,"sd_snr") == 0){
-			format = "12720243%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.196.49355 > 192.168.1.2.12346: UDP, length %d\n"; //sd_snr:1200
-		}
-		else if(strcmp(sdFile,"sd_spatial") == 0){
-			format = "12549485%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.53144 > 157.159.16.152.12346: UDP, length %d\n"; //sd_spatial:4835
-		}
-		else if(strcmp(sdFile,"sd_combined_svc") == 0){
-			format = "127064915%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.57994 > 157.159.16.50.12346: UDP, length %d\n"; //sd_combined_svc:1696
-		}
-		else if(strcmp(sdFile,"sd_sl_svc") == 0){
-			format = "127064935%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.56586 > 157.159.16.50.12346: UDP, length %d\n"; //sd_sl_svc:293
-		}
+		format = "12548667%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.41674 > 157.159.16.152.12346: UDP, length %d\n"; //sd_paris:32632
 
 		/* Read SD and write a new SD file */
 
@@ -207,12 +168,13 @@ void ConferenceApp::initializeApp(int stage)
 		sendDataTimer = new cMessage("sendDataTimer");
 		beginSendDataTime = simTime();
 
+		/*
 		scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
 
-		cout<< "Node " << nodeID << " begin send data at "<< simTime() << endl;
+		cout<< "Node " << nodeID << " begin send data at "<< simTime() << endl;*/
 
-//		stateTimer = new cMessage("stateTimer");
-//		scheduleAt(simTime() + stateTimerPeriod, stateTimer);
+		stateTimer = new cMessage("stateTimer");
+		scheduleAt(simTime() + stateTimerPeriod, stateTimer);
 
     }
     bindToPort(2000);
@@ -244,25 +206,14 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
         scheduleAt(simTime() + stateTimerPeriod, stateTimer); // reschedule our message
 
         // if the simulator is still busy creating the network, let's wait a bit longer
-        if (underlayConfigurator->isInInitPhase()) {
+        if (!NICE_is_ready) {
+
+        	cout << "NICE not ready" << endl;
 
         	return;
 
         } else {
-        	/*if(isSender){
 
-				if((global->getNumNodeJoined() > 1) && (numSent<1) && (!beginSend)){
-					cout<< "Node " << nodeID << " begin send data at "<< simTime() << " co " << global->getNumNodeJoined() << " peers trong mang" << endl;
-
-					beginSendDataTime = simTime();
-
-					scheduleAt(beginSendDataTime + sd[0].time, sendDataTimer);
-
-					beginSend = true;
-
-				}
-			}
-*/
         	cancelAndDelete(stateTimer);
 
         	beginSendDataTime = simTime();

@@ -97,6 +97,8 @@ void BaseOverlay::initialize(int stage)
 	//hoang
 	hoang_use_cost = par("hoang_use_cost");
 	hoang_debug_cost = par("hoang_debug_cost");
+	extenalPathLength = par("extenalPathLength");
+	extenalNodeID = par("extenalNodeID");
 
     if (stage == MIN_STAGE_OVERLAY) {
         OverlayKey::setKeyLength(par("keyLength"));
@@ -760,7 +762,10 @@ void BaseOverlay::handleMessage(cMessage* msg)
 			CbrAppMessage* cbrAppMsg = check_and_cast<CbrAppMessage*>(msg);
 
 			if (cbrAppMsg->getCommand() == CBR_DATA)
-				global->recordIn(nodeID,cbrAppMsg->getNodeID(),cbrAppMsg->getSeqNo(),hopCount);
+				if(cbrAppMsg->getLastHopID() == extenalNodeID){
+					hopCount += (32 + extenalPathLength);
+				}
+				global->recordIn(nodeID,cbrAppMsg->getNodeID(),cbrAppMsg->getSeqNo(),hopCount, cbrAppMsg->getLastHopID());
         }
 
         delete udpControlInfo;

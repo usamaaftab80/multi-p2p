@@ -1548,6 +1548,7 @@ CbrAppMessage::CbrAppMessage(const char *name, int kind) : BaseOverlayMessage(na
     this->bigKD_var = 0;
     this->lastHopKd_var = 0;
     this->nodeID_var = 0;
+    this->lastHopID_var = 0;
 }
 
 CbrAppMessage::CbrAppMessage(const CbrAppMessage& other) : BaseOverlayMessage()
@@ -1574,6 +1575,7 @@ CbrAppMessage& CbrAppMessage::operator=(const CbrAppMessage& other)
     this->bigKD_var = other.bigKD_var;
     this->lastHopKd_var = other.lastHopKd_var;
     this->nodeID_var = other.nodeID_var;
+    this->lastHopID_var = other.lastHopID_var;
     return *this;
 }
 
@@ -1590,6 +1592,7 @@ void CbrAppMessage::parsimPack(cCommBuffer *b)
     doPacking(b,this->bigKD_var);
     doPacking(b,this->lastHopKd_var);
     doPacking(b,this->nodeID_var);
+    doPacking(b,this->lastHopID_var);
 }
 
 void CbrAppMessage::parsimUnpack(cCommBuffer *b)
@@ -1605,6 +1608,7 @@ void CbrAppMessage::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->bigKD_var);
     doUnpacking(b,this->lastHopKd_var);
     doUnpacking(b,this->nodeID_var);
+    doUnpacking(b,this->lastHopID_var);
 }
 
 int CbrAppMessage::getCommand() const
@@ -1707,6 +1711,16 @@ void CbrAppMessage::setNodeID(int nodeID_var)
     this->nodeID_var = nodeID_var;
 }
 
+int CbrAppMessage::getLastHopID() const
+{
+    return lastHopID_var;
+}
+
+void CbrAppMessage::setLastHopID(int lastHopID_var)
+{
+    this->lastHopID_var = lastHopID_var;
+}
+
 class CbrAppMessageDescriptor : public cClassDescriptor
 {
   public:
@@ -1754,7 +1768,7 @@ const char *CbrAppMessageDescriptor::getProperty(const char *propertyname) const
 int CbrAppMessageDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 10+basedesc->getFieldCount(object) : 10;
+    return basedesc ? 11+basedesc->getFieldCount(object) : 11;
 }
 
 unsigned int CbrAppMessageDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -1776,8 +1790,9 @@ unsigned int CbrAppMessageDescriptor::getFieldTypeFlags(void *object, int field)
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<10) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<11) ? fieldTypeFlags[field] : 0;
 }
 
 const char *CbrAppMessageDescriptor::getFieldName(void *object, int field) const
@@ -1799,8 +1814,9 @@ const char *CbrAppMessageDescriptor::getFieldName(void *object, int field) const
         "bigKD",
         "lastHopKd",
         "nodeID",
+        "lastHopID",
     };
-    return (field>=0 && field<10) ? fieldNames[field] : NULL;
+    return (field>=0 && field<11) ? fieldNames[field] : NULL;
 }
 
 int CbrAppMessageDescriptor::findField(void *object, const char *fieldName) const
@@ -1817,6 +1833,7 @@ int CbrAppMessageDescriptor::findField(void *object, const char *fieldName) cons
     if (fieldName[0]=='b' && strcmp(fieldName, "bigKD")==0) return base+7;
     if (fieldName[0]=='l' && strcmp(fieldName, "lastHopKd")==0) return base+8;
     if (fieldName[0]=='n' && strcmp(fieldName, "nodeID")==0) return base+9;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lastHopID")==0) return base+10;
     return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
@@ -1839,8 +1856,9 @@ const char *CbrAppMessageDescriptor::getFieldTypeString(void *object, int field)
         "double",
         "double",
         "int",
+        "int",
     };
-    return (field>=0 && field<10) ? fieldTypeStrings[field] : NULL;
+    return (field>=0 && field<11) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *CbrAppMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1893,6 +1911,7 @@ std::string CbrAppMessageDescriptor::getFieldAsString(void *object, int field, i
         case 7: return double2string(pp->getBigKD());
         case 8: return double2string(pp->getLastHopKd());
         case 9: return long2string(pp->getNodeID());
+        case 10: return long2string(pp->getLastHopID());
         default: return "";
     }
 }
@@ -1915,6 +1934,7 @@ bool CbrAppMessageDescriptor::setFieldAsString(void *object, int field, int i, c
         case 7: pp->setBigKD(string2double(value)); return true;
         case 8: pp->setLastHopKd(string2double(value)); return true;
         case 9: pp->setNodeID(string2long(value)); return true;
+        case 10: pp->setLastHopID(string2long(value)); return true;
         default: return false;
     }
 }
@@ -1938,8 +1958,9 @@ const char *CbrAppMessageDescriptor::getFieldStructName(void *object, int field)
         NULL,
         NULL,
         NULL,
+        NULL,
     };
-    return (field>=0 && field<10) ? fieldStructNames[field] : NULL;
+    return (field>=0 && field<11) ? fieldStructNames[field] : NULL;
 }
 
 void *CbrAppMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

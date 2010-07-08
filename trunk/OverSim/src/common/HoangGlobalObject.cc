@@ -162,11 +162,11 @@ void HoangGlobalObject::updateNumLinkArray()
 	}
 }
 
-void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid,int ttl)
+void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode)
 {
 	//write to in.log
-	//at simTime() nodeID	received a packet sid,pid at baseOverlay
-	fprintf(inFile,"%f\t%d\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid, ttl);
+	//at simTime() nodeID	received a packet sid,pid fromNode at baseOverlay
+	fprintf(inFile,"%f\t%d\t%d\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid, ttl, fromNode);
 }
 
 void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid)
@@ -198,8 +198,9 @@ void HoangGlobalObject::updateRP(IPvXAddress add)
 void HoangGlobalObject::incNumNodeSentDone()
 {
 	numNodeSentDone++;
+	cout << "Total: " << numNodeSentDone << " nodes sent done " << endl;
 
 	if(numNodeSentDone >= numNode ){
-		cout << "All nodes senttttttttt doneeeeeeeeeeeee. Ready to terminate !!!!!" << endl;
+		cout << "All nodes senttttttttt doneeeeeeeeeeeee. Ready to terminate !!!!!" << endl<< endl<< endl<< endl<< endl;
 	}
 }

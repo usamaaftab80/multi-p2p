@@ -1,41 +1,58 @@
 Problems:
 
 *//Done*
+
 1. IP address ranges -> OK
+
 Simulate Network: 10.0.0.0/8
+
 Real Single Host: get the IP of the network interface (eth0, wlan0) to join overlay
- - public: 157.159.16.186 
+
+ - public: 157.159.16.186
+  
  - private in LAN: 192.168.1.10 -> tunnel OpenVPN
+ 
 NOTE: must "add route" to get host known how to go to 10.0.0.0/8
 
 2. Ports:
+
 --> firewall policy: wimax BS 12356 UDP opened for OpenVPN -> OK
 
 3. Global Statistic Object at different Oversim instances on different hosts
+
 -> Stand at host to statistic, export to file -> OK
 
 4. Rendez-vous Point (RP) in NICE. -> OK
+
 Server: add a new NICE msg NICE_RP_NOTIFY to inform SingleHost immediately when RP changed
+
 SingleHost: update RP by receiving NICE_RP_NOTIFY from server
 
 5. Loop video sending to assure that all nodes send/receive each other -> OK
+
 Finish time : manually after all node sent done
 
 6. Bug fixed: Message received from external host has senderID = 0 ? (should be 1111) => remember to set isSender = true;	
 
 
+7. Physical hop-count -> OK
+
+get TTL real Router + TTL Inet
+
+received ttl < 0 <- Reason: defaultTTL of external network = 64, internal = 32 -> +32 for packets received from external node  
+
 *//WiP*
 
-1. Physical hop-count -> 0.25 day
-get TTL real Router + TTL Inet ? -> received ttl < 0 ? 
+1. End-to-end Delay-> 0.5 day
 
-2. End-to-end Delay-> 0.5 day
 Time stamp? now() - msg->getSentTime()
+
 Clock Synchonizing on 2 hosts ? -> by PING PONG at initTime  
 
-3. Summary all statistic files follow formulas -> 0.5 day
+2. Summary all statistic files follow formulas -> 0.5 day
 
-4. Get bandwidth, delay of real link
+3. Get bandwidth, delay of real link
+
 -> 3rdParty tool ? -> 0.25 day
 
 
