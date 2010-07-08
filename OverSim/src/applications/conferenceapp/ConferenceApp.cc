@@ -70,13 +70,17 @@ void ConferenceApp::initializeApp(int stage)
 	/* get parameters from config file */
     stateTimerPeriod = 1;
 
-    loopTimes = par("loopTimes");
+//    loopTimes = par("loopTimes");
 
     isSender = par("isSender");
 
     beginSend = false;
 
     numSent = 0;
+
+    totalNumSent = 0;
+
+    currentLoop = 0;
 
     videoSize = 0;
 
@@ -93,34 +97,43 @@ void ConferenceApp::initializeApp(int stage)
 
 		const char* sdFile = par("sdFile");
 		uint P_sid; //number of packet in the dump file
+		const char * format;
 
-		switch (nodeID % 5){
+		switch (nodeID % 4){
 			case 2:
 				sdFile = "sd_paris";
+				format = "12548667%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.41674 > 157.159.16.152.12346: UDP, length %d\n"; //sd_paris:32632
 				P_sid = 32632;
+				loopTimes = 1;
 				break;
 			case 0:
 				sdFile = "sd_snr";
+				format = "12720243%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.196.49355 > 192.168.1.2.12346: UDP, length %d\n"; //sd_snr:1200
 				P_sid = 1200;
+				loopTimes = 27;
 				break;
-			case 1:
-				sdFile = "sd_sl_svc";
-				P_sid = 293;
-				break;
+//			case 1:
+//				sdFile = "sd_sl_svc";
+//				format = "127064935%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.56586 > 157.159.16.50.12346: UDP, length %d\n"; //sd_sl_svc:293
+//				P_sid = 293;
+//				loopTimes = 112;
+//				break;
 			case 3:
 				sdFile = "sd_combined_svc";
+				format = "127064915%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.57994 > 157.159.16.50.12346: UDP, length %d\n"; //sd_combined_svc:1696
 				P_sid = 1696;
+				loopTimes = 20;
 				break;
-			case 4:
+			case 1:
 				sdFile = "sd_spatial";
+				format = "12549485%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.53144 > 157.159.16.152.12346: UDP, length %d\n"; //sd_spatial:4835
 				P_sid = 4385;
+				loopTimes = 7;
 				break;
-			default:
-				sdFile = "sd_sl_svc";
-				P_sid = 293;
 		}
 
-		const char * format;
+
+/*
 
 		if(strcmp(sdFile,"sd_paris") == 0){
 			format = "12548667%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.41674 > 157.159.16.152.12346: UDP, length %d\n"; //sd_paris:32632
@@ -138,6 +151,7 @@ void ConferenceApp::initializeApp(int stage)
 			format = "127064935%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.52.56586 > 157.159.16.50.12346: UDP, length %d\n"; //sd_sl_svc:293
 		}
 
+*/
 		/* Read SD and write a new SD file */
 
 		pFile = fopen (sdFile , "r");
@@ -148,7 +162,8 @@ void ConferenceApp::initializeApp(int stage)
 			fscanf(pFile,format,&time,&id,&lengthUDP,&length);
 			videoSize++;
 		}
-
+		maxDataTime = time;
+		maxDataID = id;
 		sd = new dataPacket [videoSize];
 
 //		cout << "Node " << nodeID << " :There are " << videoSize << " packets in dump file" << endl;
@@ -270,8 +285,13 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
     } else if (msg->isName("sendDataTimer")){
 
     	/* check finish sending video */
-        if(numSent > videoSize*loopTimes - 1){
-        	cout << "Node " << nodeID << " Truyennnnnnnnnnnnnn hetttttttttt video packet at " << simTime() << endl;
+
+//        if(!(currentLoop < loopTimes)){
+    	if(totalNumSent > videoSize*loopTimes - 1){
+        	cout << "Node " << nodeID << " Truyen het " << totalNumSent << " video packets of "<< currentLoop << " loopTimes " << " at " << simTime() << endl;
+
+        	global->incNumNodeSentDone();
+
         	delete [] sd;
 
         	cancelAndDelete(sendDataTimer);
@@ -279,33 +299,50 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
         	return;
         }
 
-    	scheduleAt(beginSendDataTime + sd[numSent].time, sendDataTimer);
+        else if(numSent < videoSize){
 
-		/* send data */
+			scheduleAt(beginSendDataTime + currentLoop * maxDataTime + sd[numSent].time, sendDataTimer);
 
-		ConferenceAppMsg *pingPongPkt;                            // the message we'll send
-		pingPongPkt = new ConferenceAppMsg();
+			/* send data */
 
-		//cout << "IP " << thisNode.getAddress() << " created a msg at " << simTime()<< endl;
+			ConferenceAppMsg *pingPongPkt;                            // the message we'll send
+			pingPongPkt = new ConferenceAppMsg();
 
-		pingPongPkt->setType(MYMSG_PING);
+			//cout << "IP " << thisNode.getAddress() << " created a msg at " << simTime()<< endl;
 
-		pingPongPkt->setSenderAddress(thisNode);   // set the sender address to our own
+			pingPongPkt->setType(MYMSG_PING);
 
-		pingPongPkt->setSenderID(nodeID);
+			pingPongPkt->setSenderAddress(thisNode);   // set the sender address to our own
 
-		int length = sd[numSent].length;
+			pingPongPkt->setSenderID(nodeID);
 
-		pingPongPkt->setByteLength(length);
+			int length = sd[numSent].length;
 
-		pingPongPkt->setId(sd[numSent].id);
+			pingPongPkt->setByteLength(length);
 
-		//hoang
-		encapAndSendCbrAppMsg(pingPongPkt);
+//			pingPongPkt->setId(maxDataID * currentLoop + sd[numSent].id);
+			pingPongPkt->setId(totalNumSent);
 
-		//format:  Time		pid
-//		const char * format = "%f\t%d\n";
-//		fprintf(sentFile,format,simTime().dbl(),sd[numSent].id);
+			//hoang
+			encapAndSendCbrAppMsg(pingPongPkt);
+
+			//format:  Time		pid
+	//		const char * format = "%f\t%d\n";
+	//		fprintf(sentFile,format,simTime().dbl(),sd[numSent].id);
+        }
+
+        else {
+
+        	if(currentLoop%10 == 0){
+        		cout << "node " << nodeID << " truyen het " << numSent << " packets cua lan " << currentLoop << endl;
+        	}
+
+        	numSent = 0;
+
+        	currentLoop++;
+
+        	scheduleAt(beginSendDataTime + currentLoop * maxDataTime + sd[numSent].time, sendDataTimer);
+        }
 
     }
 
@@ -373,12 +410,9 @@ void ConferenceApp::encapAndSendCbrAppMsg(cMessage* msg)
 
         cbrMsg->setCommand(0); //CBR_DATA
 
-        //string pktName = "CBR_DATA " + to_string(numSent);
-//        string pktName = "CBR_DATA " + to_string(sd[numSent].id);
+//        cbrMsg->setSeqNo(maxDataID * currentLoop + sd[numSent].id);
 
-//        cbrMsg->setName(pktName.c_str());
-
-        cbrMsg->setSeqNo(sd[numSent].id);
+        cbrMsg->setSeqNo(totalNumSent);
 
         cbrMsg->setNodeID(nodeID);
 
@@ -389,6 +423,8 @@ void ConferenceApp::encapAndSendCbrAppMsg(cMessage* msg)
         send(cbrMsg,"to_lowerTier");
 
         numSent++;
+
+        totalNumSent++;
 
     }
 

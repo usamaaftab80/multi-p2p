@@ -70,8 +70,13 @@ private:
 
     simtime_t beginSendDataTime;
     int byteSent;
+    int totalNumSent;
 
     bool beginSend;
+
+    float maxDataTime;
+    int maxDataID;
+    int currentLoop;
 
 public:
 	uint16 getNodeID(){return nodeID;};
