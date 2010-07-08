@@ -3522,6 +3522,8 @@ void Nice::sendDataToOverlay(CbrAppMessage *appMsg)
 
                         dup->setLayer( layer );
                         dup->setLastHop(thisNode);
+                        //hoang
+                        dup->setLastHopID(nodeID);
 
                         sendMessageToUDP(member, dup);
 
@@ -3543,6 +3545,8 @@ void Nice::sendDataToOverlay(CbrAppMessage *appMsg)
         CbrAppMessage* dup = static_cast<CbrAppMessage*>(appMsg->dup());
 
         dup->setSrcNode(thisNode);
+        //hoang
+        dup->setLastHopID(nodeID);
 
         sendMessageToUDP(it->first, dup);
 

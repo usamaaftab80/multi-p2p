@@ -760,7 +760,7 @@ void BaseOverlay::handleMessage(cMessage* msg)
 			CbrAppMessage* cbrAppMsg = check_and_cast<CbrAppMessage*>(msg);
 
 			if (cbrAppMsg->getCommand() == CBR_DATA)
-					global->recordIn(nodeID,cbrAppMsg->getNodeID(),cbrAppMsg->getSeqNo(),hopCount);
+					global->recordIn(nodeID,cbrAppMsg->getNodeID(),cbrAppMsg->getSeqNo(),hopCount, cbrAppMsg->getLastHopID());
         }
 
 
