@@ -3,11 +3,11 @@
 # script only runs on Linux
 
 modprobe tun
-sleep 10
-chown admin /dev/net/tun
-chown admin .tkenvrc
+#sleep 10
+#chown admin /dev/net/tun
+#chown admin .tkenvrc
 #echo 1 > /proc/sys/net/ipv4/ip_forward
-sleep 10
+#sleep 10
 ../../src/OverSim -u Cmdenv -f world.ini
 #../../src/OverSim -f world.ini &
 #sleep 10

@@ -824,8 +824,9 @@ protected:
 	bool hoang_debug_cost;
 	bool hoang_use_cost;
 
-	int extenalPathLength;
-	int extenalNodeID;
+	int externalPathLength;
+	int externalNodeID;
+	int externalDefaultTTL;
 
 public:
 

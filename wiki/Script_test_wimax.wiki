@@ -7,3 +7,9 @@ NOTE: wait until "tun0 up done" without errors
 2. External Wimax terminal
 cd /home/admin/origine_oversim/OverSim-20090908/simulations/realworld
 ../../src/OverSim -f niceapp.ini
+
+Windows:
+cd ../../singlehost/OverSim-20090908/simulations/realworld
+./setup_tunnel.sh
+(wait for peering done with remote host)
+./addroute.sh

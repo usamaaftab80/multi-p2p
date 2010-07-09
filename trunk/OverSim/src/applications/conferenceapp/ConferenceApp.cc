@@ -194,7 +194,7 @@ void ConferenceApp::initializeApp(int stage)
 			}
 		}
 
-		startTime = startTime -1;
+//		startTime = startTime -1;
 
 		for(int i=0; i<videoSize; i++){
 			sd[i].time -= startTime;
@@ -301,7 +301,7 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
 
         else if(numSent < videoSize){
 
-			scheduleAt(beginSendDataTime + currentLoop * maxDataTime + sd[numSent].time, sendDataTimer);
+			scheduleAt(beginSendDataTime + sd[numSent].time, sendDataTimer);
 
 			/* send data */
 
@@ -333,15 +333,17 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
 
         else {
 
-        	if(currentLoop%10 == 0){
-        		cout << "node " << nodeID << " truyen het " << numSent << " packets cua lan " << currentLoop << endl;
-        	}
+//        	if(currentLoop%10 == 0){
+//        		cout << "node " << nodeID << " truyen het " << numSent << " packets cua lan " << currentLoop << endl;
+//        	}
 
         	numSent = 0;
 
         	currentLoop++;
 
-        	scheduleAt(beginSendDataTime + currentLoop * maxDataTime + sd[numSent].time, sendDataTimer);
+        	beginSendDataTime = simTime();
+
+        	scheduleAt(beginSendDataTime + sd[numSent].time, sendDataTimer);
         }
 
     }

@@ -162,11 +162,11 @@ void HoangGlobalObject::updateNumLinkArray()
 	}
 }
 
-void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode)
+void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode, float delay)
 {
 	//write to in.log
 	//at simTime() nodeID	received a packet sid,pid fromNode at baseOverlay
-	fprintf(inFile,"%f\t%d\t%d\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid, ttl, fromNode);
+	fprintf(inFile,"%f\t%d\t%d\t%d\t%d\t%d\t%f\n", simTime().dbl(), nodeID, sid, pid, ttl, fromNode, delay);
 }
 
 void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid)

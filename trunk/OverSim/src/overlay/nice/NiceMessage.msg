@@ -69,7 +69,7 @@ enum NICECommand
     NICE_POLL_RP_RESPONSE = 15; // Respond to RP Poll
     NICE_FORCE_MERGE = 16; // Force Merge to SourceNode
     //hoang
-    NICE_RP_NOTIFY = 17; // Force Merge to SourceNode
+    NICE_RP_NOTIFY = 17; // Notify about RP change
 }
 
 message NiceMessage extends BaseOverlayMessage

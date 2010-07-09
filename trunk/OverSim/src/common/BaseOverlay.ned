@@ -61,8 +61,9 @@ simple BaseOverlay extends BaseRpc
         bool isSender;              
         bool hoang_debug_cost;
         bool hoang_use_cost;
-        int extenalPathLength;
-        int extenalNodeID;
+        int externalPathLength;
+        int externalNodeID;
+        int externalDefaultTTL;
 
     gates:
         input udpIn; // gate from the UDP layer

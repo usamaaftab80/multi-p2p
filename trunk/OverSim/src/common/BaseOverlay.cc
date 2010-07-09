@@ -97,8 +97,9 @@ void BaseOverlay::initialize(int stage)
 	//hoang
 	hoang_use_cost = par("hoang_use_cost");
 	hoang_debug_cost = par("hoang_debug_cost");
-	extenalPathLength = par("extenalPathLength");
-	extenalNodeID = par("extenalNodeID");
+	externalPathLength = par("externalPathLength");
+	externalNodeID = par("externalNodeID");
+	externalDefaultTTL = par("externalDefaultTTL");
 
     if (stage == MIN_STAGE_OVERLAY) {
         OverlayKey::setKeyLength(par("keyLength"));
@@ -761,11 +762,14 @@ void BaseOverlay::handleMessage(cMessage* msg)
         if (dynamic_cast<CbrAppMessage*>(msg) != NULL){
 			CbrAppMessage* cbrAppMsg = check_and_cast<CbrAppMessage*>(msg);
 
+			simtime_t delay = simTime() - cbrAppMsg->getCreationTime();
+
 			if (cbrAppMsg->getCommand() == CBR_DATA)
-				if(cbrAppMsg->getLastHopID() == extenalNodeID){
-					hopCount += (32 + extenalPathLength);
+				if(cbrAppMsg->getLastHopID() == externalNodeID){
+//					cout << "ttl from " << externalNodeID << " : " << udpControlInfo->getTimeToLive() << endl;
+					hopCount += (externalDefaultTTL - defaultTimeToLive + externalPathLength);
 				}
-				global->recordIn(nodeID,cbrAppMsg->getNodeID(),cbrAppMsg->getSeqNo(),hopCount, cbrAppMsg->getLastHopID());
+				global->recordIn(nodeID,cbrAppMsg->getNodeID(),cbrAppMsg->getSeqNo(),hopCount, cbrAppMsg->getLastHopID(), delay.dbl());
         }
 
         delete udpControlInfo;
