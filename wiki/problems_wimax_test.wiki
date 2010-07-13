@@ -49,13 +49,12 @@ get delay on wimax link by PING PONG at initTime between singlehost and RP
 
 adjust e2eDelay by adding the PINGPONG time  
 
+9. Summary all statistic files follow formulas
 
 *//WiP*
 
-2. Summary all statistic files follow formulas -> 0.5 day
-
-3. Get bandwidth, delay of real link
-
+1. Get bandwidth, delay of real wimax link
+(for the cost function)
 -> 3rdParty tool ? -> 0.25 day
 
 
