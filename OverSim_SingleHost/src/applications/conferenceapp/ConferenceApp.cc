@@ -228,7 +228,7 @@ void ConferenceApp::handleTimerEvent(cMessage* msg)
 
     	/* check finish sending video */
         if(numSent > videoSize*loopTimes - 1){
-        	cout << "Node " << nodeID << " Truyennnnnnnnnnnnnn hetttttttttt video packet at " << simTime() << endl;
+        	cout << "Node " << nodeID << " Truyennnnnnnnnnnnnn hetttttttttt video packet at " << simTime() << endl<< endl<< endl<< endl<< endl;
         	delete [] sd;
 
         	cancelAndDelete(sendDataTimer);

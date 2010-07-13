@@ -41,6 +41,12 @@ void HoangGlobalObject::initialize()
 	inFile = fopen("in.log","w");
 	receivedFile = fopen("received.log","w");
 
+	FILE * f;
+	f = fopen("ping.log","w");
+	fclose(f);
+	f = fopen("pong.log","w");
+	fclose(f);
+
 	cout << "Hoang global object initttt done" << endl;
 }
 

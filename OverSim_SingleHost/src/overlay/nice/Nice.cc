@@ -723,7 +723,7 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
         }
         //hoang
 		else if(niceMsg->getCommand() == NICE_RP_NOTIFY){
-			cout << "vua nhan duoc NICE_RPnotify from " << niceMsg->getSrcNode() << endl;
+			cout << endl <<"vua nhan duoc NICE_RPnotify from " << niceMsg->getSrcNode() << endl;
 			RendevouzPoint = niceMsg->getSrcNode();
 			delete niceMsg;
 
@@ -733,11 +733,20 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 			msg->setSrcNode(thisNode);
 
 			sendMessageToUDP(RendevouzPoint, msg);
+			FILE * f;
+			f = fopen("ping.log","a");
+			fprintf(f,"%f\n",simTime().dbl());
+			fclose(f);
 			cout << "send RP_PING to " << RendevouzPoint << " at " << simTime() << endl;
 
 		}
 
 		else if(niceMsg->getCommand() == NICE_RP_PONG){
+			FILE * f;
+			f = fopen("pong.log","a");
+			fprintf(f,"%f\n",simTime().dbl());
+			fclose(f);
+
 			cout << "receive RP_PONG from " << niceMsg->getSrcNode() << " at " << simTime() << endl;
 
 			delete niceMsg;
