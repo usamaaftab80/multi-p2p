@@ -21,8 +21,6 @@ Define_Module(HoangGlobalObject);
 
 void HoangGlobalObject::initialize()
 {
-	cout << "Hoang global object initttt begin" << endl;
-
 	numNode = par("targetOverlayTerminalNum");
 	P_sid = new uint16 [numNode];
 	beginSendDataTime = new simtime_t [numNode];
@@ -44,7 +42,12 @@ void HoangGlobalObject::initialize()
 	inFile = fopen("in.log","w");
 	receivedFile = fopen("received.log","w");
 
-	cout << "Hoang global object initttt done" << endl;
+	ofstream f;
+	f.open ("member_list.txt");
+	f << 1111 << "\t" << "1.1.1.2" << endl;
+	f.close();
+
+	cout << "Hoang global object initttt done at " << simTime() << endl;
 	system("./addroute.sh");
 }
 
@@ -169,11 +172,11 @@ void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid,int ttl,int fromNod
 	fprintf(inFile,"%f\t%d\t%d\t%d\t%d\t%d\t%f\n", simTime().dbl(), nodeID, sid, pid, ttl, fromNode, delay);
 }
 
-void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid)
+void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid, int toNode)
 {
 	//write to out.log
 	//at simTime() nodeID	forwarded a packet sid,pid
-	fprintf(outFile,"%f\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid);
+	fprintf(outFile,"%f\t%d\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid, toNode);
 }
 
 void HoangGlobalObject::recordReceived(uint nodeID,int sid,int pid,int hopcount)
@@ -192,7 +195,7 @@ void HoangGlobalObject::updateRP(IPvXAddress add)
 	RPfile << add.str() << "\n";
 	RPfile.close();
 
-	system("cp -rf rendezvous.point /home/admin/origine_oversim/OverSim-20090908/simulations/realworld");
+//	system("cp -rf rendezvous.point /home/admin/origine_oversim/OverSim/simulations/realworld");
 }
 
 void HoangGlobalObject::incNumNodeSentDone()
@@ -203,4 +206,33 @@ void HoangGlobalObject::incNumNodeSentDone()
 	if(numNodeSentDone >= numNode ){
 		cout << "All nodes senttttttttt doneeeeeeeeeeeee. Ready to terminate !!!!!" << endl<< endl<< endl<< endl<< endl;
 	}
+}
+
+void HoangGlobalObject::updateMemberList(int nodeID,IPvXAddress add)
+{
+	ofstream f;
+	f.open ("member_list.txt",ios::app);
+
+	f << nodeID << "\t" << add.str() << endl;
+	f.close();
+}
+
+int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
+{
+	FILE * f;
+	f = fopen("member_list.txt","r");
+
+	char str[80];
+	int id;
+
+	do
+	{
+		fscanf(f,"%d\t%s\n",&id,str);
+	}
+	while (add != IPvXAddress(str));
+
+	fclose(f);
+
+	return id;
+
 }

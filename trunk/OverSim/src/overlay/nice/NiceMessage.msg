@@ -70,6 +70,8 @@ enum NICECommand
     NICE_FORCE_MERGE = 16; // Force Merge to SourceNode
     //hoang
     NICE_RP_NOTIFY = 17; // Notify about RP change
+    NICE_RP_PING = 18;
+    NICE_RP_PONG = 19;
 }
 
 message NiceMessage extends BaseOverlayMessage

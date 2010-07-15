@@ -2,7 +2,9 @@
 su -
 cd /home/admin/sim/OverSim-20090908/simulations/realworld
 ./root_setup-world
-NOTE: wait until "tun0 up done" without errors
+NOTE:
+- wait until "tun0 up done" without errors
+- make sure ip_forward = 1
 
 2. External Wimax terminal
 cd /home/admin/origine_oversim/OverSim-20090908/simulations/realworld
@@ -13,3 +15,5 @@ cd ../../singlehost/OverSim-20090908/simulations/realworld
 ./setup_tunnel.sh
 (wait for peering done with remote host)
 ./addroute.sh
+(wait until "Hoang global object initttt done" on Server to make sure that SingleHost will receive the first NICE_RP_NOTIFY msg)
+../../src/OverSim -f niceapp.ini -u Cmdenv

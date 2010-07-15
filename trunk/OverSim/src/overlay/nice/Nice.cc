@@ -705,6 +705,20 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
         }
 
+        //hoang
+		else if(niceMsg->getCommand() == NICE_RP_PING){
+			cout << thisNode.getAddress() << " receives NICE_RP_PING from " << niceMsg->getSrcNode() << " sim_delay: " << simTime() - niceMsg->getCreationTime() << endl;
+
+			NiceMessage * msg = new NiceMessage("NICE_RP_PONG");
+
+			msg->setCommand(NICE_RP_PONG);
+			msg->setSrcNode(thisNode);
+
+			sendMessageToUDP(niceMsg->getSrcNode(), msg);
+			delete niceMsg;
+
+		}
+
     } else if (dynamic_cast<CbrAppMessage*>(msg) != NULL) {
 
         CbrAppMessage* appMsg = check_and_cast<CbrAppMessage*>(msg);
