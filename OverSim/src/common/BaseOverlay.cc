@@ -766,7 +766,6 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
 			if (cbrAppMsg->getCommand() == CBR_DATA)
 				if(cbrAppMsg->getLastHopID() == externalNodeID){
-//					cout << "ttl from " << externalNodeID << " : " << udpControlInfo->getTimeToLive() << endl;
 					hopCount += (externalDefaultTTL - defaultTimeToLive + externalPathLength);
 				}
 				global->recordIn(nodeID,cbrAppMsg->getNodeID(),cbrAppMsg->getSeqNo(),hopCount, cbrAppMsg->getLastHopID(), delay.dbl());
@@ -1234,7 +1233,7 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
 		CbrAppMessage* cbrAppMsg = check_and_cast<CbrAppMessage*>(msg);
 
 		if (cbrAppMsg->getCommand() == CBR_DATA)
-			global->recordOut(nodeID,cbrAppMsg->getNodeID(),cbrAppMsg->getSeqNo());
+			global->recordOut(nodeID,cbrAppMsg->getNodeID(),cbrAppMsg->getSeqNo(),global->getNodeIDofAddress(dest.getAddress()));
     }
 
     send(msg, "udpOut");

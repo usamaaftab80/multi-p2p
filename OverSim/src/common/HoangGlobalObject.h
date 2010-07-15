@@ -87,9 +87,12 @@ class HoangGlobalObject : public cSimpleModule
 	  uint16 getNumAccessLink(uint16 sid, int pid){return numAccessLink[sid][pid];};
 
 	  void recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode, float delay);
-	  void recordOut(uint nodeID,int sid,int pid);
+	  void recordOut(uint nodeID,int sid,int pid, int toNode);
 	  void recordReceived(uint nodeID,int sid,int pid,int hopCount);
 	  void updateRP(IPvXAddress add);
+
+	  void updateMemberList(int nodeID,IPvXAddress add);
+	  int getNodeIDofAddress(IPvXAddress add);
 
 	  void incNumNodeSentDone();
 

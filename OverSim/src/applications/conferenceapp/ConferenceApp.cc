@@ -225,7 +225,9 @@ void ConferenceApp::initializeApp(int stage)
 
     }
     bindToPort(2000);
-    cout << "Node " << nodeID << " IP " << thisNode.getAddress() << " APP init done " << endl;
+//    cout << "Node " << nodeID << " IP " << thisNode.getAddress() << " APP init done " << endl;
+    global->updateMemberList(nodeID,thisNode.getAddress());
+
 }
 
 
