@@ -72,9 +72,7 @@ ant deploy
 == 9.Configure the Environment ==
 
   * All the installation examples configured to work only on the local loopback and the default domain configured as "open-ims.test".
-
   * The MySQL access rights are set only for local access 
-
   * We recommend that you try it first like this and then do your changes:
   # Replace 127.0.0.1 where required with your IP address 
   # Replace the home domain (open-ims.test) with your own one 
@@ -151,12 +149,16 @@ ff02::3 ip6-allhosts
    dig open-ims.test
 }}}
   # Change Nodes setting: 
-  * 6.1 icscf.cfg & icscf.xml (opt/OpenIMSCore/) 
-  * 6.2 pcscf.cfg & pcscf.xml 
-  * 6.3 scscf.cfg & scscf.xml 
-  # Change FHoSS setting ==
-  * 7.1 DiameterPeerHSS.xml (FHoSS/deploy) 
-  * 7.2 hss.properties (FHoSS/deploy)
+{{{
+  icscf.cfg & icscf.xml (opt/OpenIMSCore/) 
+  pcscf.cfg & pcscf.xml 
+  scscf.cfg & scscf.xml 
+}}}
+  # Change FHoSS setting 
+{{{ 
+    DiameterPeerHSS.xml (FHoSS/deploy) 
+    hss.properties (FHoSS/deploy)
+}}}
 => Check the web interface on : http://127.0.0.1:8080/
 
   # Configuration port for HSS : 
@@ -214,8 +216,7 @@ MESSAGE: ("Conference", "DAR:From", "ORIGINATING", "", "NO_ROUTE", "0")
 NOTIFY: ("Conference", "DAR:From", "ORIGINATING", "", "NO_ROUTE", "0")
 SUBSCRIBE: ("Conference", "DAR:From", "ORIGINATING", "", "NO_ROUTE", "0")
 }}}  
-  # Run JBOSS Application with real IP  
-  * Go to the directory : *JBOSS_HOME/bin/*
+  # Run JBOSS Application with real IP: Go to the directory : *JBOSS_HOME/bin/*   
 {{{
 ./run.sh -b [ip_address] 
 ex:     
