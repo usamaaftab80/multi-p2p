@@ -1,8 +1,10 @@
 #labels Mobicents,OpenIMS
 = Introduction =
 
-Install IMS Core and Mobicents AS with real IP address 
-
+  * Install IMS Core with real IP address 
+  * Mobicents AS with real IP address 
+  * Connect between IMS Core and Mobicents AS 
+  * Test system with Sipp client
 
 = I) Install OpenIMSCore with IP localhost : 127.0.0.1 =
 ==1. Prerequisites:==
