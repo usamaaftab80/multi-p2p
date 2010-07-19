@@ -228,3 +228,547 @@ ex:
   * Run the Sip phone 
   * Config Sip phone with IP proxy : IP_Address_Mobicents:port (ex : 157.159.16.91:5080)
   
+=V) Connect between IMS Core and Mobicents AS=
+  ==Prerequisites==
+  * All configuration is done through the FHoSS (FOKUS Home Subscriber Server) web interface, by default on port 8080. 
+  * Change port 8080 to 9080 in the file opt/OpenIMSCore/FHoSS/deploy/hss.properties 
+{{{
+# host & port : specify the IP address and the port where Tomcat is listening, e.g. host=127.0.0.1; port=8080;  
+
+host=127.0.0.1
+port=9080
+}}}  
+  ==Adding new Application Server==
+  * Adding a new application server is a very simple, one step action. You just need to specify it’s address in the form of SIP URI and the default behaviour of the *Serving-CSCF (S-CSCF)* in case of connection failures. You need to navigate through: *Services → Application Servers → Create* and specify the following values:
+{{{
+     * Name – any unique name,
+     * Server Name – actually it must be a valid SIP URI which resolves to application server address,
+     * Diameter FQDN – fully qualified domain name,
+     * Default Handling – default behaviour of the S-CSCF in case of connection errors,
+     * Service-Info – required, if used by the application.
+}}}
+  ==Creating Service Profile==
+  * Creation of the service profile is not that fast as adding application server but still there is no magic in it. In order to create a service profile you need to perform at most three steps:
+{{{
+    * Create Trigger Point,
+    * Create Initial Filter Criteria,
+    * Create Service Profile itself.
+}}}
+  * Trigger point defines a set of conditions under which particular SIP request is forwarded to application server. Particular conditions are provided by *SPTs (Service Point Triggers)* in the form of the regular expression. In order to create Trigger Point You need to navigate through: *Services → Trigger Points → Create* and specify the following values:
+{{{
+    * Name – any unique name,
+    * Condition Type – logic by which SPTs are evaluated (conjunction, disjunction),
+}}}
+  * After this You may optionally specify the set of appropriate SPTs constituting this Trigger Point and provide optional list of already existing *Initial Filter Criteria* to which this Trigger Point will be attached.
+  * *Initial Filter Criteria* define a correlation between a set of Trigger Points and particular application server responsible for execution of the associated service logic. IMS architecture specifies that Initial Filter Criteria can have from one to n attached Trigger Points. In OSIMS it is simplified because there can be only one. So generally in order to create Initial Filter Criteria You need to specify the previously created Trigger Point and desired application server address. You need to navigate through: *Services → Initial Filter Criteria → Create* and specify the following values:
+{{{
+    * Name – any unique name,
+    * Trigger Point – name of the already existing Trigger Point,
+    * Application Server – application server name,
+    * Profile Part Indicator – specifies the registration state condition for criteria evaluation.
+}}}
+
+  * Finally You are able to create a Service Profile and assign to it a prioritized list of Initial Filter Criteria including the one just created. If You don’t specify any Initial Filter Criteria than this Service Profile will not invoke any service logic and all request will be processed without evaluation. You need to navigate through: *Services → Service Profiles → Create* and specify the following values:
+{{{
+    * Name – any unique name,
+    * IFCs – set of attached Initial Filter Criterias.
+}}}
+  
+  ==Creating User Account(optional)==
+  * Generally we can say that IMS user account is composed of three correlated parts:
+{{{
+    * Subscription (IMSU) – identifies the user on the level of contract between subscriber and network,
+    * Private Identity (IMPI) – used by the user for authorization and authentication within the home network,
+    * Public User Identity (IMPU) – addressable identity of the user.
+}}}
+  * Any *Service Profile* is always prescribed to particular IMPU. If You already have one created You can skip this step and jump directly to the last one. But for those who don’t, this part describes how to create such account from the scratch. In order to create a user account you need to create all above described parts.
+
+  * To create IMSU navigate through: *User Identities → IMS Subscription → Create* and specify the following values:
+{{{
+    * Name – any reasonable unique name,
+    * Capabilities Set – optional parameter specifying S-CSCF selection preferences for Interogating-CSCF (I-CSCF),
+    * Preffered S-CSCF – optional preassigned S-CSCF.
+}}}
+  * To create IMPI navigate through: *User Identities → Private Identity → Create*  and specify the following values:
+{{{
+    * Identity – in the form username@domain i.e. tran@open-ims.test
+    * Secret key – password,
+    * Authentication Schemes – whichever is required, I usually use all,
+    * Default – for instance Digest-MD5.
+}}}
+  * After this, you need to assigned IMPI to previously created IMSU.
+
+  * To create IMPU navigate through: *User Identities → Public User Identity → Create* and specify the following values:
+{{{
+    * Identity – in the form of SIP URI  i.e. sip:tran@open-ims.test
+    * Service Profile – any existing profile, I always have an empty profile created (no IFCs attached), which I assign by default.
+}}}
+  * At the end You need to add a list of allowed visited networks, at least Your home network and associate IMPU with previously created IMPI.
+
+  ==Attaching Service Profile to User Account==
+  * Finally You can activate a Service Profile for a particular user by assigning it to one of his IMPU’s. You find the user by navigating through *User Identities → Public User Identity → Search*. Then You just set the Service Profile field with the appropriate value.
+  * So that’s it, now you are ready to rumble! Using the appropriate IMPU you can test and play with the services hosted on the plugged application server.
+
+=VI) Test system with Sipp client=
+==Install Sipp :==
+  * There are 2 ways to install Sipp : 
+  # Install from package : Type the following command to install sip with both openssl and pcap supported. 
+{{{
+sudo apt-get install sip-tester 
+}}} 
+  # Install from source code : The common problem we are meeting in installing sipp 3.1 in ubuntu is a declaration problem.Probably this error will prevent you from completing the compile.
+{{{ 
+‘INT_MAX’ was not declared in this scope	
+}}}
+  * Please add #include <limits.h> in the file header where it is missed.
+
+  * Additional, please read carefully instructions in Sipp's website : http://sipp.sourceforge.net/doc/reference.html
+
+==Writing scenario to test Mobicents AS==
+  * Scernario 
+{{{
+    REGISTER ----------> AS Server 
+         200 <---------- AS Server
+       Pause [   5000ms] 
+
+      INVITE ----------> AS Server
+         100 <---------- AS Server
+         180 <---------- AS Server         
+         200 <---------- AS Server
+         ACK ----------> AS Server 
+}}}
+  * Code scenario : 
+{{{
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
+
+<scenario name="Session for conference">
+	
+	<send retrans="500">
+		<![CDATA[
+			REGISTER sip:127.0.0.1 SIP/2.0
+			Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+			Max-Forwards: 20
+			From: "tran" <sip:tran@127.0.0.1>;tag=[call_number]
+			To: "tran" <sip:tran@127.0.0.1>			
+			Call-ID: [call_id]
+			CSeq: 1 REGISTER
+			Contact: <sip:tran@[local_ip]:[local_port]>
+			Expires: 300
+			Content-Length: 0
+			User-Agent: Sipp v1.1-TLS, version 20061124
+			Supported: path
+		]]>
+	</send>
+		
+	<recv response="200">
+	</recv>
+
+	<pause milliseconds="5000" crlf="true" />
+
+	<send retrans="500">
+		<![CDATA[
+			INVITE sip:sip-servlets-conference@localhost:5080 SIP/2.0
+			Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+			Max-Forwards: 20
+			From: <sip:tran@127.0.0.1>;tag=[call_number]
+			To: <sip:sip-servlets-conference@127.0.0.1:5080>
+			Call-ID: [call_id]
+			CSeq: 1 INVITE
+			Contact: <sip:tran@[local_ip]:[local_port]>
+			User-Agent: Sipp v1.1-TLS, version 20061124
+			Allow: ACK, BYE, CANCEL, INVITE, REFER, OPTIONS, INFO, REGISTER, NOTIFY, UPDATE, SUBSCRIBE, PRACK 
+			Content-Type: application/sdp
+			Content-Length: [len]
+						
+			v=0
+			o=tran 3487063231 3487063231 IN IP4 127.0.0.1
+			s=SJphone
+			c=IN IP4 127.0.0.1
+			t=0 0
+			m=audio 49154 RTP/AVP 96 101
+      			a=rtpmap:96 AMR/8000/1
+			a=fmtp:96 octet-align=1
+      			a=rtpmap:101 telephone-event/8000
+			a=sendrecv
+			m=video 49164 RTP/AVP 34 98
+ 			a=rtpmap: 34 H263/90000			
+			a=fmtp: 34 QCIF = 1 CIF = 4 MaxBR = 3760
+			a=rtpmap:98 MP4V-ES/90000 
+			a=fmtp: 98 profile-level-id = 2
+			a=sendrecv
+		]]>
+	</send>
+
+	<recv response="100" optional="true">
+	</recv>
+
+	<recv response="180" optional="true">
+	</recv>
+	
+	<recv response="403" optional="true" next="1">
+	</recv>
+	
+	<recv response="404" optional="true" next="1">
+	</recv>
+	
+	<recv response="408" optional="true" next="1">
+	</recv>
+	
+	<recv response="200" rrs="true">
+	</recv>
+
+	<send crlf="true">
+		<![CDATA[
+			ACK [next_url] SIP/2.0
+			[last_Via:]
+			Max-Forwards: 20
+			From: <sip:tran@127.0.0.1>;tag=[call_number]
+			[last_To:]
+			Call-ID: [call_id]
+			CSeq: 1 ACK
+			Content-Length: 0
+		]]>
+	</send>
+	
+	<pause milliseconds="5000" crlf="true" />	
+	<!-- Play a pre-recorded PCAP file (RTP stream)                       -->
+	<nop>
+  		<action>
+			<exec play_pcap_audio="MMdemoMainmenuH263.pcap"/>
+		</action>
+	</nop>  	
+
+
+	<pause milliseconds="5000" crlf="true" />	
+	<!--
+  	<nop>
+		<action>
+			<exec play_pcap_video="MMdemoMainmenuH263.pcap"/>
+		</action>
+	</nop>
+	-->
+
+	<pause milliseconds="5000" crlf="true" />
+	
+	<send retrans="500">
+		<![CDATA[
+			BYE [next_url] SIP/2.0
+			[last_Via:]
+			Max-Forwards: 20
+			From: <sip:tran@127.0.0.1>;tag=[call_number]
+			[last_To:]
+			Call-ID: [call_id]
+			CSeq: 11 BYE
+			Contact: <sip:tran@[local_ip]:[local_port]>
+			Content-Length: 0
+		]]>
+	</send>
+	
+	<recv response="200" crlf="true" next="2">
+	</recv>
+	
+	<label id="1"/>
+	
+	<send crlf="true">
+		<![CDATA[
+			ACK sip:sip-servlets-conference@127.0.0.1 SIP/2.0
+			[last_Via:]
+			Max-Forwards: 20
+			From: <sip:tran@127.0.0.1>;tag=[call_number]
+			[last_To:]
+			Call-ID: [call_id]
+			CSeq: 11 ACK
+			Content-Length: 0
+		]]>
+	</send>
+	
+	<label id="2"/>
+
+	<!-- definition of the response time repartition table (unit is ms)   -->
+	<ResponseTimeRepartition value="10, 20, 30, 40, 50, 100, 150, 200"/>
+
+	<!-- definition of the call length repartition table (unit is ms)     -->
+	<CallLengthRepartition value="10, 50, 100, 500, 1000, 5000, 10000"/>
+
+</scenario>   
+}}}
+  * Running this scenario: Use the command line 
+{{{
+./sipp -sf uac-tran.xml 127.0.0.1:5080 -i 127.0.0.1 -p 5061 -m 1
+
+Usage : 
+-sf :  Loads an alternate xml scenario file.  To learn more about XML scenario syntax, use the -sd option to dump embedded scenarios. They contain all the necessary help.
+127.0.0.1:5080 - remote_host[:remote_port]
+
+-i 127.0.0.1 : Set the local IP address: 127.0.0.1 for 'Contact:','Via:', and 'From:' headers. Default is primary host IP address.
+
+-p 5061 : Set the local port number: 5061.  Default is a random free portchosen by the system.
+
+}}}
+==Writing scenario to test OpenIMSCore and Mobicents AS 
+  * Scenario : 
+{{{
+    REGISTER ----------> P-CSCF (OpenIMSCore + Mobicents AS)
+         401 <---------- P-CSCF (OpenIMSCore + Mobicents AS)
+    REGISTER ----------> P-CSCF (OpenIMSCore + Mobicents AS)
+         200 <---------- P-CSCF (OpenIMSCore + Mobicents AS)
+       Pause [   5000ms] 
+ 
+      INVITE ----------> P-CSCF (OpenIMSCore + Mobicents AS)
+         100 <---------- P-CSCF (OpenIMSCore + Mobicents AS)
+         180 <---------- P-CSCF (OpenIMSCore + Mobicents AS)
+         200 <---------- P-CSCF (OpenIMSCore + Mobicents AS)
+         ACK ----------> P-CSCF (OpenIMSCore + Mobicents AS)
+
+       Pause [   5000ms]         
+
+              [ NOP ]   - Transfer of media data           
+       Pause [   5000ms]         
+
+    REGISTER ----------> P-CSCF (OpenIMSCore + Mobicents AS)   -  DeREGISTER Message
+         401 <---------- P-CSCF (OpenIMSCore + Mobicents AS)
+    REGISTER ----------> P-CSCF (OpenIMSCore + Mobicents AS)
+         200 <---------- P-CSCF (OpenIMSCore + Mobicents AS)
+         BYE <---------- P-CSCF (OpenIMSCore + Mobicents AS)
+       Pause [    20.0s]     
+
+         ACK ----------> P-CSCF (OpenIMSCore + Mobicents AS)
+
+         200 <---------- P-CSCF (OpenIMSCore + Mobicents AS)
+}}}
+  * Code scenario 
+{{{
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE scenario SYSTEM "sipp.dtd">
+
+<scenario name="Session for conference">
+	<send retrans="500">
+		<![CDATA[
+		REGISTER sip:open-ims.test SIP/2.0
+		Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+		Max-Forwards: 20
+		From: "tran" <sip:tran@open-ims.test>;tag=[call_number]
+		To: "tran" <sip:tran@open-ims.test>
+		P-Access-Network-Info: 3GPP-UTRAN-TDD;utran-cell-id-3gpp=C359A3913B20E
+		Call-ID: [call_id]
+		CSeq: 1 REGISTER
+		Contact: <sip:tran@[local_ip]:[local_port]>
+		Expires: 300
+		Content-Length: 0
+		User-Agent: Sipp v1.1-TLS, version 20061124
+		Authorization: Digest username="tran@open-ims.test", realm="open-ims.test"
+		Supported: path
+		]]>
+	</send>
+	
+	<recv response="401" auth="true">
+	</recv>
+
+	<send retrans="500">
+		<![CDATA[
+		REGISTER sip:open-ims.test SIP/2.0
+		Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+		Route: [$1]
+		Max-Forwards: 20
+		From: "tran" <sip:tran@open-ims.test>;tag=[call_number]
+		To: "tran" <sip:tran@open-ims.test>
+		P-Access-Network-Info: 3GPP-UTRAN-TDD;utran-cell-id-3gpp=C359A3913B20E			
+		Call-ID: [call_id]
+		CSeq: 2 REGISTER
+		Contact: <sip:tran@[local_ip]:[local_port]>
+		Expires: 300
+		Content-Length: 0
+		User-Agent: Sipp v1.1-TLS, version 20061124
+		[authentication username=tran@open-ims.test password=abc]
+		Supported: path
+		]]>
+	</send>
+		
+	<recv response="200">
+		<action>
+			<ereg regexp=".*" search_in="hdr" header="Service-Route:" assign_to="1" />
+		</action>
+
+	</recv>
+
+	<pause milliseconds="5000" crlf="true" />
+
+	<send retrans="500">
+		<![CDATA[
+			INVITE sip:sip-servlets-conference@127.0.0.1:5080 SIP/2.0
+			Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+			Max-Forwards: 20
+			Route: <sip:pcscf.open-ims.test:4060;lr>,[$1]
+			P-Preferred-Identity: <sip:tran@open-ims.test>
+			Privacy: none
+			P-Access-Network-Info: 3GPP-UTRAN-TDD;utran-cell-id-3gpp=C359A3913B20E
+			From: <sip:tran@open-ims.test>;tag=[call_number]
+			To: <sip:sip-servlets-conference@127.0.0.1:5080>
+			Call-ID: [call_id]
+			CSeq: 10 INVITE
+			Contact: <sip:tran@[local_ip]:[local_port]>
+			User-Agent: Sipp v1.1-TLS, version 20061124
+			Allow: ACK, BYE, CANCEL, INVITE, REFER, OPTIONS, INFO, REGISTER, NOTIFY, UPDATE, SUBSCRIBE, PRACK 
+			Content-Type: application/sdp
+			Content-Length: [len]
+						
+			v=0
+			o=- 3487063231 3487063231 IN IP4 127.0.0.1
+			s=SJphone
+			c=IN IP4 127.0.0.1
+			t=0 0
+			a=direction:active
+			m=audio 49152 RTP/AVP 3 97 98 110 8 0 101
+			a=rtpmap:3 GSM/8000
+			a=rtpmap:97 iLBC/8000
+			a=rtpmap:98 iLBC/8000
+			a=fmtp:98 mode=20
+			a=rtpmap:110 speex/8000
+			a=rtpmap:8 PCMA/8000
+			a=rtpmap:0 PCMU/8000
+			a=rtpmap:101 telephone-event/8000
+			a=fmtp:101 0-11,16
+		]]>
+	</send>
+
+	<recv response="100" optional="true">
+	</recv>
+
+	<recv response="180" optional="true">
+	</recv>
+	
+	<recv response="403" optional="true" next="1">
+	</recv>
+	
+	<recv response="404" optional="true" next="1">
+	</recv>
+	
+	<recv response="408" optional="true" next="1">
+	</recv>
+	
+	<recv response="200" rrs="true">
+	</recv>
+
+
+	<send crlf="true">
+		<![CDATA[
+			ACK [next_url] SIP/2.0
+			[last_Via:]
+			Max-Forwards: 20
+			From: <sip:tran@open-ims.test>;tag=[call_number]
+			[last_To:]
+			Call-ID: [call_id]
+			CSeq: 10 ACK
+			Content-Length: 0
+		]]>
+	</send>
+
+	<pause milliseconds="5000" crlf="true" />	
+	<!-- Play a pre-recorded PCAP file (RTP stream)                       -->
+  	<nop>
+  		<action>
+			<exec play_pcap_audio="8Khz.pcap"/>
+		</action>
+	</nop>
+
+
+	<pause milliseconds="5000" crlf="true" />
+	
+	<send retrans="500">
+		<![CDATA[
+		REGISTER sip:open-ims.test SIP/2.0
+		Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+		Max-Forwards: 20
+		From: "tran" <sip:tran@open-ims.test>;tag=[call_number]
+		To: "tran" <sip:tran@open-ims.test>
+		P-Access-Network-Info: 3GPP-UTRAN-TDD;utran-cell-id-3gpp=C359A3913B20E
+		Call-ID: [call_id]
+		CSeq: 3 REGISTER
+		Contact: <sip:tran@[local_ip]:[local_port]>
+		Expires: 0
+		Content-Length: 0
+		User-Agent: Sipp v1.1-TLS, version 20061124
+		Authorization: Digest username="tran@open-ims.test", realm="open-ims.test"
+		Supported: path
+		]]>
+	</send>
+	
+	<recv response="401" auth="true">
+	</recv>
+
+
+	<send retrans="500">
+		<![CDATA[
+		REGISTER sip:open-ims.test SIP/2.0
+		Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
+		Route: [$1]
+		Max-Forwards: 20
+		From: "tran" <sip:tran@open-ims.test>;tag=[call_number]
+		To: "tran" <sip:tran@open-ims.test>
+		P-Access-Network-Info: 3GPP-UTRAN-TDD;utran-cell-id-3gpp=C359A3913B20E			
+		Call-ID: [call_id]
+		CSeq: 4 REGISTER
+		Contact: <sip:tran@[local_ip]:[local_port]>
+		Expires: 0
+		Content-Length: 0
+		User-Agent: Sipp v1.1-TLS, version 20061124
+		[authentication username=tran@open-ims.test password=abc]
+		Supported: path
+		]]>
+	</send>
+	
+	<recv response="200" optional="true" next="2">
+	</recv>
+	
+
+	<recv request="BYE" next="2">
+	</recv>
+
+	<pause milliseconds="20000" crlf="true" /> 
+
+	<send retrans="500" crlf="true">
+		<![CDATA[
+			ACK [next_url] SIP/2.0
+			[last_Via:]
+			Max-Forwards: 20
+			From: <sip:tran@open-ims.test>;tag=[call_number]
+			[last_To:]
+			Call-ID: [call_id]
+			CSeq: 10 ACK
+			Content-Length: 0
+		]]>
+	</send>
+		
+	<recv response="200" crlf="true" next="2">
+	</recv>
+	
+	<label id="1"/>
+		
+	<label id="2"/>
+	
+	
+	<!-- definition of the response time repartition table (unit is ms)   -->
+	<ResponseTimeRepartition value="10, 20, 30, 40, 50, 100, 150, 200"/>
+
+	<!-- definition of the call length repartition table (unit is ms)     -->
+	<CallLengthRepartition value="10, 50, 100, 500, 1000, 5000, 10000"/>
+	
+</scenario>
+}}}
+
+  * Running this scenario : 
+{{{
+./sipp -sf uac-tran-ims.xml 157.159.16.91:4060 -i 157.159.16.91 -p 5061 -m 1
+
+Usage : 
+-sf :  Loads an alternate xml scenario file.  To learn more about XML scenario syntax, use the -sd option to dump embedded scenarios. They contain all the necessary help.
+157.169.16.91:4060 - remote_host[:remote_port]  --> IP : P-CSCF
+
+-i 157.159.16.91 : Set the local IP address: 127.0.0.1 for 'Contact:','Via:', and 'From:' headers. Default is primary host IP address.
+
+-p 5061 : Set the local port number: 5061.  Default is a random free portchosen by the system.
+}}}
+ 
+  * Note : Before running this scenario, please connect well between OpenIMSCore and Mobicents AS with real IP
+   
