@@ -1507,6 +1507,9 @@ void Nice::handleNiceLeaderHeartbeatOrTransfer(NiceMessage* msg)
 
 void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
 {
+	//hoang
+//	multicastMsg->get
+	//end of hoang
     RECORD_STATS(++numReceived; totalReceivedBytes += multicastMsg->getByteLength());
 
     /* If it is mine, count */
@@ -1529,6 +1532,9 @@ void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
             sendDataToOverlay(forOverlay);
 
             send(multicastMsg->decapsulate(), "appOut");
+            //hoang
+            global->recordALMhopcount(hopCount);
+            //end of hoang
 
         }
     }
@@ -3690,10 +3696,12 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
                         dup->setLayer( layer );
                         dup->setLastHop(thisNode);
 
-                        sendMessageToUDP(member, dup);
                         //hoang
+                        dup->setLastHopID(nodeID);
+                        //FIXME: record sid=0 in case of streaming (only one sender=0)
                         global->recordOut(nodeID,0,dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()));
                         //end of hoang
+                        sendMessageToUDP(member, dup);
 
                     }
 
@@ -3714,6 +3722,11 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
 
         dup->setSrcNode(thisNode);
 
+        //hoang
+        dup->setLastHopID(nodeID);
+        //FIXME: record sid=0 in case of streaming (only one sender=0)
+        global->recordOut(nodeID,0,dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()));
+        //end of hoang
         sendMessageToUDP(it->first, dup);
 
         it++;

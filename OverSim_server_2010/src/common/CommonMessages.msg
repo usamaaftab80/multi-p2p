@@ -556,7 +556,7 @@ class OverlayCtrlInfo
     int srcComp enum(CompType);  // source component
     int destComp enum(CompType); // destination component
     int transportType enum(TransportType) = INVALID_TRANSPORT; // transport type of the received message
-    int routingType enum(RoutingType);
+    int routingType enum(RoutingType);    
 }
 
 //
@@ -613,7 +613,7 @@ packet ALMLeaveMessage extends ALMMessage
 packet ALMMulticastMessage extends ALMMessage
 {
     //hoang
-    int packetID;
+    int packetID;       
 }
 
 //

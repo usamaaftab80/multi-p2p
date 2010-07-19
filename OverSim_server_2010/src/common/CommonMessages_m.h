@@ -1766,7 +1766,7 @@ inline void doUnpacking(cCommBuffer *b, P2pnsResolveResponse& obj) {obj.parsimUn
  *     int srcComp enum(CompType);  
  *     int destComp enum(CompType); 
  *     int transportType enum(TransportType) = INVALID_TRANSPORT; 
- *     int routingType enum(RoutingType);
+ *     int routingType enum(RoutingType);    
  * }
  * </pre>
  */
@@ -1987,7 +1987,7 @@ inline void doUnpacking(cCommBuffer *b, ALMLeaveMessage& obj) {obj.parsimUnpack(
  * packet ALMMulticastMessage extends ALMMessage
  * {
  *     
- *     int packetID;
+ *     int packetID;       
  * }
  * </pre>
  */

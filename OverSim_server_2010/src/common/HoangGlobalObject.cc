@@ -22,25 +22,16 @@ Define_Module(HoangGlobalObject);
 void HoangGlobalObject::initialize()
 {
 	numNode = par("targetOverlayTerminalNum");
-
-	beginSendDataTime = new simtime_t [numNode];
-	videoLength = new int [numNode];
 	numSent = 0;
 	numNodeSentDone = 0;
 	numNodeJoined = 0;
 	videoSize = par("videoSize");
 	loopTimes = par("loopTimes");
 	videoSize = videoSize * loopTimes;
-
-	linkStress = new int [videoSize];
-	fill(linkStress, linkStress + videoSize , 0);
-
-	numLink = new int [videoSize];
-	fill(numLink , numLink + videoSize , 0);
+	totalALMhopcount = numALMhopcount = 0;
 
 	outFile = fopen("out.log","w");
 	inFile = fopen("in.log","w");
-	receivedFile = fopen("received.log","w");
 
 	ofstream f;
 	f.open ("member_list.txt");
@@ -54,79 +45,11 @@ void HoangGlobalObject::initialize()
 
 HoangGlobalObject::~HoangGlobalObject()
 {
-	//cout << "~HoangGlobalObject()" << endl;
 
-	/*
-	 * 1-n NiceTestApp
-	 */
-	/*double sum = 0;
-	int count = 0;
-	for(int i=0; i<videoSize; i++){
-
-		if (!(linkStress[i] > 0)){
-			cout << "packet " << i << " stress sum " << linkStress[i] << " for " << numLink[i] << " links" << endl;
-		}
-		if(numLink[i] >0 ){
-				sum += (double)linkStress[i] / (double)numLink[i];
-				count++;
-		}
-	}
-	cout << "Average link stress: "<< sum / (double)count << endl;
-
-	delete [] linkStress;
-	delete [] numLink;*/
-
-
-
-	/*
-	 * Reserved for MultiSenderApp
-	 */
-	/*double sum = 0;
-	int count = 0;
-	double stressSumAtNode = 0;
-	int bigP = 0;
-	double stressSum = 0;
-
-	for(uint16 sid=0; sid<numNode; sid++){
-
-		for(int pid=0; pid<P_sid[sid]; pid++){
-
-			if(!(stress[sid][pid] > 0)){
-				//cout << "sid " << sid << " pid " << pid << " stress " << stress[sid][pid] << endl;
-			}
-
-			else {
-
-				if(numAccessLink[sid][pid] < numNode){
-					cout << "sid " << sid << " pid " << pid << " numAccessLink " << numAccessLink[sid][pid] << endl;
-				}
-
-				stressSumAtNode += (double)stress[sid][pid] / (double)(numAccessLink[sid][pid]);
-				stressSum += (double)(stress[sid][pid]) / (double)(numAccessLink[sid][pid]);
-				count++;
-			}
-
-		}
-
-		sum += stressSumAtNode / (double)P_sid[sid];
-
-		stressSumAtNode = 0; //reset, prepare for next node
-
-		bigP += P_sid[sid];
-	}
-
-//	cout << "Count of packet (stress > 0): "<< count << endl;
-	cout << "Total packet P= "<< bigP << endl;
-	cout << "Average link stress by Packets: "<< stressSum / (double)count << endl;
-//	cout << "Average link stress by Nodes : "<< sum / (double)numNode << endl;*/
+	cout << "\ntotalALMhopcount=" << totalALMhopcount << " numALMhopcount=" << numALMhopcount << endl<< endl;
 
 	fclose(inFile);
 	fclose(outFile);
-	fclose(receivedFile);
-
-	delete [] linkStress;
-	delete [] numLink;
-
 }
 
 /*void HoangGlobalObject::handleMessage(cMessage *msg)
@@ -134,36 +57,7 @@ HoangGlobalObject::~HoangGlobalObject()
 	// TODO - Generated method body
 }*/
 
-void HoangGlobalObject::calculateNumAccessLink(int i)
-{
 
-/*	cTopology topo;
-
-	topo.extractByModulePath(cStringTokenizer("**.overlayTerminal[*]").asVector());
-
-	numNode = topo.getNumNodes();*/
-
-
-	numLink[i] = numNode;
-
-/*
-	for (int j=0; j<numNode ; j++)
-	{
-	  cTopology::Node *node = topo.getNode(j);
-	  numLink[i] += node->getNumOutLinks();
-	}
-*/
-
-}
-
-void HoangGlobalObject::updateNumLinkArray()
-{
-
-	fill(numLink + numSent , numLink + videoSize , numNodeJoined);
-	if(!(numNodeJoined < numNode)){
-		std::cout << "numNodeJoined=" << numNodeJoined << " numNode=" << numNode << endl;
-	}
-}
 
 void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode, float delay)
 {
@@ -177,13 +71,6 @@ void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid, int toNode)
 	//write to out.log
 	//at simTime() nodeID	forwarded a packet sid,pid
 	fprintf(outFile,"%f\t%d\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid, toNode);
-}
-
-void HoangGlobalObject::recordReceived(uint nodeID,int sid,int pid,int hopcount)
-{
-	//write to in.log
-	//at simTime() nodeID	received a packet sid,pid at application
-	fprintf(receivedFile,"%f\t%d\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid, hopcount);
 }
 
 void HoangGlobalObject::updateRP(IPvXAddress add)

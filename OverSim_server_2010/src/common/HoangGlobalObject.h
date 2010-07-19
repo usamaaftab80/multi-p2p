@@ -33,16 +33,16 @@ class HoangGlobalObject : public cSimpleModule
 	int numNodeSentDone;
 	int senderId;
 	int videoSize;
-	int* linkStress;
-	int* numLink;
+
 	int loopTimes;
 	uint16 numNodeJoined;
-	int* videoLength;
-	simtime_t * beginSendDataTime;
+
+	uint totalALMhopcount;
+	uint numALMhopcount;
 
 	FILE * inFile;
 	FILE * outFile;
-	FILE * receivedFile;
+
 
   protected:
     virtual void initialize();
@@ -53,36 +53,25 @@ class HoangGlobalObject : public cSimpleModule
 
 	  uint16 getNumNode(){return numNode;};
 
-	  void calculateNumAccessLink(int i);
-
 	  void incNumSent(){numSent++;};
 	  int getNumSent(){return numSent;};
 
 	  int getVideoSize(){return videoSize;};
 	  void setVideoSize(int value){videoSize = value;};
 
-	  void addLinkStress(int pktId,int value){linkStress[pktId] += value;};
-
 	  int getNumNodeJoined(){return numNodeJoined;};
 	  void incNumNodeJoined(){numNodeJoined++;};
 
-	  void updateNumLinkArray();
-
-	  void setVideoLengthOfNode(int i, int val){videoLength[i] = val;};
-	  int getVideoLengthOfNode(int i){return videoLength[i] ;};
-
-	  void setBeginSendTimeOfNode(int id, simtime_t val){beginSendDataTime[id] = val;};
-	  simtime_t getBeginSendTimeOfNode(int id){return beginSendDataTime[id];};
-
 	  void recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode, float delay);
 	  void recordOut(uint nodeID,int sid,int pid, int toNode);
-	  void recordReceived(uint nodeID,int sid,int pid,int hopCount);
 	  void updateRP(IPvXAddress add);
 
 	  void updateMemberList(int nodeID,IPvXAddress add);
 	  int getNodeIDofAddress(IPvXAddress add);
 
 	  void incNumNodeSentDone();
+
+	  void recordALMhopcount(uint value){numALMhopcount++; totalALMhopcount+=value;};
 
 	  ~HoangGlobalObject();
 
