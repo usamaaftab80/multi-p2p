@@ -14,10 +14,6 @@
 #include "GlobalStatistics.h"
 #include "NiceTestAppMsg_m.h"
 
-#include  "NiceMessage_m.h"
-
-#include "TransportAddress.h"
-
 using namespace std;
 
 //Define_Module(BaseApp);
@@ -186,6 +182,9 @@ void NiceTestApp::initializeApp(int stage)
 		stateTimer = new cMessage("stateTimer");
 		scheduleAt(simTime() + sendPeriod, stateTimer);
 
+		delete [] sd;
+		delete [] rd;
+
     }
 //
 //    else { //not sender, just receiver
@@ -201,7 +200,7 @@ void NiceTestApp::initializeApp(int stage)
 
 void NiceTestApp::finishApp()
 {
-	cout << "node " << nodeID <<  " Received " << numReceived << endl;
+//	cout << "node " << nodeID <<  " Received " << numReceived << endl;
 }
 
 
@@ -224,7 +223,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
         	/* Begin send data timer*/
 
-        		cout << "Sender begins send data at " << simTime() << endl;
+        		cout << "Sender begins send data at " << simTime() << endl<< endl<< endl<< endl<< endl;
 				scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
         }
 
