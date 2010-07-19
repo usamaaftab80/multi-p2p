@@ -60,8 +60,8 @@ simple Nice extends BaseOverlay
         
         int k;      
         //hoang
-        string externalHostIP;      
-        
+        string externalHostIP;
+
 }
    
     

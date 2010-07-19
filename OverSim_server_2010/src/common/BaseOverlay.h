@@ -36,6 +36,8 @@
 #include <RecursiveLookup.h>
 #include <InitStages.h>
 
+#include "HoangGlobalObject.h"
+
 class GlobalNodeList;
 class UnderlayConfigurator;
 class BaseApp;
@@ -819,11 +821,14 @@ private:
     bool internalReadyState; /**< internal overlay state used for setOverlayReady() */
 
     //hoang
+
 protected:
     int nodeID;
+    HoangGlobalObject *global;
 
 public:
     void setNodeID(int id){nodeID = id;};
+
 };
 
 #endif

@@ -4,6 +4,6 @@
 
 modprobe tun
 
-#../../src/OverSim -u Cmdenv -f world.ini
-../../src/OverSim -f world.ini
+../../src/OverSim -u Cmdenv -f world.ini
+#../../src/OverSim -f world.ini
 

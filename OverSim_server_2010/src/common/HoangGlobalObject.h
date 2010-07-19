@@ -28,7 +28,6 @@ using namespace std;
 class HoangGlobalObject : public cSimpleModule
 {
   private:
-	IPvXAddress sourceSenderAddress;
 	uint16 numNode;
 	int numSent;
 	int numNodeSentDone;
@@ -40,9 +39,7 @@ class HoangGlobalObject : public cSimpleModule
 	uint16 numNodeJoined;
 	int* videoLength;
 	simtime_t * beginSendDataTime;
-	uint8 stress[100][40000]; //stress[sid][pid]
-	uint16 numAccessLink[100][40000];
-	uint16* P_sid;
+
 	FILE * inFile;
 	FILE * outFile;
 	FILE * receivedFile;
@@ -53,8 +50,6 @@ class HoangGlobalObject : public cSimpleModule
 
 
   public:
-	IPvXAddress getSourceSenderAddress(){return sourceSenderAddress;};
-	  void setSourceSenderAddress(IPvXAddress add){sourceSenderAddress = add;};
 
 	  uint16 getNumNode(){return numNode;};
 
@@ -67,7 +62,6 @@ class HoangGlobalObject : public cSimpleModule
 	  void setVideoSize(int value){videoSize = value;};
 
 	  void addLinkStress(int pktId,int value){linkStress[pktId] += value;};
-	  void addLinkStress(uint16 nodeID, uint16 pktId, uint8 value){stress[nodeID][pktId] += value;};
 
 	  int getNumNodeJoined(){return numNodeJoined;};
 	  void incNumNodeJoined(){numNodeJoined++;};
@@ -79,12 +73,6 @@ class HoangGlobalObject : public cSimpleModule
 
 	  void setBeginSendTimeOfNode(int id, simtime_t val){beginSendDataTime[id] = val;};
 	  simtime_t getBeginSendTimeOfNode(int id){return beginSendDataTime[id];};
-
-	  uint16 getP_sid(uint16 sid){return P_sid[sid];};
-	  void setP_sid(uint16 sid, uint16 value){P_sid[sid] = value;};
-
-	  void setNumAccessLink(uint16 sid, int pid, uint16 val){numAccessLink[sid][pid] = val;};
-	  uint16 getNumAccessLink(uint16 sid, int pid){return numAccessLink[sid][pid];};
 
 	  void recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode, float delay);
 	  void recordOut(uint nodeID,int sid,int pid, int toNode);
