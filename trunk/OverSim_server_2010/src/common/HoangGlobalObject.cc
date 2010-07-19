@@ -22,7 +22,7 @@ Define_Module(HoangGlobalObject);
 void HoangGlobalObject::initialize()
 {
 	numNode = par("targetOverlayTerminalNum");
-	P_sid = new uint16 [numNode];
+
 	beginSendDataTime = new simtime_t [numNode];
 	videoLength = new int [numNode];
 	numSent = 0;

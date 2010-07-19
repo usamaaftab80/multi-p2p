@@ -204,14 +204,7 @@ void ConferenceApp::finishApp()
 	}
 }
 
-ConferenceApp::~ConferenceApp()
-{
-
-}
-
-
 // handleTimerEvent is called when a timer event triggers
-
 void ConferenceApp::handleTimerEvent(cMessage* msg)
 {
 

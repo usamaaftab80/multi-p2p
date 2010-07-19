@@ -3638,8 +3638,12 @@ void Nice::handleAppMessage(cMessage* msg)
         niceMsg->setSrcNode(thisNode);
         niceMsg->setLastHop(thisNode);
         niceMsg->setHopCount(0);
-
         niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));
+        //hoang
+        niceMsg->setNodeID(nodeID);
+        niceMsg->setLastHopID(nodeID);
+        niceMsg->setSeqNo(multicastMsg->getPacketID());
+        //end of hoang
 
         niceMsg->encapsulate(multicastMsg);
         sendDataToOverlay(niceMsg);
@@ -3687,6 +3691,9 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
                         dup->setLastHop(thisNode);
 
                         sendMessageToUDP(member, dup);
+                        //hoang
+                        global->recordOut(nodeID,0,dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()));
+                        //end of hoang
 
                     }
 

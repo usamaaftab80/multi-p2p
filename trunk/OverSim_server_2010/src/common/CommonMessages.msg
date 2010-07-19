@@ -612,6 +612,8 @@ packet ALMLeaveMessage extends ALMMessage
 //
 packet ALMMulticastMessage extends ALMMessage
 {
+    //hoang
+    int packetID;
 }
 
 //

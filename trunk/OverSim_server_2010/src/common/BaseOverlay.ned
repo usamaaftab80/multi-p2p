@@ -63,6 +63,9 @@ simple BaseOverlay extends BaseRpc
         bool dropRouteMessageAttack; // if node is malicious, it drops all received BaseRouteMessages
         bool measureAuthBlock; // if true, measure the overhead of signatures in rpc messages
         bool restoreContext; // if true, a node rejoins with its old nodeId and malicious state
+        //hoang
+        string globalModulePath;
+        
 
     gates:
         input udpIn; // gate from the UDP layer

@@ -76,6 +76,11 @@ int BaseOverlay::numInitStages() const
 
 void BaseOverlay::initialize(int stage)
 {
+    //hoang
+	const char *globalModulePath = par("globalModulePath");
+	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
+	global = check_and_cast<HoangGlobalObject *>(modp2);
+
     if (stage == REGISTER_STAGE) {
         registerComp(getThisCompType(), this);
         return;
