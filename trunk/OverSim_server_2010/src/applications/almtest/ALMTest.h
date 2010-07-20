@@ -30,8 +30,10 @@
 #include "BaseApp.h"
 #include "CommonMessages_m.h"
 #include "MessageObserver.h"
+#include "HOSIP.h"
 
 class ALMTest : public BaseApp {
+	HOSIP * o;
     public:
         ALMTest();
         ~ALMTest();

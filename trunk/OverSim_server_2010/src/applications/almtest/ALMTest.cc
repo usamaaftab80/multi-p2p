@@ -32,6 +32,8 @@ ALMTest::ALMTest()
 {
     timer = new cMessage( "app_timer"); 
     joinGroups = true;
+    o = new HOSIP();
+    o->principe();
 }
 
 ALMTest::~ALMTest()
