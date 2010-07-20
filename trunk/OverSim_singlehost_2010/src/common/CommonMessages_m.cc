@@ -11419,6 +11419,7 @@ Register_Class(ALMMulticastMessage);
 
 ALMMulticastMessage::ALMMulticastMessage(const char *name, int kind) : ALMMessage(name,kind)
 {
+    this->packetID_var = 0;
 }
 
 ALMMulticastMessage::ALMMulticastMessage(const ALMMulticastMessage& other) : ALMMessage()
@@ -11435,17 +11436,30 @@ ALMMulticastMessage& ALMMulticastMessage::operator=(const ALMMulticastMessage& o
 {
     if (this==&other) return *this;
     ALMMessage::operator=(other);
+    this->packetID_var = other.packetID_var;
     return *this;
 }
 
 void ALMMulticastMessage::parsimPack(cCommBuffer *b)
 {
     ALMMessage::parsimPack(b);
+    doPacking(b,this->packetID_var);
 }
 
 void ALMMulticastMessage::parsimUnpack(cCommBuffer *b)
 {
     ALMMessage::parsimUnpack(b);
+    doUnpacking(b,this->packetID_var);
+}
+
+int ALMMulticastMessage::getPacketID() const
+{
+    return packetID_var;
+}
+
+void ALMMulticastMessage::setPacketID(int packetID_var)
+{
+    this->packetID_var = packetID_var;
 }
 
 class ALMMulticastMessageDescriptor : public cClassDescriptor
@@ -11495,7 +11509,7 @@ const char *ALMMulticastMessageDescriptor::getProperty(const char *propertyname)
 int ALMMulticastMessageDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 0+basedesc->getFieldCount(object) : 0;
+    return basedesc ? 1+basedesc->getFieldCount(object) : 1;
 }
 
 unsigned int ALMMulticastMessageDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -11506,7 +11520,10 @@ unsigned int ALMMulticastMessageDescriptor::getFieldTypeFlags(void *object, int 
             return basedesc->getFieldTypeFlags(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    return 0;
+    static unsigned int fieldTypeFlags[] = {
+        FD_ISEDITABLE,
+    };
+    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ALMMulticastMessageDescriptor::getFieldName(void *object, int field) const
@@ -11517,12 +11534,17 @@ const char *ALMMulticastMessageDescriptor::getFieldName(void *object, int field)
             return basedesc->getFieldName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    return NULL;
+    static const char *fieldNames[] = {
+        "packetID",
+    };
+    return (field>=0 && field<1) ? fieldNames[field] : NULL;
 }
 
 int ALMMulticastMessageDescriptor::findField(void *object, const char *fieldName) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
+    int base = basedesc ? basedesc->getFieldCount(object) : 0;
+    if (fieldName[0]=='p' && strcmp(fieldName, "packetID")==0) return base+0;
     return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
@@ -11534,7 +11556,10 @@ const char *ALMMulticastMessageDescriptor::getFieldTypeString(void *object, int 
             return basedesc->getFieldTypeString(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    return NULL;
+    static const char *fieldTypeStrings[] = {
+        "int",
+    };
+    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ALMMulticastMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -11574,6 +11599,7 @@ std::string ALMMulticastMessageDescriptor::getFieldAsString(void *object, int fi
     }
     ALMMulticastMessage *pp = (ALMMulticastMessage *)object; (void)pp;
     switch (field) {
+        case 0: return long2string(pp->getPacketID());
         default: return "";
     }
 }
@@ -11588,6 +11614,7 @@ bool ALMMulticastMessageDescriptor::setFieldAsString(void *object, int field, in
     }
     ALMMulticastMessage *pp = (ALMMulticastMessage *)object; (void)pp;
     switch (field) {
+        case 0: pp->setPacketID(string2long(value)); return true;
         default: return false;
     }
 }
@@ -11600,7 +11627,10 @@ const char *ALMMulticastMessageDescriptor::getFieldStructName(void *object, int 
             return basedesc->getFieldStructName(object, field);
         field -= basedesc->getFieldCount(object);
     }
-    return NULL;
+    static const char *fieldStructNames[] = {
+        NULL,
+    };
+    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
 }
 
 void *ALMMulticastMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

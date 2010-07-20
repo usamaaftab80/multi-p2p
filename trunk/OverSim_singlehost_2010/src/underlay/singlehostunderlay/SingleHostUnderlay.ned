@@ -25,6 +25,7 @@ package oversim.underlay.singlehostunderlay;
 import oversim.common.ChurnGenerator;
 import oversim.common.GlobalObserver;
 import oversim.common.GlobalStatistics;
+import oversim.common.HoangGlobalObject;
 
 
 //
@@ -38,7 +39,7 @@ network SingleHostUnderlayNetwork
         }
         churnGenerator[0]: ChurnGenerator {
             @display("p=70,210,column");
-        }        
+        }
         overlayTerminal[1]: SingleHost {
             @display("p=200,130");
         }
@@ -47,6 +48,9 @@ network SingleHostUnderlayNetwork
         }
         globalObserver: GlobalObserver {
             @display("p=70,50");
+        }
+        hoangGlobalObject: HoangGlobalObject {
+            @display("p=70,285");
         }
 }
 

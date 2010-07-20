@@ -320,6 +320,11 @@ inline void doUnpacking(cCommBuffer *b, NiceLeaderHeartbeat& obj) {obj.parsimUnp
  *     double sendTime;
  *     unsigned int seqNo;
  *     unsigned int hopCount;
+ *     
+ *     double bigKD;
+ *     double lastHopKd;
+ *     int nodeID;
+ *     int lastHopID;
  * }
  * </pre>
  */
@@ -330,6 +335,10 @@ class NiceMulticastMessage : public ::NiceMessage
     double sendTime_var;
     unsigned int seqNo_var;
     unsigned int hopCount_var;
+    double bigKD_var;
+    double lastHopKd_var;
+    int nodeID_var;
+    int lastHopID_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const NiceMulticastMessage&);
@@ -353,6 +362,14 @@ class NiceMulticastMessage : public ::NiceMessage
     virtual void setSeqNo(unsigned int seqNo_var);
     virtual unsigned int getHopCount() const;
     virtual void setHopCount(unsigned int hopCount_var);
+    virtual double getBigKD() const;
+    virtual void setBigKD(double bigKD_var);
+    virtual double getLastHopKd() const;
+    virtual void setLastHopKd(double lastHopKd_var);
+    virtual int getNodeID() const;
+    virtual void setNodeID(int nodeID_var);
+    virtual int getLastHopID() const;
+    virtual void setLastHopID(int lastHopID_var);
 };
 
 inline void doPacking(cCommBuffer *b, NiceMulticastMessage& obj) {obj.parsimPack(b);}

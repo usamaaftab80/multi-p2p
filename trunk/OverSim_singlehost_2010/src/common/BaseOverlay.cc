@@ -47,6 +47,9 @@
 
 #include "BaseOverlay.h"
 
+//hoang
+#include "NiceMessage_m.h"
+
 using namespace std;
 
 
@@ -76,6 +79,11 @@ int BaseOverlay::numInitStages() const
 
 void BaseOverlay::initialize(int stage)
 {
+    //hoang
+	const char *globalModulePath = par("globalModulePath");
+	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
+	global = check_and_cast<HoangGlobalObject *>(modp2);
+
     if (stage == REGISTER_STAGE) {
         registerComp(getThisCompType(), this);
         return;
@@ -701,6 +709,21 @@ void BaseOverlay::handleMessage(cMessage* msg)
                                         udpControlInfo->getSrcPort()));
         overlayCtrlInfo->setSrcRoute(overlayCtrlInfo->getLastHop());
         overlayCtrlInfo->setTransportType(UDP_TRANSPORT);
+
+        //hoang
+        if (dynamic_cast<NiceMulticastMessage*>(msg) != NULL){
+
+        	NiceMulticastMessage* dup = static_cast<NiceMulticastMessage*>(msg->dup());
+        	NiceMulticastMessage* niceMmsg = check_and_cast<NiceMulticastMessage*>(dup);
+
+        	simtime_t delay = simTime() - niceMmsg->getCreationTime();
+
+        	global->recordIn(nodeID, 0, niceMmsg->getSeqNo(), udpControlInfo->getTimeToLive(), niceMmsg->getLastHopID(), delay.dbl());
+
+        	delete dup;
+
+        }
+        //end of hoang
 
         msg->setControlInfo(overlayCtrlInfo);
         delete udpControlInfo;

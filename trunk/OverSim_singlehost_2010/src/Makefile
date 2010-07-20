@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for OverSim
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -O out -I../../INET-OverSim-20100505/src/networklayer/rsvp_te -I../../INET-OverSim-20100505/src/networklayer/common -I../../INET-OverSim-20100505/src/networklayer/icmpv6 -I../../INET-OverSim-20100505/src/transport/tcp -I../../INET-OverSim-20100505/src/networklayer/mpls -I../../INET-OverSim-20100505/src/networklayer/ted -I../../INET-OverSim-20100505/src/networklayer/contract -I../../INET-OverSim-20100505/src/util -I../../INET-OverSim-20100505/src/transport/contract -I../../INET-OverSim-20100505/src/linklayer/mfcore -I../../INET-OverSim-20100505/src/networklayer/ldp -I../../INET-OverSim-20100505/src/applications/udpapp -I../../INET-OverSim-20100505/src/networklayer/ipv4 -I../../INET-OverSim-20100505/src/base -I../../INET-OverSim-20100505/src/util/headerserializers -I../../INET-OverSim-20100505/src/networklayer/ipv6 -I../../INET-OverSim-20100505/src/transport/sctp -I../../INET-OverSim-20100505/src/world -I../../INET-OverSim-20100505/src/applications/pingapp -I../../INET-OverSim-20100505/src/linklayer/contract -I../../INET-OverSim-20100505/src/networklayer/arp -I../../INET-OverSim-20100505/src/transport/udp -L/usr/lib -L../../INET-OverSim-20100505/out/$(CONFIGNAME)/src -linet -KINET_PROJ=../../INET-OverSim-20100505 -- -lgmp
+#  opp_makemake -f --deep -O out -I../../INET-OverSim-20100505/src/networklayer/common -I../../INET-OverSim-20100505/src/networklayer/rsvp_te -I../../INET-OverSim-20100505/src/networklayer/icmpv6 -I../../INET-OverSim-20100505/src/transport/tcp -I../../INET-OverSim-20100505/src/networklayer/mpls -I../../INET-OverSim-20100505/src/networklayer/ted -I../../INET-OverSim-20100505/src/networklayer/contract -I../../INET-OverSim-20100505/src/util -I../../INET-OverSim-20100505/src/transport/contract -I../../INET-OverSim-20100505/src/linklayer/mfcore -I../../INET-OverSim-20100505/src/networklayer/ldp -I../../INET-OverSim-20100505/src/applications/udpapp -I../../INET-OverSim-20100505/src/networklayer/ipv4 -I../../INET-OverSim-20100505/src/base -I../../INET-OverSim-20100505/src/util/headerserializers -I../../INET-OverSim-20100505/src/networklayer/ipv6 -I../../INET-OverSim-20100505/src/transport/sctp -I../../INET-OverSim-20100505/src/world -I../../INET-OverSim-20100505/src/applications/pingapp -I../../INET-OverSim-20100505/src/linklayer/contract -I../../INET-OverSim-20100505/src/networklayer/arp -I../../INET-OverSim-20100505/src/transport/udp -L/usr/lib -L../../INET-OverSim-20100505/out/$(CONFIGNAME)/src -linet -KINET_PROJ=../../INET-OverSim-20100505 -- -lgmp
 #
 
 # Name of target to be created (-o option)
@@ -15,8 +15,8 @@ USERIF_LIBS = $(ALL_ENV_LIBS) # that is, $(TKENV_LIBS) $(CMDENV_LIBS)
 
 # C++ include paths (with -I)
 INCLUDE_PATH = \
-    -I../../INET-OverSim-20100505/src/networklayer/rsvp_te \
     -I../../INET-OverSim-20100505/src/networklayer/common \
+    -I../../INET-OverSim-20100505/src/networklayer/rsvp_te \
     -I../../INET-OverSim-20100505/src/networklayer/icmpv6 \
     -I../../INET-OverSim-20100505/src/transport/tcp \
     -I../../INET-OverSim-20100505/src/networklayer/mpls \
@@ -56,8 +56,6 @@ INCLUDE_PATH = \
     -Ioverlay/nice \
     -Ioverlay/pastry \
     -Ioverlay/pubsubmmog \
-    -Ioverlay/quon \
-    -Ioverlay/vast \
     -Itier2 \
     -Itier3 \
     -Iunderlay \
@@ -92,17 +90,17 @@ OBJS = \
     $O/common/BinaryValue.o \
     $O/common/BootstrapList.o \
     $O/common/ChurnGenerator.o \
-    $O/common/NoChurn.o \
-    $O/common/NodeHandle.o \
-    $O/common/NodeVector.o \
-    $O/common/Nps.o \
-    $O/common/OverlayKey.o \
-    $O/common/OverSimMessage.o \
-    $O/common/GlobalParameters.o \
-    $O/common/GlobalStatistics.o \
+    $O/common/cnetcommbuffer.o \
     $O/common/GlobalTraceManager.o \
+    $O/common/HoangGlobalObject.o \
     $O/common/IterativeLookup.o \
     $O/common/LifetimeChurn.o \
+    $O/common/NeighborCache.o \
+    $O/common/NoChurn.o \
+    $O/common/ProxNodeHandle.o \
+    $O/common/RandomChurn.o \
+    $O/common/RecursiveLookup.o \
+    $O/common/RpcListener.o \
     $O/common/SHA1.o \
     $O/common/SVivaldi.o \
     $O/common/TopologyVis.o \
@@ -111,19 +109,20 @@ OBJS = \
     $O/common/UnderlayConfigurator.o \
     $O/common/Vector2D.o \
     $O/common/Vivaldi.o \
-    $O/common/NeighborCache.o \
-    $O/common/cnetcommbuffer.o \
     $O/common/CoordinateSystem.o \
     $O/common/CryptoModule.o \
     $O/common/FinisherModule.o \
     $O/common/GenericPacketParser.o \
     $O/common/GlobalNodeList.o \
-    $O/common/ParetoChurn.o \
+    $O/common/GlobalParameters.o \
+    $O/common/GlobalStatistics.o \
+    $O/common/NodeHandle.o \
     $O/common/PeerInfo.o \
-    $O/common/ProxNodeHandle.o \
-    $O/common/RandomChurn.o \
-    $O/common/RecursiveLookup.o \
-    $O/common/RpcListener.o \
+    $O/common/NodeVector.o \
+    $O/common/Nps.o \
+    $O/common/OverlayKey.o \
+    $O/common/OverSimMessage.o \
+    $O/common/ParetoChurn.o \
     $O/common/cbr/CBR-DHT.o \
     $O/common/cbr/CoordBasedRouting.o \
     $O/common/cbr/Landmark.o \
@@ -161,12 +160,6 @@ OBJS = \
     $O/overlay/pubsubmmog/PubSubMMOG.o \
     $O/overlay/pubsubmmog/PubSubSubspace.o \
     $O/overlay/pubsubmmog/PubSubSubspaceId.o \
-    $O/overlay/quon/ConnectivityProbeQuon.o \
-    $O/overlay/quon/Quon.o \
-    $O/overlay/quon/QuonHelper.o \
-    $O/overlay/vast/ConnectivityProbe.o \
-    $O/overlay/vast/Vast.o \
-    $O/overlay/vast/VastDefs.o \
     $O/underlay/inetunderlay/AccessNet.o \
     $O/underlay/inetunderlay/InetInfo.o \
     $O/underlay/inetunderlay/InetUnderlayConfigurator.o \
@@ -190,11 +183,11 @@ OBJS = \
     $O/applications/almtest/ALMTestTracedMessage_m.o \
     $O/applications/dht/DHTMessage_m.o \
     $O/common/Churn_m.o \
+    $O/common/GlobalTraceManager_m.o \
+    $O/common/ExtAPIMessages_m.o \
+    $O/common/CommonMessages_m.o \
     $O/common/Nps_m.o \
     $O/common/OverSimMessage_m.o \
-    $O/common/GlobalTraceManager_m.o \
-    $O/common/CommonMessages_m.o \
-    $O/common/ExtAPIMessages_m.o \
     $O/common/cbr/CBR-DHTMessage_m.o \
     $O/common/cbr/CoordMessages_m.o \
     $O/overlay/broose/BrooseMessage_m.o \
@@ -205,8 +198,6 @@ OBJS = \
     $O/overlay/nice/NiceMessage_m.o \
     $O/overlay/pastry/PastryMessage_m.o \
     $O/overlay/pubsubmmog/PubSubMessage_m.o \
-    $O/overlay/quon/Quon_m.o \
-    $O/overlay/vast/Vast_m.o \
     $O/underlay/simpleunderlay/SimpleUDPPacket_m.o
 
 # Message files
@@ -214,11 +205,11 @@ MSGFILES = \
     applications/almtest/ALMTestTracedMessage.msg \
     applications/dht/DHTMessage.msg \
     common/Churn.msg \
+    common/GlobalTraceManager.msg \
+    common/ExtAPIMessages.msg \
+    common/CommonMessages.msg \
     common/Nps.msg \
     common/OverSimMessage.msg \
-    common/GlobalTraceManager.msg \
-    common/CommonMessages.msg \
-    common/ExtAPIMessages.msg \
     common/cbr/CBR-DHTMessage.msg \
     common/cbr/CoordMessages.msg \
     overlay/broose/BrooseMessage.msg \
@@ -229,8 +220,6 @@ MSGFILES = \
     overlay/nice/NiceMessage.msg \
     overlay/pastry/PastryMessage.msg \
     overlay/pubsubmmog/PubSubMessage.msg \
-    overlay/quon/Quon.msg \
-    overlay/vast/Vast.msg \
     underlay/simpleunderlay/SimpleUDPPacket.msg
 
 # Other makefile variables (-K)
@@ -318,8 +307,6 @@ clean:
 	-rm -f overlay/nice/*_m.cc overlay/nice/*_m.h
 	-rm -f overlay/pastry/*_m.cc overlay/pastry/*_m.h
 	-rm -f overlay/pubsubmmog/*_m.cc overlay/pubsubmmog/*_m.h
-	-rm -f overlay/quon/*_m.cc overlay/quon/*_m.h
-	-rm -f overlay/vast/*_m.cc overlay/vast/*_m.h
 	-rm -f tier2/*_m.cc tier2/*_m.h
 	-rm -f tier3/*_m.cc tier3/*_m.h
 	-rm -f underlay/*_m.cc underlay/*_m.h
@@ -332,7 +319,7 @@ cleanall: clean
 	-rm -rf $(PROJECT_OUTPUT_DIR)
 
 depend:
-	$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc applications/*.cc applications/almlistener/*.cc applications/almtest/*.cc applications/dht/*.cc applications/tierdummy/*.cc common/*.cc common/cbr/*.cc overlay/*.cc overlay/bamboo/*.cc overlay/broose/*.cc overlay/chord/*.cc overlay/gia/*.cc overlay/kademlia/*.cc overlay/koorde/*.cc overlay/myoverlay/*.cc overlay/nice/*.cc overlay/pastry/*.cc overlay/pubsubmmog/*.cc overlay/quon/*.cc overlay/vast/*.cc tier2/*.cc tier3/*.cc underlay/*.cc underlay/inetunderlay/*.cc underlay/simpleunderlay/*.cc underlay/singlehostunderlay/*.cc underlay/singlehostunderlay/stun/*.cc
+	$(MAKEDEPEND) $(INCLUDE_PATH) -f Makefile -P\$$O/ -- $(MSG_CC_FILES)  ./*.cc applications/*.cc applications/almlistener/*.cc applications/almtest/*.cc applications/dht/*.cc applications/tierdummy/*.cc common/*.cc common/cbr/*.cc overlay/*.cc overlay/bamboo/*.cc overlay/broose/*.cc overlay/chord/*.cc overlay/gia/*.cc overlay/kademlia/*.cc overlay/koorde/*.cc overlay/myoverlay/*.cc overlay/nice/*.cc overlay/pastry/*.cc overlay/pubsubmmog/*.cc tier2/*.cc tier3/*.cc underlay/*.cc underlay/inetunderlay/*.cc underlay/simpleunderlay/*.cc underlay/singlehostunderlay/*.cc underlay/singlehostunderlay/stun/*.cc
 
 # DO NOT DELETE THIS LINE -- make depend depends on it.
 $O/applications/almlistener/ALMListener.o: applications/almlistener/ALMListener.cc \
@@ -358,6 +345,7 @@ $O/applications/almlistener/ALMListener.o: applications/almlistener/ALMListener.
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	common/BaseRpc.h \
@@ -394,6 +382,7 @@ $O/applications/almtest/ALMTest.o: applications/almtest/ALMTest.cc \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
 	common/BaseRpc.h \
@@ -432,6 +421,7 @@ $O/applications/dht/DHT.o: applications/dht/DHT.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
 	common/BaseRpc.h \
@@ -492,11 +482,12 @@ $O/applications/tierdummy/TierDummy.o: applications/tierdummy/TierDummy.cc \
 	common/BaseApp.h \
 	common/InitStages.h \
 	common/TopologyVis.h \
-	common/BinaryValue.h \
 	common/Vector2D.h \
+	common/BinaryValue.h \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -515,34 +506,35 @@ $O/common/SVivaldi.o: common/SVivaldi.cc \
 	common/AbstractLookup.h \
 	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
 	common/RpcListener.h \
-	common/Vivaldi.h \
 	common/SVivaldi.h \
+	common/Vivaldi.h \
 	common/CoordinateSystem.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
-	common/NodeVector.h \
-	common/Nps.h \
 	common/HashFunc.h \
-	common/GlobalStatistics.h \
+	common/Nps.h \
+	common/NodeVector.h \
 	common/RpcState.h \
+	common/GlobalStatistics.h \
 	common/CommonMessages_m.h \
 	common/BaseApp.h \
 	common/InitStages.h \
 	common/TopologyVis.h \
-	common/cbr/simplex.h \
 	common/Nps_m.h \
-	common/GlobalStatisticsAccess.h \
+	common/cbr/simplex.h \
 	common/Vector2D.h \
 	common/BinaryValue.h \
+	common/GlobalStatisticsAccess.h \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
-	common/BaseRpc.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	common/ProxNodeHandle.h \
+	common/BaseRpc.h \
 	common/cbr/yang.h \
+	common/ProxNodeHandle.h \
 	common/NodeHandle.h \
 	common/RpcMacros.h
 $O/common/ParetoChurn.o: common/ParetoChurn.cc \
@@ -604,6 +596,7 @@ $O/common/NeighborCache.o: common/NeighborCache.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -638,19 +631,19 @@ $O/common/CryptoModule.o: common/CryptoModule.cc \
 	$(INET_PROJ)/src/base/INETDefs.h \
 	$(INET_PROJ)/src/base/INotifiable.h \
 	common/OverSimMessage_m.h \
-	common/RecursiveLookup.h \
 	common/oversim_mapset.h \
+	common/RecursiveLookup.h \
 	common/OverlayAccess.h \
 	common/OverSimMessage.h \
 	common/AbstractLookup.h \
-	common/RpcListener.h \
 	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
-	$(INET_PROJ)/src/base/ModuleAccess.h \
+	common/RpcListener.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
 	$(INET_PROJ)/src/base/NotificationBoard.h \
+	$(INET_PROJ)/src/base/ModuleAccess.h \
 	common/NodeVector.h \
-	common/GlobalStatistics.h \
 	common/RpcState.h \
+	common/GlobalStatistics.h \
 	common/CommonMessages_m.h \
 	common/cnetcommbuffer.h \
 	common/InitStages.h \
@@ -662,6 +655,7 @@ $O/common/CryptoModule.o: common/CryptoModule.cc \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
 	common/CryptoModule.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
@@ -723,6 +717,7 @@ $O/common/BaseApp.o: common/BaseApp.cc \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	common/BaseRpc.h \
@@ -769,8 +764,9 @@ $O/common/RecursiveLookup.o: common/RecursiveLookup.cc \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
-	common/BaseOverlay.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
+	common/BaseOverlay.h \
 	common/BaseRpc.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
 	common/ProxNodeHandle.h \
@@ -831,6 +827,7 @@ $O/common/Vivaldi.o: common/Vivaldi.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -908,6 +905,7 @@ $O/common/Nps.o: common/Nps.cc \
 	common/TransportAddress.h \
 	common/GlobalNodeListAccess.h \
 	common/IterativeLookupConfiguration.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -927,6 +925,7 @@ $O/common/BaseOverlay.o: common/BaseOverlay.cc \
 	$(INET_PROJ)/src/base/NotifierConsts.h \
 	common/BinaryValue.h \
 	common/Vector2D.h \
+	overlay/nice/NiceMessage_m.h \
 	$(INET_PROJ)/src/transport/contract/UDPSocket.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
@@ -959,6 +958,7 @@ $O/common/BaseOverlay.o: common/BaseOverlay.cc \
 	common/GlobalNodeListAccess.h \
 	common/IterativeLookupConfiguration.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -1011,51 +1011,52 @@ $O/common/ChurnGenerator.o: common/ChurnGenerator.cc \
 $O/common/BaseRpc.o: common/BaseRpc.cc \
 	common/NeighborCache.h \
 	common/UnderlayConfigurator.h \
-	$(INET_PROJ)/src/base/INETDefs.h \
-	$(INET_PROJ)/src/base/INotifiable.h \
-	common/OverSimMessage_m.h \
-	common/RecursiveLookup.h \
 	common/oversim_mapset.h \
 	common/OverlayAccess.h \
-	common/OverSimMessage.h \
-	common/AbstractLookup.h \
 	common/UnderlayConfiguratorAccess.h \
-	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
 	common/RpcListener.h \
 	common/Vivaldi.h \
+	$(INET_PROJ)/src/base/ModuleAccess.h \
+	common/Nps.h \
+	common/HashFunc.h \
+	common/GlobalStatistics.h \
+	common/RpcState.h \
+	common/cnetcommbuffer.h \
+	common/InitStages.h \
+	$(INET_PROJ)/src/base/NotifierConsts.h \
+	common/Vector2D.h \
+	common/BinaryValue.h \
+	common/OverlayKey.h \
+	common/oversim_byteswap.h \
+	common/BaseRpc.h \
+	common/cbr/yang.h \
+	common/ProxNodeHandle.h \
+	common/NodeHandle.h \
+	$(INET_PROJ)/src/base/INotifiable.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
+	common/OverSimMessage_m.h \
+	common/RecursiveLookup.h \
+	common/OverSimMessage.h \
+	common/AbstractLookup.h \
+	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
 	common/SVivaldi.h \
 	common/CoordinateSystem.h \
-	$(INET_PROJ)/src/base/ModuleAccess.h \
-	$(INET_PROJ)/src/base/NotificationBoard.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
-	common/HashFunc.h \
-	common/Nps.h \
+	$(INET_PROJ)/src/base/NotificationBoard.h \
 	common/NodeVector.h \
-	common/RpcState.h \
-	common/GlobalStatistics.h \
 	common/CommonMessages_m.h \
-	common/cnetcommbuffer.h \
 	common/BaseApp.h \
-	common/InitStages.h \
 	common/TopologyVis.h \
-	common/cbr/simplex.h \
 	common/Nps_m.h \
-	$(INET_PROJ)/src/base/NotifierConsts.h \
-	common/BinaryValue.h \
-	common/Vector2D.h \
+	common/cbr/simplex.h \
 	common/GlobalStatisticsAccess.h \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
-	common/OverlayKey.h \
-	common/oversim_byteswap.h \
 	common/CryptoModule.h \
-	common/Comparator.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
+	common/Comparator.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	common/BaseRpc.h \
-	common/ProxNodeHandle.h \
-	common/cbr/yang.h \
-	common/NodeHandle.h \
 	common/RpcMacros.h
 $O/common/NodeVector.o: common/NodeVector.cc \
 	common/NodeVector.h \
@@ -1089,8 +1090,8 @@ $O/common/cnetcommbuffer.o: common/cnetcommbuffer.cc \
 	common/cnetcommbuffer.h
 $O/common/IterativeLookup.o: common/IterativeLookup.cc \
 	common/UnderlayConfigurator.h \
-	$(INET_PROJ)/src/base/INotifiable.h \
 	$(INET_PROJ)/src/base/INETDefs.h \
+	$(INET_PROJ)/src/base/INotifiable.h \
 	common/OverSimMessage_m.h \
 	common/RecursiveLookup.h \
 	common/oversim_mapset.h \
@@ -1107,11 +1108,12 @@ $O/common/IterativeLookup.o: common/IterativeLookup.cc \
 	common/InitStages.h \
 	common/LookupListener.h \
 	common/TopologyVis.h \
-	common/BinaryValue.h \
 	common/Vector2D.h \
+	common/BinaryValue.h \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -1187,6 +1189,14 @@ $O/common/ProxNodeHandle.o: common/ProxNodeHandle.cc \
 	common/ProxNodeHandle.h \
 	common/NodeHandle.h \
 	common/TransportAddress.h
+$O/common/HoangGlobalObject.o: common/HoangGlobalObject.cc \
+	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
+	common/HoangGlobalObject.h \
+	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
+	common/oversim_mapset.h \
+	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
+	common/TransportAddress.h
 $O/common/GlobalTraceManager_m.o: common/GlobalTraceManager_m.cc \
 	common/GlobalTraceManager_m.h
 $O/common/GenericPacketParser.o: common/GenericPacketParser.cc \
@@ -1228,6 +1238,7 @@ $O/common/GlobalNodeList.o: common/GlobalNodeList.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
 	common/BaseRpc.h \
@@ -1286,6 +1297,7 @@ $O/common/BootstrapList.o: common/BootstrapList.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	common/BaseRpc.h \
@@ -1347,6 +1359,7 @@ $O/common/cbr/simplex.o: common/cbr/simplex.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -1422,6 +1435,7 @@ $O/common/cbr/Landmark.o: common/cbr/Landmark.cc \
 	common/GlobalStatisticsAccess.h \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -1446,52 +1460,53 @@ $O/common/cbr/CoordBasedRouting.o: common/cbr/CoordBasedRouting.cc \
 	common/NodeHandle.h
 $O/common/cbr/CBR-DHT.o: common/cbr/CBR-DHT.cc \
 	common/NeighborCache.h \
+	common/oversim_mapset.h \
+	common/cbr/CoordBasedRouting.h \
+	common/RpcListener.h \
+	common/Vivaldi.h \
+	common/SHA1.h \
+	common/Nps.h \
+	common/HashFunc.h \
+	common/GlobalStatistics.h \
+	common/RpcState.h \
+	common/InitStages.h \
+	applications/dht/DHTMessage_m.h \
+	common/Vector2D.h \
+	common/BinaryValue.h \
+	common/OverlayKey.h \
+	common/cbr/CBR-DHT.h \
+	common/oversim_byteswap.h \
+	common/BaseRpc.h \
+	common/cbr/yang.h \
+	common/ProxNodeHandle.h \
+	common/NodeHandle.h \
 	applications/dht/DHTDataStorage.h \
-	$(INET_PROJ)/src/base/INETDefs.h \
 	$(INET_PROJ)/src/base/INotifiable.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
 	common/OverSimMessage_m.h \
 	common/RecursiveLookup.h \
-	common/cbr/CoordBasedRouting.h \
-	common/oversim_mapset.h \
 	common/OverSimMessage.h \
 	common/AbstractLookup.h \
 	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
-	common/RpcListener.h \
-	common/Vivaldi.h \
 	common/SVivaldi.h \
 	common/CoordinateSystem.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
-	common/SHA1.h \
-	common/HashFunc.h \
-	common/Nps.h \
 	common/NodeVector.h \
-	common/RpcState.h \
-	common/GlobalStatistics.h \
 	common/CommonMessages_m.h \
 	common/BaseApp.h \
-	common/InitStages.h \
 	common/TopologyVis.h \
 	common/cbr/CoordBasedRoutingAccess.h \
-	common/cbr/simplex.h \
 	common/Nps_m.h \
-	applications/dht/DHTMessage_m.h \
-	common/BinaryValue.h \
-	common/Vector2D.h \
+	common/cbr/simplex.h \
 	common/GlobalStatisticsAccess.h \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
-	common/cbr/CBR-DHT.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
-	common/OverlayKey.h \
 	common/cbr/CBR-DHTMessage_m.h \
-	common/oversim_byteswap.h \
-	common/Comparator.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
+	common/Comparator.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	common/BaseRpc.h \
-	common/ProxNodeHandle.h \
-	common/cbr/yang.h \
-	common/NodeHandle.h \
 	common/RpcMacros.h
 $O/common/cbr/CBR-DHTMessage_m.o: common/cbr/CBR-DHTMessage_m.cc \
 	common/CommonMessages_m.h \
@@ -1562,6 +1577,7 @@ $O/overlay/bamboo/Bamboo.o: overlay/bamboo/Bamboo.cc \
 	overlay/pastry/PastryLeafSet.h \
 	common/IterativeLookupConfiguration.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -1612,10 +1628,11 @@ $O/overlay/broose/Broose.o: overlay/broose/Broose.cc \
 	common/IterativeLookupConfiguration.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
 	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
-	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
 	common/BaseRpc.h \
+	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
 	common/ProxNodeHandle.h \
 	common/NodeHandle.h \
 	common/RpcMacros.h
@@ -1654,6 +1671,7 @@ $O/overlay/broose/BrooseBucket.o: overlay/broose/BrooseBucket.cc \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
 	common/BaseRpc.h \
@@ -1715,6 +1733,7 @@ $O/overlay/chord/Chord.o: overlay/chord/Chord.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	overlay/chord/ChordSuccessorList.h \
 	common/Comparator.h \
@@ -1759,6 +1778,7 @@ $O/overlay/chord/ChordSuccessorList.o: overlay/chord/ChordSuccessorList.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	overlay/chord/ChordSuccessorList.h \
@@ -1805,6 +1825,7 @@ $O/overlay/chord/ChordFingerTable.o: overlay/chord/ChordFingerTable.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	overlay/chord/ChordSuccessorList.h \
@@ -1859,6 +1880,7 @@ $O/overlay/gia/Gia.o: overlay/gia/Gia.cc \
 	common/IterativeLookupConfiguration.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
 	overlay/gia/GiaTokenFactory.h \
+	common/HoangGlobalObject.h \
 	overlay/gia/Gia.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
@@ -1961,6 +1983,7 @@ $O/overlay/gia/GiaTokenFactory.o: overlay/gia/GiaTokenFactory.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	overlay/gia/GiaTokenFactory.h \
 	overlay/gia/Gia.h \
 	common/Comparator.h \
@@ -2064,6 +2087,7 @@ $O/overlay/kademlia/Kademlia.o: overlay/kademlia/Kademlia.cc \
 	common/IterativeLookupConfiguration.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
 	overlay/kademlia/KademliaBucket.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -2098,6 +2122,7 @@ $O/overlay/koorde/Koorde.o: overlay/koorde/Koorde.cc \
 	common/IterativeLookupConfiguration.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
 	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -2107,8 +2132,8 @@ $O/overlay/koorde/Koorde.o: overlay/koorde/Koorde.cc \
 	common/RpcMacros.h
 $O/overlay/myoverlay/MyOverlay.o: overlay/myoverlay/MyOverlay.cc \
 	common/UnderlayConfigurator.h \
-	$(INET_PROJ)/src/base/INotifiable.h \
 	$(INET_PROJ)/src/base/INETDefs.h \
+	$(INET_PROJ)/src/base/INotifiable.h \
 	common/OverSimMessage_m.h \
 	common/RecursiveLookup.h \
 	common/oversim_mapset.h \
@@ -2130,6 +2155,7 @@ $O/overlay/myoverlay/MyOverlay.o: overlay/myoverlay/MyOverlay.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	overlay/myoverlay/MyOverlay_m.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -2206,6 +2232,7 @@ $O/overlay/nice/Nice.o: overlay/nice/Nice.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	common/BaseRpc.h \
@@ -2214,8 +2241,8 @@ $O/overlay/nice/Nice.o: overlay/nice/Nice.cc \
 	common/NodeHandle.h \
 	common/RpcMacros.h
 $O/overlay/nice/NiceCluster.o: overlay/nice/NiceCluster.cc \
-	$(INET_PROJ)/src/base/INETDefs.h \
 	$(INET_PROJ)/src/base/INotifiable.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
 	common/OverSimMessage_m.h \
 	common/RecursiveLookup.h \
 	common/oversim_mapset.h \
@@ -2230,11 +2257,12 @@ $O/overlay/nice/NiceCluster.o: overlay/nice/NiceCluster.cc \
 	common/CommonMessages_m.h \
 	common/InitStages.h \
 	common/TopologyVis.h \
-	common/BinaryValue.h \
 	common/Vector2D.h \
+	common/BinaryValue.h \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
 	common/BaseRpc.h \
@@ -2244,8 +2272,8 @@ $O/overlay/nice/NiceCluster.o: overlay/nice/NiceCluster.cc \
 	common/RpcMacros.h
 $O/overlay/nice/NicePeerInfo.o: overlay/nice/NicePeerInfo.cc \
 	overlay/nice/NicePeerInfo.h \
-	$(INET_PROJ)/src/base/INETDefs.h \
 	$(INET_PROJ)/src/base/INotifiable.h \
+	$(INET_PROJ)/src/base/INETDefs.h \
 	common/OverSimMessage_m.h \
 	common/RecursiveLookup.h \
 	common/oversim_mapset.h \
@@ -2264,6 +2292,7 @@ $O/overlay/nice/NicePeerInfo.o: overlay/nice/NicePeerInfo.cc \
 	common/TransportAddress.h \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
 	common/BaseRpc.h \
@@ -2310,6 +2339,7 @@ $O/overlay/pastry/PastryLeafSet.o: overlay/pastry/PastryLeafSet.cc \
 	overlay/pastry/PastryTypes.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	common/BaseRpc.h \
@@ -2371,6 +2401,7 @@ $O/overlay/pastry/Pastry.o: overlay/pastry/Pastry.cc \
 	overlay/pastry/PastryLeafSet.h \
 	common/IterativeLookupConfiguration.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -2464,6 +2495,7 @@ $O/overlay/pastry/BasePastry.o: overlay/pastry/BasePastry.cc \
 	overlay/pastry/PastryLeafSet.h \
 	common/IterativeLookupConfiguration.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddressResolver.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
@@ -2516,20 +2548,20 @@ $O/overlay/pubsubmmog/PubSubLobby.o: overlay/pubsubmmog/PubSubLobby.cc \
 	$(INET_PROJ)/src/base/INETDefs.h \
 	$(INET_PROJ)/src/base/INotifiable.h \
 	common/OverSimMessage_m.h \
-	common/RecursiveLookup.h \
 	common/oversim_mapset.h \
+	common/RecursiveLookup.h \
 	common/OverSimMessage.h \
 	common/AbstractLookup.h \
 	common/GlobalNodeList.h \
-	common/RpcListener.h \
 	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
+	common/RpcListener.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
 	overlay/pubsubmmog/PubSubSubspace.h \
 	common/ChurnGenerator.h \
 	common/HashFunc.h \
 	common/NodeVector.h \
-	common/GlobalStatistics.h \
 	common/RpcState.h \
+	common/GlobalStatistics.h \
 	common/CommonMessages_m.h \
 	common/InitStages.h \
 	common/TopologyVis.h \
@@ -2541,6 +2573,7 @@ $O/overlay/pubsubmmog/PubSubLobby.o: overlay/pubsubmmog/PubSubLobby.cc \
 	overlay/pubsubmmog/PubSubLobby.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	common/BaseRpc.h \
@@ -2598,6 +2631,7 @@ $O/overlay/pubsubmmog/PubSubMMOG.o: overlay/pubsubmmog/PubSubMMOG.cc \
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/BaseOverlay.h \
 	common/Comparator.h \
 	common/BaseRpc.h \
@@ -2624,214 +2658,6 @@ $O/overlay/pubsubmmog/PubSubSubspace.o: overlay/pubsubmmog/PubSubSubspace.cc \
 	overlay/pubsubmmog/PubSubMessage_m.h \
 	common/NodeHandle.h \
 	overlay/pubsubmmog/PubSubSubspaceId.h
-$O/overlay/quon/Quon_m.o: overlay/quon/Quon_m.cc \
-	common/CommonMessages_m.h \
-	$(INET_PROJ)/src/base/INETDefs.h \
-	common/OverSimMessage_m.h \
-	common/oversim_mapset.h \
-	common/BinaryValue.h \
-	common/Vector2D.h \
-	common/TransportAddress.h \
-	common/OverSimMessage.h \
-	common/OverlayKey.h \
-	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
-	overlay/quon/QuonHelper.h \
-	overlay/quon/Quon_m.h \
-	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
-	overlay/quon/QuonDefs.h \
-	common/NodeHandle.h
-$O/overlay/quon/QuonHelper.o: overlay/quon/QuonHelper.cc \
-	common/OverlayKey.h \
-	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
-	$(INET_PROJ)/src/base/INETDefs.h \
-	overlay/quon/QuonHelper.h \
-	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	common/oversim_mapset.h \
-	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
-	overlay/quon/QuonDefs.h \
-	common/NodeHandle.h \
-	common/Vector2D.h \
-	common/TransportAddress.h
-$O/overlay/quon/Quon.o: overlay/quon/Quon.cc \
-	common/BootstrapNodeHandle.h \
-	$(INET_PROJ)/src/base/INETDefs.h \
-	$(INET_PROJ)/src/base/INotifiable.h \
-	common/OverSimMessage_m.h \
-	common/oversim_mapset.h \
-	common/RecursiveLookup.h \
-	overlay/quon/Quon.h \
-	common/OverSimMessage.h \
-	common/AbstractLookup.h \
-	common/GlobalNodeList.h \
-	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
-	common/RpcListener.h \
-	overlay/quon/QuonHelper.h \
-	overlay/quon/Quon_m.h \
-	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
-	common/ChurnGenerator.h \
-	common/NodeVector.h \
-	common/HashFunc.h \
-	common/RpcState.h \
-	common/GlobalStatistics.h \
-	common/CommonMessages_m.h \
-	common/BaseApp.h \
-	common/InitStages.h \
-	common/TopologyVis.h \
-	common/BootstrapList.h \
-	common/BinaryValue.h \
-	common/Vector2D.h \
-	common/TransportAddress.h \
-	common/IterativeLookupConfiguration.h \
-	common/OverlayKey.h \
-	common/oversim_byteswap.h \
-	common/Comparator.h \
-	common/BaseOverlay.h \
-	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	common/BaseRpc.h \
-	common/ProxNodeHandle.h \
-	overlay/quon/QuonDefs.h \
-	common/NodeHandle.h \
-	common/RpcMacros.h
-$O/overlay/quon/ConnectivityProbeQuon.o: overlay/quon/ConnectivityProbeQuon.cc \
-	$(INET_PROJ)/src/base/INETDefs.h \
-	$(INET_PROJ)/src/base/INotifiable.h \
-	common/OverSimMessage_m.h \
-	common/RecursiveLookup.h \
-	common/oversim_mapset.h \
-	overlay/quon/Quon.h \
-	common/OverSimMessage.h \
-	common/AbstractLookup.h \
-	common/GlobalNodeList.h \
-	common/RpcListener.h \
-	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
-	overlay/quon/QuonHelper.h \
-	overlay/quon/Quon_m.h \
-	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
-	common/ChurnGenerator.h \
-	common/NodeVector.h \
-	common/HashFunc.h \
-	common/RpcState.h \
-	common/GlobalStatistics.h \
-	common/CommonMessages_m.h \
-	common/InitStages.h \
-	common/TopologyVis.h \
-	common/GlobalStatisticsAccess.h \
-	common/Vector2D.h \
-	common/BinaryValue.h \
-	common/TransportAddress.h \
-	overlay/quon/ConnectivityProbeQuon.h \
-	common/IterativeLookupConfiguration.h \
-	common/OverlayKey.h \
-	common/oversim_byteswap.h \
-	common/Comparator.h \
-	common/BaseOverlay.h \
-	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	common/BaseRpc.h \
-	common/ProxNodeHandle.h \
-	overlay/quon/QuonDefs.h \
-	common/NodeHandle.h \
-	common/RpcMacros.h
-$O/overlay/vast/VastDefs.o: overlay/vast/VastDefs.cc \
-	overlay/vast/VastDefs.h \
-	common/OverlayKey.h \
-	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
-	$(INET_PROJ)/src/base/INETDefs.h \
-	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	common/oversim_mapset.h \
-	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
-	common/NodeHandle.h \
-	common/Vector2D.h \
-	common/TransportAddress.h
-$O/overlay/vast/Vast_m.o: overlay/vast/Vast_m.cc \
-	common/CommonMessages_m.h \
-	$(INET_PROJ)/src/base/INETDefs.h \
-	common/OverSimMessage_m.h \
-	common/oversim_mapset.h \
-	common/Vector2D.h \
-	common/BinaryValue.h \
-	common/TransportAddress.h \
-	common/OverSimMessage.h \
-	common/OverlayKey.h \
-	overlay/vast/Vast_m.h \
-	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
-	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
-	common/NodeHandle.h
-$O/overlay/vast/ConnectivityProbe.o: overlay/vast/ConnectivityProbe.cc \
-	$(INET_PROJ)/src/base/INotifiable.h \
-	$(INET_PROJ)/src/base/INETDefs.h \
-	common/OverSimMessage_m.h \
-	common/RecursiveLookup.h \
-	common/oversim_mapset.h \
-	overlay/vast/ConnectivityProbe.h \
-	common/OverSimMessage.h \
-	common/AbstractLookup.h \
-	common/RpcListener.h \
-	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
-	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
-	overlay/vast/VastDefs.h \
-	common/NodeVector.h \
-	common/RpcState.h \
-	common/GlobalStatistics.h \
-	common/CommonMessages_m.h \
-	common/InitStages.h \
-	common/TopologyVis.h \
-	overlay/vast/Vast.h \
-	common/BinaryValue.h \
-	common/Vector2D.h \
-	common/GlobalStatisticsAccess.h \
-	common/TransportAddress.h \
-	common/IterativeLookupConfiguration.h \
-	common/OverlayKey.h \
-	overlay/vast/Vast_m.h \
-	common/BaseOverlay.h \
-	common/Comparator.h \
-	common/BaseRpc.h \
-	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	common/ProxNodeHandle.h \
-	common/NodeHandle.h \
-	common/RpcMacros.h
-$O/overlay/vast/Vast.o: overlay/vast/Vast.cc \
-	common/BootstrapNodeHandle.h \
-	$(INET_PROJ)/src/base/INETDefs.h \
-	$(INET_PROJ)/src/base/INotifiable.h \
-	common/OverSimMessage_m.h \
-	common/oversim_mapset.h \
-	common/RecursiveLookup.h \
-	common/OverSimMessage.h \
-	common/AbstractLookup.h \
-	common/GlobalNodeList.h \
-	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
-	common/RpcListener.h \
-	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
-	common/ChurnGenerator.h \
-	overlay/vast/VastDefs.h \
-	common/NodeVector.h \
-	common/HashFunc.h \
-	common/RpcState.h \
-	common/GlobalStatistics.h \
-	common/CommonMessages_m.h \
-	common/BaseApp.h \
-	common/InitStages.h \
-	common/TopologyVis.h \
-	common/BootstrapList.h \
-	overlay/vast/Vast.h \
-	$(INET_PROJ)/src/base/NotifierConsts.h \
-	common/BinaryValue.h \
-	common/Vector2D.h \
-	common/TransportAddress.h \
-	common/IterativeLookupConfiguration.h \
-	common/OverlayKey.h \
-	common/oversim_byteswap.h \
-	overlay/vast/Vast_m.h \
-	common/Comparator.h \
-	common/BaseOverlay.h \
-	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
-	common/BaseRpc.h \
-	common/ProxNodeHandle.h \
-	common/NodeHandle.h \
-	common/RpcMacros.h
 $O/underlay/inetunderlay/AccessNet.o: underlay/inetunderlay/AccessNet.cc \
 	$(INET_PROJ)/src/networklayer/ipv4/IPv4InterfaceData.h \
 	underlay/inetunderlay/AccessNet.h \
@@ -3097,8 +2923,8 @@ $O/underlay/singlehostunderlay/ZeroconfConnector.o: underlay/singlehostunderlay/
 	common/OverSimMessage.h \
 	common/AbstractLookup.h \
 	common/GlobalNodeList.h \
-	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
 	common/RpcListener.h \
+	$(INET_PROJ)/src/networklayer/contract/IPvXAddress.h \
 	$(INET_PROJ)/src/networklayer/contract/IPAddress.h \
 	common/ChurnGenerator.h \
 	common/HashFunc.h \
@@ -3117,6 +2943,7 @@ $O/underlay/singlehostunderlay/ZeroconfConnector.o: underlay/singlehostunderlay/
 	common/IterativeLookupConfiguration.h \
 	common/OverlayKey.h \
 	common/oversim_byteswap.h \
+	common/HoangGlobalObject.h \
 	common/Comparator.h \
 	common/BaseOverlay.h \
 	$(INET_PROJ)/src/networklayer/contract/IPv6Address.h \
