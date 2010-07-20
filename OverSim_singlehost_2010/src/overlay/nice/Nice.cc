@@ -80,7 +80,10 @@ Nice::Nice() : numInconsistencies(0),
                numHeartbeat(0),
                totalHeartbeatBytes(0)
 {
+	//hoang
 	RendevouzPoint = TransportAddress(IPvXAddress("10.189.0.2"),1024,TransportAddress::UNKNOWN_NAT);
+	//end of hoang
+
     /* do nothing at this point of time, OverSim calls initializeOverlay */
 
 } // Nice
@@ -488,14 +491,15 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
                 break;
 
-			//hoang
-            case NICE_RP_NOTIFY:
+                //hoang
+			case NICE_RP_NOTIFY:
 
-				std::cout << endl <<"vua nhan duoc NICE_RPnotify from " << niceMsg->getSrcNode() << endl;
+				std::cout << endl <<"vua nhan duoc NICE_RP_NOTIFY from " << niceMsg->getSrcNode() << endl;
 
 				RendevouzPoint = niceMsg->getSrcNode();
 
 				break;
+				//end of hoang
 
             default:
                 
@@ -545,6 +549,18 @@ void Nice::becomeRendevouzPoint()
 
     RendevouzPoint = thisNode;
     EV << simTime() << " : " << thisNode.getAddress() << " : Set RP to " << thisNode.getAddress() << endl;
+    //hoang
+//    const char * ip = par("externalHostIP");
+//
+//	TransportAddress add = TransportAddress(IPvXAddress(ip),1024,TransportAddress::UNKNOWN_NAT);
+//
+//	NiceMessage * msg = new NiceMessage("NICE_RP_NOTIFY");
+//
+//	msg->setCommand(NICE_RP_NOTIFY);
+//	msg->setSrcNode(thisNode);
+//
+//	sendMessageToUDP(add, msg);
+    //end of hoang
 
     /* Mark node as new RP (star symbol) */
     getParentModule()->getParentModule()->getDisplayString().
@@ -1504,6 +1520,9 @@ void Nice::handleNiceLeaderHeartbeatOrTransfer(NiceMessage* msg)
 
 void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
 {
+	//hoang
+//	multicastMsg->get
+	//end of hoang
     RECORD_STATS(++numReceived; totalReceivedBytes += multicastMsg->getByteLength());
 
     /* If it is mine, count */
@@ -1526,6 +1545,9 @@ void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
             sendDataToOverlay(forOverlay);
 
             send(multicastMsg->decapsulate(), "appOut");
+            //hoang
+            global->recordALMhopcount(hopCount);
+            //end of hoang
 
         }
     }
@@ -3635,8 +3657,12 @@ void Nice::handleAppMessage(cMessage* msg)
         niceMsg->setSrcNode(thisNode);
         niceMsg->setLastHop(thisNode);
         niceMsg->setHopCount(0);
-
         niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));
+        //hoang
+        niceMsg->setNodeID(nodeID);
+        niceMsg->setLastHopID(nodeID);
+        niceMsg->setSeqNo(multicastMsg->getPacketID());
+        //end of hoang
 
         niceMsg->encapsulate(multicastMsg);
         sendDataToOverlay(niceMsg);
@@ -3683,6 +3709,11 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
                         dup->setLayer( layer );
                         dup->setLastHop(thisNode);
 
+                        //hoang
+                        dup->setLastHopID(nodeID);
+                        //FIXME: record sid=0 in case of streaming (only one sender=0)
+                        global->recordOut(nodeID,0,dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()));
+                        //end of hoang
                         sendMessageToUDP(member, dup);
 
                     }
@@ -3704,6 +3735,11 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
 
         dup->setSrcNode(thisNode);
 
+        //hoang
+        dup->setLastHopID(nodeID);
+        //FIXME: record sid=0 in case of streaming (only one sender=0)
+        global->recordOut(nodeID,0,dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()));
+        //end of hoang
         sendMessageToUDP(it->first, dup);
 
         it++;

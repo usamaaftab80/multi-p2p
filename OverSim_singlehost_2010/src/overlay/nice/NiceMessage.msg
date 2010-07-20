@@ -115,5 +115,10 @@ message NiceMulticastMessage extends NiceMessage
     double sendTime;
     unsigned int seqNo;
     unsigned int hopCount;
+    //hoang
+    double bigKD;
+    double lastHopKd;
+    int nodeID;
+    int lastHopID;
 }
 

@@ -1538,6 +1538,10 @@ NiceMulticastMessage::NiceMulticastMessage(const char *name, int kind) : NiceMes
     this->sendTime_var = 0;
     this->seqNo_var = 0;
     this->hopCount_var = 0;
+    this->bigKD_var = 0;
+    this->lastHopKd_var = 0;
+    this->nodeID_var = 0;
+    this->lastHopID_var = 0;
 }
 
 NiceMulticastMessage::NiceMulticastMessage(const NiceMulticastMessage& other) : NiceMessage()
@@ -1558,6 +1562,10 @@ NiceMulticastMessage& NiceMulticastMessage::operator=(const NiceMulticastMessage
     this->sendTime_var = other.sendTime_var;
     this->seqNo_var = other.seqNo_var;
     this->hopCount_var = other.hopCount_var;
+    this->bigKD_var = other.bigKD_var;
+    this->lastHopKd_var = other.lastHopKd_var;
+    this->nodeID_var = other.nodeID_var;
+    this->lastHopID_var = other.lastHopID_var;
     return *this;
 }
 
@@ -1568,6 +1576,10 @@ void NiceMulticastMessage::parsimPack(cCommBuffer *b)
     doPacking(b,this->sendTime_var);
     doPacking(b,this->seqNo_var);
     doPacking(b,this->hopCount_var);
+    doPacking(b,this->bigKD_var);
+    doPacking(b,this->lastHopKd_var);
+    doPacking(b,this->nodeID_var);
+    doPacking(b,this->lastHopID_var);
 }
 
 void NiceMulticastMessage::parsimUnpack(cCommBuffer *b)
@@ -1577,6 +1589,10 @@ void NiceMulticastMessage::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->sendTime_var);
     doUnpacking(b,this->seqNo_var);
     doUnpacking(b,this->hopCount_var);
+    doUnpacking(b,this->bigKD_var);
+    doUnpacking(b,this->lastHopKd_var);
+    doUnpacking(b,this->nodeID_var);
+    doUnpacking(b,this->lastHopID_var);
 }
 
 TransportAddress& NiceMulticastMessage::getLastHop()
@@ -1617,6 +1633,46 @@ unsigned int NiceMulticastMessage::getHopCount() const
 void NiceMulticastMessage::setHopCount(unsigned int hopCount_var)
 {
     this->hopCount_var = hopCount_var;
+}
+
+double NiceMulticastMessage::getBigKD() const
+{
+    return bigKD_var;
+}
+
+void NiceMulticastMessage::setBigKD(double bigKD_var)
+{
+    this->bigKD_var = bigKD_var;
+}
+
+double NiceMulticastMessage::getLastHopKd() const
+{
+    return lastHopKd_var;
+}
+
+void NiceMulticastMessage::setLastHopKd(double lastHopKd_var)
+{
+    this->lastHopKd_var = lastHopKd_var;
+}
+
+int NiceMulticastMessage::getNodeID() const
+{
+    return nodeID_var;
+}
+
+void NiceMulticastMessage::setNodeID(int nodeID_var)
+{
+    this->nodeID_var = nodeID_var;
+}
+
+int NiceMulticastMessage::getLastHopID() const
+{
+    return lastHopID_var;
+}
+
+void NiceMulticastMessage::setLastHopID(int lastHopID_var)
+{
+    this->lastHopID_var = lastHopID_var;
 }
 
 class NiceMulticastMessageDescriptor : public cClassDescriptor
@@ -1666,7 +1722,7 @@ const char *NiceMulticastMessageDescriptor::getProperty(const char *propertyname
 int NiceMulticastMessageDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 4+basedesc->getFieldCount(object) : 4;
+    return basedesc ? 8+basedesc->getFieldCount(object) : 8;
 }
 
 unsigned int NiceMulticastMessageDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -1682,8 +1738,12 @@ unsigned int NiceMulticastMessageDescriptor::getFieldTypeFlags(void *object, int
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<4) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *NiceMulticastMessageDescriptor::getFieldName(void *object, int field) const
@@ -1699,8 +1759,12 @@ const char *NiceMulticastMessageDescriptor::getFieldName(void *object, int field
         "sendTime",
         "seqNo",
         "hopCount",
+        "bigKD",
+        "lastHopKd",
+        "nodeID",
+        "lastHopID",
     };
-    return (field>=0 && field<4) ? fieldNames[field] : NULL;
+    return (field>=0 && field<8) ? fieldNames[field] : NULL;
 }
 
 int NiceMulticastMessageDescriptor::findField(void *object, const char *fieldName) const
@@ -1711,6 +1775,10 @@ int NiceMulticastMessageDescriptor::findField(void *object, const char *fieldNam
     if (fieldName[0]=='s' && strcmp(fieldName, "sendTime")==0) return base+1;
     if (fieldName[0]=='s' && strcmp(fieldName, "seqNo")==0) return base+2;
     if (fieldName[0]=='h' && strcmp(fieldName, "hopCount")==0) return base+3;
+    if (fieldName[0]=='b' && strcmp(fieldName, "bigKD")==0) return base+4;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lastHopKd")==0) return base+5;
+    if (fieldName[0]=='n' && strcmp(fieldName, "nodeID")==0) return base+6;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lastHopID")==0) return base+7;
     return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
@@ -1727,8 +1795,12 @@ const char *NiceMulticastMessageDescriptor::getFieldTypeString(void *object, int
         "double",
         "unsigned int",
         "unsigned int",
+        "double",
+        "double",
+        "int",
+        "int",
     };
-    return (field>=0 && field<4) ? fieldTypeStrings[field] : NULL;
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *NiceMulticastMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1772,6 +1844,10 @@ std::string NiceMulticastMessageDescriptor::getFieldAsString(void *object, int f
         case 1: return double2string(pp->getSendTime());
         case 2: return ulong2string(pp->getSeqNo());
         case 3: return ulong2string(pp->getHopCount());
+        case 4: return double2string(pp->getBigKD());
+        case 5: return double2string(pp->getLastHopKd());
+        case 6: return long2string(pp->getNodeID());
+        case 7: return long2string(pp->getLastHopID());
         default: return "";
     }
 }
@@ -1789,6 +1865,10 @@ bool NiceMulticastMessageDescriptor::setFieldAsString(void *object, int field, i
         case 1: pp->setSendTime(string2double(value)); return true;
         case 2: pp->setSeqNo(string2ulong(value)); return true;
         case 3: pp->setHopCount(string2ulong(value)); return true;
+        case 4: pp->setBigKD(string2double(value)); return true;
+        case 5: pp->setLastHopKd(string2double(value)); return true;
+        case 6: pp->setNodeID(string2long(value)); return true;
+        case 7: pp->setLastHopID(string2long(value)); return true;
         default: return false;
     }
 }
@@ -1806,8 +1886,12 @@ const char *NiceMulticastMessageDescriptor::getFieldStructName(void *object, int
         NULL,
         NULL,
         NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
     };
-    return (field>=0 && field<4) ? fieldStructNames[field] : NULL;
+    return (field>=0 && field<8) ? fieldStructNames[field] : NULL;
 }
 
 void *NiceMulticastMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

@@ -1766,7 +1766,7 @@ inline void doUnpacking(cCommBuffer *b, P2pnsResolveResponse& obj) {obj.parsimUn
  *     int srcComp enum(CompType);  
  *     int destComp enum(CompType); 
  *     int transportType enum(TransportType) = INVALID_TRANSPORT; 
- *     int routingType enum(RoutingType);
+ *     int routingType enum(RoutingType);    
  * }
  * </pre>
  */
@@ -1986,12 +1986,15 @@ inline void doUnpacking(cCommBuffer *b, ALMLeaveMessage& obj) {obj.parsimUnpack(
  * <pre>
  * packet ALMMulticastMessage extends ALMMessage
  * {
+ *     
+ *     int packetID;       
  * }
  * </pre>
  */
 class ALMMulticastMessage : public ::ALMMessage
 {
   protected:
+    int packetID_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const ALMMulticastMessage&);
@@ -2006,6 +2009,8 @@ class ALMMulticastMessage : public ::ALMMessage
     virtual void parsimUnpack(cCommBuffer *b);
 
     // field getter/setter methods
+    virtual int getPacketID() const;
+    virtual void setPacketID(int packetID_var);
 };
 
 inline void doPacking(cCommBuffer *b, ALMMulticastMessage& obj) {obj.parsimPack(b);}
