@@ -17,8 +17,9 @@ Download: http://ftp.gnu.org/gnu/osip/libosip2-3.3.0.tar.gz
 
 
 
-= Example sourcode =
+= Example sourcecode =
 main.c
+Class: HOSIP.h, .cc
 
 == Compiling ==
 gcc main.c -losip2 -lpthread -o test_osip
@@ -29,6 +30,8 @@ Goto: Project/ Properties / Settings / C/C++ Build /Tool Settings / GCC C Linker
 Add: _osip2_ to (-l)
 
 Add: _/usr/local/lib_ to (-L)
+
+Add: _-lpthread_ to _Miscellaneous_ of GCC C Compiler, GCC C++ Compiler, GCC C Linker 
 
 == Running ==
 ./test_osip: error while loading shared libraries: libosip2.so.3: cannot open shared object file: No such file or directory
