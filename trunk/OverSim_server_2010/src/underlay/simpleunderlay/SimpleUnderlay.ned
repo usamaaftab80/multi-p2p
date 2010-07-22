@@ -20,6 +20,8 @@ import oversim.common.GlobalObserver;
 import oversim.common.GlobalStatistics;
 
 import oversim.common.ChurnGenerator;
+import oversim.common.HoangGlobalObject;
+
 //
 // The SimpleUnderlay ned-file @see SimpleUnderlayConfigurator
 //
@@ -40,5 +42,10 @@ network SimpleUnderlayNetwork
         globalObserver: GlobalObserver {
             @display("p=70,50");
         }
-        overlayTerminal[0]: SimpleOverlayHost { @dynamic; }
+        hoangGlobalObject: HoangGlobalObject {
+            @display("p=70,286");
+        }
+        overlayTerminal[0]: SimpleOverlayHost {
+            @dynamic;
+        }
 }

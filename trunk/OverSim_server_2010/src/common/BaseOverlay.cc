@@ -715,6 +715,9 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         	NiceMulticastMessage* dup = static_cast<NiceMulticastMessage*>(msg->dup());
         	NiceMulticastMessage* niceMmsg = check_and_cast<NiceMulticastMessage*>(dup);
+        	if(dup->getLastHopID()>1100){
+				std::cout << "server receive NiceMulticastMessage from singleHost" << endl;
+        	}
 
         	simtime_t delay = simTime() - niceMmsg->getCreationTime();
 

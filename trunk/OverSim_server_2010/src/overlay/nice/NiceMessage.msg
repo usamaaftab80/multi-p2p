@@ -109,7 +109,7 @@ message NiceLeaderHeartbeat extends NiceHeartbeat
 }
 
 
-message NiceMulticastMessage extends NiceMessage
+message NiceMulticastMessage extends BaseOverlayMessage
 {
     TransportAddress lastHop;
     double sendTime;
@@ -120,5 +120,9 @@ message NiceMulticastMessage extends NiceMessage
     double lastHopKd;
     int nodeID;
     int lastHopID;
+    //from NiceMessage
+    int command enum(NICECommand);    
+    TransportAddress srcNode;
+    short layer;
 }
 
