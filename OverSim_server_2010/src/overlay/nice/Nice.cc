@@ -493,6 +493,22 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
                 delete niceMsg;
         }
     }
+    //hoang
+    else if(dynamic_cast<NiceMulticastMessage*>(msg) != NULL){
+
+    	NiceMulticastMessage* multicastMsg;
+
+    	multicastMsg = check_and_cast<NiceMulticastMessage*>(msg);
+
+    	if(multicastMsg->getCommand() == NICE_MULTICAST){
+    		handleNiceMulticast(multicastMsg);
+    	}
+    	else {
+            delete multicastMsg;
+    	}
+
+    }
+    //end of hoang
     else {
         delete msg;
     }
@@ -1508,7 +1524,7 @@ void Nice::handleNiceLeaderHeartbeatOrTransfer(NiceMessage* msg)
 void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
 {
 	//hoang
-//	multicastMsg->get
+//	std::cout << "node " << nodeID << " call Nice::handleNiceMulticast\n\n" << endl;
 	//end of hoang
     RECORD_STATS(++numReceived; totalReceivedBytes += multicastMsg->getByteLength());
 
@@ -1530,9 +1546,9 @@ void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
             NiceMulticastMessage* forOverlay = static_cast<NiceMulticastMessage*>(multicastMsg->dup());
             forOverlay->setHopCount(hopCount);
             sendDataToOverlay(forOverlay);
-
-            send(multicastMsg->decapsulate(), "appOut");
             //hoang
+//            send(multicastMsg->decapsulate(), "appOut");
+
             global->recordALMhopcount(hopCount);
             //end of hoang
 
@@ -3651,7 +3667,7 @@ void Nice::handleAppMessage(cMessage* msg)
         niceMsg->setSeqNo(multicastMsg->getPacketID());
         //end of hoang
 
-        niceMsg->encapsulate(multicastMsg);
+//        niceMsg->encapsulate(multicastMsg);
         sendDataToOverlay(niceMsg);
 
         // otherwise msg gets deleted later

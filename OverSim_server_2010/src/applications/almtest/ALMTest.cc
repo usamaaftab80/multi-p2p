@@ -32,8 +32,8 @@ ALMTest::ALMTest()
 {
     timer = new cMessage( "app_timer"); 
     joinGroups = true;
-    o = new HOSIP();
-    o->principe();
+//    o = new HOSIP();
+//    o->principe();
 }
 
 ALMTest::~ALMTest()
@@ -63,7 +63,7 @@ void ALMTest::handleTimerEvent( cMessage* msg )
         } else {
             sendDataToGroup( intuniform( 1, groupNum ));
         }
-        scheduleAt( simTime() + 10, timer );
+        scheduleAt( simTime() + 1, timer );
     }
 }
 
@@ -105,6 +105,7 @@ void ALMTest::handleUpperMessage(cMessage* msg)
 
 void ALMTest::joinGroup(int i)
 {
+	std::cout << thisNode.getAddress() << " joinGroup " << i << endl;
     ALMSubscribeMessage* msg = new ALMSubscribeMessage;
     msg->setGroupId(OverlayKey(i));
     send(msg, "to_lowerTier");
@@ -114,6 +115,7 @@ void ALMTest::joinGroup(int i)
 
 void ALMTest::leaveGroup(int i)
 {
+	std::cout << thisNode.getAddress() << " leaveGroup " << i << endl;
     ALMLeaveMessage* msg = new ALMLeaveMessage;
     msg->setGroupId(OverlayKey(i));
     send(msg, "to_lowerTier");
@@ -123,6 +125,7 @@ void ALMTest::leaveGroup(int i)
 
 void ALMTest::sendDataToGroup( int i )
 {
+	std::cout << thisNode.getAddress() << " sendDataToGroup " << i << endl;
     ALMMulticastMessage* msg = new ALMMulticastMessage("Multicast message");
     msg->setGroupId(OverlayKey(i));
 
@@ -143,7 +146,7 @@ void ALMTest::sendDataToGroup( int i )
 void ALMTest::handleMCast( ALMMulticastMessage* mcast )
 {
     getParentModule()->getParentModule()->bubble("Received message!");
-    EV << "[ALMTest::handleMCast()]\n"
+    std::cout << "[ALMTest::handleMCast()]\n"
        << "    App received data message for group: " << mcast->getGroupId()
        << endl;
 

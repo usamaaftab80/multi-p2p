@@ -48,6 +48,12 @@ HoangGlobalObject::~HoangGlobalObject()
 
 	cout << "\ntotalALMhopcount=" << totalALMhopcount << " numALMhopcount=" << numALMhopcount << endl<< endl;
 
+	ofstream alm_hc_file;
+	alm_hc_file.open ("alm_hopcount.log");
+
+	alm_hc_file << "totalALMhopcount=" << totalALMhopcount << endl << " numALMhopcount=" << numALMhopcount;
+	alm_hc_file.close();
+
 	fclose(inFile);
 	fclose(outFile);
 }

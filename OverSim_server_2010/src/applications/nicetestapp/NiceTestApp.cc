@@ -263,7 +263,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		msg->setPacketID(pingPongPkt->getPacketID());
 
-		msg->encapsulate(pingPongPkt);
+//		msg->encapsulate(pingPongPkt);
 
 		send(msg, "to_lowerTier");
 
