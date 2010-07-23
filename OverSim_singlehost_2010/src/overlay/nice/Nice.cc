@@ -506,6 +506,22 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
                 delete niceMsg;
         }
     }
+    //hoang
+	else if(dynamic_cast<NiceMulticastMessage*>(msg) != NULL){
+
+		NiceMulticastMessage* multicastMsg;
+
+		multicastMsg = check_and_cast<NiceMulticastMessage*>(msg);
+
+		if(multicastMsg->getCommand() == NICE_MULTICAST){
+			handleNiceMulticast(multicastMsg);
+		}
+		else {
+			delete multicastMsg;
+		}
+
+	}
+	//end of hoang
     else {
         delete msg;
     }
@@ -1544,8 +1560,9 @@ void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
             forOverlay->setHopCount(hopCount);
             sendDataToOverlay(forOverlay);
 
-            send(multicastMsg->decapsulate(), "appOut");
             //hoang
+//            send(multicastMsg->decapsulate(), "appOut");
+
             global->recordALMhopcount(hopCount);
             //end of hoang
 
@@ -3664,7 +3681,7 @@ void Nice::handleAppMessage(cMessage* msg)
         niceMsg->setSeqNo(multicastMsg->getPacketID());
         //end of hoang
 
-        niceMsg->encapsulate(multicastMsg);
+//        niceMsg->encapsulate(multicastMsg);
         sendDataToOverlay(niceMsg);
 
         // otherwise msg gets deleted later
