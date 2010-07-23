@@ -314,7 +314,7 @@ inline void doUnpacking(cCommBuffer *b, NiceLeaderHeartbeat& obj) {obj.parsimUnp
 /**
  * Class generated from <tt>overlay/nice/NiceMessage.msg</tt> by opp_msgc.
  * <pre>
- * message NiceMulticastMessage extends NiceMessage
+ * message NiceMulticastMessage extends BaseOverlayMessage
  * {
  *     TransportAddress lastHop;
  *     double sendTime;
@@ -325,10 +325,14 @@ inline void doUnpacking(cCommBuffer *b, NiceLeaderHeartbeat& obj) {obj.parsimUnp
  *     double lastHopKd;
  *     int nodeID;
  *     int lastHopID;
+ *     
+ *     int command enum(NICECommand);    
+ *     TransportAddress srcNode;
+ *     short layer;
  * }
  * </pre>
  */
-class NiceMulticastMessage : public ::NiceMessage
+class NiceMulticastMessage : public ::BaseOverlayMessage
 {
   protected:
     ::TransportAddress lastHop_var;
@@ -339,6 +343,9 @@ class NiceMulticastMessage : public ::NiceMessage
     double lastHopKd_var;
     int nodeID_var;
     int lastHopID_var;
+    int command_var;
+    ::TransportAddress srcNode_var;
+    short layer_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const NiceMulticastMessage&);
@@ -370,6 +377,13 @@ class NiceMulticastMessage : public ::NiceMessage
     virtual void setNodeID(int nodeID_var);
     virtual int getLastHopID() const;
     virtual void setLastHopID(int lastHopID_var);
+    virtual int getCommand() const;
+    virtual void setCommand(int command_var);
+    virtual TransportAddress& getSrcNode();
+    virtual const TransportAddress& getSrcNode() const {return const_cast<NiceMulticastMessage*>(this)->getSrcNode();}
+    virtual void setSrcNode(const TransportAddress& srcNode_var);
+    virtual short getLayer() const;
+    virtual void setLayer(short layer_var);
 };
 
 inline void doPacking(cCommBuffer *b, NiceMulticastMessage& obj) {obj.parsimPack(b);}
