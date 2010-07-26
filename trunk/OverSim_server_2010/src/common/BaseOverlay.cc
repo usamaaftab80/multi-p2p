@@ -64,6 +64,10 @@ BaseOverlay::BaseOverlay()
     notificationBoard = NULL;
     globalParameters = NULL;
     bootstrapList = NULL;
+    //hoang
+    kw = 1e6;
+    xw = 0;
+    //end of hoang
 }
 
 BaseOverlay::~BaseOverlay()
@@ -83,6 +87,10 @@ void BaseOverlay::initialize(int stage)
 	const char *globalModulePath = par("globalModulePath");
 	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
 	global = check_and_cast<HoangGlobalObject *>(modp2);
+
+	hoang_use_cost = par("hoang_use_cost");
+	hoang_debug_cost = par("hoang_debug_cost");
+	//end of hoang
 
     if (stage == REGISTER_STAGE) {
         registerComp(getThisCompType(), this);
@@ -718,6 +726,10 @@ void BaseOverlay::handleMessage(cMessage* msg)
         	if(dup->getLastHopID()>1100){
 				std::cout << "server receive NiceMulticastMessage from singleHost" << endl;
         	}
+
+        	kw = udpControlInfo->getMinBW();
+        	xw = dup->getXw();
+//        	cout << "Node " << nodeID << " get a pkt. xw = " << xw << " ||kw = " << kw << endl;
 
         	simtime_t delay = simTime() - niceMmsg->getCreationTime();
 

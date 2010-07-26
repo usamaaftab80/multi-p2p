@@ -329,6 +329,7 @@ inline void doUnpacking(cCommBuffer *b, NiceLeaderHeartbeat& obj) {obj.parsimUnp
  *     int command enum(NICECommand);    
  *     TransportAddress srcNode;
  *     short layer;
+ *     double xw;
  * }
  * </pre>
  */
@@ -346,6 +347,7 @@ class NiceMulticastMessage : public ::BaseOverlayMessage
     int command_var;
     ::TransportAddress srcNode_var;
     short layer_var;
+    double xw_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const NiceMulticastMessage&);
@@ -384,6 +386,8 @@ class NiceMulticastMessage : public ::BaseOverlayMessage
     virtual void setSrcNode(const TransportAddress& srcNode_var);
     virtual short getLayer() const;
     virtual void setLayer(short layer_var);
+    virtual double getXw() const;
+    virtual void setXw(double xw_var);
 };
 
 inline void doPacking(cCommBuffer *b, NiceMulticastMessage& obj) {obj.parsimPack(b);}

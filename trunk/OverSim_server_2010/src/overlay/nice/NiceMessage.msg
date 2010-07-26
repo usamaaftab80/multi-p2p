@@ -124,5 +124,6 @@ message NiceMulticastMessage extends BaseOverlayMessage
     int command enum(NICECommand);    
     TransportAddress srcNode;
     short layer;
+    double xw;
 }
 

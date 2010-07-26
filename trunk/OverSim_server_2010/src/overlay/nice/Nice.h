@@ -318,6 +318,9 @@ private:
 
     void pollRP(int layer);
 
+    //hoang
+    double cost();
+
 
 };
 
