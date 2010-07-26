@@ -20,7 +20,7 @@ int main (int argc, char *argv[])
   osip_message_t *message;
   int i;
   eXosip_event_t *event;
-
+  int pos = 0;
 // For trace
 //  osip_trace_initialize(6, stdout);
 
@@ -39,7 +39,7 @@ int main (int argc, char *argv[])
 //  eXosip_force_masquerade_contact ("localhost");
 
   i = eXosip_message_build_request (&message, "MESSAGE",
-"<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.122:5080>", NULL);
+"<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>", NULL);
   if (i != 0) {
       printf("eXosip_message_build_request failed");
       exit (1);
@@ -63,39 +63,38 @@ int main (int argc, char *argv[])
   while(1) {
      if (!(event = eXosip_event_wait (0, 1000))) {
           usleep (10000);
-          printf("%d\n",++j);
+//          printf("%d\n",++j);
           continue;
         }
           eXosip_automatic_action ();
-
+          pos = 0;
      switch (event->type) {
 			case EXOSIP_MESSAGE_NEW:
-				printf ("EXOSIP_MESSAGE_NEW Event detected! %d\n",++num);
-				printf("1. msg->status_code: %d\n",event->request->status_code);
-				printf("1. msg->from->displayname: %s\n",event->request->message);
-				/*//send an answer for 200
-				osip_message_t *answer;
-				i = eXosip_message_build_answer(event->tid, 200, &answer);
+				printf ("\nEXOSIP_MESSAGE_NEW Event detected! %d\n",++num);
+//				printf("1. msg->status_code: %d\n",event->request->status_code);
+//				printf("1. msg->from->displayname: %s\n",event->request->message);
 
-				  if (i != 0) {
-					  printf("eXosip_message_build_answer failed");
-					  exit (1);
-				  }
+				 osip_body_t * oldbody;
+				   while (!osip_list_eol (&event->request->bodies, pos))
+				     {
 
-//				  osip_message_set_expires (answer, "120");
-//				  osip_message_set_body (answer, buf, strlen (buf));
-//				  osip_message_set_content_type (answer, "text/plain");
+				       oldbody = (osip_body_t *) osip_list_get (&event->request->bodies, pos);
+				       pos++;
 
-				  printf("2. answer->message: %s\n",answer->message);
+				       printf("body:%s\nbodysize:%d\n",oldbody->body,oldbody->length);
 
+				     }
+
+
+				//send an answer for 200
 				  eXosip_lock ();
-				  i = eXosip_message_send_answer(1, 200, answer);
-				  printf("aaa %d\n",i);
+				  i = eXosip_message_send_answer(event->tid, 200, NULL);
+//				  printf("aaa %d\n",i);
 				  if (i != 0) {
 					  printf("eXosip_message_send_answer failed");
 					  exit (1);
 				  }
-				  eXosip_unlock ();*/
+				  eXosip_unlock ();
 
 				break;
 			case EXOSIP_MESSAGE_PROCEEDING:
