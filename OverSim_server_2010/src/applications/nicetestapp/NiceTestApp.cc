@@ -257,13 +257,13 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		pingPongPkt->setPacketID(numSent);
 
-//		stats->setXw(periodicData[numSent].rate);
-
 		ALMMulticastMessage* msg = new ALMMulticastMessage("Multicast message");
 
 		msg->setPacketID(pingPongPkt->getPacketID());
 
-//		msg->encapsulate(pingPongPkt);
+		msg->setXw(periodicData[numSent].rate);
+
+		msg->encapsulate(pingPongPkt);
 
 		send(msg, "to_lowerTier");
 

@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for OverSim
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -linet -O out -o OverSim -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/tcp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/applications/pingapp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/mpls -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ipv4 -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/linklayer/contract -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/linklayer/mfcore -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ldp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ipv6 -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/arp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/applications/udpapp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ted -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/rsvp_te -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/util/headerserializers -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/contract -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/contract -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/common -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/sctp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/udp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/base -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/icmpv6 -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/world -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/util -L/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src -L/usr/lib -KINET_PROJ=/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505 -- -lgmp -losip2 -lpthread
+#  opp_makemake -f --deep -linet -O out -o OverSim -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/tcp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/applications/pingapp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/mpls -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ipv4 -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/linklayer/contract -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/linklayer/mfcore -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ldp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ipv6 -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/arp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/applications/udpapp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ted -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/rsvp_te -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/util/headerserializers -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/contract -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/contract -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/common -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/sctp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/udp -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/base -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/icmpv6 -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/world -I/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src/util -L/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505/src -L/usr/lib -KINET_PROJ=/media/DATA/Downloads/Linux/oversim/OverSim-20100526/src/../../INET-OverSim-20100505 -- -lgmp
 #
 
 # Name of target to be created (-o option)
@@ -58,7 +58,7 @@ INCLUDE_PATH = \
     -Iunderlay/singlehostunderlay/stun
 
 # Additional object and library files to link with
-EXTRA_OBJS = -lgmp -losip2 -lpthread
+EXTRA_OBJS = -lgmp
 
 # Additional libraries (-L, -l options)
 LIBS = -L../../INET-OverSim-20100505/src -L/usr/lib  -linet
@@ -73,7 +73,6 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 OBJS = \
     $O/applications/almlistener/ALMListener.o \
     $O/applications/almtest/ALMTest.o \
-    $O/applications/almtest/HOSIP.o \
     $O/applications/almtest/MessageObserver.o \
     $O/applications/conferenceapp/ConferenceApp.o \
     $O/applications/dht/DHT.o \
@@ -339,8 +338,6 @@ $O/applications/almtest/ALMTest.o: applications/almtest/ALMTest.cc \
 $O/applications/almtest/ALMTestTracedMessage_m.o: applications/almtest/ALMTestTracedMessage_m.cc \
   common/OverlayKey.h \
   applications/almtest/ALMTestTracedMessage_m.h
-$O/applications/almtest/HOSIP.o: applications/almtest/HOSIP.cc \
-  applications/almtest/HOSIP.h
 $O/applications/almtest/MessageObserver.o: applications/almtest/MessageObserver.cc \
   common/OverlayKey.h \
   applications/almtest/MessageObserver.h \

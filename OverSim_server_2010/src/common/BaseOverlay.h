@@ -825,9 +825,15 @@ private:
 protected:
     int nodeID;
     HoangGlobalObject *global;
+    double kw;
+    double xw;
+    bool hoang_use_cost;
+	bool hoang_debug_cost;
 
 public:
     void setNodeID(int id){nodeID = id;};
+    double getKw(){return kw;};
+    double getXw(){return xw;};
 
 };
 
