@@ -24,7 +24,7 @@ public :
 	//~EXOSIP( );
 	int initsip();
 	int sendmessage(osip_message_t *message, char *typeMessage ,char *uriTo, char *uriFrom, char *buf);
-	void *listensip(void *parameters);
+	static void *listensip(void *parameters);
 	void wait();
 
 };
