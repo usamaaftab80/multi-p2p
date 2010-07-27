@@ -8,14 +8,8 @@
 #ifndef EXOSIP_CC_
 #define EXOSIP_CC_
 
-#include <EXOSIP.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <netdb.h>
-#include <syslog.h>
-#include <pthread.h>
-#include <eXosip2/eXosip.h>
+#include "EXOSIP.h"
+
 
 #define MESSAGE_MAX_LENGTH 4000
 #define MAX_ADDR_STR 128
@@ -148,7 +142,7 @@ void *EXOSIP::listensip (void *parameters){
 void EXOSIP::wait(){
 	pthread_t thread_id;
 	thread_id = (pthread_t)malloc(sizeof(pthread_t));
-	pthread_create(&thread_id,NULL, &listensip,NULL);
+	pthread_create(&thread_id,NULL, EXOSIP::listensip,NULL);
 	//pthread_create( &tid, NULL, &EXOSIP::listen,new thread_fun_args(this,0) );
 }
 
