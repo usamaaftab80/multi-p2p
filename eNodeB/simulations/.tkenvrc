@@ -1,0 +1,3 @@
+# Partial Tkenv config file -- see $HOME/.tkenvrc as well
+inspector "SimpleUnderlayNetwork" "SimpleUnderlayNetwork" "2" "901x490+824+530:normal"
+

@@ -1,0 +1,89 @@
+# You need to setup the tun device like this:               
+# 
+# sudo modprobe tun
+# sudo chown baumgart /dev/net/tun
+# sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
+# ../../src/OverSim -f realdhtworld.ini &
+# sudo ifconfig tun0 10.0.0.1 netmask 255.0.0.0 up
+
+[General]
+description = "NICE real world"
+
+seed-set = 1 # must be different for every node!
+scheduler-class = TunOutScheduler
+**.outRouterNum = 1
+debug-on-errors = false
+
+network = oversim.underlay.inetunderlay.enodeb_InetUnderlayNetwork
+**.globalModulePath = "enodeb_InetUnderlayNetwork.hoangGlobalObject"
+
+**.overlayType = "oversim.overlay.nice.NiceModules"
+
+**.tier1Type = "TierDummy"
+#**.tier1Type = "oversim.applications.almtest.ALMTestModule"
+#**.tier1Type = "oversim.applications.conferenceapp.ConferenceAppModule"
+#**.tier1Type = "oversim.applications.nicetestapp.NiceTestAppModule"
+
+**.almTest.joinGroups = false
+
+*.globalObserver.numGlobalFunctions = 1
+*.globalObserver.globalFunctions[0].functionType = "oversim.applications.almtest.MessageObserverModule"
+
+**.targetOverlayTerminalNum = 2
+**.backboneRouterNum = 1
+**.accessRouterNum = 2
+
+#**[0].tier1.conferenceapp.isSender = true
+#**.isSender = false
+
+**.startIP = "50.1.0.1"
+**.gatewayIP = "50.3.0.1"
+
+**.externalHostIP = "1.1.1.2"
+
+**.externalPathLength = 11
+**.externalNodeID = 1111
+**.externalDefaultTTL = 64
+
+**.numTiers = 1
+
+**.vector-recording=false
+
+**.statisticsPeriod = 10s
+**.sendDataPeriod = 0.1s
+**.sendPeriod = 1s
+**.timeSendAfterInit = 0s
+**.XDlimit = 10
+**.fixedDiff = false
+**.diff = 0.001
+
+**.hoang_debug_cost = false
+**.hoang_use_cost = false
+**.isSender = false
+**.loopTimes = 1
+**.videoSize = 1128
+**.sdFile = "sd_a01"
+**.rdFile = "rd_a01"
+
+# enodeb_InetUnderlayNetwork configuration
+**.outRouter*.outDeviceType = "oversim.underlay.singlehostunderlay.TunOutDevice"
+**.mtu = 65000
+**.parser = "oversim.common.GenericPacketParser"
+**.appParser = "oversim.common.GenericPacketParser"
+**.gatewayIP = ""
+
+# InetUnderlay backbone configuration
+**.underlayConfigurator.terminalTypes = "oversim.underlay.inetunderlay.InetOverlayHost"
+**.*ccessRouter[*].accessNet.channelTypes = "oversim.common.inet_ethernetline oversim.common.inet_dsl"
+**.*ccessRouter[*].accessNet.channelTypesRx = ""
+**.churnGenerator*.channelTypes = "" # not used in InetUnderlay
+**.churnGenerator*.channelTypesRx = "" # not used in InetUnderlay
+**.overlayBackboneRouterNum = 0
+**.overlayAccessRouterNum = 0
+**.connectivity = 0.8
+
+
+
+include ../default.ini
+include ../GTITM_TS_InetUnderlay.ned-ASIDs.ini
+include ../GTITM_TS_InetUnderlay.ned-AS_AccessRouterNum.ini
