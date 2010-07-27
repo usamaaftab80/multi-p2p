@@ -167,7 +167,6 @@ int main (int argc, char *argv[])
 				printf("received eXosip event (type, did, cid) = (%d, %d, %d)\n", event->type, event->did, event->cid);
 				break;
       }
-
   }
   eXosip_event_free (event);
 }
