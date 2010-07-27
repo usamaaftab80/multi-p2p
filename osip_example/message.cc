@@ -71,8 +71,6 @@ int main (int argc, char *argv[])
      switch (event->type) {
 			case EXOSIP_MESSAGE_NEW:
 				printf ("\nEXOSIP_MESSAGE_NEW Event detected! %d\n",++num);
-//				printf("1. msg->status_code: %d\n",event->request->status_code);
-//				printf("1. msg->from->displayname: %s\n",event->request->message);
 
 				 osip_body_t * oldbody;
 				   while (!osip_list_eol (&event->request->bodies, pos))
@@ -85,11 +83,9 @@ int main (int argc, char *argv[])
 
 				     }
 
-
 				//send an answer for 200
 				  eXosip_lock ();
 				  i = eXosip_message_send_answer(event->tid, 200, NULL);
-//				  printf("aaa %d\n",i);
 				  if (i != 0) {
 					  printf("eXosip_message_send_answer failed");
 					  exit (1);
@@ -102,54 +98,6 @@ int main (int argc, char *argv[])
 				break;
 			case EXOSIP_MESSAGE_ANSWERED:
 				printf ("EXOSIP_MESSAGE_ANSWERED Event detected! from event tid=%d\n",event->tid);
-
-//				osip_message_t * msg = NULL;
-//				msg= event->response;
-
-/*				printf("1. msg->status_code: %d\n",event->response->status_code);
-				printf("1. msg->from->displayname: %s\n",event->response->from->url->host);
-				printf("1. msg->from->displayname: %s\n",event->response->from->url->port);
-				printf("1. msg->from->displayname: %s\n",event->response->to->url->host);
-				printf("1. msg->from->displayname: %s\n",event->response->to->url->port);
-				printf("1. msg->from->displayname: %s\n",event->response->from->displayname);
-				printf("1. msg->from->displayname: %s\n",event->response->from->url->username);
-				printf("1. msg->from->displayname: %s\n",event->response->to->displayname);
-				printf("1. msg->from->displayname: %s\n",event->response->to->url->username);
-
-				//send an answer for 200
-				osip_message_t *answer;
-				i = eXosip_message_build_answer(event->tid, 200, &answer);
-
-				  if (i != 0) {
-				      printf("eXosip_message_build_answer failed");
-				      exit (1);
-				  }
-
-				  printf("1. answer->status_code: %d\n",answer->status_code);
-				  printf("1. answer->from->displayname: %s\n",answer->from->url->host);
-				  printf("1. answer->from->displayname: %s\n",answer->from->url->port);
-				  printf("1. answer->from->displayname: %s\n",answer->to->url->host);
-				  printf("1. answer->from->displayname: %s\n",answer->to->url->port);
-				  printf("1. msg->from->displayname: %s\n",answer->from->displayname);
-				printf("1. msg->from->displayname: %s\n",answer->from->url->username);
-				printf("1. msg->from->displayname: %s\n",answer->to->displayname);
-				printf("1. msg->from->displayname: %s\n",answer->to->url->username);
-///				  printf("1. answer->from->displayname: %s\n",answer->headers);
-
-//				  osip_message_set_expires (answer, "120");
-//				  osip_message_set_body (answer, buf, strlen (buf));
-//				  osip_message_set_content_type (answer, "text/plain");
-
-				  printf("2. answer->message: %s\n",answer->message);
-
-				  eXosip_lock ();
-				  i = eXosip_message_send_answer(1, 200, answer);
-				  printf("aaa %d\n",i);
-				  if (i != 0) {
-				      printf("eXosip_message_send_answer failed");
-				      exit (1);
-				  }
-				  eXosip_unlock ();*/
 				break;
 			case EXOSIP_MESSAGE_REDIRECTED:
 				printf ("EXOSIP_MESSAGE_REDIRECTED Event detected!\n");

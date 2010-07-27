@@ -142,7 +142,8 @@ void *EXOSIP::listensip (void *parameters){
 void EXOSIP::wait(){
 	pthread_t thread_id;
 	thread_id = (pthread_t)malloc(sizeof(pthread_t));
-	pthread_create(&thread_id,NULL, EXOSIP::listensip,NULL);
+	pthread_create(&thread_id,NULL, &EXOSIP::listensip,NULL);
+//	while(1);
 	//pthread_create( &tid, NULL, &EXOSIP::listen,new thread_fun_args(this,0) );
 }
 

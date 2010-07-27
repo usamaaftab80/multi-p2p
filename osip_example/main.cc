@@ -15,6 +15,12 @@ int main(){
 	EXOSIP *o = new EXOSIP();
 	int i = 0;
 	i = o->initsip();
+	o->wait();
+	osip_message_t *message;
+	o->sendmessage(message,"MESSAGE","<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>","abc");
+//	printf("ngon vl");
+	while(1);
+
 	//int i = o->initsip();
 	//int i = o->initsip();
 	//o->initsip();
