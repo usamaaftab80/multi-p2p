@@ -8,25 +8,32 @@
 #ifndef EXOSIP_H_
 #define EXOSIP_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <netdb.h>
-#include <syslog.h>
-#include <pthread.h>
-#include <eXosip2/eXosip.h>
+namespace oversim
+{
 
+class EXOSIP;
+
+}
+
+#include "Nice.h"
+
+namespace oversim
+{
 class EXOSIP {
 
-
+//private:
+//	static Nice * nicePointer;
 public :
-	//EXOSIP();
-	//~EXOSIP( );
-	int initsip();
-	int sendmessage(osip_message_t *message, char *typeMessage ,char *uriTo, char *uriFrom, char *buf);
+	EXOSIP();
+//	EXOSIP(Nice* nn);
+	virtual ~EXOSIP();
+	int initsip(Nice* nn);
+	int sendmessage(char *typeMessage ,char *uriTo, char *uriFrom, char *buf);
 	static void *listensip(void *parameters);
 	void wait();
+	void handleMESSAGE();
 
 };
-
+static Nice * nicePointer = NULL;
+}; //namespace
 #endif /* EXOSIP_H_ */

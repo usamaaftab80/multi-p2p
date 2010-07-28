@@ -10,6 +10,13 @@
 
 #include "EXOSIP.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <syslog.h>
+#include <pthread.h>
+#include <eXosip2/eXosip.h>
 
 #define MESSAGE_MAX_LENGTH 4000
 #define MAX_ADDR_STR 128
@@ -27,12 +34,32 @@
 #define LOCAL_IP "157.159.16.91"
 #define PORT_LISTEN 5080
 
+namespace oversim
+{
 //static osip_t *osip;
 //static int sipSock;
+EXOSIP::EXOSIP()
+{
+
+}
+EXOSIP::~EXOSIP()
+{
+
+}
+
+/*
+ * Constructor with a mapped pointer to the Nice instance
+ * which has an EXOSIP object
+ */
+//EXOSIP::EXOSIP(Nice* nn)
+//{
+//	nicePointer = nn;
+//}
 
 //***********************************************************************************
 //Init for preparation eXoSIP
-int EXOSIP::initsip(){
+int EXOSIP::initsip(Nice* nn){
+	nicePointer = nn;
 	if (eXosip_init ()) {
 	      perror("eXosip_init failed");
 	      exit (1);
@@ -48,8 +75,8 @@ int EXOSIP::initsip(){
 }
 //***********************************************************************************
 //Send a message out of Call: MESSAGE, OPTIONS, ...
-int EXOSIP::sendmessage(osip_message_t *message, char *typeMessage ,char *uriTo, char *uriFrom, char *buf){
-
+int EXOSIP::sendmessage(char *typeMessage ,char *uriTo, char *uriFrom, char *buf){
+	osip_message_t *message;
 	//Build request before send
 	int i = eXosip_message_build_request (&message, typeMessage, uriTo, uriFrom, NULL);
 
@@ -92,6 +119,9 @@ void *EXOSIP::listensip (void *parameters){
 	     switch (event->type) {
 				case EXOSIP_MESSAGE_NEW:
 					printf ("\nEXOSIP_MESSAGE_NEW Event detected! %d\n",++num);
+
+					nicePointer->hoang();
+
 					 osip_body_t * oldbody;
 					   while (!osip_list_eol (&event->request->bodies, pos))
 					     {
@@ -143,8 +173,12 @@ void EXOSIP::wait(){
 	pthread_t thread_id;
 	thread_id = (pthread_t)malloc(sizeof(pthread_t));
 	pthread_create(&thread_id,NULL, &EXOSIP::listensip,NULL);
-//	while(1);
-	//pthread_create( &tid, NULL, &EXOSIP::listen,new thread_fun_args(this,0) );
 }
 
+void EXOSIP::handleMESSAGE()
+{
+	nicePointer->hoang();
+}
+
+}; //namespace
 #endif /* EXOSIP_CC_ */
