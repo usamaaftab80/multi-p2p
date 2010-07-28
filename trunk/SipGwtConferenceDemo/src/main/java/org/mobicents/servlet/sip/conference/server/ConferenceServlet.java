@@ -109,6 +109,7 @@ public class ConferenceServlet extends SipServlet {
 		logger.info("Got :  " + req.toString());
 		
 		int idenodeB = -1;
+		int stt = 0; //number id user  
 		//28072010 Xac dinh User
 		logger.info("???????Xac dinh User");
 		String fromUser = req.getFrom().getURI().toString(); 
@@ -118,6 +119,7 @@ public class ConferenceServlet extends SipServlet {
 			if (fromUser.contains(conference.userURI[i])){
 				logger.info("************ Tim duoc User:"+fromUser + "== " + conference.userURI[i]);				
 				idenodeB = conference.idEnodeB[i];
+				stt = i; 
 			}			
 		}
 		if (idenodeB == -1) {
@@ -128,16 +130,9 @@ public class ConferenceServlet extends SipServlet {
 
 		
 		
-		//SipServletRequest req; //Request for Overlay network 
 		logger.info("Tao ban tin MESSAGE PAUSE/RETURN/HEARTBIT: ");
-		//SipServletRequest req; //Request for Overlay network 
-		//String toAddress= "157.159.16.122"; 
-		//String toPort ="5080"; 
 		String toAddress= en[idenodeB].ipeNodeB; 
 		String toPort = en[idenodeB].eNodeB_Port;
-		//String fromAddress= "157.159.16.91";
-		//String fromPort ="5080";
-		//String fromAddress = request.getAddressHeader("From").toString();
 		String fromAddress = req.getRemoteAddr();
 
 		SipURI to = _sipFactory.createSipURI("singlehost"+idenodeB, toAddress); 
@@ -145,8 +140,6 @@ public class ConferenceServlet extends SipServlet {
 		logger.info("Debug doMESSAGE : ");
 		SipApplicationSession sas = req.getApplicationSession(); 
 		logger.info("Debug doMESSAGE : ");
-		//sas.setAttribute("FROM_ADDRESS", fromAddress); 
-		//sas.setAttribute("FROM_PORT", fromPort);
 		sas.setAttribute("TO_ADDRESS", toAddress); 
 		sas.setAttribute("TO_PORT", toPort);
 		
@@ -230,22 +223,55 @@ public class ConferenceServlet extends SipServlet {
 			logger.info("==============Xac dinh User");
 			//String fromUser = req.getFrom().getURI().toString(); 
 			logger.info("=============="+fromUser);
-			for (int i=1;i<conference.nbrParticipant+1; i++){
-				if (fromUser.contains(conference.userURI[i])){
-					logger.info("============== Tim duoc User:"+fromUser + "== " + conference.userURI[i]);
-					logger.info("============== Chuyen User tu "+en[conference.idEnodeB[i]].eNodeBURI +"sang new enodeB ");
-					int oldEnodeB = conference.idEnodeB[i];
+			//for (int i=1;i<conference.nbrParticipant+1; i++){
+				//if (fromUser.contains(conference.userURI[i])){
+					logger.info("============== Tim duoc User:"+fromUser + "==");
+					logger.info("============== Chuyen User tu "+en[idenodeB].eNodeBURI +"sang new enodeB ");
+					
+					//int oldEnodeB = conference.idEnodeB[i];
+					int oldEnodeB = idenodeB;
 					int newEnodeB = -1;
 					if (oldEnodeB==0){
 						newEnodeB = 1; 
 					} else {
 						newEnodeB = 0;
 					}
+					logger.info("==============OldenodeB: "+oldEnodeB);
+					logger.info("==============NewenodeB: "+newEnodeB);
 					Participant par = new Participant(); 
-					par.setParticipant(i, fromUser, 0 , 0);
+					//par.setParticipant(i, fromUser, 0 , 0);
+					par.setParticipant(stt, fromUser, 0 , 0);
 					en[newEnodeB].addParticipanteNodeB(par); 
-					conference.idEnodeB[i]=newEnodeB;					
-					logger.info("============== User thuoc enodeB moi : "+en[conference.idEnodeB[i]].eNodeBURI);
+					//conference.idEnodeB[i]=newEnodeB;
+					conference.idEnodeB[stt]=newEnodeB;
+					//Create SIP message to send old enodeB : HANDOVER_SUBSCRIBE  
+					logger.info("Tao ban tin MESSAGE JOIN: ");
+					String toAddressold= en[oldEnodeB].ipeNodeB; 
+					String toPortold = en[oldEnodeB].eNodeB_Port; 
+					fromAddress = req.getRemoteAddr();
+					logger.info("IP:"+en[oldEnodeB].ipeNodeB + "\nPort:" + en[oldEnodeB].eNodeB_Port);
+					
+					to = _sipFactory.createSipURI("singlehost"+oldEnodeB+1, toAddressold); 
+					from = _sipFactory.createSipURI(username, fromAddress); 
+					sas.setAttribute("TO_ADDRESS", toAddressold); 
+					sas.setAttribute("TO_PORT", toPortold);
+					
+					logger.info("Debug 3  MESSAGE : ");
+					logger.info("Sip Application Session : "+ sas.toString()); 
+					
+					
+					message_overlay = _sipFactory.createRequest(sas, "MESSAGE", from, to);
+					//28072010
+					conMessage = "HANDOVER_SUBCRIBE\n"+ fromUser; 
+					String teststring = "sip:singlehost"+oldEnodeB+"@"+en[oldEnodeB].ipeNodeB +":"+en[oldEnodeB].eNodeB_Port; 
+					logger.info("============== "+ teststring );
+					requestUri = (SipURI) _sipFactory.createURI("sip:singlehost"+oldEnodeB+"@"+en[oldEnodeB].ipeNodeB +":"+en[oldEnodeB].eNodeB_Port);
+					message_overlay.setRequestURI(requestUri);
+					message_overlay.setContent(conMessage, "text/plain");
+					message_overlay.send();
+					
+					
+					logger.info("============== User thuoc enodeB moi : "+en[conference.idEnodeB[stt]].eNodeBURI);
 					logger.info("============== Xoa user enodeB cu "+en[oldEnodeB].eNodeBURI);
 					//en[oldEnodeB].deleteParticipantenodeB(par);
 					for (int j=1; j<en[oldEnodeB].nbrParticipant+1; j++){
@@ -253,6 +279,7 @@ public class ConferenceServlet extends SipServlet {
 							en[oldEnodeB].deleteParticipantenodeB(en[oldEnodeB].user[j]);							
 						}
 					}			
+					
 					logger.info("List of participants in conference");
 					for (int k = 1; k < nbrUser+1; k++){
 						
@@ -260,8 +287,27 @@ public class ConferenceServlet extends SipServlet {
 					}
 					logger.info("============== Test1 ");
 					
+					String toAddressnew= en[newEnodeB].ipeNodeB; 
+					String toPortnew = en[newEnodeB].eNodeB_Port; 
+					//fromAddress = req.getRemoteAddr();
+
+					to = _sipFactory.createSipURI("singlehost"+newEnodeB+1, toAddressnew); 
+					from = _sipFactory.createSipURI(username, fromAddress); 
+					sas.setAttribute("TO_ADDRESS", toAddressnew); 
+					sas.setAttribute("TO_PORT", toPortnew);
+					
+					logger.info("Debug 3  MESSAGE : ");
+					logger.info("Sip Application Session : "+ sas.toString()); 
+					
+					
+					message_overlay = _sipFactory.createRequest(sas, "MESSAGE", from, to);
+					//28072010
+					conMessage = "HANDOVER_NOTIFY\n"+ fromUser; 
+					requestUri = (SipURI) _sipFactory.createURI("sip:singlehost"+newEnodeB+"@"+en[newEnodeB].ipeNodeB +":"+en[newEnodeB].eNodeB_Port);
+					message_overlay.setRequestURI(requestUri);
+/*					
 					conMessage = "HEART BIT\n";
-					for (int k=1; i<en[0].nbrParticipant+1;k++){
+					for (int k=1; k<en[0].nbrParticipant+1;k++){
 						conMessage = conMessage+"ideNodeB="+en[0].ID+ 
 						             "\nid="+k+1+
 						             "\nuri="+en[0].user[k].userURI+
@@ -278,9 +324,9 @@ public class ConferenceServlet extends SipServlet {
 						
 					}
 					logger.info("============== Test3 ");
-
-				}
-			}
+*/
+				//}
+			//}
 			conMessage = conMessage+ "\nFinish HANDOVER";
 			logger.info("==============Finish HANDOVER ");
 		}
