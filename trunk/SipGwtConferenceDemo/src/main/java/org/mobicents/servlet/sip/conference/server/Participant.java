@@ -5,12 +5,14 @@ public class Participant {
     String userURI; // Name participant
     int status; // Participant status = 0 - Normal; 1 - pause
     int role; // role = 0 - sender/forwarder; 1 - receiver 
-    //String portMedia; //Port Media 
+    //String portMedia; //Port Media
+    String portOverlay; //Port Overlay 
     public Participant(){
             ID = 0;
             userURI = "";   
             status = 0;
             role = 0;
+            portOverlay = "";
     }
     
     public Participant getParticipant() {
@@ -18,7 +20,8 @@ public class Participant {
             tmp.ID = this.ID;
             tmp.userURI = this.userURI;
             tmp.status = this.status;
-            tmp.role = this.role; 
+            tmp.role = this.role;
+            tmp.portOverlay = this.portOverlay; 
             return tmp;             
     }
     
@@ -27,11 +30,13 @@ public class Participant {
             this.userURI = Name; 
             this.status = status; 
             this.role = role; 
+            this.portOverlay = ""; 
     }
     public  void deleteParticipant(Participant par){
             par.ID = 0; 
             par.userURI = "";
             par.status = 0; 
             par.role = 0;
+          
     }
 }
