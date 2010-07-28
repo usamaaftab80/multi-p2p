@@ -319,7 +319,10 @@ private:
     void pollRP(int layer);
 
     //hoang
+public:
     double cost();
+
+    void hoang(){cout<< "hehe\n";};
 
 
 };

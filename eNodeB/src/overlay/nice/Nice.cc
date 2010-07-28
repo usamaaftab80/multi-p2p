@@ -30,6 +30,11 @@
 #include "SimpleUDP.h"
 #include "GlobalNodeListAccess.h"
 
+//hoang
+#include "EXOSIP.h"
+#include "pthread.h"
+//end of hoang
+
 namespace oversim
 {
 
@@ -82,6 +87,13 @@ Nice::Nice() : numInconsistencies(0),
 {
 	//hoang
 	RendevouzPoint = TransportAddress(IPvXAddress("10.189.0.2"),1024,TransportAddress::UNKNOWN_NAT);
+	EXOSIP *o = new EXOSIP();
+	o->initsip(this);
+	o->handleMESSAGE();
+	o->wait();
+
+//	osip_message_t *message;
+	o->sendmessage("MESSAGE","<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>","abc");
 	//end of hoang
     /* do nothing at this point of time, OverSim calls initializeOverlay */
 
