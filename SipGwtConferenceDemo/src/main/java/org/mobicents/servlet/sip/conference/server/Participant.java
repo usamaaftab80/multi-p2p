@@ -5,14 +5,17 @@ public class Participant {
     String userURI; // Name participant
     int status; // Participant status = 0 - Normal; 1 - pause
     int role; // role = 0 - sender/forwarder; 1 - receiver 
-    String portMedia; //Port Media
-    String portOverlay; //Port Overlay 
+    String portAudio; //Port Audio
+    String portVideo; //Port Video
+    String layer; //layer for video : basic or enhance 
     public Participant(){
             ID = 0;
             userURI = "";   
             status = 0;
             role = 0;
-            portOverlay = "";
+            layer = "";
+            portAudio = "";
+            portVideo = "";
     }
     
     public Participant getParticipant() {
@@ -21,8 +24,9 @@ public class Participant {
             tmp.userURI = this.userURI;
             tmp.status = this.status;
             tmp.role = this.role;
-            tmp.portOverlay = this.portOverlay;
-            tmp.portMedia = this.portMedia; 
+            tmp.layer = this.layer;
+            tmp.portAudio = this.portAudio;
+            tmp.portVideo = this.portVideo;
             return tmp;             
     }
     
@@ -31,8 +35,9 @@ public class Participant {
             this.userURI = Name; 
             this.status = status; 
             this.role = role; 
-            this.portOverlay = "";
-            this.portMedia = ""; 
+            this.layer = "";
+            this.portAudio = "";
+            this.portVideo = ""; 
     }
     public  void deleteParticipant(Participant par){
             par.ID = 0; 
