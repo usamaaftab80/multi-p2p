@@ -43,6 +43,8 @@ class HoangGlobalObject : public cSimpleModule
 	FILE * inFile;
 	FILE * outFile;
 
+	int UEcounter;
+
 
   protected:
     virtual void initialize();
@@ -72,6 +74,9 @@ class HoangGlobalObject : public cSimpleModule
 	  void incNumNodeSentDone();
 
 	  void recordALMhopcount(uint value){numALMhopcount++; totalALMhopcount+=value;};
+
+	  int getUEcounter(){return UEcounter;};
+	  void incUEcounter(){UEcounter++;};
 
 	  ~HoangGlobalObject();
 

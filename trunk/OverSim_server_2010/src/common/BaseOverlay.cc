@@ -67,6 +67,7 @@ BaseOverlay::BaseOverlay()
     //hoang
     kw = 1e6;
     xw = 0;
+    nodeID = numNodeConstructed++;
     //end of hoang
 }
 
@@ -723,12 +724,14 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         	NiceMulticastMessage* dup = static_cast<NiceMulticastMessage*>(msg->dup());
         	NiceMulticastMessage* niceMmsg = check_and_cast<NiceMulticastMessage*>(dup);
+        	kw = udpControlInfo->getMinBW();
+			xw = dup->getXw();
         	if(dup->getLastHopID()>1100){
 				std::cout << "server receive NiceMulticastMessage from singleHost" << endl;
+				kw = 0.36e6;
         	}
 
-        	kw = udpControlInfo->getMinBW();
-        	xw = dup->getXw();
+
 //        	cout << "Node " << nodeID << " get a pkt. xw = " << xw << " ||kw = " << kw << endl;
 
         	simtime_t delay = simTime() - niceMmsg->getCreationTime();

@@ -321,7 +321,6 @@ private:
     //hoang
     double cost();
 
-
 };
 
 }; //namespace

@@ -85,6 +85,8 @@ private:
 
     bool beginSend;
 
+    BaseOverlay* overlay;
+
 };
 
 #endif /* NICETESTAPP_H_ */
