@@ -74,6 +74,8 @@ private:
     int videoSize;
     int loopTimes;
 
+    int numUEpreviewed;
+
     rateData* periodicData;
     int dataSize;
 
