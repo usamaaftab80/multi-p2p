@@ -88,6 +88,7 @@ OBJS = \
     $O/common/cnetcommbuffer.o \
     $O/common/CoordinateSystem.o \
     $O/common/CryptoModule.o \
+    $O/common/EXOSIP.o \
     $O/common/FinisherModule.o \
     $O/common/GenericPacketParser.o \
     $O/common/GlobalNodeList.o \
@@ -800,6 +801,8 @@ $O/common/CryptoModule.o: common/CryptoModule.cc \
   common/RpcMacros.h \
   common/BaseRpc.h \
   common/OverSimMessage_m.h
+$O/common/EXOSIP.o: common/EXOSIP.cc \
+  common/EXOSIP.h
 $O/common/FinisherModule.o: common/FinisherModule.cc \
   common/GlobalStatistics.h \
   common/GlobalStatisticsAccess.h \
@@ -1549,7 +1552,41 @@ $O/common/cbr/simplex.o: common/cbr/simplex.cc \
 $O/common/cbr/yang.o: common/cbr/yang.cc \
   common/cbr/yang.h
 $O/overlay/nice/EXOSIP.o: overlay/nice/EXOSIP.cc \
-  overlay/nice/EXOSIP.h
+  common/OverSimMessage.h \
+  common/RpcListener.h \
+  common/AbstractLookup.h \
+  common/BaseOverlay.h \
+  common/TopologyVis.h \
+  ../../INET-OverSim-20100505/src/base/INETDefs.h \
+  common/oversim_mapset.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
+  common/RpcState.h \
+  overlay/nice/Nice.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
+  common/InitStages.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
+  overlay/nice/combination.h \
+  common/NodeVector.h \
+  common/hashWatch.h \
+  overlay/nice/EXOSIP.h \
+  ../../INET-OverSim-20100505/src/base/INotifiable.h \
+  common/RecursiveLookup.h \
+  common/TransportAddress.h \
+  common/OverlayKey.h \
+  common/CommonMessages_m.h \
+  common/NodeHandle.h \
+  common/BinaryValue.h \
+  overlay/nice/NiceMessage_m.h \
+  common/Vector2D.h \
+  common/HoangGlobalObject.h \
+  common/ProxNodeHandle.h \
+  overlay/nice/NicePeerInfo.h \
+  common/IterativeLookupConfiguration.h \
+  common/Comparator.h \
+  common/RpcMacros.h \
+  common/BaseRpc.h \
+  overlay/nice/NiceCluster.h \
+  common/OverSimMessage_m.h
 $O/overlay/nice/Nice.o: overlay/nice/Nice.cc \
   common/GlobalStatistics.h \
   common/AbstractLookup.h \
@@ -1570,21 +1607,22 @@ $O/overlay/nice/Nice.o: overlay/nice/Nice.cc \
   overlay/nice/combination.h \
   common/hashWatch.h \
   common/NodeVector.h \
+  overlay/nice/EXOSIP.h \
   ../../INET-OverSim-20100505/src/base/INotifiable.h \
   underlay/simpleunderlay/SimpleUDPPacket_m.h \
   common/GlobalNodeList.h \
   common/RecursiveLookup.h \
   common/HashFunc.h \
-  common/TransportAddress.h \
   common/OverlayKey.h \
+  common/TransportAddress.h \
   underlay/simpleunderlay/SimpleInfo.h \
   common/CommonMessages_m.h \
   common/oversim_byteswap.h \
   common/NodeHandle.h \
   common/BinaryValue.h \
   common/ChurnGenerator.h \
-  overlay/nice/NiceMessage_m.h \
   common/Vector2D.h \
+  overlay/nice/NiceMessage_m.h \
   common/HoangGlobalObject.h \
   common/ProxNodeHandle.h \
   common/PeerInfo.h \

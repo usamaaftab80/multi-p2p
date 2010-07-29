@@ -21,19 +21,16 @@ namespace oversim
 {
 class EXOSIP {
 
-//private:
-//	static Nice * nicePointer;
 public :
 	EXOSIP();
-//	EXOSIP(Nice* nn);
-	virtual ~EXOSIP();
-	int initsip(Nice* nn);
+	~EXOSIP();
+	int initsip(Nice* n, int nodeID);
 	int sendmessage(char *typeMessage ,char *uriTo, char *uriFrom, char *buf);
 	static void *listensip(void *parameters);
 	void wait();
-	void handleMESSAGE();
+	static void handleMESSAGE(int nodeID);
 
 };
-static Nice * nicePointer = NULL;
+static Nice * nicePointer[10];
 }; //namespace
 #endif /* EXOSIP_H_ */

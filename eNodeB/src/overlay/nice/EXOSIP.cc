@@ -40,11 +40,22 @@ namespace oversim
 //static int sipSock;
 EXOSIP::EXOSIP()
 {
+	if (eXosip_init ()) {
+		  perror("eXosip_init failed");
+		  exit (1);
+	  }
 
+	  int i = eXosip_listen_addr (IPPROTO_UDP, NULL, PORT_LISTEN, AF_INET, 0);
+	  if (i!=0) {
+		  eXosip_quit();
+		  printf("could not initialize transport layer\n");
+		  exit (1);
+	  }
+	  printf("osip constructed!\n");
 }
 EXOSIP::~EXOSIP()
 {
-
+	  printf("osip destructed!\n");
 }
 
 /*
@@ -58,20 +69,8 @@ EXOSIP::~EXOSIP()
 
 //***********************************************************************************
 //Init for preparation eXoSIP
-int EXOSIP::initsip(Nice* nn){
-	nicePointer = nn;
-	if (eXosip_init ()) {
-	      perror("eXosip_init failed");
-	      exit (1);
-	  }
-
-	  int i = eXosip_listen_addr (IPPROTO_UDP, NULL, PORT_LISTEN, AF_INET, 0);
-	  if (i!=0) {
-	      eXosip_quit();
-	      printf("could not initialize transport layer\n");
-	      exit (1);
-	  }
-	  return i;
+int EXOSIP::initsip(Nice* nn, int nodeID){
+	nicePointer[nodeID - 5000] = nn;
 }
 //***********************************************************************************
 //Send a message out of Call: MESSAGE, OPTIONS, ...
@@ -119,9 +118,17 @@ void *EXOSIP::listensip (void *parameters){
 	     switch (event->type) {
 				case EXOSIP_MESSAGE_NEW:
 					printf ("\nEXOSIP_MESSAGE_NEW Event detected! %d\n",++num);
+					//send an answer for 200
+					  eXosip_lock ();
+					  i = eXosip_message_send_answer(event->tid, 200, NULL);
+					  if (i != 0) {
+						  printf("eXosip_message_send_answer failed");
+						  exit (1);
+					  }
+					  eXosip_unlock ();
 
-					nicePointer->hoang();
-
+					// fetch MESSAGE body, get nodeID to handle
+					 handleMESSAGE(5001);
 					 osip_body_t * oldbody;
 					   while (!osip_list_eol (&event->request->bodies, pos))
 					     {
@@ -132,14 +139,7 @@ void *EXOSIP::listensip (void *parameters){
 					       printf("body:%s\nbodysize:%d\n",oldbody->body,oldbody->length);
 
 					     }
-					//send an answer for 200
-					  eXosip_lock ();
-					  i = eXosip_message_send_answer(event->tid, 200, NULL);
-					  if (i != 0) {
-						  printf("eXosip_message_send_answer failed");
-						  exit (1);
-					  }
-					  eXosip_unlock ();
+
 
 					break;
 				case EXOSIP_MESSAGE_PROCEEDING:
@@ -175,9 +175,9 @@ void EXOSIP::wait(){
 	pthread_create(&thread_id,NULL, &EXOSIP::listensip,NULL);
 }
 
-void EXOSIP::handleMESSAGE()
+void EXOSIP::handleMESSAGE(int nodeID)
 {
-	nicePointer->hoang();
+	nicePointer[nodeID - 5000]->hoang();
 }
 
 }; //namespace

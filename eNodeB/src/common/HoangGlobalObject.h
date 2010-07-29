@@ -19,11 +19,8 @@
 #include <omnetpp.h>
 #include "TransportAddress.h"
 
-/**
- * TODO - Generated class
- */
-
-using namespace std;
+//#include "EXOSIP.h"
+//#include "pthread.h"
 
 class HoangGlobalObject : public cSimpleModule
 {
@@ -42,6 +39,8 @@ class HoangGlobalObject : public cSimpleModule
 
 	FILE * inFile;
 	FILE * outFile;
+
+//	EXOSIP *osip;
 
 
   protected:

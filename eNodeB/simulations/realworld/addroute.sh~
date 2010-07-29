@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ifconfig tun0 50.0.0.1 netmask 255.0.0.0 up
+ifconfig tun0 50.3.0.1 netmask 255.0.0.0 up
 
 route add -net 50.0.0.0/8 dev tun0
 route add -net 51.0.0.0/8 dev tun0
@@ -13,14 +13,3 @@ route add -net 57.0.0.0/8 dev tun0
 route add -net 58.0.0.0/8 dev tun0
 route add -net 59.0.0.0/8 dev tun0
 
-
-ip route add unicast 10.0.0.0/8 via 157.159.16.149
-ip route add unicast 11.0.0.0/8 via 157.159.16.149
-ip route add unicast 12.0.0.0/8 via 157.159.16.149
-ip route add unicast 13.0.0.0/8 via 157.159.16.149
-ip route add unicast 14.0.0.0/8 via 157.159.16.149
-ip route add unicast 15.0.0.0/8 via 157.159.16.149
-ip route add unicast 16.0.0.0/8 via 157.159.16.149
-ip route add unicast 17.0.0.0/8 via 157.159.16.149
-ip route add unicast 18.0.0.0/8 via 157.159.16.149
-ip route add unicast 19.0.0.0/8 via 157.159.16.149

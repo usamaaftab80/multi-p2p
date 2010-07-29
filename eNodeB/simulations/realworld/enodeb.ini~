@@ -37,7 +37,7 @@ network = oversim.underlay.inetunderlay.enodeb_InetUnderlayNetwork
 #**.isSender = false
 
 **.startIP = "50.1.0.1"
-**.gatewayIP = "50.3.0.1"
+**.gatewayIP = "50.0.0.1"
 
 **.externalHostIP = "1.1.1.2"
 

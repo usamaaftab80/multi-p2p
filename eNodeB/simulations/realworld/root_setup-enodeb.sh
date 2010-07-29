@@ -4,4 +4,5 @@
 
 modprobe tun
 ../../src/OverSim -f enodeb.ini
+#../../src/OverSim -f enodeb.ini -u Cmdenv
 #../../src/OverSim -f realdhtworld.ini

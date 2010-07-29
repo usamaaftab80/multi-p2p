@@ -16,6 +16,7 @@
 #include "HoangGlobalObject.h"
 #include <iostream>
 #include <fstream>
+using namespace std;
 
 Define_Module(HoangGlobalObject);
 
@@ -40,6 +41,10 @@ void HoangGlobalObject::initialize()
 
 	cout << "Hoang global object initttt done at " << simTime() << endl;
 	system("./addroute.sh");
+
+//	osip = new EXOSIP();
+//	osip->sendmessage("MESSAGE","<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>", "abcd" );
+//	osip->wait();
 }
 
 

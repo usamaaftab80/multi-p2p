@@ -62,6 +62,7 @@ static const int SHORT_L = 16;
  *     NICE_MULTICAST = 17; 
  *     
  *     NICE_RP_NOTIFY = 18; 
+ *     NICE_STATE_READY = 19; 
  * }
  * </pre>
  */
@@ -84,7 +85,8 @@ enum NICECommand {
     NICE_POLL_RP_RESPONSE = 15,
     NICE_FORCE_MERGE = 16,
     NICE_MULTICAST = 17,
-    NICE_RP_NOTIFY = 18
+    NICE_RP_NOTIFY = 18,
+    NICE_STATE_READY = 19
 };
 
 /**
