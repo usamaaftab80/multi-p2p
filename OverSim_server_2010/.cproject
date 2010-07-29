@@ -7,10 +7,6 @@
 
 <cconfiguration id="org.omnetpp.cdt.gnu.config.debug.146291904">
 <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.omnetpp.cdt.gnu.config.debug.146291904" moduleId="org.eclipse.cdt.core.settings" name="gcc-debug">
-<macros>
-<stringMacro name="opp_shared_libs" type="VALUE_TEXT" value="osip2"/>
-<stringMacro name="opp_static_libs" type="VALUE_TEXT" value="pthread"/>
-</macros>
 <externalSettings>
 <externalSetting languages="cdt.managedbuild.tool.gnu.cpp.linker.input.1998703184"/>
 </externalSettings>
@@ -60,7 +56,7 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+<entry excluding="src/applications/almtest/HOSIP.h|src/applications/almtest/HOSIP.cc" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 </sourceEntries>
 </configuration>
 </storageModule>
@@ -563,7 +559,7 @@
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
+<entry excluding="applications/almtest/HOSIP.h|applications/almtest/HOSIP.cc" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
 </sourceEntries>
 </configuration>
 </storageModule>

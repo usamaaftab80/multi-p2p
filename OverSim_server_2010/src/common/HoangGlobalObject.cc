@@ -29,6 +29,7 @@ void HoangGlobalObject::initialize()
 	loopTimes = par("loopTimes");
 	videoSize = videoSize * loopTimes;
 	totalALMhopcount = numALMhopcount = 0;
+	UEcounter = 0;
 
 	outFile = fopen("out.log","w");
 	inFile = fopen("in.log","w");

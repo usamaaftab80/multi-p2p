@@ -60,6 +60,11 @@ class BootstrapList;
  * @author Stephan Krause
  * @author Sebastian Mies
  */
+
+//hoang
+static int numNodeConstructed = 0;
+//end of hoang
+
 class BaseOverlay : public INotifiable,
                     public BaseRpc,
                     public TopologyVis
@@ -834,7 +839,6 @@ public:
     void setNodeID(int id){nodeID = id;};
     double getKw(){return kw;};
     double getXw(){return xw;};
-
 };
 
 #endif

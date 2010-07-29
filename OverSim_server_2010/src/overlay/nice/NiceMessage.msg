@@ -71,6 +71,7 @@ enum NICECommand
     NICE_MULTICAST = 17; // Multicast data
     //hoang
     NICE_RP_NOTIFY = 18; // Notify about RP change
+    NICE_STATE_READY = 19;
 }
 
 message NiceMessage extends BaseOverlayMessage

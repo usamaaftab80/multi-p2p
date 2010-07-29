@@ -48,8 +48,8 @@ void NiceTestApp::initializeApp(int stage)
 
 	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
 	cCompoundModule* overlayModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("overlay"));
-	BaseOverlay* overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
-	overlay->setNodeID(nodeID);
+	overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
+//	overlay->setNodeID(nodeID);
 
 	global->incNumNodeJoined();
 
@@ -212,14 +212,14 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
     if (msg->isName("stateTimer")) {    // is this our timer?
 
         // if the simulator is still busy creating the network, let's wait a bit longer
-        if (underlayConfigurator->isInInitPhase()) {
+        if (underlayConfigurator->isInInitPhase() || (global->getUEcounter() < 2)) {
+        	cout << "global->getUEcounter() : " << global->getUEcounter() << endl;
     		scheduleAt(simTime() + sendPeriod, stateTimer);
         	return;
 
         } else {
 
         	cancelAndDelete(stateTimer);
-        	//cout << thisNode.getAddress() << " vua init xong at " << simTime() << endl;
 
         	/* Begin send data timer*/
 
@@ -263,7 +263,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		msg->setXw(periodicData[numSent].rate);
 
-		msg->encapsulate(pingPongPkt);
+//		msg->encapsulate(pingPongPkt);
 
 		send(msg, "to_lowerTier");
 

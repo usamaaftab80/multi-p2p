@@ -487,7 +487,13 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
                 handleNiceMulticast(multicastMsg);
 
                 break;
-
+                //hoang
+            case NICE_STATE_READY:
+            	//update UE counter
+            	cout << "node " << nodeID << " ip " << thisNode << " get a NICE_STATE_READY from " << niceMsg->getSrcNode() << endl;
+            	global->incUEcounter();
+//            	UEcounter++;
+                //end of hoang
             default:
                 
                 delete niceMsg;
@@ -556,13 +562,20 @@ void Nice::becomeRendevouzPoint()
     const char * ip = par("externalHostIP");
 
 	TransportAddress add = TransportAddress(IPvXAddress(ip),1024,TransportAddress::UNKNOWN_NAT);
+	TransportAddress add2 = TransportAddress(IPvXAddress("50.5.0.2"),1024,TransportAddress::UNKNOWN_NAT);
+	TransportAddress add3 = TransportAddress(IPvXAddress("50.5.0.3"),1024,TransportAddress::UNKNOWN_NAT);
 
 	NiceMessage * msg = new NiceMessage("NICE_RP_NOTIFY");
 
 	msg->setCommand(NICE_RP_NOTIFY);
 	msg->setSrcNode(thisNode);
 
+	NiceMessage * dup2 = msg->dup();
+	NiceMessage * dup3 = msg->dup();
+
 	sendMessageToUDP(add, msg);
+	sendMessageToUDP(add2, dup2);
+	sendMessageToUDP(add3, dup3);
     //end of hoang
 
     /* Mark node as new RP (star symbol) */
@@ -3677,7 +3690,7 @@ void Nice::handleAppMessage(cMessage* msg)
         niceMsg->setHopCount(0);
 //        niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));//hoang disabled
         //hoang
-        niceMsg->setBitLength(multicastMsg->getBitLength());
+//        niceMsg->setBitLength(multicastMsg->getBitLength());
         niceMsg->setNodeID(nodeID);
         niceMsg->setLastHopID(nodeID);
         niceMsg->setSeqNo(multicastMsg->getPacketID());
