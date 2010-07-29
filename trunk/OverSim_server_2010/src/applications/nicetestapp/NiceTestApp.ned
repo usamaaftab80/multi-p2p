@@ -33,6 +33,7 @@ simple NiceTestApp extends BaseApp
         string sdFile;
         string rdFile;
         int loopTimes;
+        int numUEpreviewed;
 }                    
                     
 module NiceTestAppModule like ITier

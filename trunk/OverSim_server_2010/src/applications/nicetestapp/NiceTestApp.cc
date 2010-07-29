@@ -56,6 +56,7 @@ void NiceTestApp::initializeApp(int stage)
     sendPeriod = par("sendPeriod");
     sendDataPeriod = par("sendDataPeriod");
     loopTimes = par("loopTimes");
+    numUEpreviewed = par("numUEpreviewed");
 
     isSender = false;
     if(nodeID == 0)
@@ -212,7 +213,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
     if (msg->isName("stateTimer")) {    // is this our timer?
 
         // if the simulator is still busy creating the network, let's wait a bit longer
-        if (underlayConfigurator->isInInitPhase() || (global->getUEcounter() < 2)) {
+        if (underlayConfigurator->isInInitPhase() || (global->getUEcounter() < numUEpreviewed)) {
         	cout << "global->getUEcounter() : " << global->getUEcounter() << endl;
     		scheduleAt(simTime() + sendPeriod, stateTimer);
         	return;
