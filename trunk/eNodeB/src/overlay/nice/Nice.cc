@@ -30,11 +30,6 @@
 #include "SimpleUDP.h"
 #include "GlobalNodeListAccess.h"
 
-//hoang
-#include "EXOSIP.h"
-#include "pthread.h"
-//end of hoang
-
 namespace oversim
 {
 
@@ -86,14 +81,18 @@ Nice::Nice() : numInconsistencies(0),
                totalHeartbeatBytes(0)
 {
 	//hoang
-	RendevouzPoint = TransportAddress(IPvXAddress("10.189.0.2"),1024,TransportAddress::UNKNOWN_NAT);
-	EXOSIP *o = new EXOSIP();
-	o->initsip(this);
-	o->handleMESSAGE();
-	o->wait();
+	RendevouzPoint = TransportAddress(IPvXAddress("10.5.0.2"),1024,TransportAddress::UNKNOWN_NAT);
 
-//	osip_message_t *message;
-	o->sendmessage("MESSAGE","<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>","abc");
+	nodeID = 5000 + (numNiceInstance++);
+	std::cout << "NICE node " << nodeID << " constructed!" << endl;
+
+	if(numNiceInstance < 2){
+		osip = new EXOSIP();
+		osip->wait();
+	}
+	osip->initsip(this,nodeID);
+//	osip->handleMESSAGE(nodeID);
+//	osip->sendmessage("MESSAGE","<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>","abc");
 	//end of hoang
     /* do nothing at this point of time, OverSim calls initializeOverlay */
 
@@ -293,6 +292,20 @@ void Nice::changeState( int toState )
     case READY:
 
         state = READY;
+
+        //hoang
+//		const char * ip = "10.5.0.2";//par("externalHostIP");
+
+//		TransportAddress add = TransportAddress(IPvXAddress(ip),1024,TransportAddress::UNKNOWN_NAT);
+
+		NiceMessage * msg = new NiceMessage("NICE_STATE_READY");
+
+		msg->setCommand(NICE_STATE_READY);
+		msg->setSrcNode(thisNode);
+
+		sendMessageToUDP(RendevouzPoint, msg);
+		std::cout << "node " << nodeID << " has sent a NICE_STATE_READY to " << RendevouzPoint << endl;
+        //end of hoang
 
         cancelEvent(heartbeatTimer);
         scheduleAt(simTime() + heartbeatInterval, heartbeatTimer);
@@ -504,7 +517,7 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 			//hoang
 			case NICE_RP_NOTIFY:
 
-				std::cout << endl <<"vua nhan duoc NICE_RP_NOTIFY from " << niceMsg->getSrcNode() << endl;
+				std::cout << endl <<"Node " << nodeID << " vua nhan duoc NICE_RP_NOTIFY from " << niceMsg->getSrcNode() << endl;
 
 				RendevouzPoint = niceMsg->getSrcNode();
 

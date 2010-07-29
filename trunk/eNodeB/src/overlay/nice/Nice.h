@@ -42,6 +42,11 @@ class Nice;
 
 #include <fstream>
 
+//hoang
+#include "EXOSIP.h"
+#include "pthread.h"
+//end of hoang
+
 namespace oversim
 {
 
@@ -322,11 +327,13 @@ private:
 public:
     double cost();
 
-    void hoang(){cout<< "hehe\n";};
+    void hoang(){printf("hehe from nodeID %d\n",nodeID);};
 
 
 };
-
+//hoang
+static int numNiceInstance = 0;
+static EXOSIP *osip;
 }; //namespace
 
 #endif

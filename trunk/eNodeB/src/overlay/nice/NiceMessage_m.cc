@@ -52,6 +52,7 @@ EXECUTE_ON_STARTUP(
     e->insert(NICE_FORCE_MERGE, "NICE_FORCE_MERGE");
     e->insert(NICE_MULTICAST, "NICE_MULTICAST");
     e->insert(NICE_RP_NOTIFY, "NICE_RP_NOTIFY");
+    e->insert(NICE_STATE_READY, "NICE_STATE_READY");
 );
 
 Register_Class(NiceMessage);
