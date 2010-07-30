@@ -42,11 +42,6 @@ class Nice;
 
 #include <fstream>
 
-//hoang
-#include "EXOSIP.h"
-#include "pthread.h"
-//end of hoang
-
 namespace oversim
 {
 
@@ -327,18 +322,16 @@ private:
 public:
     double cost();
 
-    void hoangHandleSIP(char * body);
-    void handleSIP_JOIN();
-    void handleSIP_LEAVE();
-    void handleSIP_PAUSE();
-    void handleSIP_RETURN();
-    void hoangJoinOverlay();
+    virtual void hoangHandleSIP(char * body);
+    virtual void handleSIP_JOIN();
+    virtual void handleSIP_LEAVE();
+    virtual void handleSIP_PAUSE();
+    virtual void handleSIP_RETURN();
+    virtual void hoangJoinOverlay();
 
 
 };
-//hoang
-static int numNiceInstance = 0;
-static EXOSIP *osip;
+
 }; //namespace
 
 #endif

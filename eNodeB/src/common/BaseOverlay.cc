@@ -49,7 +49,11 @@
 
 //hoang
 #include "NiceMessage_m.h"
-
+//hoang
+#include "EXOSIP.h"
+//#include "pthread.h"
+//end of hoang
+static EXOSIP* osip = new EXOSIP();
 using namespace std;
 
 
@@ -68,6 +72,17 @@ BaseOverlay::BaseOverlay()
     kw = 1e6;
     xw = 0;
     //end of hoang
+
+	nodeID = 5000 + (numNiceInstance++);
+	std::cout << "NICE node " << nodeID << " constructed!" << endl;
+
+//	if(numNiceInstance < 2){
+//		osip = new EXOSIP();
+//		osip->wait();
+//	}
+	osip->initsip(this,nodeID);
+//	osip->handleMESSAGE(nodeID);
+//	osip->sendmessage("MESSAGE","<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>","abc");
 }
 
 BaseOverlay::~BaseOverlay()
@@ -1184,12 +1199,12 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
         delete ctrlInfo;
 
     // debug message
-    if (debugOutput) {
-        EV << "[BaseOverlay::sendMessageToUDP() @ " << thisNode.getAddress()
+//    if (debugOutput) {
+        std::cout << "[BaseOverlay::sendMessageToUDP() @ " << thisNode.getAddress()
         << " (" << thisNode.getKey().toString(16) << ")]\n"
         << "    Sending " << *msg << " to " << dest.getAddress()
         << endl;
-    }
+//    }
 
     msg->setKind(UDP_C_DATA);
     UDPControlInfo* udpControlInfo = new UDPControlInfo();
@@ -1198,7 +1213,7 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
     udpControlInfo->setDestAddr(dest.getAddress());
     udpControlInfo->setDestPort(dest.getPort());
     msg->setControlInfo(udpControlInfo);
-
+    std::cout << "after msg->setControlInfo(udpControlInfo);\n";
     if (dest != thisNode) {
         BaseOverlayMessage* baseOverlayMsg
             = check_and_cast<BaseOverlayMessage*>(msg);
@@ -1224,7 +1239,13 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
             RECORD_STATS(numInternalSent++; bytesInternalSent += msg->getByteLength());
         }
     }
+    std::cout<< "before send(msg, udpOut);\n";
+    std::cout << "[BaseOverlay::sendMessageToUDP() @ " << thisNode.getAddress()
+            << " (" << thisNode.getKey().toString(16) << ")]\n"
+            << "    Sending " << *msg << " to " << dest.getAddress()
+            << endl;
     send(msg, "udpOut");
+    std::cout<< "after send(msg, udpOut);\n";
 }
 
 //------------------------------------------------------------------------
@@ -2056,3 +2077,27 @@ bool BaseOverlay::isInSimpleMultiOverlayHost()
     return isVector() || getParentModule()->isVector();
 }
 
+void BaseOverlay::hoangHandleSIP(char * body)
+{
+
+}
+void BaseOverlay::handleSIP_JOIN()
+{
+
+}
+void BaseOverlay::handleSIP_LEAVE()
+{
+
+}
+void BaseOverlay::handleSIP_PAUSE()
+{
+
+}
+void BaseOverlay::handleSIP_RETURN()
+{
+
+}
+void BaseOverlay::hoangJoinOverlay()
+{
+
+}
