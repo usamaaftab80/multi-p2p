@@ -97,7 +97,7 @@ public:
     virtual void finishOverlay();
 
 
-protected:
+public:
 
     /**
      * changes node state
@@ -327,7 +327,12 @@ private:
 public:
     double cost();
 
-    void hoang(){printf("hehe from nodeID %d\n",nodeID);};
+    void hoangHandleSIP(char * body);
+    void handleSIP_JOIN();
+    void handleSIP_LEAVE();
+    void handleSIP_PAUSE();
+    void handleSIP_RETURN();
+    void hoangJoinOverlay();
 
 
 };
