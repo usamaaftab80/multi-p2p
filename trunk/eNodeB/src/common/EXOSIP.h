@@ -8,30 +8,22 @@
 #ifndef EXOSIP_H_
 #define EXOSIP_H_
 
-namespace oversim
-{
+#include "BaseOverlay.h"
 
-class EXOSIP;
 
-}
-
-#include "Nice.h"
-
-namespace oversim
-{
 class EXOSIP {
 
 public :
 	EXOSIP();
 	~EXOSIP();
-	int initsip(Nice* n, int nodeID);
+	int initsip(BaseOverlay* n, int nodeID);
 	int sendmessage(char *typeMessage ,char *uriTo, char *uriFrom, char *buf);
 //	void *listensip(void *parameters);
-	void wait();
+//	void wait();
 //	void handleMESSAGE(int ueID, char* msgBody);
 
 
 };
-static Nice * nicePointer[10];
-}; //namespace
+static BaseOverlay * nicePointer[100];
+
 #endif /* EXOSIP_H_ */

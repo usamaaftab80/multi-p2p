@@ -37,6 +37,9 @@
 #include <InitStages.h>
 
 #include "HoangGlobalObject.h"
+//hoang
+static int numNiceInstance = 0;
+//end of hoang
 
 class GlobalNodeList;
 class UnderlayConfigurator;
@@ -835,12 +838,12 @@ public:
     double getKw(){return kw;};
     double getXw(){return xw;};
 
-    void hoangHandleSIP(char * body);
-    void handleSIP_JOIN();
-    void handleSIP_LEAVE();
-    void handleSIP_PAUSE();
-    void handleSIP_RETURN();
-    void hoangJoinOverlay();
+    virtual void hoangHandleSIP(char * body);
+    virtual void handleSIP_JOIN();
+    virtual void handleSIP_LEAVE();
+    virtual void handleSIP_PAUSE();
+    virtual void handleSIP_RETURN();
+    virtual void hoangJoinOverlay();
 
 };
 

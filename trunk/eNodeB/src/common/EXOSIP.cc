@@ -34,18 +34,13 @@
 #define LOCAL_IP "157.159.16.91"
 #define PORT_LISTEN 5080
 
-namespace oversim
-{
-//static osip_t *osip;
-//static int sipSock;
 void handleMESSAGE(int ueID,char* msgBody);
+void *listensip (void *parameters);
 EXOSIP::EXOSIP()
 {
-//	nicePointer = (Nice *[10] )malloc(10);
-
-	for(int i=0; i<10; i++)
+	for(int i=0; i<100; i++)
 	{
-		nicePointer[i] = (Nice*)malloc(sizeof(Nice*));
+		nicePointer[i] = (BaseOverlay*)malloc(sizeof(BaseOverlay*));
 	}
 
 	if (eXosip_init ()) {
@@ -59,6 +54,11 @@ EXOSIP::EXOSIP()
 		  printf("could not initialize transport layer\n");
 		  exit (1);
 	  }
+
+	  pthread_t thread_id;
+	  thread_id = (pthread_t)malloc(sizeof(pthread_t));
+	  pthread_create(&thread_id,NULL, &listensip,NULL);
+
 	  printf("osip constructed!\n");
 }
 EXOSIP::~EXOSIP()
@@ -77,7 +77,7 @@ EXOSIP::~EXOSIP()
 
 //***********************************************************************************
 //Init for preparation eXoSIP
-int EXOSIP::initsip(Nice* nn, int nodeID){
+int EXOSIP::initsip(BaseOverlay* nn, int nodeID){
 	nicePointer[nodeID - 5000] = nn;
 }
 //***********************************************************************************
@@ -184,16 +184,16 @@ void *listensip (void *parameters){
 	  eXosip_event_free (event);
 }
 //***********************************************************************************
-void EXOSIP::wait(){
-	pthread_t thread_id;
-	thread_id = (pthread_t)malloc(sizeof(pthread_t));
-	pthread_create(&thread_id,NULL, &listensip,NULL);
-}
+//void EXOSIP::wait(){
+//	pthread_t thread_id;
+//	thread_id = (pthread_t)malloc(sizeof(pthread_t));
+//	pthread_create(&thread_id,NULL, &listensip,NULL);
+//}
 
 void handleMESSAGE(int ueID,char* msgBody)
 {
 	nicePointer[ueID - 5000]->hoangHandleSIP(msgBody);
 }
 
-}; //namespace
+
 #endif /* EXOSIP_CC_ */

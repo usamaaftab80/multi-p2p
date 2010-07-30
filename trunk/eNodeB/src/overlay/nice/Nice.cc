@@ -86,17 +86,6 @@ Nice::Nice() : numInconsistencies(0),
 {
 	//hoang
 	RendevouzPoint = TransportAddress(IPvXAddress("10.5.0.2"),1024,TransportAddress::UNKNOWN_NAT);
-
-	nodeID = 5000 + (numNiceInstance++);
-	std::cout << "NICE node " << nodeID << " constructed!" << endl;
-
-	if(numNiceInstance < 2){
-		osip = new EXOSIP();
-		osip->wait();
-	}
-	osip->initsip(this,nodeID);
-//	osip->handleMESSAGE(nodeID);
-//	osip->sendmessage("MESSAGE","<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>","abc");
 	//end of hoang
     /* do nothing at this point of time, OverSim calls initializeOverlay */
 
