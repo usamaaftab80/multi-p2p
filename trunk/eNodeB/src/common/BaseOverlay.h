@@ -835,6 +835,13 @@ public:
     double getKw(){return kw;};
     double getXw(){return xw;};
 
+    void hoangHandleSIP(char * body);
+    void handleSIP_JOIN();
+    void handleSIP_LEAVE();
+    void handleSIP_PAUSE();
+    void handleSIP_RETURN();
+    void hoangJoinOverlay();
+
 };
 
 #endif

@@ -26,9 +26,10 @@ public :
 	~EXOSIP();
 	int initsip(Nice* n, int nodeID);
 	int sendmessage(char *typeMessage ,char *uriTo, char *uriFrom, char *buf);
-	static void *listensip(void *parameters);
+//	void *listensip(void *parameters);
 	void wait();
-	static void handleMESSAGE(int nodeID);
+//	void handleMESSAGE(int ueID, char* msgBody);
+
 
 };
 static Nice * nicePointer[10];

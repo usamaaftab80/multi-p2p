@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for OverSim
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -linet -O out -o OverSim -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/tcp -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/applications/pingapp -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/mpls -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ipv4 -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/linklayer/contract -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/linklayer/mfcore -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ldp -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ipv6 -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/arp -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/applications/udpapp -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ted -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/rsvp_te -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/util/headerserializers -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/contract -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/contract -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/common -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/sctp -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/udp -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/base -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/icmpv6 -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/world -I/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src/util -L/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505/src -L/usr/lib -KINET_PROJ=/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505 -- -lgmp -leXosip2 -lpthread
+#  opp_makemake -f --deep -linet -O out -o OverSim -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/tcp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/applications/pingapp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/mpls -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ipv4 -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/linklayer/contract -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/linklayer/mfcore -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ldp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ipv6 -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/arp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/applications/udpapp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ted -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/rsvp_te -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/util/headerserializers -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/contract -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/contract -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/common -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/sctp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/udp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/base -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/icmpv6 -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/world -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/util -L/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src -L/usr/lib -KINET_PROJ=/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505 -- -lgmp -leXosip2 -lpthread
 #
 
 # Name of target to be created (-o option)
@@ -88,7 +88,6 @@ OBJS = \
     $O/common/cnetcommbuffer.o \
     $O/common/CoordinateSystem.o \
     $O/common/CryptoModule.o \
-    $O/common/EXOSIP.o \
     $O/common/FinisherModule.o \
     $O/common/GenericPacketParser.o \
     $O/common/GlobalNodeList.o \
@@ -181,7 +180,7 @@ MSGFILES = \
     underlay/simpleunderlay/SimpleUDPPacket.msg
 
 # Other makefile variables (-K)
-INET_PROJ=/home/wimax/sim2010/OverSim-20100526/src/../../INET-OverSim-20100505
+INET_PROJ=/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505
 
 #------------------------------------------------------------------------------
 
@@ -655,7 +654,6 @@ $O/common/BaseRpc.o: common/BaseRpc.cc \
   common/cnetcommbuffer.h \
   ../../INET-OverSim-20100505/src/base/INotifiable.h \
   common/NeighborCache.h \
-  /home/wimax/sim/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
   common/RecursiveLookup.h \
   common/HashFunc.h \
   common/cbr/yang.h \
@@ -664,6 +662,7 @@ $O/common/BaseRpc.o: common/BaseRpc.cc \
   common/CommonMessages_m.h \
   common/oversim_byteswap.h \
   common/NodeHandle.h \
+  /home/admin/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
   common/GlobalStatisticsAccess.h \
   common/OverlayAccess.h \
   common/BinaryValue.h \
@@ -738,6 +737,9 @@ $O/common/Churn_m.o: common/Churn_m.cc \
   common/TransportAddress.h \
   common/OverlayKey.h \
   common/NodeHandle.h
+$O/common/cnetcommbuffer.o: common/cnetcommbuffer.cc \
+  common/cnetcommbuffer.h \
+  /home/admin/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h
 $O/common/CommonMessages_m.o: common/CommonMessages_m.cc \
   common/OverSimMessage.h \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
@@ -781,12 +783,12 @@ $O/common/CryptoModule.o: common/CryptoModule.cc \
   common/NodeVector.h \
   common/cnetcommbuffer.h \
   ../../INET-OverSim-20100505/src/base/INotifiable.h \
-  /home/wimax/sim/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
   common/RecursiveLookup.h \
   common/OverlayKey.h \
   common/TransportAddress.h \
   common/CommonMessages_m.h \
   common/NodeHandle.h \
+  /home/admin/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
   common/GlobalStatisticsAccess.h \
   common/OverlayAccess.h \
   common/BinaryValue.h \
@@ -801,8 +803,6 @@ $O/common/CryptoModule.o: common/CryptoModule.cc \
   common/RpcMacros.h \
   common/BaseRpc.h \
   common/OverSimMessage_m.h
-$O/common/EXOSIP.o: common/EXOSIP.cc \
-  common/EXOSIP.h
 $O/common/FinisherModule.o: common/FinisherModule.cc \
   common/GlobalStatistics.h \
   common/GlobalStatisticsAccess.h \
@@ -810,7 +810,7 @@ $O/common/FinisherModule.o: common/FinisherModule.cc \
 $O/common/GenericPacketParser.o: common/GenericPacketParser.cc \
   common/PacketParser.h \
   common/cnetcommbuffer.h \
-  /home/wimax/sim/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
+  /home/admin/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
   common/GenericPacketParser.h
 $O/common/GlobalNodeList.o: common/GlobalNodeList.cc \
   common/GlobalStatistics.h \
@@ -1088,13 +1088,6 @@ $O/common/Nps_m.o: common/Nps_m.cc \
   common/Vector2D.h \
   common/Nps_m.h \
   common/OverSimMessage_m.h
-$O/common/OverSimMessage.o: common/OverSimMessage.cc \
-  common/OverSimMessage.h \
-  common/cnetcommbuffer.h \
-  /home/wimax/sim/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
-  common/OverSimMessage_m.h
-$O/common/OverSimMessage_m.o: common/OverSimMessage_m.cc \
-  common/OverSimMessage_m.h
 $O/common/OverlayKey.o: common/OverlayKey.cc \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
   common/oversim_mapset.h \
@@ -1108,6 +1101,13 @@ $O/common/OverlayKey.o: common/OverlayKey.cc \
   common/ProxNodeHandle.h \
   common/Comparator.h \
   common/SHA1.h
+$O/common/OverSimMessage.o: common/OverSimMessage.cc \
+  common/OverSimMessage.h \
+  common/cnetcommbuffer.h \
+  /home/admin/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
+  common/OverSimMessage_m.h
+$O/common/OverSimMessage_m.o: common/OverSimMessage_m.cc \
+  common/OverSimMessage_m.h
 $O/common/ParetoChurn.o: common/ParetoChurn.cc \
   common/GlobalStatistics.h \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
@@ -1348,9 +1348,6 @@ $O/common/Vivaldi.o: common/Vivaldi.cc \
   common/RpcMacros.h \
   common/BaseRpc.h \
   common/OverSimMessage_m.h
-$O/common/cnetcommbuffer.o: common/cnetcommbuffer.cc \
-  common/cnetcommbuffer.h \
-  /home/wimax/sim/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h
 $O/common/cbr/CBR-DHT.o: common/cbr/CBR-DHT.cc \
   common/GlobalStatistics.h \
   common/OverSimMessage.h \
@@ -1881,6 +1878,15 @@ $O/underlay/simpleunderlay/SimpleUnderlayConfigurator.o: underlay/simpleunderlay
   underlay/simpleunderlay/SimpleUnderlayConfigurator.h \
   ../../INET-OverSim-20100505/src/networklayer/common/InterfaceEntry.h \
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h
+$O/underlay/singlehostunderlay/apptunoutscheduler.o: underlay/singlehostunderlay/apptunoutscheduler.cc \
+  ../../INET-OverSim-20100505/src/base/INETDefs.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
+  underlay/singlehostunderlay/apptunoutscheduler.h \
+  underlay/singlehostunderlay/realtimescheduler.h
+$O/underlay/singlehostunderlay/realtimescheduler.o: underlay/singlehostunderlay/realtimescheduler.cc \
+  underlay/singlehostunderlay/realtimescheduler.h
 $O/underlay/singlehostunderlay/RealworldApp.o: underlay/singlehostunderlay/RealworldApp.cc \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
   common/PacketParser.h \
@@ -1960,6 +1966,9 @@ $O/underlay/singlehostunderlay/TunOutDevice.o: underlay/singlehostunderlay/TunOu
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h \
   underlay/singlehostunderlay/realtimescheduler.h \
   underlay/singlehostunderlay/RealworldDevice.h
+$O/underlay/singlehostunderlay/tunoutscheduler.o: underlay/singlehostunderlay/tunoutscheduler.cc \
+  underlay/singlehostunderlay/tunoutscheduler.h \
+  underlay/singlehostunderlay/realtimescheduler.h
 $O/underlay/singlehostunderlay/UdpOutDevice.o: underlay/singlehostunderlay/UdpOutDevice.cc \
   ../../INET-OverSim-20100505/src/networklayer/common/IInterfaceTable.h \
   ../../INET-OverSim-20100505/src/transport/udp/UDPPacket_m.h \
@@ -1983,6 +1992,13 @@ $O/underlay/singlehostunderlay/UdpOutDevice.o: underlay/singlehostunderlay/UdpOu
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h \
   underlay/singlehostunderlay/realtimescheduler.h \
   underlay/singlehostunderlay/RealworldDevice.h
+$O/underlay/singlehostunderlay/udpoutscheduler.o: underlay/singlehostunderlay/udpoutscheduler.cc \
+  ../../INET-OverSim-20100505/src/base/INETDefs.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
+  underlay/singlehostunderlay/udpoutscheduler.h \
+  underlay/singlehostunderlay/realtimescheduler.h
 $O/underlay/singlehostunderlay/ZeroconfConnector.o: underlay/singlehostunderlay/ZeroconfConnector.cc \
   common/OverSimMessage.h \
   common/RpcListener.h \
@@ -2021,25 +2037,6 @@ $O/underlay/singlehostunderlay/ZeroconfConnector.o: underlay/singlehostunderlay/
   common/RpcMacros.h \
   common/BaseRpc.h \
   common/OverSimMessage_m.h
-$O/underlay/singlehostunderlay/apptunoutscheduler.o: underlay/singlehostunderlay/apptunoutscheduler.cc \
-  ../../INET-OverSim-20100505/src/base/INETDefs.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
-  underlay/singlehostunderlay/apptunoutscheduler.h \
-  underlay/singlehostunderlay/realtimescheduler.h
-$O/underlay/singlehostunderlay/realtimescheduler.o: underlay/singlehostunderlay/realtimescheduler.cc \
-  underlay/singlehostunderlay/realtimescheduler.h
-$O/underlay/singlehostunderlay/tunoutscheduler.o: underlay/singlehostunderlay/tunoutscheduler.cc \
-  underlay/singlehostunderlay/tunoutscheduler.h \
-  underlay/singlehostunderlay/realtimescheduler.h
-$O/underlay/singlehostunderlay/udpoutscheduler.o: underlay/singlehostunderlay/udpoutscheduler.cc \
-  ../../INET-OverSim-20100505/src/base/INETDefs.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
-  underlay/singlehostunderlay/udpoutscheduler.h \
-  underlay/singlehostunderlay/realtimescheduler.h
 $O/underlay/singlehostunderlay/stun/stun.o: underlay/singlehostunderlay/stun/stun.cc \
   underlay/singlehostunderlay/stun/stun.h \
   underlay/singlehostunderlay/stun/stun_udp.h

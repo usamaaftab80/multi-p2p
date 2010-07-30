@@ -38,8 +38,16 @@ namespace oversim
 {
 //static osip_t *osip;
 //static int sipSock;
+void handleMESSAGE(int ueID,char* msgBody);
 EXOSIP::EXOSIP()
 {
+//	nicePointer = (Nice *[10] )malloc(10);
+
+	for(int i=0; i<10; i++)
+	{
+		nicePointer[i] = (Nice*)malloc(sizeof(Nice*));
+	}
+
 	if (eXosip_init ()) {
 		  perror("eXosip_init failed");
 		  exit (1);
@@ -100,7 +108,7 @@ int EXOSIP::sendmessage(char *typeMessage ,char *uriTo, char *uriFrom, char *buf
 	return i;
 }
 //***********************************************************************************
-void *EXOSIP::listensip (void *parameters){
+void *listensip (void *parameters){
 
 
 	  //int j=0;
@@ -128,15 +136,22 @@ void *EXOSIP::listensip (void *parameters){
 					  eXosip_unlock ();
 
 					// fetch MESSAGE body, get nodeID to handle
-					 handleMESSAGE(5001);
+					  char type[80];
+					  int ueID;
+					  char str[80];
+					  const char* format;
+					  format = "%s\nIDNode:%d\n%s\n";
+
 					 osip_body_t * oldbody;
 					   while (!osip_list_eol (&event->request->bodies, pos))
 					     {
-
 					       oldbody = (osip_body_t *) osip_list_get (&event->request->bodies, pos);
+//					       printf("body content:\n%s\n",oldbody->body);
+					       sscanf(oldbody->body,format,type,&ueID,str);
+//					       printf("OSIP: type=%s\tnodeID=%d\n",type,ueID);
+					       handleMESSAGE(ueID, oldbody->body);
 					       pos++;
 
-					       printf("body:%s\nbodysize:%d\n",oldbody->body,oldbody->length);
 
 					     }
 
@@ -172,12 +187,12 @@ void *EXOSIP::listensip (void *parameters){
 void EXOSIP::wait(){
 	pthread_t thread_id;
 	thread_id = (pthread_t)malloc(sizeof(pthread_t));
-	pthread_create(&thread_id,NULL, &EXOSIP::listensip,NULL);
+	pthread_create(&thread_id,NULL, &listensip,NULL);
 }
 
-void EXOSIP::handleMESSAGE(int nodeID)
+void handleMESSAGE(int ueID,char* msgBody)
 {
-	nicePointer[nodeID - 5000]->hoang();
+	nicePointer[ueID - 5000]->hoangHandleSIP(msgBody);
 }
 
 }; //namespace

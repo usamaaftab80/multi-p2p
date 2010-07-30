@@ -30,6 +30,10 @@
 #include "SimpleUDP.h"
 #include "GlobalNodeListAccess.h"
 
+//hoang
+#include <string>
+//end of hoang
+using namespace std;
 namespace oversim
 {
 
@@ -235,8 +239,21 @@ void Nice::initializeOverlay( int stage )
  */
 void Nice::joinOverlay()
 {
-    changeState(INIT);
-    changeState(BOOTSTRAP);
+	/*
+	 * hoang disabled
+	 * just call when handle SIP_JOIN
+	 */
+//    changeState(INIT);
+
+    NiceMessage * msg = new NiceMessage("HOANG");
+	TransportAddress add = TransportAddress(IPvXAddress("157.159.16.91"),1024,TransportAddress::UNKNOWN_NAT);
+	sendMessageToUDP(add, msg);
+	cout << "send test msg joinOverlay()" << endl;
+
+//    changeState(BOOTSTRAP);
+//	hoangJoinOverlay();
+	cout << "Node " << nodeID << " call joinOverlay()" << endl;
+
 } // joinOverlay
 
 
@@ -261,6 +278,10 @@ void Nice::changeState( int toState )
     case BOOTSTRAP:
 
         state = BOOTSTRAP;
+
+        //hoang
+        cout << "state = BOOTSTRAP" << endl;
+        //end of hoang
 
         /* check wether there exists a Rendevouz Point */
         if (RendevouzPoint.isUnspecified()) {
@@ -294,10 +315,6 @@ void Nice::changeState( int toState )
         state = READY;
 
         //hoang
-//		const char * ip = "10.5.0.2";//par("externalHostIP");
-
-//		TransportAddress add = TransportAddress(IPvXAddress(ip),1024,TransportAddress::UNKNOWN_NAT);
-
 		NiceMessage * msg = new NiceMessage("NICE_STATE_READY");
 
 		msg->setCommand(NICE_STATE_READY);
@@ -624,6 +641,10 @@ void Nice::becomeRendevouzPoint()
 void Nice::BasicJoinLayer(short layer)
 {
 
+	//hoang
+	cout << "BasicJoinLayer(" << layer << ")" << endl;
+	//end of hoang
+
     // Cancel timers involved in structure refinement
     cancelEvent(maintenanceTimer);
     cancelEvent(heartbeatTimer);
@@ -644,6 +665,10 @@ void Nice::BasicJoinLayer(short layer)
 
     sendMessageToUDP(RendevouzPoint, msg);
 
+    //hoang
+    cout << "Node " << nodeID << " send NICE_PEER_TEMPORARY to RP\n";
+    //end of hoang
+
     isTempPeered = true;
 
 } // BasicJoinLayer
@@ -660,6 +685,9 @@ void Nice::Query(const TransportAddress& destination, short layer)
 {
     if (debug_queries)
         EV << simTime() << " : " << thisNode.getAddress() << " : Query()" << endl;
+    //hoang
+    cout << simTime() << " : " << thisNode.getAddress() << " : Query()" << endl;
+    //end of hoang
 
 
     NiceMessage* msg = new NiceMessage("NICE_QUERY");
@@ -667,7 +695,9 @@ void Nice::Query(const TransportAddress& destination, short layer)
     msg->setCommand(NICE_QUERY);
     msg->setLayer(layer);
     msg->setBitLength(NICEMESSAGE_L(msg));
-
+    //hoang
+    cout << "create msg srcNode=" << msg->getSrcNode() << " length=" << msg->getBitLength() << endl;
+    //end of hoang
     query_start = simTime();
     tempResolver = destination;
 
@@ -680,6 +710,9 @@ void Nice::Query(const TransportAddress& destination, short layer)
 
     if (debug_queries)
         EV << simTime() << " : " << thisNode.getAddress() << " : Query() finished." << endl;
+    //hoang
+    cout << simTime() << " : " << thisNode.getAddress() << " : Query() finished." << endl;
+    //end of hoang
 
 } // Query
 
@@ -3936,6 +3969,102 @@ double Nice::cost()
 
 //	globalStatistics->recordOutVector("1 Cost",cost);
 	return cost;
+}
+
+/*
+ * Hoang handle SIP messages
+ */
+void Nice::hoangHandleSIP(char * body)
+{
+//	printf("hehe from nodeID %d body: %s\n",nodeID,body);
+	char type[80];
+	char str[80];
+	int ueID;
+	const char* format;
+
+	format = "%s\nIDNode:%d\n%s\n";
+	sscanf(body,format,type,&ueID,str);
+	std::cout << "Node " << nodeID << " get a SIP msg Type=" << type << " ueID=" << ueID << endl;
+//	string type_string = string(type);
+	NiceMessage * msg = new NiceMessage("HOANG");
+		cout << "created test msg before handle\n";
+		TransportAddress add = TransportAddress(IPvXAddress("157.159.16.91"),1024,TransportAddress::UNKNOWN_NAT);
+		sendMessageToUDP(add, msg);
+		cout << "send test msg hoangJoinOverlay()" << endl;
+
+	if ( string(type) == "JOIN" )
+	{
+		handleSIP_JOIN();
+	}
+	else if ( string(type) == "LEAVE" )
+	{
+		handleSIP_LEAVE() ;
+	}
+	else if ( string(type) == "PAUSE" )
+	{
+		handleSIP_PAUSE() ;
+	}
+	else if ( string(type) == "RETURN" )
+	{
+		handleSIP_RETURN() ;
+	}
+	else
+		return;
+}
+
+void Nice::handleSIP_JOIN()
+{
+	cout<< "handle JOIN\n" ;
+	cout << "RP: " << RendevouzPoint << endl;
+	cout << "state: " << getState() << endl;
+	//call JoinOverlay
+	hoangJoinOverlay();
+	//fetch JOIN's body
+		/*char fromAddress[80];
+		int portAudio;
+		int portVideo;
+		char layer[80];
+		int ueID;
+		const char* format;
+		format = "%s\tIP:%s\tPortAudio:%d\tPortVideo:%d\tLayer:%s\tIDNode:%d";*/
+}
+
+void Nice::handleSIP_LEAVE()
+{
+	cout<< "handle LEAVE\n" ;
+	//call graceful leave
+}
+
+void Nice::handleSIP_PAUSE()
+{
+	//cancel HB_timer, maintenanceTimer
+//    cancelEvent(maintenanceTimer);
+    cancelEvent(heartbeatTimer);
+}
+
+void Nice::handleSIP_RETURN()
+{
+	//re-schedule HB_timer, maintenanceTimer
+//	cancelEvent(heartbeatTimer);
+	scheduleAt(simTime() + heartbeatInterval, heartbeatTimer);
+//	cancelEvent(maintenanceTimer);
+//	scheduleAt(simTime() + maintenanceInterval, maintenanceTimer);
+}
+
+void Nice::hoangJoinOverlay()
+{
+	cout << "hoangJoinOverlay() at " << simTime() << endl;
+//	changeState(INIT);
+
+	NiceMessage * msg = new NiceMessage("HOANG");
+		cout << "created test msg at hoangJoinOverlay()\n";
+		TransportAddress add = TransportAddress(IPvXAddress("157.159.16.91"),1024,TransportAddress::UNKNOWN_NAT);
+		BaseOverlay::sendMessageToUDP(add, msg);
+
+		cout << "send test msg hoangJoinOverlay()" << endl;
+	changeState(BOOTSTRAP);
+//	BasicJoinLayer(-1);
+//	changeState(READY);
 }
 
 }; //namespace
