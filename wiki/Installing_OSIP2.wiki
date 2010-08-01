@@ -1,15 +1,25 @@
-#labels osip,osip2
-= Installing OSIP2 Library =
+#labels osip,osip2,eXosip,eXosip2
+= Installing OSIP2 & eXosip2 Library =
 
 Download: http://ftp.gnu.org/gnu/osip/libosip2-3.3.0.tar.gz
-
- su -
 
  tar xzfv libosip2-3.3.0.tar.gz
 
  cd libosip2-3.3.0
 
  ./configure --enable-test
+
+ make
+
+ sudo make install
+
+Download eXosip: http://mirror.lihnidos.org/GNU/savannah/exosip/libeXosip2-3.3.0.tar.gz
+
+ tar xzfv libeXosip2-3.3.0.tar.gz
+
+ cd libeXosip2-3.3.0
+
+ ./configure
 
  make
 
@@ -36,4 +46,7 @@ Add: _-lpthread_ to _Miscellaneous_ of GCC C Compiler, GCC C++ Compiler, GCC C L
 == Running ==
 ./test_osip: error while loading shared libraries: libosip2.so.3: cannot open shared object file: No such file or directory
 
-*FIX:* export LD_LIBRARY_PATH=/usr/local/lib
+*FIX:*
+Add _export LD_LIBRARY_PATH=/usr/local/lib_ to /etc/profile
+
+Add _/usr/local/lib_ to /etc/ld.so.conf
