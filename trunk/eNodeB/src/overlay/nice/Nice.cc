@@ -4048,6 +4048,14 @@ void Nice::hoangHandleSIP(string body)
 	{
 		handleSIP_RETURN() ;
 	}
+	else if ( string(type) == "HANDOVER_SUBCRIBE" )
+	{
+		handleSIP_HANDOVER_SUBCRIBE();
+	}
+	else if ( string(type) == "HANDOVER_NOTIFY" )
+	{
+		handleSIP_HANDOVER_NOTIFY();
+	}
 	else
 		return;
 }
@@ -4133,8 +4141,19 @@ void Nice::hoangJoinOverlay()
 	cout << "hoangJoinOverlay() at " << simTime() << endl;
 	changeState(INIT);
 	changeState(BOOTSTRAP);
-//	BasicJoinLayer(-1);
+}
 
+void Nice::handleSIP_HANDOVER_SUBCRIBE()
+{
+	//log data
+}
+
+void Nice::handleSIP_HANDOVER_NOTIFY()
+{
+	//join
+	hoangJoinOverlay();
+	//reply HANDOVER_NOTIFY
+//	osip->sendmessage()
 }
 
 }; //namespace

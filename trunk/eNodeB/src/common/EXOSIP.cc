@@ -44,15 +44,17 @@ typedef queue<string> stringQueue_t;
 #define SIP_TO_PORT "5080"
 #define SIP_CONTACT "sip:singlehost@157.159.16.91"
 #define LOCAL_IP "157.159.16.91"
-#define PORT_LISTEN 5080
+//#define PORT_LISTEN 5080
 
 void *listensip (void *parameters);
 void handleMESSAGE(int ueID,char* msgBody);
 
 stringQueue_t sipReceiveBuffer[10]; //for max 10 UEs
 
-EXOSIP::EXOSIP()
+EXOSIP::EXOSIP(int PORT_LISTEN, int ueIDbegin_var)
 {
+	ueIDbegin = ueIDbegin_var;
+
 	 if (eXosip_init ()) {
 		  perror("eXosip_init failed");
 		  exit (1);
@@ -313,12 +315,12 @@ void *listensip (void *parameters){
 void handleMESSAGE(int ueID,char* msgBody)
 {
 //	printf("osip handleMESSAGE for node %d\n",ueID);
-	if(ueID > 4999){
+	if(ueID > ueIDbegin - 1){
 //		((BaseOverlay*)(nicePointer[ueID - 5000]))->hoangHandleSIP(msgBody);
-		sipReceiveBuffer[ueID - 5000].push(string(msgBody));
+		sipReceiveBuffer[ueID - ueIDbegin].push(string(msgBody));
 	}
 	else{
-		printf("ERROR: ueID=%d < 5000\n",ueID);
+		printf("ERROR: ueID=%d < %d\n", ueID, ueIDbegin);
 	}
 //	return;
 }
@@ -326,9 +328,9 @@ void handleMESSAGE(int ueID,char* msgBody)
 void EXOSIP::pollBufferOfNode(int nodeID, string &str)
 {
 //	string ret;
-	if(!sipReceiveBuffer[nodeID - 5000].empty()){
-		str = sipReceiveBuffer[nodeID - 5000].front();
-		sipReceiveBuffer[nodeID - 5000].pop();
+	if(!sipReceiveBuffer[nodeID - ueIDbegin].empty()){
+		str = sipReceiveBuffer[nodeID - ueIDbegin].front();
+		sipReceiveBuffer[nodeID - ueIDbegin].pop();
 	}else{
 		str = "nothing";
 	}

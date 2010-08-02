@@ -337,6 +337,8 @@ public:
     void handleSIP_LEAVE();
     void handleSIP_PAUSE();
     void handleSIP_RETURN();
+    void handleSIP_HANDOVER_SUBCRIBE();
+    void handleSIP_HANDOVER_NOTIFY();
     void hoangJoinOverlay();
 
 
