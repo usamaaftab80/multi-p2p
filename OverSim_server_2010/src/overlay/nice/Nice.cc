@@ -564,6 +564,8 @@ void Nice::becomeRendevouzPoint()
 	TransportAddress add = TransportAddress(IPvXAddress(ip),1024,TransportAddress::UNKNOWN_NAT);
 	TransportAddress add2 = TransportAddress(IPvXAddress("50.5.0.2"),1024,TransportAddress::UNKNOWN_NAT);
 	TransportAddress add3 = TransportAddress(IPvXAddress("50.5.0.3"),1024,TransportAddress::UNKNOWN_NAT);
+	TransportAddress add62 = TransportAddress(IPvXAddress("60.5.0.2"),1024,TransportAddress::UNKNOWN_NAT);
+	TransportAddress add63 = TransportAddress(IPvXAddress("60.5.0.3"),1024,TransportAddress::UNKNOWN_NAT);
 
 	NiceMessage * msg = new NiceMessage("NICE_RP_NOTIFY");
 
@@ -572,10 +574,14 @@ void Nice::becomeRendevouzPoint()
 
 	NiceMessage * dup2 = msg->dup();
 	NiceMessage * dup3 = msg->dup();
+	NiceMessage * dup62 = msg->dup();
+	NiceMessage * dup63 = msg->dup();
 
 	sendMessageToUDP(add, msg);
 	sendMessageToUDP(add2, dup2);
 	sendMessageToUDP(add3, dup3);
+	sendMessageToUDP(add62, dup62);
+	sendMessageToUDP(add63, dup63);
     //end of hoang
 
     /* Mark node as new RP (star symbol) */
