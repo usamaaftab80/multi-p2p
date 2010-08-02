@@ -49,11 +49,7 @@
 
 //hoang
 #include "NiceMessage_m.h"
-//hoang
-#include "EXOSIP.h"
-//#include "pthread.h"
-//end of hoang
-static EXOSIP* osip = new EXOSIP();
+
 using namespace std;
 
 
@@ -80,7 +76,7 @@ BaseOverlay::BaseOverlay()
 //		osip = new EXOSIP();
 //		osip->wait();
 //	}
-	osip->initsip(this,nodeID);
+
 //	osip->handleMESSAGE(nodeID);
 //	osip->sendmessage("MESSAGE","<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>","abc");
 }
@@ -102,6 +98,10 @@ void BaseOverlay::initialize(int stage)
 	const char *globalModulePath = par("globalModulePath");
 	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
 	global = check_and_cast<HoangGlobalObject *>(modp2);
+
+	osip = global->osip;
+
+//	osip->initsip(this,nodeID);
 
 	hoang_use_cost = par("hoang_use_cost");
 	hoang_debug_cost = par("hoang_debug_cost");
@@ -1200,10 +1200,10 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
 
     // debug message
 //    if (debugOutput) {
-        std::cout << "[BaseOverlay::sendMessageToUDP() @ " << thisNode.getAddress()
-        << " (" << thisNode.getKey().toString(16) << ")]\n"
-        << "    Sending " << *msg << " to " << dest.getAddress()
-        << endl;
+//        std::cout << "[BaseOverlay::sendMessageToUDP() @ " << thisNode.getAddress()
+//        << " (" << thisNode.getKey().toString(16) << ")]\n"
+//        << "    Sending " << *msg << " to " << dest.getAddress()
+//        << endl;
 //    }
 
     msg->setKind(UDP_C_DATA);
@@ -1213,7 +1213,7 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
     udpControlInfo->setDestAddr(dest.getAddress());
     udpControlInfo->setDestPort(dest.getPort());
     msg->setControlInfo(udpControlInfo);
-    std::cout << "after msg->setControlInfo(udpControlInfo);\n";
+
     if (dest != thisNode) {
         BaseOverlayMessage* baseOverlayMsg
             = check_and_cast<BaseOverlayMessage*>(msg);
@@ -1239,13 +1239,13 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
             RECORD_STATS(numInternalSent++; bytesInternalSent += msg->getByteLength());
         }
     }
-    std::cout<< "before send(msg, udpOut);\n";
-    std::cout << "[BaseOverlay::sendMessageToUDP() @ " << thisNode.getAddress()
-            << " (" << thisNode.getKey().toString(16) << ")]\n"
-            << "    Sending " << *msg << " to " << dest.getAddress()
-            << endl;
+//    std::cout<< "before send(msg, udpOut);\n";
+//    std::cout << "[BaseOverlay::sendMessageToUDP() @ " << thisNode.getAddress()
+//            << " (" << thisNode.getKey().toString(16) << ")]\n"
+//            << "    Sending " << *msg << " to " << dest.getAddress()
+//            << endl;
+
     send(msg, "udpOut");
-    std::cout<< "after send(msg, udpOut);\n";
 }
 
 //------------------------------------------------------------------------
@@ -2077,9 +2077,10 @@ bool BaseOverlay::isInSimpleMultiOverlayHost()
     return isVector() || getParentModule()->isVector();
 }
 
+/*
 void BaseOverlay::hoangHandleSIP(char * body)
 {
-
+	printf("BaseOverlay::hoangHandleSIP");
 }
 void BaseOverlay::handleSIP_JOIN()
 {
@@ -2101,3 +2102,4 @@ void BaseOverlay::hoangJoinOverlay()
 {
 
 }
+*/

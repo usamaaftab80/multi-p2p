@@ -2,7 +2,7 @@
 # OMNeT++/OMNEST Makefile for OverSim
 #
 # This file was generated with the command:
-#  opp_makemake -f --deep -linet -O out -o OverSim -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/tcp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/applications/pingapp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/mpls -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ipv4 -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/linklayer/contract -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/linklayer/mfcore -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ldp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ipv6 -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/arp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/applications/udpapp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/ted -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/rsvp_te -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/util/headerserializers -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/contract -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/contract -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/common -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/sctp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/transport/udp -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/base -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/networklayer/icmpv6 -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/world -I/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src/util -L/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505/src -L/usr/lib -KINET_PROJ=/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505 -- -lgmp -leXosip2 -lpthread
+#  opp_makemake -f --deep -linet -O out -o OverSim -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/transport/tcp -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/applications/pingapp -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/networklayer/mpls -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/networklayer/ipv4 -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/linklayer/contract -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/linklayer/mfcore -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/networklayer/ldp -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/networklayer/ipv6 -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/networklayer/arp -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/applications/udpapp -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/networklayer/ted -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/networklayer/rsvp_te -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/util/headerserializers -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/networklayer/contract -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/transport/contract -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/networklayer/common -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/transport/sctp -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/transport/udp -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/base -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/networklayer/icmpv6 -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/world -I/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src/util -L/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505/src -L/usr/lib -KINET_PROJ=/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505 -- -lgmp -leXosip2 -lpthread
 #
 
 # Name of target to be created (-o option)
@@ -88,6 +88,7 @@ OBJS = \
     $O/common/cnetcommbuffer.o \
     $O/common/CoordinateSystem.o \
     $O/common/CryptoModule.o \
+    $O/common/EXOSIP.o \
     $O/common/FinisherModule.o \
     $O/common/GenericPacketParser.o \
     $O/common/GlobalNodeList.o \
@@ -123,7 +124,6 @@ OBJS = \
     $O/common/cbr/Landmark.o \
     $O/common/cbr/simplex.o \
     $O/common/cbr/yang.o \
-    $O/overlay/nice/EXOSIP.o \
     $O/overlay/nice/Nice.o \
     $O/overlay/nice/NiceCluster.o \
     $O/overlay/nice/NicePeerInfo.o \
@@ -180,7 +180,7 @@ MSGFILES = \
     underlay/simpleunderlay/SimpleUDPPacket.msg
 
 # Other makefile variables (-K)
-INET_PROJ=/media/DATA/enodeb/OverSim-20100526/src/../../INET-OverSim-20100505
+INET_PROJ=/home/hoang/workspaces/enodeb/OverSim/src/../../INET-OverSim-20100505
 
 #------------------------------------------------------------------------------
 
@@ -298,6 +298,7 @@ $O/applications/almlistener/ALMListener.o: applications/almlistener/ALMListener.
   common/NodeVector.h \
   applications/almlistener/ALMListener.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/RpcMacros.h \
   ../../INET-OverSim-20100505/src/base/INotifiable.h \
@@ -330,6 +331,7 @@ $O/applications/almtest/ALMTest.o: applications/almtest/ALMTest.cc \
   applications/almtest/MessageObserver.h \
   common/NodeVector.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/RpcMacros.h \
   ../../INET-OverSim-20100505/src/base/INotifiable.h \
@@ -344,12 +346,8 @@ $O/applications/almtest/MessageObserver.o: applications/almtest/MessageObserver.
   applications/almtest/MessageObserver.h \
   applications/almtest/ALMTestTracedMessage_m.h
 $O/applications/conferenceapp/ConferenceApp.o: applications/conferenceapp/ConferenceApp.cc \
-  common/RecursiveLookup.h \
   common/GlobalStatistics.h \
-  common/OverlayKey.h \
-  common/TransportAddress.h \
   applications/conferenceapp/ConferenceAppMsg_m.h \
-  common/CommonMessages_m.h \
   common/AbstractLookup.h \
   common/RpcListener.h \
   common/OverSimMessage.h \
@@ -360,31 +358,36 @@ $O/applications/conferenceapp/ConferenceApp.o: applications/conferenceapp/Confer
   ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
   common/oversim_mapset.h \
   common/RpcState.h \
-  common/NodeHandle.h \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
   common/InitStages.h \
-  common/BinaryValue.h \
-  common/Vector2D.h \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
-  common/HoangGlobalObject.h \
-  common/ProxNodeHandle.h \
   common/BaseApp.h \
   common/NodeVector.h \
   applications/conferenceapp/ConferenceApp.h \
+  ../../INET-OverSim-20100505/src/base/INotifiable.h \
+  common/RecursiveLookup.h \
+  common/TransportAddress.h \
+  common/OverlayKey.h \
+  common/CommonMessages_m.h \
+  common/NodeHandle.h \
+  common/BinaryValue.h \
+  common/Vector2D.h \
+  common/HoangGlobalObject.h \
+  common/ProxNodeHandle.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/RpcMacros.h \
-  ../../INET-OverSim-20100505/src/base/INotifiable.h \
   common/BaseRpc.h \
   common/OverSimMessage_m.h
 $O/applications/conferenceapp/ConferenceAppMsg_m.o: applications/conferenceapp/ConferenceAppMsg_m.cc \
-  common/TransportAddress.h \
   applications/conferenceapp/ConferenceAppMsg_m.h \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
   common/oversim_mapset.h \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
+  common/TransportAddress.h
 $O/applications/dht/DHT.o: applications/dht/DHT.cc \
   common/GlobalStatistics.h \
   common/OverSimMessage.h \
@@ -416,11 +419,12 @@ $O/applications/dht/DHT.o: applications/dht/DHT.cc \
   common/ProxNodeHandle.h \
   applications/dht/DHTDataStorage.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/RpcMacros.h \
   common/BaseRpc.h \
-  common/SHA1.h \
-  common/OverSimMessage_m.h
+  common/OverSimMessage_m.h \
+  common/SHA1.h
 $O/applications/dht/DHTDataStorage.o: applications/dht/DHTDataStorage.cc \
   common/OverSimMessage.h \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
@@ -486,6 +490,7 @@ $O/applications/nicetestapp/NiceTestApp.o: applications/nicetestapp/NiceTestApp.
   common/HoangGlobalObject.h \
   common/ProxNodeHandle.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/RpcMacros.h \
   common/BaseRpc.h \
@@ -525,6 +530,7 @@ $O/applications/tierdummy/TierDummy.o: applications/tierdummy/TierDummy.cc \
   common/ProxNodeHandle.h \
   applications/tierdummy/TierDummy.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/RpcMacros.h \
   common/BaseRpc.h \
@@ -568,6 +574,7 @@ $O/common/BaseApp.o: common/BaseApp.cc \
   ../../INET-OverSim-20100505/src/transport/contract/UDPControlInfo_m.h \
   ../../INET-OverSim-20100505/src/transport/contract/UDPSocket.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/GlobalNodeListAccess.h \
   common/Comparator.h \
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h \
@@ -621,6 +628,7 @@ $O/common/BaseOverlay.o: common/BaseOverlay.cc \
   ../../INET-OverSim-20100505/src/transport/contract/UDPControlInfo_m.h \
   ../../INET-OverSim-20100505/src/transport/contract/UDPSocket.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/GlobalNodeListAccess.h \
   common/Comparator.h \
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h \
@@ -651,6 +659,7 @@ $O/common/BaseRpc.o: common/BaseRpc.cc \
   ../../INET-OverSim-20100505/src/base/NotificationBoard.h \
   common/BaseApp.h \
   common/NodeVector.h \
+  /home/hoang/Downloads/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
   common/cnetcommbuffer.h \
   ../../INET-OverSim-20100505/src/base/INotifiable.h \
   common/NeighborCache.h \
@@ -662,7 +671,6 @@ $O/common/BaseRpc.o: common/BaseRpc.cc \
   common/CommonMessages_m.h \
   common/oversim_byteswap.h \
   common/NodeHandle.h \
-  /home/admin/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
   common/GlobalStatisticsAccess.h \
   common/OverlayAccess.h \
   common/BinaryValue.h \
@@ -673,6 +681,7 @@ $O/common/BaseRpc.o: common/BaseRpc.cc \
   common/cbr/simplex.h \
   common/CryptoModule.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h \
   common/Comparator.h \
   common/Nps_m.h \
@@ -717,6 +726,7 @@ $O/common/BootstrapList.o: common/BootstrapList.cc \
   common/HoangGlobalObject.h \
   common/ProxNodeHandle.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/RpcMacros.h \
   common/BaseRpc.h \
@@ -737,9 +747,6 @@ $O/common/Churn_m.o: common/Churn_m.cc \
   common/TransportAddress.h \
   common/OverlayKey.h \
   common/NodeHandle.h
-$O/common/cnetcommbuffer.o: common/cnetcommbuffer.cc \
-  common/cnetcommbuffer.h \
-  /home/admin/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h
 $O/common/CommonMessages_m.o: common/CommonMessages_m.cc \
   common/OverSimMessage.h \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
@@ -781,6 +788,7 @@ $O/common/CryptoModule.o: common/CryptoModule.cc \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
   ../../INET-OverSim-20100505/src/base/NotificationBoard.h \
   common/NodeVector.h \
+  /home/hoang/Downloads/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
   common/cnetcommbuffer.h \
   ../../INET-OverSim-20100505/src/base/INotifiable.h \
   common/RecursiveLookup.h \
@@ -788,7 +796,6 @@ $O/common/CryptoModule.o: common/CryptoModule.cc \
   common/TransportAddress.h \
   common/CommonMessages_m.h \
   common/NodeHandle.h \
-  /home/admin/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
   common/GlobalStatisticsAccess.h \
   common/OverlayAccess.h \
   common/BinaryValue.h \
@@ -798,8 +805,39 @@ $O/common/CryptoModule.o: common/CryptoModule.cc \
   ../../INET-OverSim-20100505/src/base/ModuleAccess.h \
   common/CryptoModule.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h \
+  common/RpcMacros.h \
+  common/BaseRpc.h \
+  common/OverSimMessage_m.h
+$O/common/EXOSIP.o: common/EXOSIP.cc \
+  common/OverSimMessage.h \
+  common/RpcListener.h \
+  common/AbstractLookup.h \
+  common/BaseOverlay.h \
+  common/TopologyVis.h \
+  ../../INET-OverSim-20100505/src/base/INETDefs.h \
+  common/oversim_mapset.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
+  common/RpcState.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
+  common/InitStages.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
+  common/NodeVector.h \
+  ../../INET-OverSim-20100505/src/base/INotifiable.h \
+  common/RecursiveLookup.h \
+  common/OverlayKey.h \
+  common/TransportAddress.h \
+  common/CommonMessages_m.h \
+  common/NodeHandle.h \
+  common/BinaryValue.h \
+  common/Vector2D.h \
+  common/HoangGlobalObject.h \
+  common/ProxNodeHandle.h \
+  common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
+  common/Comparator.h \
   common/RpcMacros.h \
   common/BaseRpc.h \
   common/OverSimMessage_m.h
@@ -809,8 +847,8 @@ $O/common/FinisherModule.o: common/FinisherModule.cc \
   common/FinisherModule.h
 $O/common/GenericPacketParser.o: common/GenericPacketParser.cc \
   common/PacketParser.h \
+  /home/hoang/Downloads/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
   common/cnetcommbuffer.h \
-  /home/admin/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
   common/GenericPacketParser.h
 $O/common/GlobalNodeList.o: common/GlobalNodeList.cc \
   common/GlobalStatistics.h \
@@ -850,6 +888,7 @@ $O/common/GlobalNodeList.o: common/GlobalNodeList.cc \
   ../../INET-OverSim-20100505/src/base/ModuleAccess.h \
   common/PeerInfo.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h \
   common/RpcMacros.h \
@@ -890,7 +929,8 @@ $O/common/HoangGlobalObject.o: common/HoangGlobalObject.cc \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
   common/TransportAddress.h \
-  common/HoangGlobalObject.h
+  common/HoangGlobalObject.h \
+  common/EXOSIP.h
 $O/common/IterativeLookup.o: common/IterativeLookup.cc \
   common/GlobalStatistics.h \
   common/IterativeLookup.h \
@@ -920,6 +960,7 @@ $O/common/IterativeLookup.o: common/IterativeLookup.cc \
   common/ProxNodeHandle.h \
   common/LookupListener.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/RpcMacros.h \
   common/BaseRpc.h \
@@ -981,6 +1022,7 @@ $O/common/NeighborCache.o: common/NeighborCache.cc \
   common/PeerInfo.h \
   common/cbr/simplex.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/GlobalNodeListAccess.h \
   common/Comparator.h \
   common/Nps_m.h \
@@ -1066,6 +1108,7 @@ $O/common/Nps.o: common/Nps.cc \
   common/cbr/simplex.h \
   common/cbr/CoordBasedRoutingAccess.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/GlobalNodeListAccess.h \
   common/cbr/CoordBasedRouting.h \
   common/Comparator.h \
@@ -1088,6 +1131,13 @@ $O/common/Nps_m.o: common/Nps_m.cc \
   common/Vector2D.h \
   common/Nps_m.h \
   common/OverSimMessage_m.h
+$O/common/OverSimMessage.o: common/OverSimMessage.cc \
+  common/OverSimMessage.h \
+  /home/hoang/Downloads/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
+  common/cnetcommbuffer.h \
+  common/OverSimMessage_m.h
+$O/common/OverSimMessage_m.o: common/OverSimMessage_m.cc \
+  common/OverSimMessage_m.h
 $O/common/OverlayKey.o: common/OverlayKey.cc \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
   common/oversim_mapset.h \
@@ -1101,13 +1151,6 @@ $O/common/OverlayKey.o: common/OverlayKey.cc \
   common/ProxNodeHandle.h \
   common/Comparator.h \
   common/SHA1.h
-$O/common/OverSimMessage.o: common/OverSimMessage.cc \
-  common/OverSimMessage.h \
-  common/cnetcommbuffer.h \
-  /home/admin/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
-  common/OverSimMessage_m.h
-$O/common/OverSimMessage_m.o: common/OverSimMessage_m.cc \
-  common/OverSimMessage_m.h
 $O/common/ParetoChurn.o: common/ParetoChurn.cc \
   common/GlobalStatistics.h \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
@@ -1175,6 +1218,7 @@ $O/common/RecursiveLookup.o: common/RecursiveLookup.cc \
   common/ProxNodeHandle.h \
   common/LookupListener.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/RpcMacros.h \
   common/BaseRpc.h \
@@ -1220,9 +1264,9 @@ $O/common/SVivaldi.o: common/SVivaldi.cc \
   ../../INET-OverSim-20100505/src/base/INotifiable.h \
   common/NeighborCache.h \
   common/RecursiveLookup.h \
-  common/OverlayKey.h \
-  common/TransportAddress.h \
   common/HashFunc.h \
+  common/TransportAddress.h \
+  common/OverlayKey.h \
   common/cbr/yang.h \
   common/CommonMessages_m.h \
   common/oversim_byteswap.h \
@@ -1234,6 +1278,7 @@ $O/common/SVivaldi.o: common/SVivaldi.cc \
   common/ProxNodeHandle.h \
   common/cbr/simplex.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/Nps_m.h \
   common/RpcMacros.h \
@@ -1329,9 +1374,9 @@ $O/common/Vivaldi.o: common/Vivaldi.cc \
   ../../INET-OverSim-20100505/src/base/INotifiable.h \
   common/NeighborCache.h \
   common/RecursiveLookup.h \
-  common/OverlayKey.h \
-  common/TransportAddress.h \
   common/HashFunc.h \
+  common/TransportAddress.h \
+  common/OverlayKey.h \
   common/cbr/yang.h \
   common/CommonMessages_m.h \
   common/oversim_byteswap.h \
@@ -1343,11 +1388,15 @@ $O/common/Vivaldi.o: common/Vivaldi.cc \
   common/ProxNodeHandle.h \
   common/cbr/simplex.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/Nps_m.h \
   common/RpcMacros.h \
   common/BaseRpc.h \
   common/OverSimMessage_m.h
+$O/common/cnetcommbuffer.o: common/cnetcommbuffer.cc \
+  /home/hoang/Downloads/omnetpp-4.1/src/sim/parsim/ccommbufferbase.h \
+  common/cnetcommbuffer.h
 $O/common/cbr/CBR-DHT.o: common/cbr/CBR-DHT.cc \
   common/GlobalStatistics.h \
   common/OverSimMessage.h \
@@ -1391,6 +1440,7 @@ $O/common/cbr/CBR-DHT.o: common/cbr/CBR-DHT.cc \
   common/cbr/simplex.h \
   common/cbr/CoordBasedRoutingAccess.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/cbr/CoordBasedRouting.h \
   common/Nps_m.h \
   common/Comparator.h \
@@ -1498,6 +1548,7 @@ $O/common/cbr/Landmark.o: common/cbr/Landmark.cc \
   common/cbr/simplex.h \
   underlay/simpleunderlay/SimpleUnderlayConfigurator.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Nps_m.h \
   common/Comparator.h \
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h \
@@ -1527,9 +1578,9 @@ $O/common/cbr/simplex.o: common/cbr/simplex.cc \
   ../../INET-OverSim-20100505/src/base/INotifiable.h \
   common/NeighborCache.h \
   common/RecursiveLookup.h \
-  common/OverlayKey.h \
-  common/TransportAddress.h \
   common/HashFunc.h \
+  common/TransportAddress.h \
+  common/OverlayKey.h \
   common/cbr/yang.h \
   common/CommonMessages_m.h \
   common/oversim_byteswap.h \
@@ -1541,6 +1592,7 @@ $O/common/cbr/simplex.o: common/cbr/simplex.cc \
   common/ProxNodeHandle.h \
   common/cbr/simplex.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/Nps_m.h \
   common/RpcMacros.h \
@@ -1548,42 +1600,6 @@ $O/common/cbr/simplex.o: common/cbr/simplex.cc \
   common/OverSimMessage_m.h
 $O/common/cbr/yang.o: common/cbr/yang.cc \
   common/cbr/yang.h
-$O/overlay/nice/EXOSIP.o: overlay/nice/EXOSIP.cc \
-  common/OverSimMessage.h \
-  common/RpcListener.h \
-  common/AbstractLookup.h \
-  common/BaseOverlay.h \
-  common/TopologyVis.h \
-  ../../INET-OverSim-20100505/src/base/INETDefs.h \
-  common/oversim_mapset.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
-  common/RpcState.h \
-  overlay/nice/Nice.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
-  common/InitStages.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
-  overlay/nice/combination.h \
-  common/NodeVector.h \
-  common/hashWatch.h \
-  overlay/nice/EXOSIP.h \
-  ../../INET-OverSim-20100505/src/base/INotifiable.h \
-  common/RecursiveLookup.h \
-  common/TransportAddress.h \
-  common/OverlayKey.h \
-  common/CommonMessages_m.h \
-  common/NodeHandle.h \
-  common/BinaryValue.h \
-  overlay/nice/NiceMessage_m.h \
-  common/Vector2D.h \
-  common/HoangGlobalObject.h \
-  common/ProxNodeHandle.h \
-  overlay/nice/NicePeerInfo.h \
-  common/IterativeLookupConfiguration.h \
-  common/Comparator.h \
-  common/RpcMacros.h \
-  common/BaseRpc.h \
-  overlay/nice/NiceCluster.h \
-  common/OverSimMessage_m.h
 $O/overlay/nice/Nice.o: overlay/nice/Nice.cc \
   common/GlobalStatistics.h \
   common/AbstractLookup.h \
@@ -1604,28 +1620,28 @@ $O/overlay/nice/Nice.o: overlay/nice/Nice.cc \
   overlay/nice/combination.h \
   common/hashWatch.h \
   common/NodeVector.h \
-  overlay/nice/EXOSIP.h \
   ../../INET-OverSim-20100505/src/base/INotifiable.h \
   underlay/simpleunderlay/SimpleUDPPacket_m.h \
   common/GlobalNodeList.h \
   common/RecursiveLookup.h \
   common/HashFunc.h \
-  common/OverlayKey.h \
   common/TransportAddress.h \
+  common/OverlayKey.h \
   underlay/simpleunderlay/SimpleInfo.h \
   common/CommonMessages_m.h \
   common/oversim_byteswap.h \
   common/NodeHandle.h \
   common/BinaryValue.h \
   common/ChurnGenerator.h \
-  common/Vector2D.h \
   overlay/nice/NiceMessage_m.h \
+  common/Vector2D.h \
   common/HoangGlobalObject.h \
   common/ProxNodeHandle.h \
   common/PeerInfo.h \
   overlay/nice/NicePeerInfo.h \
   ../../INET-OverSim-20100505/src/transport/contract/UDPControlInfo_m.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/GlobalNodeListAccess.h \
   common/Comparator.h \
   common/RpcMacros.h \
@@ -1657,6 +1673,7 @@ $O/overlay/nice/NiceCluster.o: overlay/nice/NiceCluster.cc \
   common/HoangGlobalObject.h \
   common/ProxNodeHandle.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/RpcMacros.h \
   common/BaseRpc.h \
@@ -1703,6 +1720,7 @@ $O/overlay/nice/NicePeerInfo.o: overlay/nice/NicePeerInfo.cc \
   common/ProxNodeHandle.h \
   overlay/nice/NicePeerInfo.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/Comparator.h \
   common/RpcMacros.h \
   common/BaseRpc.h \
@@ -1878,15 +1896,6 @@ $O/underlay/simpleunderlay/SimpleUnderlayConfigurator.o: underlay/simpleunderlay
   underlay/simpleunderlay/SimpleUnderlayConfigurator.h \
   ../../INET-OverSim-20100505/src/networklayer/common/InterfaceEntry.h \
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h
-$O/underlay/singlehostunderlay/apptunoutscheduler.o: underlay/singlehostunderlay/apptunoutscheduler.cc \
-  ../../INET-OverSim-20100505/src/base/INETDefs.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
-  underlay/singlehostunderlay/apptunoutscheduler.h \
-  underlay/singlehostunderlay/realtimescheduler.h
-$O/underlay/singlehostunderlay/realtimescheduler.o: underlay/singlehostunderlay/realtimescheduler.cc \
-  underlay/singlehostunderlay/realtimescheduler.h
 $O/underlay/singlehostunderlay/RealworldApp.o: underlay/singlehostunderlay/RealworldApp.cc \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
   common/PacketParser.h \
@@ -1966,9 +1975,6 @@ $O/underlay/singlehostunderlay/TunOutDevice.o: underlay/singlehostunderlay/TunOu
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h \
   underlay/singlehostunderlay/realtimescheduler.h \
   underlay/singlehostunderlay/RealworldDevice.h
-$O/underlay/singlehostunderlay/tunoutscheduler.o: underlay/singlehostunderlay/tunoutscheduler.cc \
-  underlay/singlehostunderlay/tunoutscheduler.h \
-  underlay/singlehostunderlay/realtimescheduler.h
 $O/underlay/singlehostunderlay/UdpOutDevice.o: underlay/singlehostunderlay/UdpOutDevice.cc \
   ../../INET-OverSim-20100505/src/networklayer/common/IInterfaceTable.h \
   ../../INET-OverSim-20100505/src/transport/udp/UDPPacket_m.h \
@@ -1992,13 +1998,6 @@ $O/underlay/singlehostunderlay/UdpOutDevice.o: underlay/singlehostunderlay/UdpOu
   ../../INET-OverSim-20100505/src/base/NotifierConsts.h \
   underlay/singlehostunderlay/realtimescheduler.h \
   underlay/singlehostunderlay/RealworldDevice.h
-$O/underlay/singlehostunderlay/udpoutscheduler.o: underlay/singlehostunderlay/udpoutscheduler.cc \
-  ../../INET-OverSim-20100505/src/base/INETDefs.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
-  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
-  underlay/singlehostunderlay/udpoutscheduler.h \
-  underlay/singlehostunderlay/realtimescheduler.h
 $O/underlay/singlehostunderlay/ZeroconfConnector.o: underlay/singlehostunderlay/ZeroconfConnector.cc \
   common/OverSimMessage.h \
   common/RpcListener.h \
@@ -2032,11 +2031,31 @@ $O/underlay/singlehostunderlay/ZeroconfConnector.o: underlay/singlehostunderlay/
   common/HoangGlobalObject.h \
   common/ProxNodeHandle.h \
   common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
   common/GlobalNodeListAccess.h \
   common/Comparator.h \
   common/RpcMacros.h \
   common/BaseRpc.h \
   common/OverSimMessage_m.h
+$O/underlay/singlehostunderlay/apptunoutscheduler.o: underlay/singlehostunderlay/apptunoutscheduler.cc \
+  ../../INET-OverSim-20100505/src/base/INETDefs.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
+  underlay/singlehostunderlay/apptunoutscheduler.h \
+  underlay/singlehostunderlay/realtimescheduler.h
+$O/underlay/singlehostunderlay/realtimescheduler.o: underlay/singlehostunderlay/realtimescheduler.cc \
+  underlay/singlehostunderlay/realtimescheduler.h
+$O/underlay/singlehostunderlay/tunoutscheduler.o: underlay/singlehostunderlay/tunoutscheduler.cc \
+  underlay/singlehostunderlay/tunoutscheduler.h \
+  underlay/singlehostunderlay/realtimescheduler.h
+$O/underlay/singlehostunderlay/udpoutscheduler.o: underlay/singlehostunderlay/udpoutscheduler.cc \
+  ../../INET-OverSim-20100505/src/base/INETDefs.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
+  ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
+  underlay/singlehostunderlay/udpoutscheduler.h \
+  underlay/singlehostunderlay/realtimescheduler.h
 $O/underlay/singlehostunderlay/stun/stun.o: underlay/singlehostunderlay/stun/stun.cc \
   underlay/singlehostunderlay/stun/stun.h \
   underlay/singlehostunderlay/stun/stun_udp.h
