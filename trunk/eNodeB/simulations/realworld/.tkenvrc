@@ -1,5 +1,5 @@
 # Partial Tkenv config file -- see $HOME/.tkenvrc as well
-inspector "enodeb_InetUnderlayNetwork" "enodeb_InetUnderlayNetwork" "2" "1085x490+3+682:normal"
-inspector "SimpleUnderlayNetwork" "SimpleUnderlayNetwork" "2" "907x490+1010+48:normal"
+inspector "enodeb_InetUnderlayNetwork" "enodeb_InetUnderlayNetwork" "2" "503x523+2+202:normal"
 inspector "InetUnderlayNetwork" "InetUnderlayNetwork" "2" "932x490+982+71:normal"
+inspector "SimpleUnderlayNetwork" "SimpleUnderlayNetwork" "2" "907x490+1010+48:normal"
 

@@ -39,6 +39,12 @@
 #include "HoangGlobalObject.h"
 //hoang
 static int numNiceInstance = 0;
+
+//hoang
+//#include "EXOSIP.h"
+//#include "pthread.h"
+//end of hoang
+
 //end of hoang
 
 class GlobalNodeList;
@@ -832,18 +838,19 @@ protected:
     double xw;
     bool hoang_use_cost;
 	bool hoang_debug_cost;
+	EXOSIP* osip;
 
 public:
     void setNodeID(int id){nodeID = id;};
     double getKw(){return kw;};
     double getXw(){return xw;};
 
-    virtual void hoangHandleSIP(char * body);
-    virtual void handleSIP_JOIN();
-    virtual void handleSIP_LEAVE();
-    virtual void handleSIP_PAUSE();
-    virtual void handleSIP_RETURN();
-    virtual void hoangJoinOverlay();
+//    virtual void hoangHandleSIP(string body);
+//    virtual void handleSIP_JOIN();
+//    virtual void handleSIP_LEAVE();
+//    virtual void handleSIP_PAUSE();
+//    virtual void handleSIP_RETURN();
+//    virtual void hoangJoinOverlay();
 
 };
 

@@ -42,6 +42,11 @@ class Nice;
 
 #include <fstream>
 
+//hoang
+#include <string>
+using namespace std;
+//end of hoang
+
 namespace oversim
 {
 
@@ -135,6 +140,11 @@ private:
 
     /* For Visualization only */
     cMessage* visualizationTimer;
+
+    //hoang
+    cMessage* pollSipReceiveBufferTimer;
+	simtime_t pollSipReceiveBufferTimerInterval;
+    //end of hoang
 
     void updateVisualization();
 
@@ -322,12 +332,12 @@ private:
 public:
     double cost();
 
-    virtual void hoangHandleSIP(char * body);
-    virtual void handleSIP_JOIN();
-    virtual void handleSIP_LEAVE();
-    virtual void handleSIP_PAUSE();
-    virtual void handleSIP_RETURN();
-    virtual void hoangJoinOverlay();
+    void hoangHandleSIP(string body);
+    void handleSIP_JOIN();
+    void handleSIP_LEAVE();
+    void handleSIP_PAUSE();
+    void handleSIP_RETURN();
+    void hoangJoinOverlay();
 
 
 };

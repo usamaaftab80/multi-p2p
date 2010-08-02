@@ -19,8 +19,8 @@
 #include <omnetpp.h>
 #include "TransportAddress.h"
 
-//#include "EXOSIP.h"
-//#include "pthread.h"
+#include "EXOSIP.h"
+#include "pthread.h"
 
 class HoangGlobalObject : public cSimpleModule
 {
@@ -39,8 +39,6 @@ class HoangGlobalObject : public cSimpleModule
 
 	FILE * inFile;
 	FILE * outFile;
-
-//	EXOSIP *osip;
 
 
   protected:
@@ -71,6 +69,8 @@ class HoangGlobalObject : public cSimpleModule
 	  void incNumNodeSentDone();
 
 	  void recordALMhopcount(uint value){numALMhopcount++; totalALMhopcount+=value;};
+
+	  EXOSIP *osip;
 
 	  ~HoangGlobalObject();
 
