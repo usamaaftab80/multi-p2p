@@ -39,12 +39,6 @@
 #include "HoangGlobalObject.h"
 //hoang
 static int numNiceInstance = 0;
-
-//hoang
-//#include "EXOSIP.h"
-//#include "pthread.h"
-//end of hoang
-
 //end of hoang
 
 class GlobalNodeList;

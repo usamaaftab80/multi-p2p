@@ -923,14 +923,35 @@ $O/common/GlobalTraceManager.o: common/GlobalTraceManager.cc \
 $O/common/GlobalTraceManager_m.o: common/GlobalTraceManager_m.cc \
   common/GlobalTraceManager_m.h
 $O/common/HoangGlobalObject.o: common/HoangGlobalObject.cc \
+  common/OverSimMessage.h \
+  common/RpcListener.h \
+  common/AbstractLookup.h \
+  common/BaseOverlay.h \
+  common/TopologyVis.h \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
   common/oversim_mapset.h \
+  common/RpcState.h \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
+  common/InitStages.h \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
+  common/NodeVector.h \
+  ../../INET-OverSim-20100505/src/base/INotifiable.h \
+  common/RecursiveLookup.h \
+  common/OverlayKey.h \
   common/TransportAddress.h \
+  common/CommonMessages_m.h \
+  common/NodeHandle.h \
+  common/BinaryValue.h \
+  common/Vector2D.h \
   common/HoangGlobalObject.h \
-  common/EXOSIP.h
+  common/ProxNodeHandle.h \
+  common/IterativeLookupConfiguration.h \
+  common/EXOSIP.h \
+  common/Comparator.h \
+  common/RpcMacros.h \
+  common/BaseRpc.h \
+  common/OverSimMessage_m.h
 $O/common/IterativeLookup.o: common/IterativeLookup.cc \
   common/GlobalStatistics.h \
   common/IterativeLookup.h \

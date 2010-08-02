@@ -17,8 +17,7 @@
 #include <iostream>
 #include <fstream>
 
-//#include "EXOSIP.h"
-//#include "pthread.h"
+#include "BaseOverlay.h"
 
 using namespace std;
 
@@ -42,8 +41,9 @@ void HoangGlobalObject::initialize()
 	f.open ("member_list.txt");
 	f << 1111 << "\t" << "1.1.1.2" << endl;
 	f.close();
-	osip = new EXOSIP();
-//	osip->wait();
+	int SIPportListen = par("SIPportListen");
+	int ueIDbegin = par("ueIDbegin");
+	osip = new EXOSIP(SIPportListen, ueIDbegin);
 
 	cout << "Hoang global object initttt done at " << simTime() << endl;
 	system("./addroute.sh");

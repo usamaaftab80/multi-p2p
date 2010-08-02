@@ -67,18 +67,16 @@ BaseOverlay::BaseOverlay()
     //hoang
     kw = 1e6;
     xw = 0;
-    //end of hoang
 
-	nodeID = 5000 + (numNiceInstance++);
+    int ueIDbegin;
+    FILE * f;
+    f = fopen("ueIDbegin.txt","r");
+    fscanf(f,"%d",&ueIDbegin);
+    fclose(f);
+
+	nodeID = ueIDbegin + (numNiceInstance++);
 	std::cout << "NICE node " << nodeID << " constructed!" << endl;
-
-//	if(numNiceInstance < 2){
-//		osip = new EXOSIP();
-//		osip->wait();
-//	}
-
-//	osip->handleMESSAGE(nodeID);
-//	osip->sendmessage("MESSAGE","<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>","abc");
+	//end of hoang
 }
 
 BaseOverlay::~BaseOverlay()
