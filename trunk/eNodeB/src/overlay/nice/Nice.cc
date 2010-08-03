@@ -30,6 +30,17 @@
 #include "SimpleUDP.h"
 #include "GlobalNodeListAccess.h"
 
+//hoang
+template <class T>
+inline std::string to_string (const T& t)
+{
+    std::stringstream ss;
+    ss << t;
+    return ss.str();
+}
+
+//end of hoang
+
 namespace oversim
 {
 
@@ -289,10 +300,6 @@ void Nice::changeState( int toState )
 
         state = BOOTSTRAP;
 
-        //hoang
-//        cout << "state = BOOTSTRAP" << endl;
-        //end of hoang
-
         /* check wether there exists a Rendevouz Point */
         if (RendevouzPoint.isUnspecified()) {
 
@@ -333,6 +340,13 @@ void Nice::changeState( int toState )
 		sendMessageToUDP(RendevouzPoint, readyMsg);
 //		std::cout << "node " << nodeID << " has sent a NICE_STATE_READY to " << RendevouzPoint << endl;
 
+		string body = "REP_JOIN\nIDNode " + to_string(nodeID);
+		char buf[100];
+		buf[0] = '\0';
+		strcat(buf,body.c_str());
+//		cout << "body " << body << endl << " c_str(): " << body.c_str()  << endl << " buf: " << buf << endl;
+//		char * buf = "REP_JOIN\nIDNode 5000";
+		osip->sendmessage("MESSAGE","<sip:as@157.159.16.91:5080>", "<sip:enodeb@157.159.16.172:5080>",buf);
         //end of hoang
 
         cancelEvent(heartbeatTimer);
@@ -352,6 +366,11 @@ void Nice::changeState( int toState )
     {
     	state = SHUTDOWN;
     	setOverlayReady(false);
+    	string body = "REP_LEAVE\nIDNode " + to_string(nodeID);
+    	char buf[100];
+    	buf[0] = '\0';
+		strcat(buf,body.c_str());
+		osip->sendmessage("MESSAGE","<sip:as@157.159.16.91:5080>", "<sip:enodeb@157.159.16.172:5080>",buf);
     	break;
     	//end of hoang
     }
@@ -4032,27 +4051,27 @@ void Nice::hoangHandleSIP(string body)
 //	sendMessageToUDP(add, msg);
 //	cout << "send test msg hoangJoinOverlay()" << endl;
 
-	if ( string(type) == "JOIN" )
+	if ( string(type) == "REQ_JOIN" )
 	{
 		handleSIP_JOIN();
 	}
-	else if ( string(type) == "LEAVE" )
+	else if ( string(type) == "REQ_LEAVE" )
 	{
 		handleSIP_LEAVE() ;
 	}
-	else if ( string(type) == "PAUSE" )
+	else if ( string(type) == "REQ_PAUSE" )
 	{
 		handleSIP_PAUSE() ;
 	}
-	else if ( string(type) == "RETURN" )
+	else if ( string(type) == "REQ_RETURN" )
 	{
 		handleSIP_RETURN() ;
 	}
-	else if ( string(type) == "HANDOVER_SUBCRIBE" )
+	else if ( string(type) == "REQ_HANDOVER_SUBCRIBE" )
 	{
 		handleSIP_HANDOVER_SUBCRIBE();
 	}
-	else if ( string(type) == "HANDOVER_NOTIFY" )
+	else if ( string(type) == "REQ_HANDOVER_NOTIFY" )
 	{
 		handleSIP_HANDOVER_NOTIFY();
 	}
@@ -4090,10 +4109,11 @@ void Nice::handleSIP_LEAVE()
 	changeState(SHUTDOWN);
 	getParentModule()->getParentModule()->getDisplayString().setTagArg("i2", 1, "red");
 
-	cout << "cancelAndDelete all timers" << endl;
+//	cout << "cancelAndDelete all timers" << endl;
 
 	if(queryTimer->isScheduled()){
-		cancelAndDelete(queryTimer);
+//		cancelAndDelete(queryTimer);
+		cancelEvent(queryTimer);
 	}
 //	if(structureConnectionTimer->isScheduled()){
 //		cancelAndDelete(structureConnectionTimer);
@@ -4105,10 +4125,12 @@ void Nice::handleSIP_LEAVE()
 //		cancelAndDelete(visualizationTimer);
 //	}
 	if(maintenanceTimer->isScheduled()){
-		cancelAndDelete(maintenanceTimer);
+//		cancelAndDelete(maintenanceTimer);
+		cancelEvent(maintenanceTimer);
 	}
 	if(heartbeatTimer->isScheduled()){
-		cancelAndDelete(heartbeatTimer);
+//		cancelAndDelete(heartbeatTimer);
+		cancelEvent(heartbeatTimer);
 	}
 //	if(pollSipReceiveBufferTimer->isScheduled()){
 //		cancelAndDelete(pollSipReceiveBufferTimer);
@@ -4123,6 +4145,11 @@ void Nice::handleSIP_PAUSE()
 //    cancelEvent(maintenanceTimer);
 //	if(!heartbeatTimer->isScheduled()){
 		cancelEvent(heartbeatTimer);
+		string body = "REP_PAUSE\nIDNode " + to_string(nodeID);
+		char buf[100];
+		buf[0] = '\0';
+		strcat(buf,body.c_str());
+		osip->sendmessage("MESSAGE","<sip:as@157.159.16.91:5080>", "<sip:enodeb@157.159.16.172:5080>",buf);
 //	}
 }
 
@@ -4132,6 +4159,11 @@ void Nice::handleSIP_RETURN()
 
 	cancelEvent(heartbeatTimer);
 	scheduleAt(simTime() + heartbeatInterval, heartbeatTimer);
+	string body = "REP_RETURN\nIDNode " + to_string(nodeID);
+	char buf[100];
+	buf[0] = '\0';
+	strcat(buf,body.c_str());
+	osip->sendmessage("MESSAGE","<sip:as@157.159.16.91:5080>", "<sip:enodeb@157.159.16.172:5080>",buf);
 //	cancelEvent(maintenanceTimer);
 //	scheduleAt(simTime() + maintenanceInterval, maintenanceTimer);
 }
@@ -4146,6 +4178,12 @@ void Nice::hoangJoinOverlay()
 void Nice::handleSIP_HANDOVER_SUBCRIBE()
 {
 	//log data
+	string body = "REP_HANDOVER_SUBCRIBE\nIDNode " + to_string(nodeID);
+	char buf[100];
+	buf[0] = '\0';
+	strcat(buf,body.c_str());
+	cout << buf << endl;
+	osip->sendmessage("MESSAGE","<sip:as@157.159.16.91:5080>", "<sip:enodeb@157.159.16.172:5080>",buf);
 }
 
 void Nice::handleSIP_HANDOVER_NOTIFY()
@@ -4153,7 +4191,11 @@ void Nice::handleSIP_HANDOVER_NOTIFY()
 	//join
 	hoangJoinOverlay();
 	//reply HANDOVER_NOTIFY
-//	osip->sendmessage()
+	string body = "REP_HANDOVER_NOTIFY\nIDNode " + to_string(nodeID);
+	char buf[100];
+	buf[0] = '\0';
+	strcat(buf,body.c_str());
+	osip->sendmessage("MESSAGE","<as:root@157.159.16.91:5080>", "<sip:enodeb@157.159.16.172:5080>",buf);
 }
 
 }; //namespace
