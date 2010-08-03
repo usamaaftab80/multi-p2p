@@ -1,0 +1,36 @@
+package oversim.applications.almtest;
+
+import oversim.common.BaseApp;
+import oversim.common.ITier;
+
+
+simple ALMTest extends BaseApp
+{
+    parameters:
+        @class(ALMTest);
+        bool joinGroups = default(true);
+        int messageLength;
+}
+
+module ALMTestModule like ITier
+{
+    gates:
+        input udpIn;
+        input from_lowerTier;
+        input from_upperTier;
+        output udpOut;
+        output to_lowerTier;
+        output to_upperTier;
+
+    submodules:
+        almTest: ALMTest;
+    connections allowunconnected:
+        from_lowerTier --> almTest.from_lowerTier;
+        to_lowerTier <-- almTest.to_lowerTier;
+        from_upperTier --> almTest.from_upperTier;
+        to_upperTier <-- almTest.to_upperTier;
+        udpIn --> almTest.udpIn;
+        udpOut <-- almTest.udpOut;
+
+}
+
