@@ -39,10 +39,10 @@ void HoangGlobalObject::initialize()
 	f.open ("member_list.txt");
 	f << 1111 << "\t" << "1.1.1.2" << endl;
 	f.close();
-	int SIPportListen = par("SIPportListen");
+	sipPortListen = par("SIPportListen");
 	int ueIDbegin = par("ueIDbegin");
 
-	osip = new EXOSIP(SIPportListen, ueIDbegin);
+	osip = new EXOSIP(sipPortListen, ueIDbegin);
 
 	f.open ("ueIDbegin.txt");
 	f << ueIDbegin ;
