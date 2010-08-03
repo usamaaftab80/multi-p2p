@@ -13,7 +13,8 @@ using namespace std;
 class EXOSIP {
 
 public :
-	EXOSIP(int PORT_LISTEN, int ueIDbegin_var);
+	EXOSIP(int PORT_LISTEN_var, int ueIDbegin_var);
+	int portListen;
 //	~EXOSIP();
 //	void wait();
 	void pollBufferOfNode(int nodeID, string &msgBody);

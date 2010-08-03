@@ -291,7 +291,9 @@ void Nice::changeState( int toState )
         state = INIT;
 
         getParentModule()->getParentModule()->getDisplayString().setTagArg("i2", 1, "red");
-
+        //hoang
+        cancelEvent(visualizationTimer);
+        //end of hoang
         scheduleAt(simTime() + 1, visualizationTimer);
 
         break;
@@ -321,6 +323,9 @@ void Nice::changeState( int toState )
             BasicJoinLayer(-1);
 
             double offset = structureConnectionInterval.dbl() * heartbeatInterval.dbl();
+            //hoang
+            cancelEvent(structureConnectionTimer);
+            //end of hoang
             scheduleAt(simTime() + offset, structureConnectionTimer);
 
         }
@@ -4067,9 +4072,9 @@ void Nice::hoangHandleSIP(string body)
 	{
 		handleSIP_RETURN() ;
 	}
-	else if ( string(type) == "REQ_HANDOVER_SUBCRIBE" )
+	else if ( string(type) == "REQ_HANDOVER_SUBSCRIBE" )
 	{
-		handleSIP_HANDOVER_SUBCRIBE();
+		handleSIP_HANDOVER_SUBSCRIBE();
 	}
 	else if ( string(type) == "REQ_HANDOVER_NOTIFY" )
 	{
@@ -4115,9 +4120,10 @@ void Nice::handleSIP_LEAVE()
 //		cancelAndDelete(queryTimer);
 		cancelEvent(queryTimer);
 	}
-//	if(structureConnectionTimer->isScheduled()){
+	if(structureConnectionTimer->isScheduled()){
 //		cancelAndDelete(structureConnectionTimer);
-//	}
+		cancelEvent(structureConnectionTimer);
+	}
 //	if(rpPollTimer->isScheduled()){
 //		cancelAndDelete(rpPollTimer);
 //	}
@@ -4175,27 +4181,28 @@ void Nice::hoangJoinOverlay()
 	changeState(BOOTSTRAP);
 }
 
-void Nice::handleSIP_HANDOVER_SUBCRIBE()
+void Nice::handleSIP_HANDOVER_SUBSCRIBE()
 {
 	//log data
-	string body = "REP_HANDOVER_SUBCRIBE\nIDNode " + to_string(nodeID);
+	string body = "REP_HANDOVER_SUBSCRIBE\nIDNode " + to_string(nodeID);
 	char buf[100];
 	buf[0] = '\0';
 	strcat(buf,body.c_str());
-	cout << buf << endl;
+//	cout << buf << endl;
 	osip->sendmessage("MESSAGE","<sip:as@157.159.16.91:5080>", "<sip:enodeb@157.159.16.172:5080>",buf);
 }
 
 void Nice::handleSIP_HANDOVER_NOTIFY()
 {
 	//join
-	hoangJoinOverlay();
+//	hoangJoinOverlay();
 	//reply HANDOVER_NOTIFY
 	string body = "REP_HANDOVER_NOTIFY\nIDNode " + to_string(nodeID);
 	char buf[100];
 	buf[0] = '\0';
 	strcat(buf,body.c_str());
-	osip->sendmessage("MESSAGE","<as:root@157.159.16.91:5080>", "<sip:enodeb@157.159.16.172:5080>",buf);
+	osip->sendmessage("MESSAGE","<sip:as@157.159.16.91:5080>", "<sip:enodeb@157.159.16.172:5090>",buf);
+
 }
 
 }; //namespace

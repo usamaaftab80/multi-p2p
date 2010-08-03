@@ -71,6 +71,8 @@ class HoangGlobalObject : public cSimpleModule
 	  void recordALMhopcount(uint value){numALMhopcount++; totalALMhopcount+=value;};
 
 	  EXOSIP *osip;
+	  int sipPortListen;
+	  int getSipPortListen(){return sipPortListen;};
 
 	  ~HoangGlobalObject();
 
