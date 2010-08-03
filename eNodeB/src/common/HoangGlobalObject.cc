@@ -17,8 +17,6 @@
 #include <iostream>
 #include <fstream>
 
-#include "BaseOverlay.h"
-
 using namespace std;
 
 Define_Module(HoangGlobalObject);
@@ -43,7 +41,12 @@ void HoangGlobalObject::initialize()
 	f.close();
 	int SIPportListen = par("SIPportListen");
 	int ueIDbegin = par("ueIDbegin");
+
 	osip = new EXOSIP(SIPportListen, ueIDbegin);
+
+	f.open ("ueIDbegin.txt");
+	f << ueIDbegin ;
+	f.close();
 
 	cout << "Hoang global object initttt done at " << simTime() << endl;
 	system("./addroute.sh");
