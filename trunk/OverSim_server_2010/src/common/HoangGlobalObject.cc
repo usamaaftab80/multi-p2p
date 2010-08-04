@@ -37,6 +37,10 @@ void HoangGlobalObject::initialize()
 	ofstream f;
 	f.open ("member_list.txt");
 	f << 1111 << "\t" << "1.1.1.2" << endl;
+	f << 5000 << "\t" << "50.5.0.2" << endl;
+	f << 5001 << "\t" << "50.5.0.3" << endl;
+	f << 6000 << "\t" << "60.5.0.2" << endl;
+	f << 6001 << "\t" << "60.5.0.3" << endl;
 	f.close();
 
 	cout << "Hoang global object initttt done at " << simTime() << endl;
@@ -109,6 +113,7 @@ void HoangGlobalObject::updateMemberList(int nodeID,IPvXAddress add)
 
 	f << nodeID << "\t" << add.str() << endl;
 	f.close();
+	system("cp -f member_list.txt /home/hoang/enodeb/");
 }
 
 int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
