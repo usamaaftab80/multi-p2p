@@ -38,6 +38,11 @@ void HoangGlobalObject::initialize()
 	ofstream f;
 	f.open ("member_list.txt");
 	f << 1111 << "\t" << "1.1.1.2" << endl;
+	f << 5000 << "\t" << "50.5.0.2" << endl;
+	f << 5001 << "\t" << "50.5.0.3" << endl;
+	f << 6000 << "\t" << "60.5.0.2" << endl;
+	f << 6001 << "\t" << "60.5.0.3" << endl;
+
 	f.close();
 	sipPortListen = par("SIPportListen");
 	int ueIDbegin = par("ueIDbegin");
