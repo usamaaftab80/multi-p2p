@@ -3,7 +3,7 @@ package org.mobicents.servlet.sip.conference.server;
 public class eNodeB {
 	public int ID; // eNodeB ID 
 	public String eNodeBURI; // enodeB URI 
-	public Participant user[] = new Participant[10];
+	public Participant user[] = new Participant[100];
 	public int nbrParticipant; 
 	public String ipeNodeB; 
 	public String eNodeB_Port;
@@ -12,7 +12,7 @@ public class eNodeB {
 		ID = 0; 
 		eNodeBURI =""; 
 		nbrParticipant = 0;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
             user[i] = new Participant();
 		}
 		ipeNodeB = "";
@@ -43,16 +43,36 @@ public class eNodeB {
 	}
 	
 	public void deleteParticipantenodeB(Participant par){
-		for (int i = 1; i <= nbrParticipant; i++) {
-            if ((par.ID == user[i].ID) && (par.userURI == user[i].userURI)) {
+		for (int i = 1; i < nbrParticipant; i++) {
+            if ((par.ID == user[i].ID) && (par.userURI.contains(user[i].userURI))) {
                     user[i].deleteParticipant(par);
                     for (int j = i; j <= nbrParticipant - 1; j++) {
                             user[j].ID = user[j + 1].ID;
                             user[j].userURI = user[j + 1].userURI;
+                            user[j].portAudio = user[j + 1].portAudio;
+                            user[j].portVideo = user[j + 1].portVideo;
+                            user[j].layer = user[j + 1].layer;
                     }
             }
 		}
 		nbrParticipant--;
-		
+	}
+	
+	public int getindexinenodeB (int id){
+		for (int i = 1; i < nbrParticipant+1; i++){
+			if (user[i].ID == id ) { 
+				return i; 
+			}
+		}
+		return (-1); 
+	}
+	
+	public int getindexinenodeB (String  uri){
+		for (int i = 1; i < nbrParticipant+1; i++){
+			if (user[i].userURI.contains(uri) ) { 
+				return i; 
+			}
+		}
+		return (-1); 
 	}
 }
