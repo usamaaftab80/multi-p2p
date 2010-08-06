@@ -340,6 +340,9 @@ public:
     void handleSIP_HANDOVER_SUBSCRIBE();
     void handleSIP_HANDOVER_NOTIFY();
     void hoangJoinOverlay();
+private:
+    char username[80];
+    bool isHandOvering;
 
 
 };
