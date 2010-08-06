@@ -22,7 +22,8 @@ public :
 
 	void pollBufferOfNode(int nodeID, string &msgBody);
 	int initsip(void* n, int nodeID);
-	int sendmessage(char *typeMessage ,char *uriTo, char *uriFrom, char *buf);
+	void sendSipMessageTo(string uriTo_var, string body);
+	void sendSipMessageToAS(string body);
 
 };
 #endif /* EXOSIP_H_ */

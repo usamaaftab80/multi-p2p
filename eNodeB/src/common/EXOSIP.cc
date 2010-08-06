@@ -50,11 +50,13 @@ int ueIDbegin = 5000;
 int ueIDavailable = 5000;
 bool activatedByAS = false;
 char hoangFrom[100];
+string localSocket;
 void *listensip (void *parameters);
 void handleMESSAGE(int ueID,char* msgBody);
 void sendMemberListToAS();
 void queryAS();
-void sendMESSAGE(string body);
+void sendMESSAGEtoAS(string body);
+void sendMESSAGEto(string uriTo_var, string body);
 stringQueue_t sipReceiveBuffer[10]; //for max 10 UEs
 
 template <class T>
@@ -71,6 +73,7 @@ EXOSIP::EXOSIP(int PORT_LISTEN_var, int ueIDbegin_var, string cardEthernetIP_var
 	portListen = PORT_LISTEN_var;
 	ueIDbegin = ueIDbegin_var;
 	ueIDavailable = ueIDbegin_var;
+	localSocket = cardEthernetIP_var + ":" + to_string(portListen);
 
 	string body = "<sip:hoang@" + cardEthernetIP_var + ":" + to_string(portListen) + ">";
 	hoangFrom[0] = '\0';
@@ -97,12 +100,21 @@ EXOSIP::EXOSIP(int PORT_LISTEN_var, int ueIDbegin_var, string cardEthernetIP_var
 
 //***********************************************************************************
 //Send a message out of Call: MESSAGE, OPTIONS, ...
-int EXOSIP::sendmessage(char *typeMessage ,char *uriTo, char *uriFrom, char *buf){
+void EXOSIP::sendSipMessageTo(string uriTo_var, string body){
 	osip_message_t *message;
+
 	//Build request before send
 
+	char buf[80];
+	buf[0] = '\0';
+	strcat(buf, body.c_str());
 
-	int i = eXosip_message_build_request (&message, typeMessage, uriTo, hoangFrom, NULL);
+	char uriTo[80];
+	uriTo[0] = '\0';
+	strcat(uriTo, uriTo_var.c_str());
+
+
+	int i = eXosip_message_build_request (&message, "MESSAGE", uriTo, hoangFrom, NULL);
 
 	if (i != 0) {
 		printf("eXosip_message_build_request failed");
@@ -120,8 +132,16 @@ int EXOSIP::sendmessage(char *typeMessage ,char *uriTo, char *uriFrom, char *buf
 	    exit (1);
 	}
 	eXosip_unlock ();
-	return i;
 }
+
+
+//***********************************************************************************
+void EXOSIP::sendSipMessageToAS(string body)
+{
+	string uriTo = "<sip:as@157.159.16.91:5080>";
+	sendSipMessageTo(uriTo, body);
+}
+
 
 //***********************************************************************************
 void EXOSIP::pollBufferOfNode(int nodeID, string &str)
@@ -186,27 +206,46 @@ void *listensip (void *parameters){
 
 					 osip_body_t * oldbody;
 					   while (!osip_list_eol (&event->request->bodies, pos))
-					     {
+					   {
 					       oldbody = (osip_body_t *) osip_list_get (&event->request->bodies, pos);
-//					       printf("body content:\n%s\n",oldbody->body);
-					       sscanf(oldbody->body,format,type,&ueID,str);
+
+					       sscanf(oldbody->body,"%s\n%s\n",type,str);
+					       if( string(type) == "REQ_HANDOVER_NOTIFY" ){
+							   cout << "oldEnodeB " << str << endl;
+							   //query oldEnodeB about packetID
+							   string uriTo = "<sip:enodeb@" + string(str) + ">";
+							   string body = string("REQ_INFO_HANDOVER_NOTIFY\n") + localSocket;
+							   sendMESSAGEto(uriTo, body);
+							   //reply to AS
+							   sendMESSAGEtoAS(string("REP_HANDOVER_NOTIFY"));
+						   }
+					       else if( string(type) == "REQ_INFO_HANDOVER_NOTIFY" ){
+							   //reply newEnodeB about packetID
+					    	   string uriTo = "<sip:enodeb@" + string(str) + ">";
+					    	   string body = string("REP_INFO_HANDOVER_NOTIFY\n") + string("150");
+					    	   sendMESSAGEto(uriTo, body);
+						   }
+					       else if( string(type) == "REP_INFO_HANDOVER_NOTIFY" ){
+							   cout << "get a REP_INFO_HANDOVER_NOTIFY. currentPacketID=" << str << endl;
+						   }
+					       else
+					       {
+					    	   sscanf(oldbody->body,format,type,&ueID,str);
 //					       printf("OSIP: type=%s\tnodeID=%d\n",type,ueID);
-					       if(string(type) == "JOIN" && ueID == 0){
-					    	   char username[80];
-					    	   sscanf(oldbody->body,"%s\nIDNode:%d\nusername:%s\n%s\n",type,&ueID,username,str);
-					    	   //provide an ID
-					    	   ueID = ueIDavailable;
-					    	   //reply to joiner
-					    	   string rep_join = "REP_JOIN\nIDNode:" + to_string(ueID) + "\nusername:" + string(username) + "\n";
-					    	   cout << "vua cap id " << ueID << " cho username:" << username << endl;
-							   sendMESSAGE(rep_join);
-					    	   ueIDavailable++;
+							   if( (string(type) == "REQ_JOIN" || string(type) == "REQ_HANDOVER_JOIN") && ueID == 0){
+								   char username[80];
+								   sscanf(oldbody->body,"%s\nIDNode:%d\nUserURI:%s\n%s\n",type,&ueID,username,str);
+								   //provide an ID
+								   ueID = ueIDavailable;
+								   cout << "vua cap id " << ueID << " cho user " << username << endl;
+								   ueIDavailable++;
+							   }
 					       }
+
 					       handleMESSAGE(ueID, oldbody->body);
 					       pos++;
 
-
-					     }
+					   }
 
 
 					break;
@@ -271,22 +310,32 @@ void sendMemberListToAS()
 	}
 
 	//send SIP to AS
-	sendMESSAGE(body);
+	sendMESSAGEtoAS(body);
 }
 
 //***********************************************************************************
 void queryAS()
 {
-	sendMESSAGE("REQ_QUERY");
+	sendMESSAGEtoAS("REQ_QUERY");
 }
 
 //***********************************************************************************
-void sendMESSAGE(string body)
+void sendMESSAGEtoAS(string body)
+{
+	string uriTo = "<sip:as@157.159.16.91:5080>";
+	sendMESSAGEto(uriTo, body);
+}
+
+void sendMESSAGEto(string uriTo_var, string body)
 {
 	osip_message_t *message;
 	//Build request before send
+	char uriTo[80];
+	uriTo[0] = '\0';
+	strcat(uriTo, uriTo_var.c_str());
 
-	int i = eXosip_message_build_request (&message, "MESSAGE", "<sip:as@157.159.16.91:5080>", hoangFrom, NULL);
+//	int i = eXosip_message_build_request (&message, "MESSAGE", "<sip:as@157.159.16.91:5080>", hoangFrom, NULL);
+	int i = eXosip_message_build_request (&message, "MESSAGE", uriTo, hoangFrom, NULL);
 
 	//int i = eXosip_message_build_request (&message, "MESSAGE",
 	//		"<sip:as@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>", NULL);
