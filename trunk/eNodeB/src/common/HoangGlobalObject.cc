@@ -16,7 +16,14 @@
 #include "HoangGlobalObject.h"
 #include <iostream>
 #include <fstream>
-
+#include <string>
+template <class T>
+inline std::string to_string (const T& t)
+{
+    std::stringstream ss;
+    ss << t;
+    return ss.str();
+}
 using namespace std;
 
 Define_Module(HoangGlobalObject);
@@ -35,19 +42,23 @@ void HoangGlobalObject::initialize()
 	outFile = fopen("out.log","w");
 	inFile = fopen("in.log","w");
 
+	system("rm -rf member_list*");
+
 	ofstream f;
 	f.open ("member_list.txt");
-	f << 1111 << "\t" << "1.1.1.2" << endl;
-	f << 5000 << "\t" << "50.5.0.2" << endl;
-	f << 5001 << "\t" << "50.5.0.3" << endl;
-	f << 6000 << "\t" << "60.5.0.2" << endl;
-	f << 6001 << "\t" << "60.5.0.3" << endl;
+	f << 1111 << "\t" << "1.1.1.2" << endl
+	 << 5000 << "\t" << "50.5.0.2" << endl
+	 << 5001 << "\t" << "50.5.0.3" << endl
+	 << 6000 << "\t" << "60.5.0.2" << endl
+	 << 6001 << "\t" << "60.5.0.3" << endl
+	 << 6002 << "\t" << "60.4.0.2" << endl;
 
 	f.close();
 	sipPortListen = par("SIPportListen");
 	int ueIDbegin = par("ueIDbegin");
+	string cardEthernetIP = par("cardEthernetIP");
 
-	osip = new EXOSIP(sipPortListen, ueIDbegin);
+	osip = new EXOSIP(sipPortListen, ueIDbegin, cardEthernetIP);
 
 	f.open ("ueIDbegin.txt");
 	f << ueIDbegin ;
@@ -56,8 +67,6 @@ void HoangGlobalObject::initialize()
 	cout << "Hoang global object initttt done at " << simTime() << endl;
 	system("./addroute.sh");
 
-//	osip->sendmessage("MESSAGE","<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>", "abcd" );
-//	osip->wait();
 }
 
 
@@ -126,6 +135,20 @@ void HoangGlobalObject::updateMemberList(int nodeID,IPvXAddress add)
 
 	f << nodeID << "\t" << add.str() << endl;
 	f.close();
+}
+
+void HoangGlobalObject::updateEnodeBMemberList(int nodeID,IPvXAddress add)
+{
+	ofstream f;
+	string str = "member_list_in_enodeb_" + to_string(sipPortListen) + ".txt";
+	char name[100];
+	name[0] = '\0';
+	strcat(name,str.c_str());
+	f.open (name, ios::app);
+
+	f << nodeID << "\t" << add.str() << endl;
+	f.close();
+	system("cp -f member_list_in_enodeb* /home/hoang/server2010/");
 }
 
 int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)

@@ -11,7 +11,7 @@
 #include "EXOSIP.h"
 
 #include <iostream>
-
+#include <fstream>
 // Required by for routine
 #include <sys/types.h>
 #include <unistd.h>
@@ -43,12 +43,18 @@ typedef queue<string> stringQueue_t;
 #define SIP_TO "sip:AS@157.159.16.91"
 #define SIP_TO_PORT "5080"
 #define SIP_CONTACT "sip:singlehost@157.159.16.91"
-#define LOCAL_IP "157.159.16.91"
-//#define PORT_LISTEN 5080
+#define LOCAL_IP = "157.159.16.91";
 
+int PORT_LISTEN = 5080;
+int ueIDbegin = 5000;
+int ueIDavailable = 5000;
+bool activatedByAS = false;
+char hoangFrom[100];
 void *listensip (void *parameters);
 void handleMESSAGE(int ueID,char* msgBody);
-
+void sendMemberListToAS();
+void queryAS();
+void sendMESSAGE(string body);
 stringQueue_t sipReceiveBuffer[10]; //for max 10 UEs
 
 template <class T>
@@ -59,10 +65,16 @@ inline std::string to_string (const T& t)
     return ss.str();
 }
 
-EXOSIP::EXOSIP(int PORT_LISTEN_var, int ueIDbegin_var)
+EXOSIP::EXOSIP(int PORT_LISTEN_var, int ueIDbegin_var, string cardEthernetIP_var)
 {
+	PORT_LISTEN = PORT_LISTEN_var;
 	portListen = PORT_LISTEN_var;
 	ueIDbegin = ueIDbegin_var;
+	ueIDavailable = ueIDbegin_var;
+
+	string body = "<sip:hoang@" + cardEthernetIP_var + ":" + to_string(portListen) + ">";
+	hoangFrom[0] = '\0';
+	strcat(hoangFrom,body.c_str());
 
 	 if (eXosip_init ()) {
 		  perror("eXosip_init failed");
@@ -88,15 +100,10 @@ EXOSIP::EXOSIP(int PORT_LISTEN_var, int ueIDbegin_var)
 int EXOSIP::sendmessage(char *typeMessage ,char *uriTo, char *uriFrom, char *buf){
 	osip_message_t *message;
 	//Build request before send
-	string body = "<sip:hoang@157.159.16.172:" + to_string(portListen) + ">";
-	char hoangFrom[100];
-	hoangFrom[0] = '\0';
-	strcat(hoangFrom,body.c_str());
+
 
 	int i = eXosip_message_build_request (&message, typeMessage, uriTo, hoangFrom, NULL);
 
-	//int i = eXosip_message_build_request (&message, "MESSAGE",
-	//		"<sip:root@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>", NULL);
 	if (i != 0) {
 		printf("eXosip_message_build_request failed");
 		exit (1);
@@ -115,6 +122,22 @@ int EXOSIP::sendmessage(char *typeMessage ,char *uriTo, char *uriFrom, char *buf
 	eXosip_unlock ();
 	return i;
 }
+
+//***********************************************************************************
+void EXOSIP::pollBufferOfNode(int nodeID, string &str)
+{
+//	string ret;
+	if(!sipReceiveBuffer[nodeID - ueIDbegin].empty()){
+		str = sipReceiveBuffer[nodeID - ueIDbegin].front();
+		sipReceiveBuffer[nodeID - ueIDbegin].pop();
+	}else{
+		str = "nothing";
+	}
+
+//	return ret;
+}
+
+
 //***********************************************************************************
 void *listensip (void *parameters){
 
@@ -126,14 +149,25 @@ void *listensip (void *parameters){
 	  while(1) {
 	     if (!(event = eXosip_event_wait (0, 1000))) {
 	          usleep (10000);
-//	          printf("loop %d\n",j++);
+//	          if(j++ > 32000){
+//	        	  j=0;
+//	          }
+//
+//	          if(j%10 == 0){ //10s gui 1 phat
+////	        	  sendMemberListToAS();
+//	          }
 	          continue;
 	        }
 	          eXosip_automatic_action ();
 	          pos = 0;
 	     switch (event->type) {
 				case EXOSIP_MESSAGE_NEW:
-					printf ("\nEXOSIP_MESSAGE_NEW Event detected! %d\n",++num);
+//					printf ("\nEXOSIP_MESSAGE_NEW Event detected! %d\n",++num);
+					if(!activatedByAS)
+					{
+						activatedByAS = true;
+						cout << "eNodeB port " << PORT_LISTEN << " activated by AS\n";
+					}
 					//send an answer for 200
 					  eXosip_lock ();
 					  i = eXosip_message_send_answer(event->tid, 200, NULL);
@@ -157,6 +191,17 @@ void *listensip (void *parameters){
 //					       printf("body content:\n%s\n",oldbody->body);
 					       sscanf(oldbody->body,format,type,&ueID,str);
 //					       printf("OSIP: type=%s\tnodeID=%d\n",type,ueID);
+					       if(string(type) == "JOIN" && ueID == 0){
+					    	   char username[80];
+					    	   sscanf(oldbody->body,"%s\nIDNode:%d\nusername:%s\n%s\n",type,&ueID,username,str);
+					    	   //provide an ID
+					    	   ueID = ueIDavailable;
+					    	   //reply to joiner
+					    	   string rep_join = "REP_JOIN\nIDNode:" + to_string(ueID) + "\nusername:" + string(username) + "\n";
+					    	   cout << "vua cap id " << ueID << " cho username:" << username << endl;
+							   sendMESSAGE(rep_join);
+					    	   ueIDavailable++;
+					       }
 					       handleMESSAGE(ueID, oldbody->body);
 					       pos++;
 
@@ -169,7 +214,7 @@ void *listensip (void *parameters){
 					printf ("EXOSIP_MESSAGE_PROCEEDING Event detected!\n");
 					break;
 				case EXOSIP_MESSAGE_ANSWERED:
-					printf ("EXOSIP_MESSAGE_ANSWERED Event detected! from event tid=%d\n",event->tid);
+//					printf ("EXOSIP_MESSAGE_ANSWERED Event detected! from event tid=%d\n",event->tid);
 					break;
 				case EXOSIP_MESSAGE_REDIRECTED:
 					printf ("EXOSIP_MESSAGE_REDIRECTED Event detected!\n");
@@ -191,37 +236,78 @@ void *listensip (void *parameters){
 	  }
 	  eXosip_event_free (event);
 }
-//***********************************************************************************
-//void EXOSIP::wait(){
-//	pthread_t thread_id;
-//	thread_id = (pthread_t)malloc(sizeof(pthread_t));
-//	pthread_create(&thread_id,NULL, &listensip,NULL);
-//}
 
+//***********************************************************************************
 void handleMESSAGE(int ueID,char* msgBody)
 {
 //	printf("osip handleMESSAGE for node %d\n",ueID);
 	if(ueID > ueIDbegin - 1){
-//		((BaseOverlay*)(nicePointer[ueID - 5000]))->hoangHandleSIP(msgBody);
 		sipReceiveBuffer[ueID - ueIDbegin].push(string(msgBody));
 	}
 	else{
-		printf("ERROR: ueID=%d < %d\n", ueID, ueIDbegin);
+		printf("ERROR: ueID=%d < %d body:%s\n", ueID, ueIDbegin, msgBody);
 	}
-//	return;
+
 }
 
-void EXOSIP::pollBufferOfNode(int nodeID, string &str)
+//***********************************************************************************
+void sendMemberListToAS()
 {
-//	string ret;
-	if(!sipReceiveBuffer[nodeID - ueIDbegin].empty()){
-		str = sipReceiveBuffer[nodeID - ueIDbegin].front();
-		sipReceiveBuffer[nodeID - ueIDbegin].pop();
-	}else{
-		str = "nothing";
+	if(!activatedByAS)
+		return;
+	//fetch member_list.txt
+	//add to body
+	string body = "MEMBER_LIST\n";
+	string line;
+	ifstream myfile ("member_list.txt");
+	if (myfile.is_open())
+	{
+		while (! myfile.eof() )
+		{
+			getline (myfile,line);
+			body += line + "\n";
+		}
+		myfile.close();
 	}
 
-//	return ret;
+	//send SIP to AS
+	sendMESSAGE(body);
 }
 
+//***********************************************************************************
+void queryAS()
+{
+	sendMESSAGE("REQ_QUERY");
+}
+
+//***********************************************************************************
+void sendMESSAGE(string body)
+{
+	osip_message_t *message;
+	//Build request before send
+
+	int i = eXosip_message_build_request (&message, "MESSAGE", "<sip:as@157.159.16.91:5080>", hoangFrom, NULL);
+
+	//int i = eXosip_message_build_request (&message, "MESSAGE",
+	//		"<sip:as@157.159.16.91:5080>", "<sip:hoang@157.159.16.160:5080>", NULL);
+	if (i != 0) {
+		printf("eXosip_message_build_request failed");
+		exit (1);
+	}
+	char buf[1000];
+	buf[0] = '\0';
+
+	strcat(buf,body.c_str());
+	osip_message_set_expires (message, EXPIRES_TIME_INSECS);
+	osip_message_set_body (message, buf, strlen (buf));
+	osip_message_set_content_type (message, "text/plain");
+	// Send this request
+	eXosip_lock ();
+	i = eXosip_message_send_request (message);
+	if (i != 0) {
+		printf("eXosip_message_send_request failed");
+		exit (1);
+	}
+	eXosip_unlock ();
+}
 #endif /* EXOSIP_CC_ */

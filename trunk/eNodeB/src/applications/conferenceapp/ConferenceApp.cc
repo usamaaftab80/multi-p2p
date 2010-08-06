@@ -39,12 +39,13 @@ void ConferenceApp::initializeApp(int stage)
 	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
 	global = check_and_cast<HoangGlobalObject *>(modp2);
 
-	nodeID = global->getNumNodeJoined();
+//	nodeID = global->getNumNodeJoined();
 
 	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
 	cCompoundModule* overlayModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("overlay"));
 	BaseOverlay* overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
-	overlay->setNodeID(nodeID);
+//	overlay->setNodeID(nodeID);
+	nodeID = overlay->getNodeID();
 
 	global->incNumNodeJoined();
 
@@ -69,7 +70,7 @@ void ConferenceApp::initializeApp(int stage)
 
     videoSize = 0;
 
-    if(isSender){
+//    if(isSender){
 //        cout << "senderrrrrrr " << thisNode.getAddress() << " nodeID " << nodeID << endl;
 
     	/* read trace file */
@@ -81,10 +82,14 @@ void ConferenceApp::initializeApp(int stage)
 		uint lengthUDP;
 
 		const char* sdFile;// = par("sdFile");
-		uint P_sid; //number of packet in the dump file
+//		uint P_sid; //number of packet in the dump file
 		const char * format;
 
-		switch (nodeID % 4){
+		sdFile = "sd_snr";
+		format = "12720243%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 157.159.16.196.49355 > 192.168.1.2.12346: UDP, length %d\n"; //sd_snr:1200
+//		P_sid = 1200;
+
+		/*switch (nodeID % 4){
 			case 2:
 				sdFile = "sd_paris";
 				format = "12548667%f IP (tos 0x0, ttl 64, id %d, offset 0, flags [DF], proto UDP (17), length %d) 192.168.0.12.41674 > 157.159.16.152.12346: UDP, length %d\n"; //sd_paris:32632
@@ -115,7 +120,7 @@ void ConferenceApp::initializeApp(int stage)
 				P_sid = 4385;
 				loopTimes = 7;
 				break;
-		}
+		}*/
 
 		/* Read SD and write a new SD file */
 
@@ -186,7 +191,7 @@ void ConferenceApp::initializeApp(int stage)
 		stateTimer = new cMessage("stateTimer");
 		scheduleAt(simTime() + stateTimerPeriod, stateTimer);
 
-    }
+//    }
     bindToPort(2000);
 
     global->updateMemberList(nodeID,thisNode.getAddress());

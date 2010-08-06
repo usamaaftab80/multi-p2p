@@ -64,6 +64,7 @@ class HoangGlobalObject : public cSimpleModule
 	  void updateRP(IPvXAddress add);
 
 	  void updateMemberList(int nodeID,IPvXAddress add);
+	  void updateEnodeBMemberList(int nodeID,IPvXAddress add);
 	  int getNodeIDofAddress(IPvXAddress add);
 
 	  void incNumNodeSentDone();

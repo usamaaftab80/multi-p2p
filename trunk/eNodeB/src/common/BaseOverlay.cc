@@ -49,7 +49,7 @@
 
 //hoang
 #include "NiceMessage_m.h"
-
+//end of hoang
 using namespace std;
 
 
@@ -99,10 +99,9 @@ void BaseOverlay::initialize(int stage)
 
 	osip = global->osip;
 
-//	osip->initsip(this,nodeID);
-
 	hoang_use_cost = par("hoang_use_cost");
 	hoang_debug_cost = par("hoang_debug_cost");
+
 	//end of hoang
 
     if (stage == REGISTER_STAGE) {
@@ -1131,7 +1130,7 @@ void BaseOverlay::setOverlayReady(bool ready)
 
     if (globalParameters->getPrintStateToStdOut()) {
         std::cout << "OVERLAY STATE: " << (ready ? "READY (" : "OFFLINE (")
-                  << thisNode << ")" << std::endl;
+                  << thisNode.getAddress() << " ID " << nodeID << ")" << std::endl; //hoang modified
     }
 
     CompReadyMessage* msg = new CompReadyMessage;
