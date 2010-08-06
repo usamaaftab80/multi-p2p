@@ -271,7 +271,8 @@ void Nice::joinOverlay()
 //    changeState(INIT);
 //    changeState(BOOTSTRAP);
 //	hoangJoinOverlay();
-	cout << "Node " << nodeID << " begin polling SIP buffer" << endl;
+//	cout << "Node " << nodeID << " begin polling SIP buffer" << endl;
+	global->updateEnodeBMemberList(nodeID, thisNode.getAddress());
 	cancelEvent(pollSipReceiveBufferTimer);
 	scheduleAt(simTime() + pollSipReceiveBufferTimerInterval, pollSipReceiveBufferTimer);
 
@@ -4124,9 +4125,9 @@ void Nice::handleSIP_LEAVE()
 //		cancelAndDelete(structureConnectionTimer);
 		cancelEvent(structureConnectionTimer);
 	}
-//	if(rpPollTimer->isScheduled()){
-//		cancelAndDelete(rpPollTimer);
-//	}
+	if(rpPollTimer->isScheduled()){
+		cancelAndDelete(rpPollTimer);
+	}
 //	if(visualizationTimer->isScheduled()){
 //		cancelAndDelete(visualizationTimer);
 //	}

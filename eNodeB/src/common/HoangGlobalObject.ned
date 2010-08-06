@@ -25,5 +25,6 @@ simple HoangGlobalObject
         int videoSize;
         int loopTimes;
         int SIPportListen;
-        int ueIDbegin;        
+        int ueIDbegin;
+        string cardEthernetIP;        
 }
