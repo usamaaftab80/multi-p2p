@@ -289,16 +289,26 @@ void Nice::changeState( int toState )
         ("i2", 1, clustercolors[getHighestLayer()]);
 
         setOverlayReady(true);
-        cout << "node " << nodeID << " setOverlayReady(true) ";
-        //hoang
-		NiceMessage * readyMsg = new NiceMessage("NICE_STATE_READY");
 
-		readyMsg->setCommand(NICE_STATE_READY);
-		readyMsg->setSrcNode(thisNode);
-		readyMsg->setNodeID(nodeID);
-		cout << readyMsg->getNodeID() << endl;
-		TransportAddress add = TransportAddress(IPvXAddress("50.5.0.2"), 1024, TransportAddress::UNKNOWN_NAT);
-		sendMessageToUDP(add, readyMsg);
+        //hoang
+        cout << "node " << nodeID << " setOverlayReady(true) ";
+        FILE* f;
+        f = fopen("ue_list.txt","r");
+        int id;
+        char ip[80];
+        while(! feof(f)){
+        	fscanf(f,"%d\t%s\n",&id,ip);
+        	TransportAddress add = TransportAddress(IPvXAddress(ip),1024,TransportAddress::UNKNOWN_NAT);
+    		NiceMessage * readyMsg = new NiceMessage("NICE_STATE_READY");
+
+    		readyMsg->setCommand(NICE_STATE_READY);
+    		readyMsg->setSrcNode(thisNode);
+    		readyMsg->setNodeID(nodeID);
+
+    		sendMessageToUDP(add, readyMsg);
+        }
+        fclose(f);
+
 		//end of hoang
         break;
 
@@ -573,8 +583,25 @@ void Nice::becomeRendevouzPoint()
     RendevouzPoint = thisNode;
     EV << simTime() << " : " << thisNode.getAddress() << " : Set RP to " << thisNode.getAddress() << endl;
     //hoang
-    const char * ip = par("externalHostIP");
+//    const char * ip = par("externalHostIP");
 
+    FILE* f;
+    f = fopen("ue_list.txt","r");
+    int id;
+    char ip[80];
+    while(! feof(f)){
+    	fscanf(f,"%d\t%s\n",&id,ip);
+    	TransportAddress add = TransportAddress(IPvXAddress(ip),1024,TransportAddress::UNKNOWN_NAT);
+    	NiceMessage * msg = new NiceMessage("NICE_RP_NOTIFY");
+
+		msg->setCommand(NICE_RP_NOTIFY);
+		msg->setSrcNode(thisNode);
+
+   		sendMessageToUDP(add, msg);
+
+    }
+    fclose(f);
+/*
 	TransportAddress add = TransportAddress(IPvXAddress(ip),1024,TransportAddress::UNKNOWN_NAT);
 	TransportAddress add2 = TransportAddress(IPvXAddress("50.5.0.2"),1024,TransportAddress::UNKNOWN_NAT);
 	TransportAddress add3 = TransportAddress(IPvXAddress("50.5.0.3"),1024,TransportAddress::UNKNOWN_NAT);
@@ -599,6 +626,7 @@ void Nice::becomeRendevouzPoint()
 	sendMessageToUDP(add62, dup62);
 	sendMessageToUDP(add63, dup63);
 	sendMessageToUDP(add222, dup222);
+*/
     //end of hoang
 
     /* Mark node as new RP (star symbol) */
