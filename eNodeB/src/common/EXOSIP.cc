@@ -54,7 +54,6 @@ string localSocket;
 void *listensip (void *parameters);
 void handleMESSAGE(int ueID,char* msgBody);
 void sendMemberListToAS();
-void queryAS();
 void sendMESSAGEtoAS(string body);
 void sendMESSAGEto(string uriTo_var, string body);
 stringQueue_t sipReceiveBuffer[10]; //for max 10 UEs
@@ -157,6 +156,11 @@ void EXOSIP::pollBufferOfNode(int nodeID, string &str)
 //	return ret;
 }
 
+//***********************************************************************************
+void EXOSIP::queryAS()
+{
+	sendSipMessageToAS(string("REQ_QUERY"));
+}
 
 //***********************************************************************************
 void *listensip (void *parameters){
@@ -313,11 +317,6 @@ void sendMemberListToAS()
 	sendMESSAGEtoAS(body);
 }
 
-//***********************************************************************************
-void queryAS()
-{
-	sendMESSAGEtoAS("REQ_QUERY");
-}
 
 //***********************************************************************************
 void sendMESSAGEtoAS(string body)

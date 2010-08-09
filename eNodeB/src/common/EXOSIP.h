@@ -24,6 +24,7 @@ public :
 	int initsip(void* n, int nodeID);
 	void sendSipMessageTo(string uriTo_var, string body);
 	void sendSipMessageToAS(string body);
+	void queryAS();
 
 };
 #endif /* EXOSIP_H_ */
