@@ -408,7 +408,10 @@ void Nice::handleTimerEvent( cMessage* msg )
 
     }
     else if (msg->isName("heartbeatTimer")) {
-
+    	//hoang
+    	//query AS about UE's status
+    	osip->queryAS();
+    	//end of hoang
         sendHeartbeats();
         scheduleAt(simTime() + heartbeatInterval, heartbeatTimer);
 
@@ -4118,7 +4121,7 @@ void Nice::handleSIP_LEAVE()
 	//call graceful leave
 	for (short i=0; i<maxLayers; i++) {
 		gracefulLeave(i);
-//		Remove(i);
+		Remove(i);
 	}
 
 	changeState(SHUTDOWN);
