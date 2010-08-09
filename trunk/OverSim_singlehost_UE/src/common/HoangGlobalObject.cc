@@ -138,47 +138,17 @@ int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
 	FILE * f;
 	f = fopen("member_list.txt","r");
 	char str[80];
-	int id;
-	int sodong = 0;
+	int id = -1;
 
 	while(! feof(f)){
-		fscanf(f,"%s\n",str);
-		sodong++;
-	}
-
-	int dangdocden = 0;
-
-	do
-	{
 		fscanf(f,"%d\t%s\n",&id,str);
+		if(add == IPvXAddress(str))
+			break;
 	}
-	while ((add != IPvXAddress(str)) && (dangdocden++ <= sodong));
 
 	fclose(f);
-	/*
-	//
-	f = fopen("member_list_in_enodeb_5090.txt","r");
-	do
-	{
-		fscanf(f,"%d\t%s\n",&id,str);
-	}
-	while (add != IPvXAddress(str));
 
-	fclose(f);
-	//
-
-	f = fopen("member_list_in_enodeb_5090.txt","r");
-	do
-	{
-		fscanf(f,"%d\t%s\n",&id,str);
-	}
-	while (add != IPvXAddress(str));
-
-	fclose(f);*/
-	if(dangdocden >= sodong){
-		cout << "Member_list ko co id tuong ung voi ip " << add << endl;
-		id = 9999;
-	}
+//	cout << "HoangGlobalObject::getNodeIDofAddress() " << id << endl;
 
 	return id;
 
