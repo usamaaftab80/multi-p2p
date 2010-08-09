@@ -837,6 +837,7 @@ protected:
 
 public:
     void setNodeID(int id){nodeID = id;};
+    int getNodeID(){return nodeID;};
     double getKw(){return kw;};
     double getXw(){return xw;};
 };
