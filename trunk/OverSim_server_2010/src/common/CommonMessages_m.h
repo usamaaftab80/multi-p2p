@@ -301,6 +301,8 @@ inline void doUnpacking(cCommBuffer *b, AuthBlock& obj) {obj.parsimUnpack(b);}
  * {
  *     int type enum(BaseOverlayMessageType) = OVERLAYSIGNALING;  
  *     int statType enum(StatType) = MAINTENANCE_STAT; 
+ *     
+ *     int nodeID;
  * }
  * </pre>
  */
@@ -309,6 +311,7 @@ class BaseOverlayMessage : public ::OverSimMessage
   protected:
     int type_var;
     int statType_var;
+    int nodeID_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const BaseOverlayMessage&);
@@ -327,6 +330,8 @@ class BaseOverlayMessage : public ::OverSimMessage
     virtual void setType(int type_var);
     virtual int getStatType() const;
     virtual void setStatType(int statType_var);
+    virtual int getNodeID() const;
+    virtual void setNodeID(int nodeID_var);
 };
 
 inline void doPacking(cCommBuffer *b, BaseOverlayMessage& obj) {obj.parsimPack(b);}

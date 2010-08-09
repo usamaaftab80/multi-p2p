@@ -24,7 +24,6 @@ class NiceTestApp : public BaseApp
     int numSent;              //number of packets sent
     int numReceived;          //number of packets received
 
-//    StatisticsCollector *stats;
     HoangGlobalObject *global;
 
     // our timer
