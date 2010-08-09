@@ -51,7 +51,7 @@ void NiceTestApp::initializeApp(int stage)
 	overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
 //	overlay->setNodeID(nodeID);
 	nodeID = overlay -> getNodeID();
-	cout << "APP: " << nodeID << endl;
+//	cout << "APP: " << nodeID << endl;
 
 	global->incNumNodeJoined();
 
@@ -147,7 +147,7 @@ void NiceTestApp::initializeApp(int stage)
 			i++;
 
 		}
-		cout << "Read RD done" << endl;
+//		cout << "Read RD done" << endl;
 
 		fclose(rFile);
 
@@ -227,7 +227,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
         	/* Begin send data timer*/
 
-        		cout << "Node " << nodeID << " begins send data at " << simTime() << endl<< endl<< endl<< endl<< endl;
+        		cout << "Node " << nodeID << " begins send data at " << simTime() << endl;
 				scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
         }
 
@@ -366,7 +366,7 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 
     delete msg;*/
 
-	ALMMulticastMessage* mcast = dynamic_cast<ALMMulticastMessage*>(msg);
+	/*ALMMulticastMessage* mcast = dynamic_cast<ALMMulticastMessage*>(msg);
 	if ( mcast != 0 ) {
 		cPacket * pkt = mcast->decapsulate();
 		NiceTestAppMsg *pingPongPkt = dynamic_cast<NiceTestAppMsg *>(pkt);
@@ -376,7 +376,7 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 		delete pkt;
 	}
 
-    delete msg;
+    delete msg;*/
 }
 
 /*
