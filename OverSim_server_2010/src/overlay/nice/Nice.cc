@@ -357,7 +357,10 @@ void Nice::handleTimerEvent( cMessage* msg )
  */
 void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 {
-
+	//hoang
+	global->incNumReceivedAll();
+	global->addToBitReceivedAll(msg->getBitLength());
+	//end of hoang
     // try message cast to NICE base message
     if (dynamic_cast<NiceMessage*>(msg) != NULL) {
 
@@ -490,7 +493,7 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
                 //hoang
             case NICE_STATE_READY:
             	//update UE counter
-            	cout << "node " << nodeID << " ip " << thisNode << " get a NICE_STATE_READY from " << niceMsg->getSrcNode() << endl;
+            	cout << "node " << nodeID << " ip " << thisNode.getAddress() << " get a NICE_STATE_READY from " << niceMsg->getSrcNode() << endl;
             	global->incUEcounter();
 //            	UEcounter++;
                 //end of hoang
@@ -1553,7 +1556,8 @@ void Nice::handleNiceLeaderHeartbeatOrTransfer(NiceMessage* msg)
 void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
 {
 	//hoang
-//	std::cout << "node " << nodeID << " call Nice::handleNiceMulticast\n\n" << endl;
+	global->incNumReceivedData();
+	global->addToBitReceivedData(multicastMsg->getBitLength());
 	//end of hoang
     RECORD_STATS(++numReceived; totalReceivedBytes += multicastMsg->getByteLength());
 
@@ -1576,6 +1580,7 @@ void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
             forOverlay->setHopCount(hopCount);
             sendDataToOverlay(forOverlay);
             //hoang
+//            global->incNumForwardedData();
 //            send(multicastMsg->decapsulate(), "appOut");
 
             global->recordALMhopcount(hopCount);
@@ -3694,7 +3699,7 @@ void Nice::handleAppMessage(cMessage* msg)
         niceMsg->setSrcNode(thisNode);
         niceMsg->setLastHop(thisNode);
         niceMsg->setHopCount(0);
-//        niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));//hoang disabled
+        niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));//hoang disabled
         //hoang
 //        niceMsg->setBitLength(multicastMsg->getBitLength());
         niceMsg->setNodeID(nodeID);
@@ -3752,8 +3757,9 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
 
                         //hoang
                         dup->setLastHopID(nodeID);
-                        //FIXME: record sid=0 in case of streaming (only one sender=0)
-                        global->recordOut(nodeID,0,dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()));
+                        global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()), dup->getBitLength());
+                        global->incNumSentData();
+                        global->addToBitSentData(dup->getBitLength());
                         //end of hoang
                         sendMessageToUDP(member, dup);
 
@@ -3779,7 +3785,9 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
         //hoang
         dup->setLastHopID(nodeID);
         //FIXME: record sid=0 in case of streaming (only one sender=0)
-        global->recordOut(nodeID,0,dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()));
+        global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()), dup->getBitLength());
+        global->incNumSentData();
+		global->addToBitSentData(dup->getBitLength());
         //end of hoang
         sendMessageToUDP(it->first, dup);
 

@@ -45,6 +45,18 @@ class HoangGlobalObject : public cSimpleModule
 
 	int UEcounter;
 
+	int numReceivedAll;
+	int numSentAll;
+
+	int numReceivedData;
+	int numSentData;
+	int numForwardedData;
+
+	int bitReceivedAll;
+	int bitSentAll;
+
+	int bitReceivedData;
+	int bitSentData;
 
   protected:
     virtual void initialize();
@@ -64,8 +76,8 @@ class HoangGlobalObject : public cSimpleModule
 	  int getNumNodeJoined(){return numNodeJoined;};
 	  void incNumNodeJoined(){numNodeJoined++;};
 
-	  void recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode, float delay);
-	  void recordOut(uint nodeID,int sid,int pid, int toNode);
+	  void recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode, float delay, int length);
+	  void recordOut(uint nodeID,int sid,int pid, int toNode, int length);
 	  void updateRP(IPvXAddress add);
 
 	  void updateMemberList(int nodeID,IPvXAddress add);
@@ -77,6 +89,19 @@ class HoangGlobalObject : public cSimpleModule
 
 	  int getUEcounter(){return UEcounter;};
 	  void incUEcounter(){UEcounter++;};
+
+	  void incNumReceivedAll(){numReceivedAll++;};
+	  void incNumSentAll(){numSentAll++;};
+
+	  void addToBitReceivedAll(int value){bitReceivedAll += value;};
+	  void addToBitSentAll(int value){bitSentAll += value;};
+
+	  void incNumReceivedData(){numReceivedData++;};
+	  void incNumSentData(){numSentData++;};
+	  void incNumForwardedData(){numForwardedData++;};
+
+	  void addToBitReceivedData(int value){bitReceivedData += value;};
+	  void addToBitSentData(int value){bitSentData += value;};
 
 	  ~HoangGlobalObject();
 

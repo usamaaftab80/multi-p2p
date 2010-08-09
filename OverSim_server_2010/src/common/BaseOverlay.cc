@@ -720,6 +720,7 @@ void BaseOverlay::handleMessage(cMessage* msg)
         overlayCtrlInfo->setTransportType(UDP_TRANSPORT);
 
         //hoang
+
         if (dynamic_cast<NiceMulticastMessage*>(msg) != NULL){
 
         	NiceMulticastMessage* dup = static_cast<NiceMulticastMessage*>(msg->dup());
@@ -736,7 +737,7 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         	simtime_t delay = simTime() - niceMmsg->getCreationTime();
 
-        	global->recordIn(nodeID, 0, niceMmsg->getSeqNo(), udpControlInfo->getTimeToLive(), niceMmsg->getLastHopID(), delay.dbl());
+        	global->recordIn(nodeID, 0, niceMmsg->getSeqNo(), udpControlInfo->getTimeToLive(), niceMmsg->getLastHopID(), delay.dbl(), niceMmsg->getBitLength());
 
         	delete dup;
 
@@ -1225,6 +1226,10 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
             RECORD_STATS(numInternalSent++; bytesInternalSent += msg->getByteLength());
         }
     }
+    //hoang
+    global->incNumSentAll();
+    global->addToBitSentAll(msg->getBitLength());
+    //end of hoang
     send(msg, "udpOut");
 }
 

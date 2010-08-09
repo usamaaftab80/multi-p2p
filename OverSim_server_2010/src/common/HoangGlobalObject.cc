@@ -31,6 +31,9 @@ void HoangGlobalObject::initialize()
 	totalALMhopcount = numALMhopcount = 0;
 	UEcounter = 0;
 
+	numReceivedAll = numSentAll = bitReceivedAll = bitSentAll = 0;
+	numReceivedData = numSentData = numForwardedData = bitReceivedData = bitSentData = 0;
+
 	outFile = fopen("out.log","w");
 	inFile = fopen("in.log","w");
 
@@ -41,6 +44,7 @@ void HoangGlobalObject::initialize()
 	f << 5001 << "\t" << "50.5.0.3" << endl;
 	f << 6000 << "\t" << "60.5.0.2" << endl;
 	f << 6001 << "\t" << "60.5.0.3" << endl;
+	f << 6002 << "\t" << "60.4.0.2" << endl;
 	f.close();
 
 	cout << "Hoang global object initttt done at " << simTime() << endl;
@@ -53,11 +57,23 @@ HoangGlobalObject::~HoangGlobalObject()
 
 	cout << "\ntotalALMhopcount=" << totalALMhopcount << " numALMhopcount=" << numALMhopcount << endl<< endl;
 
-	ofstream alm_hc_file;
-	alm_hc_file.open ("alm_hopcount.log");
+	ofstream summary_file;
+	summary_file.open ("summary.log");
 
-	alm_hc_file << "totalALMhopcount=" << totalALMhopcount << endl << " numALMhopcount=" << numALMhopcount;
-	alm_hc_file.close();
+	summary_file << "totalALMhopcount=" << totalALMhopcount << endl
+				<< "numALMhopcount=" << numALMhopcount << endl << endl
+				<< "====All messages====" << endl
+				<< "numReceivedAll=" << numReceivedAll << endl
+				<< "numSentAll=" << numSentAll << endl
+				<< "bitReceivedAll=" << bitReceivedAll << endl
+				<< "bitSentAll=" << bitSentAll << endl << endl
+				<< "====DATA===" << endl
+				<< "numReceivedData=" << numReceivedData << endl
+				<< "numSentData=" << numSentData << endl
+//				<< "numForwardedData=" << numForwardedData << endl
+				<< "bitReceivedData=" << bitReceivedData << endl
+				<< "bitSentData=" << bitSentData;
+	summary_file.close();
 
 	fclose(inFile);
 	fclose(outFile);
@@ -70,18 +86,18 @@ HoangGlobalObject::~HoangGlobalObject()
 
 
 
-void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode, float delay)
+void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode, float delay, int length)
 {
 	//write to in.log
 	//at simTime() nodeID	received a packet sid,pid fromNode at baseOverlay
-	fprintf(inFile,"%f\t%d\t%d\t%d\t%d\t%d\t%f\n", simTime().dbl(), nodeID, sid, pid, ttl, fromNode, delay);
+	fprintf(inFile,"%f\t%d\t%d\t%d\t%d\t%d\t%f\t%d\n", simTime().dbl(), nodeID, sid, pid, ttl, fromNode, delay, length);
 }
 
-void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid, int toNode)
+void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid, int toNode, int length)
 {
 	//write to out.log
 	//at simTime() nodeID	forwarded a packet sid,pid
-	fprintf(outFile,"%f\t%d\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid, toNode);
+	fprintf(outFile,"%f\t%d\t%d\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid, toNode, length);
 }
 
 void HoangGlobalObject::updateRP(IPvXAddress add)
@@ -114,6 +130,7 @@ void HoangGlobalObject::updateMemberList(int nodeID,IPvXAddress add)
 	f << nodeID << "\t" << add.str() << endl;
 	f.close();
 	system("cp -f member_list.txt /home/hoang/enodeb/");
+	system("cp -f member_list.txt /home/hoang/enodeb_2/");
 }
 
 int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
@@ -131,6 +148,26 @@ int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
 	while (add != IPvXAddress(str));
 
 	fclose(f);
+	/*
+	//
+	f = fopen("member_list_in_enodeb_5090.txt","r");
+	do
+	{
+		fscanf(f,"%d\t%s\n",&id,str);
+	}
+	while (add != IPvXAddress(str));
+
+	fclose(f);
+	//
+
+	f = fopen("member_list_in_enodeb_5090.txt","r");
+	do
+	{
+		fscanf(f,"%d\t%s\n",&id,str);
+	}
+	while (add != IPvXAddress(str));
+
+	fclose(f);*/
 
 	return id;
 
