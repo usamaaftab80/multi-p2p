@@ -503,8 +503,7 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
                 //hoang
             case NICE_STATE_READY:
             	//update UE counter
-            	cout << "node " << nodeID << " ip " << thisNode.getAddress() << " get a NICE_STATE_READY from " << niceMsg->getSrcNode() << endl;
-//            	TransportAddress tata = niceMsg->getSrcNode();
+            	cout << "node " << nodeID << " ip " << thisNode.getAddress() << " get a NICE_STATE_READY from " << niceMsg->getSrcNode() << " " << niceMsg->getNodeID() << endl;
             	global->updateMemberList(niceMsg->getNodeID(), niceMsg->getSrcNode().getAddress() );
             	global->incUEcounter();
 
