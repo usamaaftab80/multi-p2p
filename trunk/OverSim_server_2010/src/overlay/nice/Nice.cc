@@ -291,7 +291,7 @@ void Nice::changeState( int toState )
         setOverlayReady(true);
 
         //hoang
-        cout << "node " << nodeID << " setOverlayReady(true) ";
+        cout << "node " << nodeID << " setOverlayReady(true)\n";
         FILE* f;
         f = fopen("ue_list.txt","r");
         int id;
@@ -3744,7 +3744,7 @@ void Nice::handleAppMessage(cMessage* msg)
         niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));//hoang disabled
         //hoang
 //        niceMsg->setBitLength(multicastMsg->getBitLength());
-        niceMsg->setNodeID(nodeID);
+        niceMsg->setSenderID(nodeID);
         niceMsg->setLastHopID(nodeID);
         niceMsg->setSeqNo(multicastMsg->getPacketID());
         niceMsg->setXw(multicastMsg->getXw());
@@ -3799,7 +3799,7 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
 
                         //hoang
                         dup->setLastHopID(nodeID);
-                        global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()), dup->getBitLength());
+                        global->recordOut(nodeID,dup->getSenderID(),dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()), dup->getBitLength());
                         global->incNumSentData();
                         global->addToBitSentData(dup->getBitLength());
                         //end of hoang
@@ -3827,7 +3827,7 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
         //hoang
         dup->setLastHopID(nodeID);
         //FIXME: record sid=0 in case of streaming (only one sender=0)
-        global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()), dup->getBitLength());
+        global->recordOut(nodeID,dup->getSenderID(),dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()), dup->getBitLength());
         global->incNumSentData();
 		global->addToBitSentData(dup->getBitLength());
         //end of hoang

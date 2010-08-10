@@ -129,8 +129,6 @@ void HoangGlobalObject::updateMemberList(int nodeID,IPvXAddress add)
 
 	f << nodeID << "\t" << add.str() << endl;
 	f.close();
-	system("cp -f member_list.txt /home/hoang/enodeb/");
-	system("cp -f member_list.txt /home/hoang/enodeb_2/");
 }
 
 int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)

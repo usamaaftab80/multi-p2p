@@ -2,10 +2,10 @@ totalALMhopcount=0
 numALMhopcount=0
 
 ====All messages====
-numReceivedAll=931
-numSentAll=1019
-bitReceivedAll=243424
-bitSentAll=243952
+numReceivedAll=234
+numSentAll=300
+bitReceivedAll=60416
+bitSentAll=60784
 
 ====DATA===
 numReceivedData=0
