@@ -47,7 +47,7 @@ void NiceTestApp::initializeApp(int stage)
 	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
 	cCompoundModule* overlayModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("overlay"));
 	overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
-	nodeID = overlay -> getNodeID();
+	nodeID = overlay->getNodeID();
 
 	global->incNumNodeJoined();
 
@@ -157,14 +157,15 @@ void NiceTestApp::initializeApp(int stage)
 		periodicData = new rateData [videoSize * loopTimes];
 
 		for(int i=0; i<videoSize ; i++){
-			double offset = (rd[i].time - sd[i].time).dbl();
-			if(!(offset > 0)){
-				cout << "packet " << i << " rd time " << rd[i].time << " sd time " << sd[i].time << endl;
-			}
-			int rate = (int)(sd[i].length * 8 / offset);
+//			double offset = (rd[i].time - sd[i].time).dbl();
+//			if(!(offset > 0)){
+//				cout << "packet " << i << " rd time " << rd[i].time << " sd time " << sd[i].time << endl;
+//			}
+//			int rate = (int)(sd[i].length * 8 / offset);
 			for(int j=0; j< loopTimes; j++){
-				periodicData[j*videoSize + i].rate = rate;
-				periodicData[j*videoSize + i].length = (int)(rate * sendDataPeriod.dbl());
+//				periodicData[j*videoSize + i].rate = rate;
+//				periodicData[j*videoSize + i].length = (int)(rate * sendDataPeriod.dbl());
+				periodicData[j*videoSize + i].length = sd[i].length * 8;
 			}
 
 		}
@@ -211,9 +212,9 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
     if (msg->isName("stateTimer")) {    // is this our timer?
 
         // if the simulator is still busy creating the network, let's wait a bit longer
-        if (underlayConfigurator->isInInitPhase() || (global->getUEcounter() < numUEpreviewed)) {
+        if (underlayConfigurator->isInInitPhase() || (overlay->getUEcounter() < numUEpreviewed) || (overlay->getState() != 4)) {
 //		if (underlayConfigurator->isInInitPhase()) {
-        	cout << "global->getUEcounter() : " << global->getUEcounter() << endl;
+        	cout << "global->getUEcounter() : " << overlay->getUEcounter() << endl;
     		scheduleAt(simTime() + sendPeriod, stateTimer);
         	return;
 
@@ -232,7 +233,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 	else if (msg->isName("sendDataPeriodTimer")){
 
 		/* check finish sending data */
-		if(numSent > loopTimes*videoSize -1){
+		if((numSent > loopTimes*videoSize -1)){
 			cout << "Node " << nodeID <<" Truyennnnnnnnnnnnnn hetttttttttt data packet at " << simTime() << endl<< endl<< endl<< endl<< endl;
 			delete [] periodicData;
 
@@ -242,7 +243,12 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 			return;
 		}
 
-		scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
+		if(overlay->getState() != 4){
+//			cancelEvent(sendDataTimer);
+			return;
+		}
+		else
+			scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
 
 		/* send data */
 

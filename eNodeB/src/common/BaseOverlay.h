@@ -847,12 +847,15 @@ protected:
 	int64 bitSentData;
 	int64 bitForwardedData;
 
+	int UEcounter;
+
 
 public:
     void setNodeID(int id){nodeID = id;};
     int getNodeID(){return nodeID;};
     double getKw(){return kw;};
     double getXw(){return xw;};
+    int getUEcounter(){return UEcounter;};
 
 //    virtual void hoangHandleSIP(string body);
 //    virtual void handleSIP_JOIN();

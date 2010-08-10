@@ -131,6 +131,9 @@ void HoangGlobalObject::incNumNodeSentDone()
 
 void HoangGlobalObject::updateMemberList(int nodeID,IPvXAddress add)
 {
+	if(getNodeIDofAddress(add) > -1){ //address already in list
+		return;
+	}
 	ofstream f;
 	f.open ("member_list.txt",ios::app);
 
@@ -154,6 +157,7 @@ void HoangGlobalObject::updateEnodeBMemberList(int nodeID,IPvXAddress add)
 
 int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
 {
+	bool found = false;
 	FILE * f;
 	f = fopen("member_list.txt","r");
 	char str[80];
@@ -161,11 +165,16 @@ int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
 
 	while(! feof(f)){
 		fscanf(f,"%d\t%s\n",&id,str);
-		if(add == IPvXAddress(str))
+		if(add == IPvXAddress(str)){
+			found = true;
 			break;
+		}
 	}
 
 	fclose(f);
+
+	if(!found)
+		id = -1;
 
 	return id;
 }
