@@ -505,7 +505,10 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
             	//update UE counter
             	cout << "node " << nodeID << " ip " << thisNode.getAddress() << " get a NICE_STATE_READY from " << niceMsg->getSrcNode() << " " << niceMsg->getNodeID() << endl;
             	global->updateMemberList(niceMsg->getNodeID(), niceMsg->getSrcNode().getAddress() );
+
             	global->incUEcounter();
+
+            	break;
 
 			case NICE_RP_NOTIFY:
 
@@ -3779,6 +3782,10 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
                         global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()), dup->getBitLength());
                         global->incNumSentData();
                         global->addToBitSentData(dup->getBitLength());
+                        if(dup->getNodeID() != nodeID){
+                        	global->incNumForwardedData();
+                        	global->addToBitForwardedData(dup->getBitLength());
+                        }
                         //end of hoang
                         sendMessageToUDP(member, dup);
 
@@ -3807,6 +3814,10 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
         global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()), dup->getBitLength());
         global->incNumSentData();
 		global->addToBitSentData(dup->getBitLength());
+		if(dup->getNodeID() != nodeID){
+			global->incNumForwardedData();
+			global->addToBitForwardedData(dup->getBitLength());
+		}
         //end of hoang
         sendMessageToUDP(it->first, dup);
 

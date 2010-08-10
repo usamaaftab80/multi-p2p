@@ -1,14 +1,14 @@
-totalALMhopcount=37595
-numALMhopcount=16994
+totalALMhopcount=0
+numALMhopcount=0
 
 ====All messages====
-numReceivedAll=17234
-numSentAll=5844
-bitReceivedAll=12489888
-bitSentAll=1545200
+numReceivedAll=17
+numSentAll=556
+bitReceivedAll=4216
+bitSentAll=44480
 
 ====DATA===
-numReceivedData=17024
-numSentData=5640
-bitReceivedData=12257280
-bitSentData=1443840
+numReceivedData=0
+numSentData=0
+bitReceivedData=0
+bitSentData=0
