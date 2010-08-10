@@ -49,9 +49,7 @@ void NiceTestApp::initializeApp(int stage)
 	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
 	cCompoundModule* overlayModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("overlay"));
 	overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
-//	overlay->setNodeID(nodeID);
 	nodeID = overlay -> getNodeID();
-//	cout << "APP: " << nodeID << endl;
 
 	global->incNumNodeJoined();
 
@@ -160,7 +158,7 @@ void NiceTestApp::initializeApp(int stage)
 
 		periodicData = new rateData [videoSize * loopTimes];
 
-		for(int i=0; i<videoSize ; i++){
+		/*for(int i=0; i<videoSize ; i++){
 			double offset = (rd[i].time - sd[i].time).dbl();
 			if(!(offset > 0)){
 				cout << "packet " << i << " rd time " << rd[i].time << " sd time " << sd[i].time << endl;
@@ -169,6 +167,13 @@ void NiceTestApp::initializeApp(int stage)
 			for(int j=0; j< loopTimes; j++){
 				periodicData[j*videoSize + i].rate = rate;
 				periodicData[j*videoSize + i].length = (int)(rate * sendDataPeriod.dbl());
+			}
+
+		}*/
+		for(int i=0; i<videoSize ; i++){
+
+			for(int j=0; j< loopTimes; j++){
+				periodicData[j*videoSize + i].length = sd[i].length * 8;
 			}
 
 		}
@@ -217,7 +222,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         // if the simulator is still busy creating the network, let's wait a bit longer
         if (underlayConfigurator->isInInitPhase() || (global->getUEcounter() < numUEpreviewed)) {
 //		if (underlayConfigurator->isInInitPhase()) {
-//        	cout << "global->getUEcounter() : " << global->getUEcounter() << endl;
+        	cout << "Server node " << nodeID << " :global->getUEcounter()=" << global->getUEcounter() << " < numUEpreviewed=" << numUEpreviewed << endl;
     		scheduleAt(simTime() + sendPeriod, stateTimer);
         	return;
 

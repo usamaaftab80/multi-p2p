@@ -325,7 +325,7 @@ inline void doUnpacking(cCommBuffer *b, NiceLeaderHeartbeat& obj) {obj.parsimUnp
  *     
  *     double bigKD;
  *     double lastHopKd;
- * 
+ *     int senderID;
  *     int lastHopID;
  *     
  *     int command enum(NICECommand);    
@@ -344,6 +344,7 @@ class NiceMulticastMessage : public ::BaseOverlayMessage
     unsigned int hopCount_var;
     double bigKD_var;
     double lastHopKd_var;
+    int senderID_var;
     int lastHopID_var;
     int command_var;
     ::TransportAddress srcNode_var;
@@ -376,6 +377,8 @@ class NiceMulticastMessage : public ::BaseOverlayMessage
     virtual void setBigKD(double bigKD_var);
     virtual double getLastHopKd() const;
     virtual void setLastHopKd(double lastHopKd_var);
+    virtual int getSenderID() const;
+    virtual void setSenderID(int senderID_var);
     virtual int getLastHopID() const;
     virtual void setLastHopID(int lastHopID_var);
     virtual int getCommand() const;

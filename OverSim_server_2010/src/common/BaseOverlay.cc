@@ -737,7 +737,7 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         	simtime_t delay = simTime() - niceMmsg->getCreationTime();
 
-        	global->recordIn(nodeID, 0, niceMmsg->getSeqNo(), udpControlInfo->getTimeToLive(), niceMmsg->getLastHopID(), delay.dbl(), niceMmsg->getBitLength());
+        	global->recordIn(nodeID, niceMmsg->getSenderID(), niceMmsg->getSeqNo(), udpControlInfo->getTimeToLive(), niceMmsg->getLastHopID(), delay.dbl(), niceMmsg->getBitLength());
 
         	delete dup;
 
