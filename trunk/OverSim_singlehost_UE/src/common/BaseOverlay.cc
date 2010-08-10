@@ -731,7 +731,7 @@ void BaseOverlay::handleMessage(cMessage* msg)
 //        	kw = udpControlInfo->getMinBW();
 			xw = dup->getXw();
         	if(dup->getLastHopID()>1100){
-				std::cout << "server receive NiceMulticastMessage from singleHost" << endl;
+//				std::cout << "server receive NiceMulticastMessage from singleHost" << endl;
 				kw = 0.36e6;
         	}
 

@@ -32,7 +32,8 @@ void HoangGlobalObject::initialize()
 	UEcounter = 0;
 
 	numReceivedAll = numSentAll = bitReceivedAll = bitSentAll = 0;
-	numReceivedData = numSentData = numForwardedData = bitReceivedData = bitSentData = 0;
+	numReceivedData = numSentData = numForwardedData = 0;
+	bitReceivedData = bitSentData = bitForwardedData = 0;
 
 	outFile = fopen("out.log","w");
 	inFile = fopen("in.log","w");
@@ -60,19 +61,21 @@ HoangGlobalObject::~HoangGlobalObject()
 	ofstream summary_file;
 	summary_file.open ("summary.log");
 
-	summary_file << "totalALMhopcount=" << totalALMhopcount << endl
-				<< "numALMhopcount=" << numALMhopcount << endl << endl
+	summary_file
+//				<< "totalALMhopcount=" << totalALMhopcount << endl
+//				<< "numALMhopcount=" << numALMhopcount << endl << endl
 				<< "====All messages====" << endl
-				<< "numReceivedAll=" << numReceivedAll << endl
-				<< "numSentAll=" << numSentAll << endl
-				<< "bitReceivedAll=" << bitReceivedAll << endl
-				<< "bitSentAll=" << bitSentAll << endl << endl
-				<< "====DATA===" << endl
-				<< "numReceivedData=" << numReceivedData << endl
-				<< "numSentData=" << numSentData << endl
-//				<< "numForwardedData=" << numForwardedData << endl
-				<< "bitReceivedData=" << bitReceivedData << endl
-				<< "bitSentData=" << bitSentData;
+				<< "numReceivedAll = " << numReceivedAll << endl
+				<< "numSentAll = " << numSentAll << endl
+				<< "bitReceivedAll = " << bitReceivedAll << endl
+				<< "bitSentAll = " << bitSentAll << endl << endl
+				<< "========DATA========" << endl
+				<< "numReceivedData = " << numReceivedData << endl
+				<< "numSentData = " << numSentData << endl
+				<< "numForwardedData = " << numForwardedData << endl
+				<< "bitReceivedData = " << bitReceivedData << endl
+				<< "bitSentData = " << bitSentData << endl
+				<< "bitForwardedData = " << bitForwardedData ;
 	summary_file.close();
 
 	fclose(inFile);
@@ -129,8 +132,6 @@ void HoangGlobalObject::updateMemberList(int nodeID,IPvXAddress add)
 
 	f << nodeID << "\t" << add.str() << endl;
 	f.close();
-//	system("cp -f member_list.txt /home/hoang/enodeb/");
-//	system("cp -f member_list.txt /home/hoang/enodeb_2/");
 }
 
 int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
@@ -148,8 +149,5 @@ int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
 
 	fclose(f);
 
-//	cout << "HoangGlobalObject::getNodeIDofAddress() " << id << endl;
-
 	return id;
-
 }
