@@ -119,7 +119,7 @@ message NiceMulticastMessage extends BaseOverlayMessage
     //hoang
     double bigKD;
     double lastHopKd;
-    int nodeID;
+//    int nodeID;
     int lastHopID;
     //from NiceMessage
     int command enum(NICECommand);    

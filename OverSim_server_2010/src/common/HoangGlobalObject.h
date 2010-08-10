@@ -52,11 +52,11 @@ class HoangGlobalObject : public cSimpleModule
 	int numSentData;
 	int numForwardedData;
 
-	int bitReceivedAll;
-	int bitSentAll;
+	int64 bitReceivedAll;
+	int64 bitSentAll;
 
-	int bitReceivedData;
-	int bitSentData;
+	int64 bitReceivedData;
+	int64 bitSentData;
 
   protected:
     virtual void initialize();
