@@ -611,7 +611,7 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 				//update UE counter
 				cout << "node " << nodeID << " ip " << thisNode.getAddress() << " get a NICE_STATE_READY from " << niceMsg->getSrcNode() << " " << niceMsg->getNodeID() << endl;
 				global->updateMemberList(niceMsg->getNodeID(), niceMsg->getSrcNode().getAddress() );
-				global->incUEcounter();
+				UEcounter++;
 				break;
 
 			case NICE_RP_NOTIFY:
@@ -4170,13 +4170,21 @@ void Nice::handleSIP_LEAVE()
 	cout <<"node " << nodeID << " handle LEAVE\n" ;
 
 	//call graceful leave
-	for (short i=0; i<maxLayers; i++) {
-		gracefulLeave(i);
-		Remove(i);
+	for (short layer=0; layer<maxLayers; layer++) {
+		gracefulLeave(layer);
+//		Remove(layer);
+		NiceMessage* msg = new NiceMessage("NICE_REMOVE");
+	    msg->setSrcNode(thisNode);
+	    msg->setCommand(NICE_REMOVE);
+	    msg->setLayer(layer);
+
+	    msg->setBitLength(NICEMESSAGE_L(msg));
+
+	    sendMessageToUDP(clusters[layer].getLeader(), msg);
 	}
 
 	changeState(SHUTDOWN);
-	getParentModule()->getParentModule()->getDisplayString().setTagArg("i2", 1, "red");
+//	getParentModule()->getParentModule()->getDisplayString().setTagArg("i2", 1, "red");
 
 //	cout << "cancelAndDelete all timers" << endl;
 

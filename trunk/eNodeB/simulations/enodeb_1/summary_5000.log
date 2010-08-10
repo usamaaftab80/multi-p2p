@@ -1,0 +1,13 @@
+====All messages====
+numReceivedAll = 7
+numSentAll = 0
+bitReceivedAll = 1736
+bitSentAll = 0
+
+========DATA========
+numReceivedData = 0
+numSentData = 0
+numForwardedData = 0
+bitReceivedData = 0
+bitSentData = 0
+bitForwardedData = 0
