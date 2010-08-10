@@ -38,6 +38,7 @@ void HoangGlobalObject::initialize()
 	loopTimes = par("loopTimes");
 	videoSize = videoSize * loopTimes;
 	totalALMhopcount = numALMhopcount = 0;
+	UEcounter = 0;
 
 	outFile = fopen("out.log","w");
 	inFile = fopen("in.log","w");
@@ -148,25 +149,23 @@ void HoangGlobalObject::updateEnodeBMemberList(int nodeID,IPvXAddress add)
 
 	f << nodeID << "\t" << add.str() << endl;
 	f.close();
-	system("cp -f member_list_in_enodeb* /home/hoang/server2010/");
+//	system("cp -f member_list_in_enodeb* /home/hoang/server2010/");
 }
 
 int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
 {
 	FILE * f;
 	f = fopen("member_list.txt","r");
-
 	char str[80];
-	int id;
+	int id = -1;
 
-	do
-	{
+	while(! feof(f)){
 		fscanf(f,"%d\t%s\n",&id,str);
+		if(add == IPvXAddress(str))
+			break;
 	}
-	while (add != IPvXAddress(str));
 
 	fclose(f);
 
 	return id;
-
 }

@@ -76,6 +76,12 @@ BaseOverlay::BaseOverlay()
 
 	nodeID = ueIDbegin + (numNiceInstance++);
 	std::cout << "NICE node " << nodeID << " constructed!" << endl;
+
+	numReceivedAll = numSentAll = 0;
+    bitReceivedAll = bitSentAll = 0;
+
+    numReceivedData = numSentData = numForwardedData = 0;
+    bitReceivedData = bitSentData = bitForwardedData = 0;
 	//end of hoang
 }
 
@@ -1236,11 +1242,11 @@ void BaseOverlay::sendMessageToUDP(const TransportAddress& dest,
             RECORD_STATS(numInternalSent++; bytesInternalSent += msg->getByteLength());
         }
     }
-//    std::cout<< "before send(msg, udpOut);\n";
-//    std::cout << "[BaseOverlay::sendMessageToUDP() @ " << thisNode.getAddress()
-//            << " (" << thisNode.getKey().toString(16) << ")]\n"
-//            << "    Sending " << *msg << " to " << dest.getAddress()
-//            << endl;
+
+    //hoang
+    numSentAll++;
+    bitSentAll += msg->getBitLength();
+    //end of hoang
 
     send(msg, "udpOut");
 }

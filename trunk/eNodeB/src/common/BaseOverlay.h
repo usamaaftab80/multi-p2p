@@ -832,7 +832,21 @@ protected:
     double xw;
     bool hoang_use_cost;
 	bool hoang_debug_cost;
+
 	EXOSIP* osip;
+
+    int numReceivedAll;
+    int numSentAll;
+    int64 bitReceivedAll;
+	int64 bitSentAll;
+
+    int numReceivedData;
+	int numSentData;
+	int numForwardedData;
+	int64 bitReceivedData;
+	int64 bitSentData;
+	int64 bitForwardedData;
+
 
 public:
     void setNodeID(int id){nodeID = id;};
