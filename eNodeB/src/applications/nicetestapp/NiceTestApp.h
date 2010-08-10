@@ -74,6 +74,8 @@ private:
     int videoSize;
     int loopTimes;
 
+    int numUEpreviewed;
+
     rateData* periodicData;
     int dataSize;
 
@@ -84,6 +86,8 @@ private:
     int byteSent;
 
     bool beginSend;
+
+    BaseOverlay* overlay;
 
 };
 

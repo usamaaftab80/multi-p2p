@@ -473,6 +473,10 @@ void Nice::handleTimerEvent( cMessage* msg )
 void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 {
 
+	//hoang
+	numReceivedAll++;
+	bitReceivedAll += msg->getBitLength();
+	//end of hoang
     // try message cast to NICE base message
     if (dynamic_cast<NiceMessage*>(msg) != NULL) {
 
@@ -603,6 +607,13 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 
                 break;
 			//hoang
+            case NICE_STATE_READY:
+				//update UE counter
+				cout << "node " << nodeID << " ip " << thisNode.getAddress() << " get a NICE_STATE_READY from " << niceMsg->getSrcNode() << " " << niceMsg->getNodeID() << endl;
+				global->updateMemberList(niceMsg->getNodeID(), niceMsg->getSrcNode().getAddress() );
+				global->incUEcounter();
+				break;
+
 			case NICE_RP_NOTIFY:
 
 				std::cout << endl <<"Node " << nodeID << " vua nhan duoc NICE_RP_NOTIFY from " << niceMsg->getSrcNode() << endl;
@@ -620,6 +631,9 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
     }
     //hoang
     else if(dynamic_cast<NiceMulticastMessage*>(msg) != NULL){
+
+    	numReceivedData++;
+    	bitReceivedData += msg->getBitLength();
 
     	NiceMulticastMessage* multicastMsg;
 
@@ -647,6 +661,31 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 void Nice::finishOverlay()
 {
 
+	//hoang
+	ofstream f;
+	string str = "summary_" + to_string(nodeID) + ".log";
+	char name[100];
+	name[0] = '\0';
+	strcat(name,str.c_str());
+	f.open (name);
+
+	f
+//		<< "totalALMhopcount=" << totalALMhopcount << endl
+//		<< "numALMhopcount=" << numALMhopcount << endl << endl
+		<< "====All messages====" << endl
+		<< "numReceivedAll = " << numReceivedAll << endl
+		<< "numSentAll = " << numSentAll << endl
+		<< "bitReceivedAll = " << bitReceivedAll << endl
+		<< "bitSentAll = " << bitSentAll << endl << endl
+		<< "========DATA========" << endl
+		<< "numReceivedData = " << numReceivedData << endl
+		<< "numSentData = " << numSentData << endl
+		<< "numForwardedData = " << numForwardedData << endl
+		<< "bitReceivedData = " << bitReceivedData << endl
+		<< "bitSentData = " << bitSentData << endl
+		<< "bitForwardedData = " << bitForwardedData ;
+	f.close();
+	//end of hoang
     simtime_t time = globalStatistics->calcMeasuredLifetime(creationTime);
     if (time < GlobalStatistics::MIN_MEASURED) return;
 
@@ -1675,7 +1714,8 @@ void Nice::handleNiceLeaderHeartbeatOrTransfer(NiceMessage* msg)
 void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
 {
 	//hoang
-//	std::cout << "node " << nodeID << " call Nice::handleNiceMulticast\n\n" << endl;
+	numReceivedData++;
+	bitReceivedData += multicastMsg->getBitLength();
 	//end of hoang
     RECORD_STATS(++numReceived; totalReceivedBytes += multicastMsg->getByteLength());
 
@@ -3874,8 +3914,13 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
 
                         //hoang
                         dup->setLastHopID(nodeID);
-                        //FIXME: record sid=0 in case of streaming (only one sender=0)
-                        global->recordOut(nodeID,0,dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()));
+                        global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()));
+                        numSentData++;
+                        bitSentData += dup->getBitLength();
+                        if(dup->getNodeID() != nodeID){
+                        	numForwardedData++;
+                        	bitForwardedData += dup->getBitLength();
+                        }
                         //end of hoang
                         sendMessageToUDP(member, dup);
 
@@ -3900,8 +3945,14 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
 
         //hoang
         dup->setLastHopID(nodeID);
-        //FIXME: record sid=0 in case of streaming (only one sender=0)
-        global->recordOut(nodeID,0,dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()));
+        global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()));
+        numSentData++;
+        bitSentData += dup->getBitLength();
+
+		if(dup->getNodeID() != nodeID){
+			numForwardedData++;
+        	bitForwardedData += dup->getBitLength();
+		}
         //end of hoang
         sendMessageToUDP(it->first, dup);
 

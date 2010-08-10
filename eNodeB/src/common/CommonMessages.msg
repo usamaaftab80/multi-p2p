@@ -181,6 +181,8 @@ packet BaseOverlayMessage extends OverSimMessage
 {
     int type enum(BaseOverlayMessageType) = OVERLAYSIGNALING;  // message type
     int statType enum(StatType) = MAINTENANCE_STAT; // message type for stats
+    //hoang
+    int nodeID;
 }
 
 packet BaseRouteMessage extends BaseOverlayMessage

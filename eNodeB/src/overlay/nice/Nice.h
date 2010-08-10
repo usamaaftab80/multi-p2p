@@ -344,7 +344,6 @@ private:
     char username[80];
     bool isHandOvering;
 
-
 };
 
 }; //namespace

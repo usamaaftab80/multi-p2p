@@ -40,6 +40,7 @@ class HoangGlobalObject : public cSimpleModule
 	FILE * inFile;
 	FILE * outFile;
 
+	int UEcounter;
 
   protected:
     virtual void initialize();
@@ -47,6 +48,8 @@ class HoangGlobalObject : public cSimpleModule
 
 
   public:
+	  int getUEcounter(){return UEcounter;};
+	  void incUEcounter(){UEcounter++;};
 
 	  uint16 getNumNode(){return numNode;};
 

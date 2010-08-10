@@ -378,6 +378,7 @@ BaseOverlayMessage::BaseOverlayMessage(const char *name, int kind) : OverSimMess
 {
     this->type_var = OVERLAYSIGNALING;
     this->statType_var = MAINTENANCE_STAT;
+    this->nodeID_var = 0;
 }
 
 BaseOverlayMessage::BaseOverlayMessage(const BaseOverlayMessage& other) : OverSimMessage()
@@ -396,6 +397,7 @@ BaseOverlayMessage& BaseOverlayMessage::operator=(const BaseOverlayMessage& othe
     OverSimMessage::operator=(other);
     this->type_var = other.type_var;
     this->statType_var = other.statType_var;
+    this->nodeID_var = other.nodeID_var;
     return *this;
 }
 
@@ -404,6 +406,7 @@ void BaseOverlayMessage::parsimPack(cCommBuffer *b)
     OverSimMessage::parsimPack(b);
     doPacking(b,this->type_var);
     doPacking(b,this->statType_var);
+    doPacking(b,this->nodeID_var);
 }
 
 void BaseOverlayMessage::parsimUnpack(cCommBuffer *b)
@@ -411,6 +414,7 @@ void BaseOverlayMessage::parsimUnpack(cCommBuffer *b)
     OverSimMessage::parsimUnpack(b);
     doUnpacking(b,this->type_var);
     doUnpacking(b,this->statType_var);
+    doUnpacking(b,this->nodeID_var);
 }
 
 int BaseOverlayMessage::getType() const
@@ -431,6 +435,16 @@ int BaseOverlayMessage::getStatType() const
 void BaseOverlayMessage::setStatType(int statType_var)
 {
     this->statType_var = statType_var;
+}
+
+int BaseOverlayMessage::getNodeID() const
+{
+    return nodeID_var;
+}
+
+void BaseOverlayMessage::setNodeID(int nodeID_var)
+{
+    this->nodeID_var = nodeID_var;
 }
 
 class BaseOverlayMessageDescriptor : public cClassDescriptor
@@ -480,7 +494,7 @@ const char *BaseOverlayMessageDescriptor::getProperty(const char *propertyname) 
 int BaseOverlayMessageDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 2+basedesc->getFieldCount(object) : 2;
+    return basedesc ? 3+basedesc->getFieldCount(object) : 3;
 }
 
 unsigned int BaseOverlayMessageDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -494,8 +508,9 @@ unsigned int BaseOverlayMessageDescriptor::getFieldTypeFlags(void *object, int f
     static unsigned int fieldTypeFlags[] = {
         FD_ISEDITABLE,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *BaseOverlayMessageDescriptor::getFieldName(void *object, int field) const
@@ -509,8 +524,9 @@ const char *BaseOverlayMessageDescriptor::getFieldName(void *object, int field) 
     static const char *fieldNames[] = {
         "type",
         "statType",
+        "nodeID",
     };
-    return (field>=0 && field<2) ? fieldNames[field] : NULL;
+    return (field>=0 && field<3) ? fieldNames[field] : NULL;
 }
 
 int BaseOverlayMessageDescriptor::findField(void *object, const char *fieldName) const
@@ -519,6 +535,7 @@ int BaseOverlayMessageDescriptor::findField(void *object, const char *fieldName)
     int base = basedesc ? basedesc->getFieldCount(object) : 0;
     if (fieldName[0]=='t' && strcmp(fieldName, "type")==0) return base+0;
     if (fieldName[0]=='s' && strcmp(fieldName, "statType")==0) return base+1;
+    if (fieldName[0]=='n' && strcmp(fieldName, "nodeID")==0) return base+2;
     return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
@@ -533,8 +550,9 @@ const char *BaseOverlayMessageDescriptor::getFieldTypeString(void *object, int f
     static const char *fieldTypeStrings[] = {
         "int",
         "int",
+        "int",
     };
-    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *BaseOverlayMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -582,6 +600,7 @@ std::string BaseOverlayMessageDescriptor::getFieldAsString(void *object, int fie
     switch (field) {
         case 0: return long2string(pp->getType());
         case 1: return long2string(pp->getStatType());
+        case 2: return long2string(pp->getNodeID());
         default: return "";
     }
 }
@@ -598,6 +617,7 @@ bool BaseOverlayMessageDescriptor::setFieldAsString(void *object, int field, int
     switch (field) {
         case 0: pp->setType(string2long(value)); return true;
         case 1: pp->setStatType(string2long(value)); return true;
+        case 2: pp->setNodeID(string2long(value)); return true;
         default: return false;
     }
 }
@@ -613,8 +633,9 @@ const char *BaseOverlayMessageDescriptor::getFieldStructName(void *object, int f
     static const char *fieldStructNames[] = {
         NULL,
         NULL,
+        NULL,
     };
-    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
+    return (field>=0 && field<3) ? fieldStructNames[field] : NULL;
 }
 
 void *BaseOverlayMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

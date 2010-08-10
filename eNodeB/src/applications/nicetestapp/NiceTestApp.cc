@@ -44,30 +44,29 @@ void NiceTestApp::initializeApp(int stage)
 	cModule *modp2 = simulation.getModuleByPath(globalModulePath);
 	global = check_and_cast<HoangGlobalObject *>(modp2);
 
-	nodeID = global->getNumNodeJoined();
-
 	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
 	cCompoundModule* overlayModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("overlay"));
-	BaseOverlay* overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
-	overlay->setNodeID(nodeID);
+	overlay = check_and_cast<BaseOverlay*> (overlayModule->getSubmodule("nice"));
+	nodeID = overlay -> getNodeID();
 
 	global->incNumNodeJoined();
 
     sendPeriod = par("sendPeriod");
     sendDataPeriod = par("sendDataPeriod");
     loopTimes = par("loopTimes");
+    numUEpreviewed = par("numUEpreviewed");
 
-    isSender = false;
-    if(nodeID == 0)
+//    isSender = false;
+//    if(nodeID == 0)
     	isSender = true;
 
-    if(isSender){
+/*    if(isSender){
         cout << "senderrrrrrr " << thisNode.getAddress() << endl;
 
 //        global->setSourceSenderAddress(thisNode.getAddress());
 //
 //        globalStatistics->recordOutVector("HOANG num sender",1);
-    }
+    }*/
 
     // initialize our statictics variables
 
@@ -212,14 +211,15 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
     if (msg->isName("stateTimer")) {    // is this our timer?
 
         // if the simulator is still busy creating the network, let's wait a bit longer
-        if (underlayConfigurator->isInInitPhase()) {
+        if (underlayConfigurator->isInInitPhase() || (global->getUEcounter() < numUEpreviewed)) {
+//		if (underlayConfigurator->isInInitPhase()) {
+        	cout << "global->getUEcounter() : " << global->getUEcounter() << endl;
     		scheduleAt(simTime() + sendPeriod, stateTimer);
         	return;
 
         } else {
 
         	cancelAndDelete(stateTimer);
-        	//cout << thisNode.getAddress() << " vua init xong at " << simTime() << endl;
 
         	/* Begin send data timer*/
 
@@ -233,7 +233,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		/* check finish sending data */
 		if(numSent > loopTimes*videoSize -1){
-			cout << "Truyennnnnnnnnnnnnn hetttttttttt data packet at " << simTime() << endl<< endl<< endl<< endl<< endl;
+			cout << "Node " << nodeID <<" Truyennnnnnnnnnnnnn hetttttttttt data packet at " << simTime() << endl<< endl<< endl<< endl<< endl;
 			delete [] periodicData;
 
 			cancelAndDelete(sendDataPeriodTimer);
@@ -263,7 +263,9 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		msg->setXw(periodicData[numSent].rate);
 
-		msg->encapsulate(pingPongPkt);
+		msg->setBitLength(length);
+
+//		msg->encapsulate(pingPongPkt);
 
 		send(msg, "to_lowerTier");
 
@@ -360,7 +362,7 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 
     delete msg;*/
 
-	ALMMulticastMessage* mcast = dynamic_cast<ALMMulticastMessage*>(msg);
+	/*ALMMulticastMessage* mcast = dynamic_cast<ALMMulticastMessage*>(msg);
 	if ( mcast != 0 ) {
 		cPacket * pkt = mcast->decapsulate();
 		NiceTestAppMsg *pingPongPkt = dynamic_cast<NiceTestAppMsg *>(pkt);
@@ -370,7 +372,7 @@ void NiceTestApp::handleLowerMessage(cMessage* msg)
 		delete pkt;
 	}
 
-    delete msg;
+    delete msg;*/
 }
 
 /*
