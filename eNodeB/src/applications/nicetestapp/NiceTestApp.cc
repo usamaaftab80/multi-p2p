@@ -245,6 +245,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		if(overlay->getState() != 4){
 //			cancelEvent(sendDataTimer);
+			cout << "APP: overlay->getState()=" << overlay->getState() << " at numSent=" << numSent << endl;
 			return;
 		}
 		else

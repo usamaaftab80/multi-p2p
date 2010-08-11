@@ -744,10 +744,10 @@ void BaseOverlay::handleMessage(cMessage* msg)
         	NiceMulticastMessage* niceMmsg = check_and_cast<NiceMulticastMessage*>(dup);
         	kw = udpControlInfo->getMinBW();
 			xw = dup->getXw();
-        	if(dup->getLastHopID()>1100){
+        	/*if(dup->getLastHopID()>1100){
 				std::cout << "server receive NiceMulticastMessage from singleHost" << endl;
 				kw = 0.36e6;
-        	}
+        	}*/
 
 
 //        	cout << "Node " << nodeID << " get a pkt. xw = " << xw << " ||kw = " << kw << endl;
