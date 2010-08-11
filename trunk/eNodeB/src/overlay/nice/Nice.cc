@@ -286,6 +286,10 @@ void Nice::joinOverlay()
  */
 void Nice::changeState( int toState )
 {
+	//hoang
+	if(state == SHUTDOWN)
+		return;
+	//end of hoang
     switch (toState) {
 
     case INIT:
@@ -397,6 +401,7 @@ void Nice::handleTimerEvent( cMessage* msg )
 {
 	//hoang
 	if(state == SHUTDOWN){
+		delete msg;
 		return;
 	}
 	//end of hoang
@@ -472,8 +477,12 @@ void Nice::handleTimerEvent( cMessage* msg )
  */
 void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 {
-
 	//hoang
+	if(state == SHUTDOWN){
+		delete msg;
+		return;
+	}
+
 	numReceivedAll++;
 	bitReceivedAll += msg->getBitLength();
 	//end of hoang
@@ -669,10 +678,7 @@ void Nice::finishOverlay()
 	strcat(name,str.c_str());
 	f.open (name);
 
-	f
-//		<< "totalALMhopcount=" << totalALMhopcount << endl
-//		<< "numALMhopcount=" << numALMhopcount << endl << endl
-		<< "====All messages====" << endl
+	f	<< "====All messages====" << endl
 		<< "numReceivedAll = " << numReceivedAll << endl
 		<< "numSentAll = " << numSentAll << endl
 		<< "bitReceivedAll = " << bitReceivedAll << endl
@@ -4171,16 +4177,10 @@ void Nice::handleSIP_LEAVE()
 
 	//call graceful leave
 	for (short layer=0; layer<maxLayers; layer++) {
-		gracefulLeave(layer);
-//		Remove(layer);
-		NiceMessage* msg = new NiceMessage("NICE_REMOVE");
-	    msg->setSrcNode(thisNode);
-	    msg->setCommand(NICE_REMOVE);
-	    msg->setLayer(layer);
-
-	    msg->setBitLength(NICEMESSAGE_L(msg));
-
-	    sendMessageToUDP(clusters[layer].getLeader(), msg);
+	    if(! clusters[layer].getLeader().isUnspecified()){
+			gracefulLeave(layer);
+	    	Remove(layer);
+	    }
 	}
 
 	changeState(SHUTDOWN);
