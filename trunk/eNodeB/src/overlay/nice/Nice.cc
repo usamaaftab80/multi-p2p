@@ -107,16 +107,31 @@ Nice::~Nice()
 {
 
     // destroy self timer messages
-//    cancelAndDelete(heartbeatTimer);
-//    cancelAndDelete(maintenanceTimer);
-//    cancelAndDelete(structureConnectionTimer);
-//    cancelAndDelete(rpPollTimer);
-//    cancelAndDelete(queryTimer);
-//    cancelAndDelete(visualizationTimer);
+    cancelAndDelete(heartbeatTimer);
+    cancelAndDelete(maintenanceTimer);
+    cancelAndDelete(structureConnectionTimer);
+    cancelAndDelete(rpPollTimer);
+    cancelAndDelete(queryTimer);
+    cancelAndDelete(visualizationTimer);
 //    //hoang
-//    cancelAndDelete(pollSipReceiveBufferTimer);
+    cancelAndDelete(pollSipReceiveBufferTimer);
+	cout<< "Node : " << nodeID << endl
+		<< "====All messages====" << endl
+		<< "numReceivedAll = " << numReceivedAll << endl
+		<< "numSentAll = " << numSentAll << endl << endl
+		<< "bitReceivedAll = " << bitReceivedAll << endl
+		<< "bitSentAll = " << bitSentAll << endl << endl
+		<< "========DATA========" << endl
+		<< "numReceivedData = " << numReceivedData << endl
+		<< "numAppMsg = " << numAppMsg << endl << endl
+		<< "numSentData = " << numSentData << endl
+		<< "numForwardedData = " << numForwardedData << endl
+
+		<< "bitReceivedData = " << bitReceivedData << endl
+		<< "bitSentData = " << bitSentData << endl
+		<< "bitForwardedData = " << bitForwardedData ;
     //end of hoang
-	if(queryTimer->isScheduled()){
+	/*if(queryTimer->isScheduled()){
 		cancelAndDelete(queryTimer);
 	}
 	if(structureConnectionTimer->isScheduled()){
@@ -136,7 +151,7 @@ Nice::~Nice()
 	}
 	if(pollSipReceiveBufferTimer->isScheduled()){
 		cancelAndDelete(pollSipReceiveBufferTimer);
-	}
+	}*/
 
     std::map<TransportAddress, NicePeerInfo*>::iterator it = peerInfos.begin();
 
@@ -384,6 +399,30 @@ void Nice::changeState( int toState )
     	}
 
 		osip->sendSipMessageToAS(body);
+		//statistic
+		ofstream f;
+		string str = "summary_" + to_string(nodeID) + ".log";
+		char name[100];
+		name[0] = '\0';
+		strcat(name,str.c_str());
+		f.open (name);
+
+		f	<< "====All messages====" << endl
+			<< "numReceivedAll = " << numReceivedAll << endl
+			<< "numSentAll = " << numSentAll << endl << endl
+			<< "bitReceivedAll = " << bitReceivedAll << endl
+			<< "bitSentAll = " << bitSentAll << endl << endl
+			<< "========DATA========" << endl
+			<< "numReceivedData = " << numReceivedData << endl
+			<< "numAppMsg = " << numAppMsg << endl << endl
+			<< "numSentData = " << numSentData << endl
+			<< "numForwardedData = " << numForwardedData << endl
+
+			<< "bitReceivedData = " << bitReceivedData << endl
+			<< "bitSentData = " << bitSentData << endl
+			<< "bitForwardedData = " << bitForwardedData ;
+		f.close();
+		//end of hoang statistic
     	break;
 
     }
@@ -642,6 +681,9 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
     else if(dynamic_cast<NiceMulticastMessage*>(msg) != NULL){
 
     	numReceivedData++;
+    	if(numReceivedData%100 == 0){
+    		cout << "node " << nodeID << " numReceivedData : " << numReceivedData << endl;
+    	}
     	bitReceivedData += msg->getBitLength();
 
     	NiceMulticastMessage* multicastMsg;
@@ -669,29 +711,6 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
  */
 void Nice::finishOverlay()
 {
-
-	//hoang
-	ofstream f;
-	string str = "summary_" + to_string(nodeID) + ".log";
-	char name[100];
-	name[0] = '\0';
-	strcat(name,str.c_str());
-	f.open (name);
-
-	f	<< "====All messages====" << endl
-		<< "numReceivedAll = " << numReceivedAll << endl
-		<< "numSentAll = " << numSentAll << endl
-		<< "bitReceivedAll = " << bitReceivedAll << endl
-		<< "bitSentAll = " << bitSentAll << endl << endl
-		<< "========DATA========" << endl
-		<< "numReceivedData = " << numReceivedData << endl
-		<< "numSentData = " << numSentData << endl
-		<< "numForwardedData = " << numForwardedData << endl
-		<< "bitReceivedData = " << bitReceivedData << endl
-		<< "bitSentData = " << bitSentData << endl
-		<< "bitForwardedData = " << bitForwardedData ;
-	f.close();
-	//end of hoang
     simtime_t time = globalStatistics->calcMeasuredLifetime(creationTime);
     if (time < GlobalStatistics::MIN_MEASURED) return;
 
@@ -1719,10 +1738,6 @@ void Nice::handleNiceLeaderHeartbeatOrTransfer(NiceMessage* msg)
 
 void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
 {
-	//hoang
-	numReceivedData++;
-	bitReceivedData += multicastMsg->getBitLength();
-	//end of hoang
     RECORD_STATS(++numReceived; totalReceivedBytes += multicastMsg->getByteLength());
 
     /* If it is mine, count */
@@ -3699,8 +3714,8 @@ void Nice::LeaderTransfer(int layer, TransportAddress leader, TaSet cluster, Tra
  */
 void Nice::Remove(int layer)
 {
-    if (debug_removes)
-        EV << simTime() << " : " << thisNode.getAddress() << " : Remove()" << endl;
+//    if (debug_removes)
+        cout << simTime() << " : " << thisNode.getAddress() << " : Remove() from layer " << layer << endl;
 
     NiceMessage* msg = new NiceMessage("NICE_REMOVE");
     msg->setSrcNode(thisNode);
@@ -3864,11 +3879,12 @@ void Nice::handleAppMessage(cMessage* msg)
         niceMsg->setHopCount(0);
 //        niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));//hoang disabled
         //hoang
-        niceMsg->setBitLength(multicastMsg->getBitLength());
-        niceMsg->setNodeID(nodeID);
+//        niceMsg->setBitLength(multicastMsg->getBitLength());
+        niceMsg->setBitLength(720);
+        niceMsg->setSenderID(nodeID);
         niceMsg->setLastHopID(nodeID);
-        niceMsg->setSeqNo(multicastMsg->getPacketID());
-        niceMsg->setXw(multicastMsg->getXw());
+        niceMsg->setSeqNo(numAppMsg++);
+//        niceMsg->setXw(multicastMsg->getXw());
         delete multicastMsg;
         //end of hoang
 
@@ -3920,10 +3936,10 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
 
                         //hoang
                         dup->setLastHopID(nodeID);
-                        global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()));
+                        global->recordOut(nodeID,dup->getSenderID(),dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()));
                         numSentData++;
                         bitSentData += dup->getBitLength();
-                        if(dup->getNodeID() != nodeID){
+                        if(dup->getSenderID() != nodeID){
                         	numForwardedData++;
                         	bitForwardedData += dup->getBitLength();
                         }
@@ -3951,11 +3967,11 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
 
         //hoang
         dup->setLastHopID(nodeID);
-        global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()));
+        global->recordOut(nodeID,dup->getSenderID(),dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()));
         numSentData++;
         bitSentData += dup->getBitLength();
 
-		if(dup->getNodeID() != nodeID){
+		if(dup->getSenderID() != nodeID){
 			numForwardedData++;
         	bitForwardedData += dup->getBitLength();
 		}
@@ -4176,7 +4192,7 @@ void Nice::handleSIP_LEAVE()
 	cout <<"node " << nodeID << " handle LEAVE\n" ;
 
 	//call graceful leave
-	for (short layer=0; layer<maxLayers; layer++) {
+	for (short layer=0; layer<getHighestLayer(); layer++) {
 	    if(! clusters[layer].getLeader().isUnspecified()){
 			gracefulLeave(layer);
 	    	Remove(layer);
@@ -4197,7 +4213,8 @@ void Nice::handleSIP_LEAVE()
 		cancelEvent(structureConnectionTimer);
 	}
 	if(rpPollTimer->isScheduled()){
-		cancelAndDelete(rpPollTimer);
+//		cancelAndDelete(rpPollTimer);
+		cancelEvent(rpPollTimer);
 	}
 //	if(visualizationTimer->isScheduled()){
 //		cancelAndDelete(visualizationTimer);

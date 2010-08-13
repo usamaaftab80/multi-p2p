@@ -1,13 +1,16 @@
 ====All messages====
-numReceivedAll = 7
-numSentAll = 0
-bitReceivedAll = 1736
-bitSentAll = 0
+numReceivedAll = 1672
+numSentAll = 773
+
+bitReceivedAll = 1114336
+bitSentAll = 301328
 
 ========DATA========
-numReceivedData = 0
-numSentData = 0
+numReceivedData = 1452
+numAppMsg = 548
+
+numSentData = 360
 numForwardedData = 0
-bitReceivedData = 0
-bitSentData = 0
+bitReceivedData = 1045440
+bitSentData = 259200
 bitForwardedData = 0
