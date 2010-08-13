@@ -1,0 +1,427 @@
+version 2
+run General-0-20100813-10:55:16-3035
+attr configname General
+attr datetime 20100813-10:55:16
+attr experiment General
+attr inifile world_simple.ini
+attr iterationvars ""
+attr iterationvars2 $repetition=0
+attr measurement ""
+attr network oversim.underlay.inetunderlay.InetUnderlayNetwork
+attr processid 3035
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 1
+
+scalar InetUnderlayNetwork.underlayConfigurator 	"Terminals added" 	12
+scalar InetUnderlayNetwork.underlayConfigurator 	"Terminals removed" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[0].queue 	"packets received by queue" 	3774
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[1].queue 	"packets received by queue" 	7905
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[2].queue 	"packets received by queue" 	3454
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[2].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[3].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[3].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[4].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[4].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[5].queue 	"packets received by queue" 	1600
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[5].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[6].queue 	"packets received by queue" 	1488
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[6].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[7].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[7].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[8].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[0].ppp[8].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[0].queue 	"packets received by queue" 	2006
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[1].queue 	"packets received by queue" 	891
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[2].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[2].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[3].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[3].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[4].queue 	"packets received by queue" 	1970
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[4].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[5].queue 	"packets received by queue" 	1920
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[5].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[6].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[1].ppp[6].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[0].queue 	"packets received by queue" 	4428
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[1].queue 	"packets received by queue" 	5653
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[2].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[2].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[3].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[3].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[4].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[4].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[5].queue 	"packets received by queue" 	3208
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[5].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[6].queue 	"packets received by queue" 	3983
+scalar InetUnderlayNetwork.backboneRouter[2].ppp[6].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[0].queue 	"packets received by queue" 	410
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[1].queue 	"packets received by queue" 	7375
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[2].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[2].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[3].queue 	"packets received by queue" 	3123
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[3].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[4].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[4].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[5].queue 	"packets received by queue" 	1327
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[5].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[6].queue 	"packets received by queue" 	2276
+scalar InetUnderlayNetwork.backboneRouter[3].ppp[6].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[4].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.backboneRouter[4].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.backboneRouter[4].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.backboneRouter[4].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.backboneRouter[4].ppp[0].queue 	"packets received by queue" 	891
+scalar InetUnderlayNetwork.backboneRouter[4].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[4].ppp[1].queue 	"packets received by queue" 	3454
+scalar InetUnderlayNetwork.backboneRouter[4].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[4].ppp[2].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.backboneRouter[4].ppp[2].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.outRouter[0].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.outRouter[0].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.outRouter[0].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.outRouter[0].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.outRouter[0].ppp[0].queue 	"packets received by queue" 	6835
+scalar InetUnderlayNetwork.outRouter[0].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[0].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[0].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[0].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[0].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[0].ppp[0].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[0].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[1].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[1].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[1].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[1].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[1].ppp[0].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[1].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[2].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[2].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[2].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[2].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[2].ppp[0].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[2].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[3].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[3].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[3].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[3].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[3].ppp[0].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[3].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[4].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[4].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[4].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[4].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[4].ppp[0].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[4].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[5].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[5].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[5].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[5].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[5].ppp[0].queue 	"packets received by queue" 	2118
+scalar InetUnderlayNetwork.accessRouter[5].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[5].ppp[1].queue 	"packets received by queue" 	1970
+scalar InetUnderlayNetwork.accessRouter[5].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[6].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[6].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[6].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[6].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[6].ppp[0].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[6].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[7].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[7].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[7].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[7].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[7].ppp[0].queue 	"packets received by queue" 	805
+scalar InetUnderlayNetwork.accessRouter[7].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[7].ppp[1].queue 	"packets received by queue" 	1920
+scalar InetUnderlayNetwork.accessRouter[7].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[8].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[8].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[8].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[8].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[8].ppp[0].queue 	"packets received by queue" 	3170
+scalar InetUnderlayNetwork.accessRouter[8].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[8].ppp[1].queue 	"packets received by queue" 	1600
+scalar InetUnderlayNetwork.accessRouter[8].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[9].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[9].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[9].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[9].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[9].ppp[0].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[9].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[10].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[10].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[10].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[10].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[10].ppp[0].queue 	"packets received by queue" 	1092
+scalar InetUnderlayNetwork.accessRouter[10].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[10].ppp[1].queue 	"packets received by queue" 	2236
+scalar InetUnderlayNetwork.accessRouter[10].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[10].ppp[2].queue 	"packets received by queue" 	2202
+scalar InetUnderlayNetwork.accessRouter[10].ppp[2].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[11].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[11].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[11].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[11].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[11].ppp[0].queue 	"packets received by queue" 	2897
+scalar InetUnderlayNetwork.accessRouter[11].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[11].ppp[1].queue 	"packets received by queue" 	1488
+scalar InetUnderlayNetwork.accessRouter[11].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[12].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[12].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[12].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[12].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[12].ppp[0].queue 	"packets received by queue" 	5176
+scalar InetUnderlayNetwork.accessRouter[12].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[12].ppp[1].queue 	"packets received by queue" 	1782
+scalar InetUnderlayNetwork.accessRouter[12].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[12].ppp[2].queue 	"packets received by queue" 	1354
+scalar InetUnderlayNetwork.accessRouter[12].ppp[2].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[13].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[13].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[13].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[13].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[13].ppp[0].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[13].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[14].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[14].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[14].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[14].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[14].ppp[0].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[14].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[15].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[15].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[15].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[15].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[15].ppp[0].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[15].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[16].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[16].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[16].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[16].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[16].ppp[0].queue 	"packets received by queue" 	905
+scalar InetUnderlayNetwork.accessRouter[16].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[16].ppp[1].queue 	"packets received by queue" 	1327
+scalar InetUnderlayNetwork.accessRouter[16].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[17].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[17].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[17].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[17].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[17].ppp[0].queue 	"packets received by queue" 	900
+scalar InetUnderlayNetwork.accessRouter[17].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[17].ppp[1].queue 	"packets received by queue" 	1702
+scalar InetUnderlayNetwork.accessRouter[17].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[17].ppp[2].queue 	"packets received by queue" 	2281
+scalar InetUnderlayNetwork.accessRouter[17].ppp[2].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[18].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[18].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[18].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[18].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[18].ppp[0].queue 	"packets received by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[18].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[19].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.accessRouter[19].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.accessRouter[19].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[19].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.accessRouter[19].ppp[0].queue 	"packets received by queue" 	771
+scalar InetUnderlayNetwork.accessRouter[19].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.accessRouter[19].ppp[1].queue 	"packets received by queue" 	2276
+scalar InetUnderlayNetwork.accessRouter[19].ppp[1].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.globalObserver.globalFunctions[0].function.observer 	"MessageObserver: Total Sent Messages" 	0
+scalar InetUnderlayNetwork.globalObserver.globalFunctions[0].function.observer 	"MessageObserver: Total Received Messages" 	0
+scalar InetUnderlayNetwork.globalObserver.globalFunctions[0].function.observer 	"MessageObserver: Total Delivered Percentage" 	-nan
+scalar InetUnderlayNetwork.overlayTerminal[0].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[0].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[0].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[0].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[0].ppp[0].queue 	"packets received by queue" 	3170
+scalar InetUnderlayNetwork.overlayTerminal[0].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.overlayTerminal[1].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[1].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[1].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[1].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[1].ppp[0].queue 	"packets received by queue" 	3738
+scalar InetUnderlayNetwork.overlayTerminal[1].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.overlayTerminal[2].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[2].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[2].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[2].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[2].ppp[0].queue 	"packets received by queue" 	124
+scalar InetUnderlayNetwork.overlayTerminal[2].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.overlayTerminal[3].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[3].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[3].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[3].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[3].ppp[0].queue 	"packets received by queue" 	776
+scalar InetUnderlayNetwork.overlayTerminal[3].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.overlayTerminal[4].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[4].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[4].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[4].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[4].ppp[0].queue 	"packets received by queue" 	905
+scalar InetUnderlayNetwork.overlayTerminal[4].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.overlayTerminal[5].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[5].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[5].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[5].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[5].ppp[0].queue 	"packets received by queue" 	1451
+scalar InetUnderlayNetwork.overlayTerminal[5].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.overlayTerminal[6].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[6].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[6].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[6].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[6].ppp[0].queue 	"packets received by queue" 	1825
+scalar InetUnderlayNetwork.overlayTerminal[6].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.overlayTerminal[7].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[7].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[7].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[7].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[7].ppp[0].queue 	"packets received by queue" 	2897
+scalar InetUnderlayNetwork.overlayTerminal[7].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.overlayTerminal[8].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[8].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[8].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[8].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[8].ppp[0].queue 	"packets received by queue" 	771
+scalar InetUnderlayNetwork.overlayTerminal[8].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.overlayTerminal[9].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[9].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[9].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[9].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[9].ppp[0].queue 	"packets received by queue" 	497
+scalar InetUnderlayNetwork.overlayTerminal[9].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.overlayTerminal[10].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[10].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[10].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[10].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[10].ppp[0].queue 	"packets received by queue" 	2118
+scalar InetUnderlayNetwork.overlayTerminal[10].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.overlayTerminal[11].networkLayer.arp 	"ARP requests sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[11].networkLayer.arp 	"ARP replies sent" 	0
+scalar InetUnderlayNetwork.overlayTerminal[11].networkLayer.arp 	"ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[11].networkLayer.arp 	"failed ARP resolutions" 	0
+scalar InetUnderlayNetwork.overlayTerminal[11].ppp[0].queue 	"packets received by queue" 	805
+scalar InetUnderlayNetwork.overlayTerminal[11].ppp[0].queue 	"packets dropped by queue" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"GlobalStatistics: Simulation Time" 	51.380243564
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (bootstrapList): Received Bytes/s from Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (bootstrapList): Received Bytes/s from UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (bootstrapList): Received Messages/s from Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (bootstrapList): Received Messages/s from UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (bootstrapList): Sent Bytes/s to Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (bootstrapList): Sent Bytes/s to UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (bootstrapList): Sent Messages/s to Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (bootstrapList): Sent Messages/s to UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (neighborCache): Received Bytes/s from Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (neighborCache): Received Bytes/s from UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (neighborCache): Received Messages/s from Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (neighborCache): Received Messages/s from UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (neighborCache): Sent Bytes/s to Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (neighborCache): Sent Bytes/s to UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (neighborCache): Sent Messages/s to Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (neighborCache): Sent Messages/s to UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (nicetestapp): Received Bytes/s from Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (nicetestapp): Received Bytes/s from UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (nicetestapp): Received Messages/s from Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (nicetestapp): Received Messages/s from UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (nicetestapp): Sent Bytes/s to Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (nicetestapp): Sent Bytes/s to UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (nicetestapp): Sent Messages/s to Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (nicetestapp): Sent Messages/s to UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier2): Received Bytes/s from Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier2): Received Bytes/s from UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier2): Received Messages/s from Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier2): Received Messages/s from UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier2): Sent Bytes/s to Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier2): Sent Bytes/s to UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier2): Sent Messages/s to Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier2): Sent Messages/s to UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier3): Received Bytes/s from Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier3): Received Bytes/s from UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier3): Received Messages/s from Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier3): Received Messages/s from UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier3): Sent Bytes/s to Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier3): Sent Bytes/s to UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier3): Sent Messages/s to Overlay.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (tier3): Sent Messages/s to UDP.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Dropped Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Dropped Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Forwarded App Data Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Forwarded App Data Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Forwarded App Lookup Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Forwarded App Lookup Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Forwarded Maintenance Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Forwarded Maintenance Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Forwarded Total Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Forwarded Total Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Join Retries.mean" 	1
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Measured Session Time.mean" 	45.339143075417
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received App Data Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received App Data Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received App Lookup Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received App Lookup Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Maintenance Bytes/s.mean" 	4189.2195548762
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Maintenance Messages/s.mean" 	46.597245980941
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Total Bytes/s.mean" 	4189.2195548762
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Total Messages/s.mean" 	46.597245980941
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent App Data Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent App Data Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent App Lookup Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent App Lookup Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent FailedNode Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent FailedNode Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent FailedNodeResponse Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent FailedNodeResponse Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent FindNode Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent FindNode Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent FindNodeResponse Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent FindNodeResponse Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Maintenance Bytes/s.mean" 	3568.764192668
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Maintenance Messages/s.mean" 	40.004975301236
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Ping Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Ping Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Ping Response Bytes/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Ping Response Messages/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Total Bytes/s.mean" 	3568.764192668
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Total Messages/s.mean" 	40.004975301236
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Forwarded Multicast Bytes/s.mean" 	3995.9840178935
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Forwarded Multicast Messages/s.mean" 	424339.06227106
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Inconsistencies/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Own Messages Received/s.mean" 	1.1400326665642
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Peer Timeouts/s.mean" 	0.1546884473219
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Query Timeouts/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Received JOIN Messages/s.mean" 	0.02542823791593
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Received Multicast Bytes/s (subscribed groups only).mean" 	4098.5869578843
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Received Multicast Messages/s (subscribed groups only).mean" 	45.539855087604
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: SC Minimum Compare/s.mean" 	0.0010434286717017
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Send Heartbeat Bytes/s.mean" 	62.23985033889
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Send Heartbeat Messages/s.mean" 	0.69715752286174
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Structure Partitions/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Temporary Peer Timeouts/s.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Vector: GlobalNodeList: Number of bootstrapped malicious nodes.mean" 	0
+scalar InetUnderlayNetwork.globalObserver.globalStatistics 	"Vector: GlobalNodeList: Number of nodes.mean" 	12
