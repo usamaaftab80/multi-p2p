@@ -67,6 +67,7 @@ BaseOverlay::BaseOverlay()
     //hoang
     kw = 1e6;
     xw = 0;
+    numAppMsg = 0;
     FILE * f;
     f = fopen("nodeID.txt","r");
     fscanf(f,"%d",&nodeID);
@@ -730,10 +731,10 @@ void BaseOverlay::handleMessage(cMessage* msg)
         	NiceMulticastMessage* niceMmsg = check_and_cast<NiceMulticastMessage*>(dup);
 //        	kw = udpControlInfo->getMinBW();
 			xw = dup->getXw();
-        	if(dup->getLastHopID()>1100){
+        	/*if(dup->getLastHopID()>1100){
 //				std::cout << "server receive NiceMulticastMessage from singleHost" << endl;
 				kw = 0.36e6;
-        	}
+        	}*/
 
 
 //        	cout << "Node " << nodeID << " get a pkt. xw = " << xw << " ||kw = " << kw << endl;
@@ -741,7 +742,7 @@ void BaseOverlay::handleMessage(cMessage* msg)
         	simtime_t delay = simTime() - niceMmsg->getCreationTime();
 
 //        	global->recordIn(nodeID, 0, niceMmsg->getSeqNo(), udpControlInfo->getTimeToLive(), niceMmsg->getLastHopID(), delay.dbl(), niceMmsg->getBitLength());
-        	global->recordIn(nodeID, 0, niceMmsg->getSeqNo(), 10, niceMmsg->getLastHopID(), delay.dbl(), niceMmsg->getBitLength());
+        	global->recordIn(nodeID, niceMmsg->getSenderID(), niceMmsg->getSeqNo(), 10, niceMmsg->getLastHopID(), delay.dbl(), niceMmsg->getBitLength());
 
         	delete dup;
 

@@ -1541,6 +1541,7 @@ NiceMulticastMessage::NiceMulticastMessage(const char *name, int kind) : BaseOve
     this->hopCount_var = 0;
     this->bigKD_var = 0;
     this->lastHopKd_var = 0;
+    this->senderID_var = 0;
     this->lastHopID_var = 0;
     this->command_var = 0;
     this->layer_var = 0;
@@ -1567,6 +1568,7 @@ NiceMulticastMessage& NiceMulticastMessage::operator=(const NiceMulticastMessage
     this->hopCount_var = other.hopCount_var;
     this->bigKD_var = other.bigKD_var;
     this->lastHopKd_var = other.lastHopKd_var;
+    this->senderID_var = other.senderID_var;
     this->lastHopID_var = other.lastHopID_var;
     this->command_var = other.command_var;
     this->srcNode_var = other.srcNode_var;
@@ -1584,6 +1586,7 @@ void NiceMulticastMessage::parsimPack(cCommBuffer *b)
     doPacking(b,this->hopCount_var);
     doPacking(b,this->bigKD_var);
     doPacking(b,this->lastHopKd_var);
+    doPacking(b,this->senderID_var);
     doPacking(b,this->lastHopID_var);
     doPacking(b,this->command_var);
     doPacking(b,this->srcNode_var);
@@ -1600,6 +1603,7 @@ void NiceMulticastMessage::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->hopCount_var);
     doUnpacking(b,this->bigKD_var);
     doUnpacking(b,this->lastHopKd_var);
+    doUnpacking(b,this->senderID_var);
     doUnpacking(b,this->lastHopID_var);
     doUnpacking(b,this->command_var);
     doUnpacking(b,this->srcNode_var);
@@ -1665,6 +1669,16 @@ double NiceMulticastMessage::getLastHopKd() const
 void NiceMulticastMessage::setLastHopKd(double lastHopKd_var)
 {
     this->lastHopKd_var = lastHopKd_var;
+}
+
+int NiceMulticastMessage::getSenderID() const
+{
+    return senderID_var;
+}
+
+void NiceMulticastMessage::setSenderID(int senderID_var)
+{
+    this->senderID_var = senderID_var;
 }
 
 int NiceMulticastMessage::getLastHopID() const
@@ -1764,7 +1778,7 @@ const char *NiceMulticastMessageDescriptor::getProperty(const char *propertyname
 int NiceMulticastMessageDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 11+basedesc->getFieldCount(object) : 11;
+    return basedesc ? 12+basedesc->getFieldCount(object) : 12;
 }
 
 unsigned int NiceMulticastMessageDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -1784,11 +1798,12 @@ unsigned int NiceMulticastMessageDescriptor::getFieldTypeFlags(void *object, int
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
         FD_ISCOMPOUND,
         FD_ISEDITABLE,
         FD_ISEDITABLE,
     };
-    return (field>=0 && field<11) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<12) ? fieldTypeFlags[field] : 0;
 }
 
 const char *NiceMulticastMessageDescriptor::getFieldName(void *object, int field) const
@@ -1806,13 +1821,14 @@ const char *NiceMulticastMessageDescriptor::getFieldName(void *object, int field
         "hopCount",
         "bigKD",
         "lastHopKd",
+        "senderID",
         "lastHopID",
         "command",
         "srcNode",
         "layer",
         "xw",
     };
-    return (field>=0 && field<11) ? fieldNames[field] : NULL;
+    return (field>=0 && field<12) ? fieldNames[field] : NULL;
 }
 
 int NiceMulticastMessageDescriptor::findField(void *object, const char *fieldName) const
@@ -1825,11 +1841,12 @@ int NiceMulticastMessageDescriptor::findField(void *object, const char *fieldNam
     if (fieldName[0]=='h' && strcmp(fieldName, "hopCount")==0) return base+3;
     if (fieldName[0]=='b' && strcmp(fieldName, "bigKD")==0) return base+4;
     if (fieldName[0]=='l' && strcmp(fieldName, "lastHopKd")==0) return base+5;
-    if (fieldName[0]=='l' && strcmp(fieldName, "lastHopID")==0) return base+6;
-    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+7;
-    if (fieldName[0]=='s' && strcmp(fieldName, "srcNode")==0) return base+8;
-    if (fieldName[0]=='l' && strcmp(fieldName, "layer")==0) return base+9;
-    if (fieldName[0]=='x' && strcmp(fieldName, "xw")==0) return base+10;
+    if (fieldName[0]=='s' && strcmp(fieldName, "senderID")==0) return base+6;
+    if (fieldName[0]=='l' && strcmp(fieldName, "lastHopID")==0) return base+7;
+    if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+8;
+    if (fieldName[0]=='s' && strcmp(fieldName, "srcNode")==0) return base+9;
+    if (fieldName[0]=='l' && strcmp(fieldName, "layer")==0) return base+10;
+    if (fieldName[0]=='x' && strcmp(fieldName, "xw")==0) return base+11;
     return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
@@ -1850,11 +1867,12 @@ const char *NiceMulticastMessageDescriptor::getFieldTypeString(void *object, int
         "double",
         "int",
         "int",
+        "int",
         "TransportAddress",
         "short",
         "double",
     };
-    return (field>=0 && field<11) ? fieldTypeStrings[field] : NULL;
+    return (field>=0 && field<12) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *NiceMulticastMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1866,7 +1884,7 @@ const char *NiceMulticastMessageDescriptor::getFieldProperty(void *object, int f
         field -= basedesc->getFieldCount(object);
     }
     switch (field) {
-        case 7:
+        case 8:
             if (!strcmp(propertyname,"enum")) return "NICECommand";
             return NULL;
         default: return NULL;
@@ -1903,11 +1921,12 @@ std::string NiceMulticastMessageDescriptor::getFieldAsString(void *object, int f
         case 3: return ulong2string(pp->getHopCount());
         case 4: return double2string(pp->getBigKD());
         case 5: return double2string(pp->getLastHopKd());
-        case 6: return long2string(pp->getLastHopID());
-        case 7: return long2string(pp->getCommand());
-        case 8: {std::stringstream out; out << pp->getSrcNode(); return out.str();}
-        case 9: return long2string(pp->getLayer());
-        case 10: return double2string(pp->getXw());
+        case 6: return long2string(pp->getSenderID());
+        case 7: return long2string(pp->getLastHopID());
+        case 8: return long2string(pp->getCommand());
+        case 9: {std::stringstream out; out << pp->getSrcNode(); return out.str();}
+        case 10: return long2string(pp->getLayer());
+        case 11: return double2string(pp->getXw());
         default: return "";
     }
 }
@@ -1927,10 +1946,11 @@ bool NiceMulticastMessageDescriptor::setFieldAsString(void *object, int field, i
         case 3: pp->setHopCount(string2ulong(value)); return true;
         case 4: pp->setBigKD(string2double(value)); return true;
         case 5: pp->setLastHopKd(string2double(value)); return true;
-        case 6: pp->setLastHopID(string2long(value)); return true;
-        case 7: pp->setCommand(string2long(value)); return true;
-        case 9: pp->setLayer(string2long(value)); return true;
-        case 10: pp->setXw(string2double(value)); return true;
+        case 6: pp->setSenderID(string2long(value)); return true;
+        case 7: pp->setLastHopID(string2long(value)); return true;
+        case 8: pp->setCommand(string2long(value)); return true;
+        case 10: pp->setLayer(string2long(value)); return true;
+        case 11: pp->setXw(string2double(value)); return true;
         default: return false;
     }
 }
@@ -1952,11 +1972,12 @@ const char *NiceMulticastMessageDescriptor::getFieldStructName(void *object, int
         NULL,
         NULL,
         NULL,
+        NULL,
         "TransportAddress",
         NULL,
         NULL,
     };
-    return (field>=0 && field<11) ? fieldStructNames[field] : NULL;
+    return (field>=0 && field<12) ? fieldStructNames[field] : NULL;
 }
 
 void *NiceMulticastMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
@@ -1970,7 +1991,7 @@ void *NiceMulticastMessageDescriptor::getFieldStructPointer(void *object, int fi
     NiceMulticastMessage *pp = (NiceMulticastMessage *)object; (void)pp;
     switch (field) {
         case 0: return (void *)(&pp->getLastHop()); break;
-        case 8: return (void *)(&pp->getSrcNode()); break;
+        case 9: return (void *)(&pp->getSrcNode()); break;
         default: return NULL;
     }
 }
