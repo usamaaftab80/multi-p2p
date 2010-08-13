@@ -834,6 +834,7 @@ protected:
     double xw;
     bool hoang_use_cost;
 	bool hoang_debug_cost;
+	int numAppMsg;
 
 public:
     void setNodeID(int id){nodeID = id;};

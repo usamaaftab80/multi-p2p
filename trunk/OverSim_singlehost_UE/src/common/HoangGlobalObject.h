@@ -51,6 +51,7 @@ class HoangGlobalObject : public cSimpleModule
 	int numReceivedData;
 	int numSentData;
 	int numForwardedData;
+	int numAppData;
 
 	int64 bitReceivedAll;
 	int64 bitSentAll;
@@ -97,9 +98,10 @@ class HoangGlobalObject : public cSimpleModule
 	  void addToBitReceivedAll(int value){bitReceivedAll += value;};
 	  void addToBitSentAll(int value){bitSentAll += value;};
 
-	  void incNumReceivedData(){numReceivedData++;};
+	  void incNumReceivedData();
 	  void incNumSentData(){numSentData++;};
 	  void incNumForwardedData(){numForwardedData++;};
+	  void incNumAppData(){numAppData++;};
 
 	  void addToBitReceivedData(int value){bitReceivedData += value;};
 	  void addToBitSentData(int value){bitSentData += value;};

@@ -30,6 +30,7 @@ void HoangGlobalObject::initialize()
 	videoSize = videoSize * loopTimes;
 	totalALMhopcount = numALMhopcount = 0;
 	UEcounter = 0;
+	numAppData = 0;
 
 	numReceivedAll = numSentAll = bitReceivedAll = bitSentAll = 0;
 	numReceivedData = numSentData = numForwardedData = 0;
@@ -71,6 +72,7 @@ HoangGlobalObject::~HoangGlobalObject()
 				<< "bitSentAll = " << bitSentAll << endl << endl
 				<< "========DATA========" << endl
 				<< "numReceivedData = " << numReceivedData << endl
+				<< "numAppData = " << numAppData << endl<< endl
 				<< "numSentData = " << numSentData << endl
 				<< "numForwardedData = " << numForwardedData << endl
 				<< "bitReceivedData = " << bitReceivedData << endl
@@ -136,6 +138,7 @@ void HoangGlobalObject::updateMemberList(int nodeID,IPvXAddress add)
 
 int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
 {
+	bool found = false;
 	FILE * f;
 	f = fopen("member_list.txt","r");
 	char str[80];
@@ -143,11 +146,24 @@ int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
 
 	while(! feof(f)){
 		fscanf(f,"%d\t%s\n",&id,str);
-		if(add == IPvXAddress(str))
+		if(add == IPvXAddress(str)){
+			found = true;
 			break;
+		}
 	}
 
 	fclose(f);
 
+	if(!found)
+		id = -1;
+
 	return id;
+}
+
+void HoangGlobalObject::incNumReceivedData()
+{
+	numReceivedData++;
+	if(numReceivedData %100 ==0){
+		cout << "numReceivedData : " << numReceivedData << endl;
+	}
 }

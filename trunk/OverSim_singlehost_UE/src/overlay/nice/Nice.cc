@@ -583,31 +583,6 @@ void Nice::becomeRendevouzPoint()
 
     RendevouzPoint = thisNode;
     EV << simTime() << " : " << thisNode.getAddress() << " : Set RP to " << thisNode.getAddress() << endl;
-    //hoang
-    /*const char * ip = par("externalHostIP");
-
-	TransportAddress add = TransportAddress(IPvXAddress(ip),1024,TransportAddress::UNKNOWN_NAT);
-	TransportAddress add2 = TransportAddress(IPvXAddress("50.5.0.2"),1024,TransportAddress::UNKNOWN_NAT);
-	TransportAddress add3 = TransportAddress(IPvXAddress("50.5.0.3"),1024,TransportAddress::UNKNOWN_NAT);
-	TransportAddress add62 = TransportAddress(IPvXAddress("60.5.0.2"),1024,TransportAddress::UNKNOWN_NAT);
-	TransportAddress add63 = TransportAddress(IPvXAddress("60.5.0.3"),1024,TransportAddress::UNKNOWN_NAT);
-
-	NiceMessage * msg = new NiceMessage("NICE_RP_NOTIFY");
-
-	msg->setCommand(NICE_RP_NOTIFY);
-	msg->setSrcNode(thisNode);
-
-	NiceMessage * dup2 = msg->dup();
-	NiceMessage * dup3 = msg->dup();
-	NiceMessage * dup62 = msg->dup();
-	NiceMessage * dup63 = msg->dup();
-
-	sendMessageToUDP(add, msg);
-	sendMessageToUDP(add2, dup2);
-	sendMessageToUDP(add3, dup3);
-	sendMessageToUDP(add62, dup62);
-	sendMessageToUDP(add63, dup63);*/
-    //end of hoang
 
     /* Mark node as new RP (star symbol) */
     getParentModule()->getParentModule()->getDisplayString().
@@ -3686,6 +3661,9 @@ void Nice::gracefulLeave(short bottomLayer)
  */
 void Nice::handleAppMessage(cMessage* msg)
 {
+	//hoang
+	global->incNumAppData();
+	//end of hoang
     if ( ALMAnycastMessage* anycastMsg = dynamic_cast<ALMAnycastMessage*>(msg) ) {
         EV << "[Nice::handleAppMessage() @ " << overlay->getThisNode().getAddress()
            << " (" << overlay->getThisNode().getKey().toString(16) << ")]\n"
@@ -3721,13 +3699,15 @@ void Nice::handleAppMessage(cMessage* msg)
         niceMsg->setSrcNode(thisNode);
         niceMsg->setLastHop(thisNode);
         niceMsg->setHopCount(0);
-        niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));//hoang disabled
+//        niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));//hoang disabled
         //hoang
 //        niceMsg->setBitLength(multicastMsg->getBitLength());
-        niceMsg->setNodeID(nodeID);
+        niceMsg->setBitLength(720);
+        niceMsg->setSenderID(nodeID);
         niceMsg->setLastHopID(nodeID);
-        niceMsg->setSeqNo(multicastMsg->getPacketID());
-        niceMsg->setXw(multicastMsg->getXw());
+//        niceMsg->setSeqNo(multicastMsg->getPacketID());
+        niceMsg->setSeqNo(numAppMsg++);
+//        niceMsg->setXw(multicastMsg->getXw());
         delete multicastMsg;
         //end of hoang
 
@@ -3779,10 +3759,10 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
 
                         //hoang
                         dup->setLastHopID(nodeID);
-                        global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()), dup->getBitLength());
+                        global->recordOut(nodeID,dup->getSenderID(),dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()), dup->getBitLength());
                         global->incNumSentData();
                         global->addToBitSentData(dup->getBitLength());
-                        if(dup->getNodeID() != nodeID){
+                        if(dup->getSenderID() != nodeID){
                         	global->incNumForwardedData();
                         	global->addToBitForwardedData(dup->getBitLength());
                         }
@@ -3811,10 +3791,10 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
         //hoang
         dup->setLastHopID(nodeID);
         //FIXME: record sid=0 in case of streaming (only one sender=0)
-        global->recordOut(nodeID,dup->getNodeID(),dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()), dup->getBitLength());
+        global->recordOut(nodeID,dup->getSenderID(),dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()), dup->getBitLength());
         global->incNumSentData();
 		global->addToBitSentData(dup->getBitLength());
-		if(dup->getNodeID() != nodeID){
+		if(dup->getSenderID() != nodeID){
 			global->incNumForwardedData();
 			global->addToBitForwardedData(dup->getBitLength());
 		}

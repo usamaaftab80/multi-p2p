@@ -1,14 +1,15 @@
-totalALMhopcount=0
-numALMhopcount=0
-
 ====All messages====
-numReceivedAll=17
-numSentAll=556
-bitReceivedAll=4216
-bitSentAll=44480
+numReceivedAll = 969
+numSentAll = 2225
+bitReceivedAll = 780592
+bitSentAll = 1554048
 
-====DATA===
-numReceivedData=0
-numSentData=0
-bitReceivedData=0
-bitSentData=0
+========DATA========
+numReceivedData = 716
+numAppData = 100
+
+numSentData = 1961
+numForwardedData = 1502
+bitReceivedData = 515520
+bitSentData = 1411920
+bitForwardedData = 1081440
