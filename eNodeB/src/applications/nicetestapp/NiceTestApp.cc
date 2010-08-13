@@ -156,7 +156,7 @@ void NiceTestApp::initializeApp(int stage)
 
 		periodicData = new rateData [videoSize * loopTimes];
 
-		for(int i=0; i<videoSize ; i++){
+		/*for(int i=0; i<videoSize ; i++){
 //			double offset = (rd[i].time - sd[i].time).dbl();
 //			if(!(offset > 0)){
 //				cout << "packet " << i << " rd time " << rd[i].time << " sd time " << sd[i].time << endl;
@@ -168,9 +168,13 @@ void NiceTestApp::initializeApp(int stage)
 				periodicData[j*videoSize + i].length = sd[i].length * 8;
 			}
 
+		}*/
+
+		for(int i=0; i<videoSize ; i++){
+			for(int j=0; j< loopTimes; j++){
+				periodicData[j*videoSize + i].length = sd[i].length * 8;
+			}
 		}
-
-
 		/* init XD and schedule */
 
 //		stats->setXw(periodicData[0].rate);
@@ -253,7 +257,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		/* send data */
 
-		NiceTestAppMsg *pingPongPkt;                            // the message we'll send
+		/*NiceTestAppMsg *pingPongPkt;                            // the message we'll send
 		pingPongPkt = new NiceTestAppMsg();
 
 		pingPongPkt->setSenderAddress(thisNode);   // set the sender address to our own
@@ -262,15 +266,15 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		pingPongPkt->setBitLength(length);
 
-		pingPongPkt->setPacketID(numSent);
+		pingPongPkt->setPacketID(numSent);*/
 
 		ALMMulticastMessage* msg = new ALMMulticastMessage("Multicast message");
 
-		msg->setPacketID(pingPongPkt->getPacketID());
+		/*msg->setPacketID(pingPongPkt->getPacketID());
 
 		msg->setXw(periodicData[numSent].rate);
 
-		msg->setBitLength(length);
+		msg->setBitLength(length);*/
 
 //		msg->encapsulate(pingPongPkt);
 

@@ -835,6 +835,8 @@ protected:
 
 	EXOSIP* osip;
 
+	int numAppMsg;
+
     int numReceivedAll;
     int numSentAll;
     int64 bitReceivedAll;

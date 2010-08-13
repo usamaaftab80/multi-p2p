@@ -77,6 +77,8 @@ BaseOverlay::BaseOverlay()
 	nodeID = ueIDbegin + (numNiceInstance++);
 	std::cout << "NICE node " << nodeID << " constructed!" << endl;
 
+	numAppMsg = 0;
+
 	numReceivedAll = numSentAll = 0;
     bitReceivedAll = bitSentAll = 0;
 
