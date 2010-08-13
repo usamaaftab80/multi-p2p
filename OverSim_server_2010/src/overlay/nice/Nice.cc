@@ -3741,13 +3741,14 @@ void Nice::handleAppMessage(cMessage* msg)
         niceMsg->setSrcNode(thisNode);
         niceMsg->setLastHop(thisNode);
         niceMsg->setHopCount(0);
-        niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));//hoang disabled
+//        niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));//hoang disabled
         //hoang
 //        niceMsg->setBitLength(multicastMsg->getBitLength());
+        niceMsg->setBitLength(720);
         niceMsg->setSenderID(nodeID);
         niceMsg->setLastHopID(nodeID);
-        niceMsg->setSeqNo(multicastMsg->getPacketID());
-        niceMsg->setXw(multicastMsg->getXw());
+        niceMsg->setSeqNo(numAppMsg++);
+//        niceMsg->setXw(multicastMsg->getXw());
         delete multicastMsg;
         //end of hoang
 

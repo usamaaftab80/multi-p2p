@@ -67,6 +67,7 @@ BaseOverlay::BaseOverlay()
     //hoang
     kw = 1e6;
     xw = 0;
+    numAppMsg = 0;
     nodeID = numNodeConstructed++;
     //end of hoang
 }

@@ -220,7 +220,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
     if (msg->isName("stateTimer")) {    // is this our timer?
 
         // if the simulator is still busy creating the network, let's wait a bit longer
-        if (underlayConfigurator->isInInitPhase() || (global->getUEcounter() < numUEpreviewed)) {
+        if (underlayConfigurator->isInInitPhase() || (global->getUEcounter() < numUEpreviewed) || (overlay->getState() != 4)) {
 //		if (underlayConfigurator->isInInitPhase()) {
         	cout << "Server node " << nodeID << " :global->getUEcounter()=" << global->getUEcounter() << " < numUEpreviewed=" << numUEpreviewed << endl;
     		scheduleAt(simTime() + sendPeriod, stateTimer);
@@ -250,12 +250,17 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 			//endSimulation();
 			return;
 		}
-
-		scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
+		if(overlay->getState() != 4){
+//			cancelEvent(sendDataTimer);
+			cout << "node " << nodeID << " APP: overlay->getState()=" << overlay->getState() << " at numSent=" << numSent << endl;
+			return;
+		}
+		else
+			scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
 
 		/* send data */
 
-		NiceTestAppMsg *pingPongPkt;                            // the message we'll send
+		/*NiceTestAppMsg *pingPongPkt;                            // the message we'll send
 		pingPongPkt = new NiceTestAppMsg();
 
 		pingPongPkt->setSenderAddress(thisNode);   // set the sender address to our own
@@ -264,15 +269,15 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		pingPongPkt->setBitLength(length);
 
-		pingPongPkt->setPacketID(numSent);
+		pingPongPkt->setPacketID(numSent);*/
 
 		ALMMulticastMessage* msg = new ALMMulticastMessage("Multicast message");
 
-		msg->setPacketID(pingPongPkt->getPacketID());
+		/*msg->setPacketID(pingPongPkt->getPacketID());
 
 		msg->setXw(periodicData[numSent].rate);
 
-		msg->setBitLength(length);
+		msg->setBitLength(length);*/
 
 //		msg->encapsulate(pingPongPkt);
 
