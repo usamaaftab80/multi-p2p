@@ -107,14 +107,14 @@ Nice::~Nice()
 {
 
     // destroy self timer messages
-    cancelAndDelete(heartbeatTimer);
+   /* cancelAndDelete(heartbeatTimer);
     cancelAndDelete(maintenanceTimer);
     cancelAndDelete(structureConnectionTimer);
     cancelAndDelete(rpPollTimer);
     cancelAndDelete(queryTimer);
     cancelAndDelete(visualizationTimer);
 //    //hoang
-    cancelAndDelete(pollSipReceiveBufferTimer);
+    cancelAndDelete(pollSipReceiveBufferTimer);*/
 	cout<< "Node : " << nodeID << endl
 		<< "====All messages====" << endl
 		<< "numReceivedAll = " << numReceivedAll << endl
@@ -129,30 +129,44 @@ Nice::~Nice()
 
 		<< "bitReceivedData = " << bitReceivedData << endl
 		<< "bitSentData = " << bitSentData << endl
-		<< "bitForwardedData = " << bitForwardedData ;
-    //end of hoang
-	/*if(queryTimer->isScheduled()){
-		cancelAndDelete(queryTimer);
+		<< "bitForwardedData = " << bitForwardedData << endl ;
+
+	if(queryTimer->isScheduled()){
+		cancelEvent(queryTimer);
 	}
+	delete queryTimer;
+//	cout << "apres delete queryTimer;" << endl;
 	if(structureConnectionTimer->isScheduled()){
-		cancelAndDelete(structureConnectionTimer);
+		cancelEvent(structureConnectionTimer);
 	}
+	delete structureConnectionTimer;
+//	cout << "apres delete structureConnectionTimer;" << endl;
 	if(rpPollTimer->isScheduled()){
-		cancelAndDelete(rpPollTimer);
+		cancelEvent(rpPollTimer);
 	}
-
-	cancelAndDelete(visualizationTimer);
-
+	delete rpPollTimer;
+//	cout << "apres delete rpPollTimer;;" << endl;
+	/*if(visualizationTimer->isScheduled()){
+		cancelEvent(visualizationTimer);
+	}
+	delete visualizationTimer;
+	cout << "apres delete(visualizationTimer);;;" << endl;*/
 	if(maintenanceTimer->isScheduled()){
-		cancelAndDelete(maintenanceTimer);
+		cancelEvent(maintenanceTimer);
 	}
+	delete maintenanceTimer;
+//	cout << "apres delete maintenanceTimer;" << endl;
 	if(heartbeatTimer->isScheduled()){
-		cancelAndDelete(heartbeatTimer);
+		cancelEvent(heartbeatTimer);
 	}
-	if(pollSipReceiveBufferTimer->isScheduled()){
-		cancelAndDelete(pollSipReceiveBufferTimer);
-	}*/
-
+	delete heartbeatTimer;
+//	cout << "apres delete heartbeatTimer;" << endl;
+	/*if(pollSipReceiveBufferTimer->isScheduled()){
+		cancelEvent(pollSipReceiveBufferTimer);
+	}
+//	cancelAndDelete(pollSipReceiveBufferTimer);
+	cout << "apres cancelEvent pollSipReceiveBufferTimer;" << endl;*/
+    //end of hoang
     std::map<TransportAddress, NicePeerInfo*>::iterator it = peerInfos.begin();
 
     for (; it != peerInfos.end(); it++) {
@@ -3884,6 +3898,7 @@ void Nice::handleAppMessage(cMessage* msg)
         niceMsg->setSenderID(nodeID);
         niceMsg->setLastHopID(nodeID);
         niceMsg->setSeqNo(numAppMsg++);
+        global->incNumAppMsgOfNode(nodeID);
 //        niceMsg->setXw(multicastMsg->getXw());
         delete multicastMsg;
         //end of hoang
@@ -4200,7 +4215,6 @@ void Nice::handleSIP_LEAVE()
 	}
 
 	changeState(SHUTDOWN);
-//	getParentModule()->getParentModule()->getDisplayString().setTagArg("i2", 1, "red");
 
 //	cout << "cancelAndDelete all timers" << endl;
 

@@ -24,7 +24,7 @@
 #include <pthread.h>
 #include <eXosip2/eXosip.h>
 
-#include "BaseOverlay.h"
+#include "HoangGlobalObject.h"
 
 #include <queue>
 
@@ -51,6 +51,7 @@ int ueIDavailable = 5000;
 bool activatedByAS = false;
 char hoangFrom[100];
 string localSocket;
+HoangGlobalObject * globalObject;
 void *listensip (void *parameters);
 void handleMESSAGE(int ueID,char* msgBody);
 void sendMemberListToAS();
@@ -96,7 +97,11 @@ EXOSIP::EXOSIP(int PORT_LISTEN_var, int ueIDbegin_var, string cardEthernetIP_var
 
 	  printf("osip thread constructed!\n");
 }
-
+//***********************************************************************************
+void EXOSIP::assignHoangGlobalObject(void* n)
+{
+	globalObject = (HoangGlobalObject*)n;
+}
 //***********************************************************************************
 //Send a message out of Call: MESSAGE, OPTIONS, ...
 void EXOSIP::sendSipMessageTo(string uriTo_var, string body){
@@ -137,7 +142,8 @@ void EXOSIP::sendSipMessageTo(string uriTo_var, string body){
 //***********************************************************************************
 void EXOSIP::sendSipMessageToAS(string body)
 {
-	string uriTo = "<sip:as@157.159.16.91:5080>";
+//	string uriTo = "<sip:as@157.159.16.91:5080>";
+	string uriTo = "<sip:as@157.159.16.57:5080>";
 	sendSipMessageTo(uriTo, body);
 }
 
@@ -226,11 +232,15 @@ void *listensip (void *parameters){
 					       else if( string(type) == "REQ_INFO_HANDOVER_NOTIFY" ){
 							   //reply newEnodeB about packetID
 					    	   string uriTo = "<sip:enodeb@" + string(str) + ">";
-					    	   string body = string("REP_INFO_HANDOVER_NOTIFY\n") + string("150");
+					    	   string body = string("REP_INFO_HANDOVER_NOTIFY\n") + to_string(globalObject->getNumAppMsgOfNode(5000));
 					    	   sendMESSAGEto(uriTo, body);
 						   }
 					       else if( string(type) == "REP_INFO_HANDOVER_NOTIFY" ){
 							   cout << "get a REP_INFO_HANDOVER_NOTIFY. currentPacketID=" << str << endl;
+							   ofstream f;
+							   f.open ("numAppMsgSent.txt");
+							   f << str << endl;
+							   f.close();
 						   }
 					       else
 					       {
@@ -321,7 +331,8 @@ void sendMemberListToAS()
 //***********************************************************************************
 void sendMESSAGEtoAS(string body)
 {
-	string uriTo = "<sip:as@157.159.16.91:5080>";
+//	string uriTo = "<sip:as@157.159.16.91:5080>";
+	string uriTo = "<sip:as@157.159.16.57:5080>";
 	sendMESSAGEto(uriTo, body);
 }
 

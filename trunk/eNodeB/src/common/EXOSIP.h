@@ -21,7 +21,7 @@ public :
 //	~EXOSIP();
 
 	void pollBufferOfNode(int nodeID, string &msgBody);
-	int initsip(void* n, int nodeID);
+	void assignHoangGlobalObject(void* n);
 	void sendSipMessageTo(string uriTo_var, string body);
 	void sendSipMessageToAS(string body);
 	void queryAS();
