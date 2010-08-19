@@ -31,6 +31,10 @@ Define_Module(HoangGlobalObject);
 void HoangGlobalObject::initialize()
 {
 	numNode = par("targetOverlayTerminalNum");
+	numAppMsgOfNode = new int[numNode];
+	for(int i=0; i<numNode; i++){
+		numAppMsgOfNode[i] = 0;
+	}
 	numSent = 0;
 	numNodeSentDone = 0;
 	numNodeJoined = 0;
@@ -53,13 +57,18 @@ void HoangGlobalObject::initialize()
 	 << 6000 << "\t" << "60.5.0.2" << endl
 	 << 6001 << "\t" << "60.5.0.3" << endl
 	 << 6002 << "\t" << "60.4.0.2" << endl;
-
 	f.close();
+
+	f.open ("numAppMsgSent.txt");
+	f << 0 << endl;
+	f.close();
+
 	sipPortListen = par("SIPportListen");
-	int ueIDbegin = par("ueIDbegin");
+	ueIDbegin = par("ueIDbegin");
 	string cardEthernetIP = par("cardEthernetIP");
 
 	osip = new EXOSIP(sipPortListen, ueIDbegin, cardEthernetIP);
+	osip->assignHoangGlobalObject(this);
 
 	f.open ("ueIDbegin.txt");
 	f << ueIDbegin ;

@@ -41,6 +41,8 @@ class HoangGlobalObject : public cSimpleModule
 	FILE * outFile;
 
 	int UEcounter;
+	int ueIDbegin;
+	int * numAppMsgOfNode;
 
   protected:
     virtual void initialize();
@@ -77,6 +79,8 @@ class HoangGlobalObject : public cSimpleModule
 	  EXOSIP *osip;
 	  int sipPortListen;
 	  int getSipPortListen(){return sipPortListen;};
+	  void incNumAppMsgOfNode(int nodeid_var){numAppMsgOfNode[nodeid_var - ueIDbegin]++;};
+	  int getNumAppMsgOfNode(int nodeid_var){return numAppMsgOfNode[nodeid_var - ueIDbegin];};
 
 	  ~HoangGlobalObject();
 

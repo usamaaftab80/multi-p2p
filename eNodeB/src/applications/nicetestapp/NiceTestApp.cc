@@ -227,9 +227,12 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         	cancelAndDelete(stateTimer);
 
         	/* Begin send data timer*/
-
-        		cout << "Sender begins send data at " << simTime() << endl<< endl<< endl<< endl<< endl;
-				scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
+			FILE* f;
+			f = fopen("numAppMsgSent.txt","r");
+			fscanf(f,"%d",&numSent);
+			fclose(f);
+			cout << "Node " << nodeID << " begins send data from packetID=" << numSent <<" at time " << simTime() << "s"<< endl<< endl<< endl<< endl<< endl;
+			scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);
         }
 
     }
