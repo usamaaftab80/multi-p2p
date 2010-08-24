@@ -88,7 +88,8 @@ void NiceTestApp::initializeApp(int stage)
 		float time;
 		unsigned int id;
 		unsigned int length;
-		const char* sdFile = "sd_a02";
+//		const char* sdFile = "sd_a02";
+		const char* sdFile = par("sdFile");
 
 		const char * format;
 
@@ -130,7 +131,7 @@ void NiceTestApp::initializeApp(int stage)
 
 		/* Read RD */
 		FILE * rFile;
-		const char* rdFile = "rd_a02";
+		const char* rdFile = par("rdFile");
 		rFile = fopen (rdFile , "r");
 		if (rFile == NULL) perror ("Error opening RD file");
 

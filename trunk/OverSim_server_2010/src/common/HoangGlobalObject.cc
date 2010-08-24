@@ -47,6 +47,23 @@ void HoangGlobalObject::initialize()
 	f << 6002 << "\t" << "60.4.0.2" << endl;
 	f.close();
 
+	sipPortListen = par("SIPportListen");
+	ueIDbegin = par("ueIDbegin");
+	string cardEthernetIP = par("cardEthernetIP");
+
+	osip = new EXOSIP(sipPortListen, ueIDbegin, cardEthernetIP);
+	osip->assignHoangGlobalObject(this);
+
+	string uriTo = "<sip:as@50.5.0.2:5000>";
+	string body = "HOANG_SERVER_BEGIN";
+	osip->sendSipMessageTo(uriTo, body);
+	uriTo = "<sip:as@50.5.0.3:5001>";
+	osip->sendSipMessageTo(uriTo, body);
+	uriTo = "<sip:as@60.5.0.2:6000>";
+	osip->sendSipMessageTo(uriTo, body);
+	uriTo = "<sip:as@60.5.0.3:6001>";
+	osip->sendSipMessageTo(uriTo, body);
+
 	cout << "Hoang global object initttt done at " << simTime() << endl;
 	system("./addroute.sh");
 }

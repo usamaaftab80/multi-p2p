@@ -18,6 +18,7 @@
 
 #include <omnetpp.h>
 #include "TransportAddress.h"
+#include "EXOSIP.h"
 
 /**
  * TODO - Generated class
@@ -57,6 +58,10 @@ class HoangGlobalObject : public cSimpleModule
 
 	int64 bitReceivedData;
 	int64 bitSentData;
+
+	EXOSIP *osip;
+	int sipPortListen;
+	int ueIDbegin;
 
   protected:
     virtual void initialize();
