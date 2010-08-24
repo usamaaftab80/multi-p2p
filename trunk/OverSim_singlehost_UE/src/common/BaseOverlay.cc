@@ -739,7 +739,10 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
 //        	cout << "Node " << nodeID << " get a pkt. xw = " << xw << " ||kw = " << kw << endl;
 
-        	simtime_t delay = simTime() - niceMmsg->getCreationTime();
+        	simtime_t delay = simTime() - niceMmsg->getSendTime();
+        	if(niceMmsg->getSenderID() < 5000){
+        		delay -= global->getServerBeginTime();
+        	}
 
 //        	global->recordIn(nodeID, 0, niceMmsg->getSeqNo(), udpControlInfo->getTimeToLive(), niceMmsg->getLastHopID(), delay.dbl(), niceMmsg->getBitLength());
         	global->recordIn(nodeID, niceMmsg->getSenderID(), niceMmsg->getSeqNo(), 10, niceMmsg->getLastHopID(), delay.dbl(), niceMmsg->getBitLength());

@@ -31,6 +31,7 @@ void HoangGlobalObject::initialize()
 	totalALMhopcount = numALMhopcount = 0;
 	UEcounter = 0;
 	numAppData = 0;
+	serverBeginTime = 0;
 
 	numReceivedAll = numSentAll = bitReceivedAll = bitSentAll = 0;
 	numReceivedData = numSentData = numForwardedData = 0;
@@ -48,6 +49,13 @@ void HoangGlobalObject::initialize()
 	f << 6001 << "\t" << "60.5.0.3" << endl;
 	f << 6002 << "\t" << "60.4.0.2" << endl;
 	f.close();
+
+	sipPortListen = par("SIPportListen");
+	ueIDbegin = par("ueIDbegin");
+	string cardEthernetIP = par("cardEthernetIP");
+
+	osip = new EXOSIP(sipPortListen, ueIDbegin, cardEthernetIP);
+	osip->assignHoangGlobalObject(this);
 
 	cout << "SingleHost: Hoang global object initttt done at " << simTime() << endl;
 //	system("./addroute.sh");

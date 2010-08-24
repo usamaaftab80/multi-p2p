@@ -3,7 +3,7 @@
 	<name>OverSim</name>
 	<comment></comment>
 	<projects>
-		<project>INET-OverSim-20100505</project>
+		<project>inet</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
