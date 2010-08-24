@@ -3702,10 +3702,10 @@ void Nice::handleAppMessage(cMessage* msg)
 //        niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));//hoang disabled
         //hoang
 //        niceMsg->setBitLength(multicastMsg->getBitLength());
+        niceMsg->setSendTime(simTime().dbl());
         niceMsg->setBitLength(720);
         niceMsg->setSenderID(nodeID);
         niceMsg->setLastHopID(nodeID);
-//        niceMsg->setSeqNo(multicastMsg->getPacketID());
         niceMsg->setSeqNo(numAppMsg++);
 //        niceMsg->setXw(multicastMsg->getXw());
         delete multicastMsg;

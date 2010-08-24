@@ -89,7 +89,7 @@ void NiceTestApp::initializeApp(int stage)
 		float time;
 		unsigned int id;
 		unsigned int length;
-		const char* sdFile = "sd_a02";
+		const char* sdFile = par("sdFile");
 
 		const char * format;
 
@@ -131,7 +131,7 @@ void NiceTestApp::initializeApp(int stage)
 
 		/* Read RD */
 		FILE * rFile;
-		const char* rdFile = "rd_a02";
+		const char* rdFile = par("rdFile");
 		rFile = fopen (rdFile , "r");
 		if (rFile == NULL) perror ("Error opening RD file");
 
@@ -216,7 +216,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         // if the simulator is still busy creating the network, let's wait a bit longer
         if (underlayConfigurator->isInInitPhase() || (global->getUEcounter() < numUEpreviewed)) {
 //		if (underlayConfigurator->isInInitPhase()) {
-        	cout << "global->getUEcounter() : " << global->getUEcounter() << endl;
+        	cout << "numUEpreviewed : " << numUEpreviewed << ">< || global->getUEcounter() : " << global->getUEcounter() <<endl;
     		scheduleAt(simTime() + sendPeriod, stateTimer);
         	return;
 

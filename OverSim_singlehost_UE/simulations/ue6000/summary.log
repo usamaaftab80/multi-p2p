@@ -1,15 +1,15 @@
 ====All messages====
-numReceivedAll = 916
-numSentAll = 594
-bitReceivedAll = 740584
-bitSentAll = 378128
+numReceivedAll = 2299
+numSentAll = 1221
+bitReceivedAll = 1646168
+bitSentAll = 853344
 
 ========DATA========
-numReceivedData = 716
-numAppData = 100
+numReceivedData = 2236
+numAppData = 548
 
-numSentData = 388
+numSentData = 1167
 numForwardedData = 0
-bitReceivedData = 515520
-bitSentData = 279360
+bitReceivedData = 1609920
+bitSentData = 840240
 bitForwardedData = 0
