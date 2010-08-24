@@ -23,5 +23,8 @@ simple HoangGlobalObject
     parameters:
         int targetOverlayTerminalNum;
         int videoSize;
-        int loopTimes;        
+        int loopTimes;
+		int SIPportListen;
+        int ueIDbegin;
+        string cardEthernetIP;                 
 }
