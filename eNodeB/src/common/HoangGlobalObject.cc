@@ -43,9 +43,10 @@ void HoangGlobalObject::initialize()
 	videoSize = videoSize * loopTimes;
 	totalALMhopcount = numALMhopcount = 0;
 	UEcounter = 0;
-
+	recordInAble = true;
 	outFile = fopen("out.log","w");
 	inFile = fopen("in.log","w");
+	serverBeginTime = 0;
 
 	system("rm -rf member_list*");
 
@@ -77,6 +78,11 @@ void HoangGlobalObject::initialize()
 	cout << "Hoang global object initttt done at " << simTime() << endl;
 	system("./addroute.sh");
 
+
+	FILE* ff;
+	ff = fopen("../time_initdone.txt","a");
+	fprintf(ff,"eNodeB %d init done at %f (s)\n", sipPortListen, getRealTime());
+	fclose(ff);
 }
 
 
@@ -106,6 +112,8 @@ void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid,int ttl,int fromNod
 {
 	//write to in.log
 	//at simTime() nodeID	received a packet sid,pid fromNode at baseOverlay
+	if(!recordInAble)
+		return;
 	fprintf(inFile,"%f\t%d\t%d\t%d\t%d\t%d\t%f\n", simTime().dbl(), nodeID, sid, pid, ttl, fromNode, delay);
 }
 
@@ -186,4 +194,12 @@ int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
 		id = -1;
 
 	return id;
+}
+
+double HoangGlobalObject::getRealTime()
+{
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	double tim = (double)tv.tv_sec + (double)tv.tv_usec/1000000.0 - 1282900642.0;
+	return tim;
 }

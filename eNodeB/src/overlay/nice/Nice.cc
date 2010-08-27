@@ -413,6 +413,7 @@ void Nice::changeState( int toState )
     	}
 
 		osip->sendSipMessageToAS(body);
+		global->setRecordInAble(false);
 		//statistic
 		ofstream f;
 		string str = "summary_" + to_string(nodeID) + ".log";
@@ -3894,6 +3895,8 @@ void Nice::handleAppMessage(cMessage* msg)
 //        niceMsg->setBitLength(NICEMULTICAST_L(niceMsg));//hoang disabled
         //hoang
 //        niceMsg->setBitLength(multicastMsg->getBitLength());
+//        niceMsg->setSendTime(simTime().dbl());
+        niceMsg->setSendTime(global->getRealTime());
         niceMsg->setBitLength(720);
         niceMsg->setSenderID(nodeID);
         niceMsg->setLastHopID(nodeID);
@@ -4256,6 +4259,7 @@ void Nice::handleSIP_PAUSE()
 		cancelEvent(heartbeatTimer);
 		string body = "REP_PAUSE\nIDNode " + to_string(nodeID);
 		osip->sendSipMessageToAS(body);
+		global->setRecordInAble(false);
 //	}
 }
 
@@ -4268,6 +4272,7 @@ void Nice::handleSIP_RETURN()
 	string body = "REP_RETURN\nIDNode " + to_string(nodeID);
 
 	osip->sendSipMessageToAS(body);
+	global->setRecordInAble(true);
 //	cancelEvent(maintenanceTimer);
 //	scheduleAt(simTime() + maintenanceInterval, maintenanceTimer);
 }

@@ -142,8 +142,8 @@ void EXOSIP::sendSipMessageTo(string uriTo_var, string body){
 //***********************************************************************************
 void EXOSIP::sendSipMessageToAS(string body)
 {
-//	string uriTo = "<sip:as@157.159.16.91:5080>";
-	string uriTo = "<sip:as@157.159.16.57:5080>";
+	string uriTo = "<sip:as@157.159.16.91:5080>";
+//	string uriTo = "<sip:as@157.159.16.57:5080>";
 	sendSipMessageTo(uriTo, body);
 }
 
@@ -177,15 +177,8 @@ void *listensip (void *parameters){
 	  int pos = 0;
 	  eXosip_event_t *event;
 	  while(1) {
-	     if (!(event = eXosip_event_wait (0, 1000))) {
+	     if (!(event = eXosip_event_wait (0, 0))) {
 	          usleep (10000);
-//	          if(j++ > 32000){
-//	        	  j=0;
-//	          }
-//
-//	          if(j%10 == 0){ //10s gui 1 phat
-////	        	  sendMemberListToAS();
-//	          }
 	          continue;
 	        }
 	          eXosip_automatic_action ();
@@ -196,7 +189,7 @@ void *listensip (void *parameters){
 					if(!activatedByAS)
 					{
 						activatedByAS = true;
-						cout << "eNodeB port " << PORT_LISTEN << " activated by AS\n";
+						cout << "eNodeB SIP port " << PORT_LISTEN << " activated by AS\n";
 					}
 					//send an answer for 200
 					  eXosip_lock ();
@@ -233,14 +226,19 @@ void *listensip (void *parameters){
 							   //reply newEnodeB about packetID
 					    	   string uriTo = "<sip:enodeb@" + string(str) + ">";
 					    	   string body = string("REP_INFO_HANDOVER_NOTIFY\n") + to_string(globalObject->getNumAppMsgOfNode(5000));
+					    	   cout << simTime() << endl;
 					    	   sendMESSAGEto(uriTo, body);
 						   }
 					       else if( string(type) == "REP_INFO_HANDOVER_NOTIFY" ){
-							   cout << "get a REP_INFO_HANDOVER_NOTIFY. currentPacketID=" << str << endl;
+							   cout << "get a REP_INFO_HANDOVER_NOTIFY.\ncurrentPacketID=" << str << endl;
 							   ofstream f;
 							   f.open ("numAppMsgSent.txt");
 							   f << str << endl;
 							   f.close();
+						   }
+					       else if( string(type) == "HOANG_SERVER_BEGIN" ){
+							   cout << localSocket << " get a HOANG_SERVER_BEGIN at " << globalObject->getRealTime() << endl;
+							   globalObject->setServerBeginTime(globalObject->getRealTime());
 						   }
 					       else
 					       {
@@ -331,8 +329,8 @@ void sendMemberListToAS()
 //***********************************************************************************
 void sendMESSAGEtoAS(string body)
 {
-//	string uriTo = "<sip:as@157.159.16.91:5080>";
-	string uriTo = "<sip:as@157.159.16.57:5080>";
+	string uriTo = "<sip:as@157.159.16.91:5080>";
+//	string uriTo = "<sip:as@157.159.16.57:5080>";
 	sendMESSAGEto(uriTo, body);
 }
 

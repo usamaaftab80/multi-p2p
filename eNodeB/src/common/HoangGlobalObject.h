@@ -44,6 +44,10 @@ class HoangGlobalObject : public cSimpleModule
 	int ueIDbegin;
 	int * numAppMsgOfNode;
 
+	bool recordInAble;
+
+	double serverBeginTime;
+
   protected:
     virtual void initialize();
     //virtual void handleMessage(cMessage *msg);
@@ -81,6 +85,12 @@ class HoangGlobalObject : public cSimpleModule
 	  int getSipPortListen(){return sipPortListen;};
 	  void incNumAppMsgOfNode(int nodeid_var){numAppMsgOfNode[nodeid_var - ueIDbegin]++;};
 	  int getNumAppMsgOfNode(int nodeid_var){return numAppMsgOfNode[nodeid_var - ueIDbegin];};
+	  void setRecordInAble(bool val){recordInAble = val;};
+
+	  void setServerBeginTime(double val){serverBeginTime = val;};
+	  double getServerBeginTime(){return serverBeginTime;};
+
+	  double getRealTime();
 
 	  ~HoangGlobalObject();
 
