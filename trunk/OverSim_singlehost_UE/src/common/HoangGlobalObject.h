@@ -60,7 +60,7 @@ class HoangGlobalObject : public cSimpleModule
 	int64 bitSentData;
 	int64 bitForwardedData;
 
-	simtime_t serverBeginTime;
+	double serverBeginTime;
 	EXOSIP *osip;
 	int sipPortListen;
 	int ueIDbegin;
@@ -112,8 +112,10 @@ class HoangGlobalObject : public cSimpleModule
 	  void addToBitSentData(int value){bitSentData += value;};
 	  void addToBitForwardedData(int value){bitForwardedData += value;};
 
-	  void setServerBeginTime(simtime_t val){serverBeginTime = val;};
-	  simtime_t getServerBeginTime(){return serverBeginTime;};
+	  void setServerBeginTime(double val){serverBeginTime = val;};
+	  double getServerBeginTime(){return serverBeginTime;};
+
+	  double getRealTime();
 
 	  ~HoangGlobalObject();
 

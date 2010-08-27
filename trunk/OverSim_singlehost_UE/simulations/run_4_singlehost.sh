@@ -1,5 +1,5 @@
 #/bin/bash!
-
+rm time*txt
 cd ue5000
 ../../src/OverSim -f ue.ini -u Cmdenv &
 cd ../ue5001

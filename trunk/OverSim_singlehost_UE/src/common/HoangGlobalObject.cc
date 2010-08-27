@@ -16,6 +16,7 @@
 #include "HoangGlobalObject.h"
 #include <iostream>
 #include <fstream>
+#include <sys/time.h>
 
 Define_Module(HoangGlobalObject);
 
@@ -50,6 +51,12 @@ void HoangGlobalObject::initialize()
 	f << 6002 << "\t" << "60.4.0.2" << endl;
 	f.close();
 
+	int nodeID;
+	FILE * ff;
+	ff = fopen("nodeID.txt","r");
+	fscanf(ff,"%d",&nodeID);
+	fclose(ff);
+
 	sipPortListen = par("SIPportListen");
 	ueIDbegin = par("ueIDbegin");
 	string cardEthernetIP = par("cardEthernetIP");
@@ -58,6 +65,14 @@ void HoangGlobalObject::initialize()
 	osip->assignHoangGlobalObject(this);
 
 	cout << "SingleHost: Hoang global object initttt done at " << simTime() << endl;
+
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	double tim = (double)tv.tv_sec + (double)tv.tv_usec/1000000.0;
+	ff = fopen("../time_initdone.txt","a");
+	fprintf(ff,"Node %d init done at %f (s)\n", nodeID, tim);
+	fclose(ff);
+
 //	system("./addroute.sh");
 }
 
@@ -174,4 +189,12 @@ void HoangGlobalObject::incNumReceivedData()
 	if(numReceivedData %100 ==0){
 		cout << "numReceivedData : " << numReceivedData << endl;
 	}
+}
+
+double HoangGlobalObject::getRealTime()
+{
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	double tim = (double)tv.tv_sec + (double)tv.tv_usec/1000000.0 - 1282900642.0;
+	return tim;
 }

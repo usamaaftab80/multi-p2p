@@ -1,14 +1,14 @@
 version 2
-run General-0-20100824-17:36:23-8198
+run General-0-20100827-15:22:58-12476
 attr configname General
-attr datetime 20100824-17:36:23
+attr datetime 20100827-15:22:58
 attr experiment General
 attr inifile ue.ini
 attr iterationvars ""
 attr iterationvars2 $repetition=0
 attr measurement ""
 attr network oversim.underlay.singlehostunderlay.SingleHostUnderlayNetwork
-attr processid 8198
+attr processid 12476
 attr repetition 0
 attr replication #0
 attr resultdir results
@@ -19,7 +19,7 @@ scalar SingleHostUnderlayNetwork.overlayTerminal[0].networkLayer.arp 	"ARP reque
 scalar SingleHostUnderlayNetwork.overlayTerminal[0].networkLayer.arp 	"ARP replies sent" 	0
 scalar SingleHostUnderlayNetwork.overlayTerminal[0].networkLayer.arp 	"ARP resolutions" 	0
 scalar SingleHostUnderlayNetwork.overlayTerminal[0].networkLayer.arp 	"failed ARP resolutions" 	0
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"GlobalStatistics: Simulation Time" 	81
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"GlobalStatistics: Simulation Time" 	35.097001
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (bootstrapList): Received Bytes/s from Overlay.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (bootstrapList): Received Bytes/s from UDP.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseApp (bootstrapList): Received Messages/s from Overlay.mean" 	0
@@ -71,15 +71,15 @@ scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: 
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Forwarded Total Bytes/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Forwarded Total Messages/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Join Retries.mean" 	1
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Measured Session Time.mean" 	81
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Measured Session Time.mean" 	35.097001
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received App Data Bytes/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received App Data Messages/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received App Lookup Bytes/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received App Lookup Messages/s.mean" 	0
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Maintenance Bytes/s.mean" 	2540.3827160494
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Maintenance Messages/s.mean" 	28.382716049383
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Total Bytes/s.mean" 	2540.3827160494
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Total Messages/s.mean" 	28.382716049383
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Maintenance Bytes/s.mean" 	2066.2164268679
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Maintenance Messages/s.mean" 	22.87944773401
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Total Bytes/s.mean" 	2066.2164268679
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Received Total Messages/s.mean" 	22.87944773401
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent App Data Bytes/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent App Data Messages/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent App Lookup Bytes/s.mean" 	0
@@ -92,27 +92,25 @@ scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: 
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent FindNode Messages/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent FindNodeResponse Bytes/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent FindNodeResponse Messages/s.mean" 	0
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Maintenance Bytes/s.mean" 	1316.8888888889
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Maintenance Messages/s.mean" 	15.074074074074
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Maintenance Bytes/s.mean" 	877.5678582908
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Maintenance Messages/s.mean" 	10.399748970005
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Ping Bytes/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Ping Messages/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Ping Response Bytes/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Ping Response Messages/s.mean" 	0
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Total Bytes/s.mean" 	1316.8888888889
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Total Messages/s.mean" 	15.074074074074
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Forwarded Multicast Bytes/s.mean" 	2100
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Forwarded Multicast Messages/s.mean" 	23.333333333333
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Inconsistencies/s.mean" 	0.049382716049383
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Own Messages Received/s.mean" 	3.4197530864198
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Peer Timeouts/s.mean" 	0.11111111111111
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Query Timeouts/s.mean" 	0.049382716049383
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Total Bytes/s.mean" 	877.5678582908
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"BaseOverlay: Sent Total Messages/s.mean" 	10.399748970005
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Forwarded Multicast Bytes/s.mean" 	1905.2909962307
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Forwarded Multicast Messages/s.mean" 	21.169899958119
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Inconsistencies/s.mean" 	0.1424623146576
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Own Messages Received/s.mean" 	0.94025127674014
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Peer Timeouts/s.mean" 	0.056984925863039
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Query Timeouts/s.mean" 	0.1424623146576
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Received JOIN Messages/s.mean" 	0
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Received Multicast Bytes/s (subscribed groups only).mean" 	2484.4444444444
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Received Multicast Messages/s (subscribed groups only).mean" 	27.604938271605
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: SC Minimum Compare/s.mean" 	0.00045417864197531
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Send Heartbeat Bytes/s.mean" 	16.518518518519
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Send Heartbeat Messages/s.mean" 	0.28395061728395
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Received Multicast Bytes/s (subscribed groups only).mean" 	1989.9136111373
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Received Multicast Messages/s (subscribed groups only).mean" 	22.110151234859
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: SC Minimum Compare/s.mean" 	0
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Send Heartbeat Bytes/s.mean" 	28.207538302204
+scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Send Heartbeat Messages/s.mean" 	0.42738694397279
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Structure Partitions/s.mean" 	0
 scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Nice: Temporary Peer Timeouts/s.mean" 	0
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Vector: GlobalNodeList: Number of bootstrapped malicious nodes.mean" 	0
-scalar SingleHostUnderlayNetwork.globalObserver.globalStatistics 	"Vector: GlobalNodeList: Number of nodes.mean" 	1
