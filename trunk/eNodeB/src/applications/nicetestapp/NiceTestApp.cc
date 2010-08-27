@@ -86,7 +86,7 @@ void NiceTestApp::initializeApp(int stage)
 		float time;
 		unsigned int id;
 		unsigned int length;
-		const char* sdFile = "sd_a02";
+		const char* sdFile = par("sdFile");
 
 		const char * format;
 
@@ -128,7 +128,7 @@ void NiceTestApp::initializeApp(int stage)
 
 		/* Read RD */
 		FILE * rFile;
-		const char* rdFile = "rd_a02";
+		const char* rdFile = par("rdFile");
 		rFile = fopen (rdFile , "r");
 		if (rFile == NULL) perror ("Error opening RD file");
 
@@ -218,7 +218,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         // if the simulator is still busy creating the network, let's wait a bit longer
         if (underlayConfigurator->isInInitPhase() || (overlay->getUEcounter() < numUEpreviewed) || (overlay->getState() != 4)) {
 //		if (underlayConfigurator->isInInitPhase()) {
-        	cout << "global->getUEcounter() : " << overlay->getUEcounter() << endl;
+        	cout << "node " << nodeID << " global->getUEcounter() : " << overlay->getUEcounter() << endl;
     		scheduleAt(simTime() + sendPeriod, stateTimer);
         	return;
 
@@ -229,7 +229,7 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
         	/* Begin send data timer*/
 			FILE* f;
 			f = fopen("numAppMsgSent.txt","r");
-			fscanf(f,"%d",&numSent);
+			fscanf(f,"%d\n",&numSent);
 			fclose(f);
 			cout << "Node " << nodeID << " begins send data from packetID=" << numSent <<" at time " << simTime() << "s"<< endl<< endl<< endl<< endl<< endl;
 			scheduleAt(simTime() + sendDataPeriod, sendDataPeriodTimer);

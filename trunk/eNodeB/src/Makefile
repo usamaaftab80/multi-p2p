@@ -812,35 +812,14 @@ $O/common/CryptoModule.o: common/CryptoModule.cc \
   common/BaseRpc.h \
   common/OverSimMessage_m.h
 $O/common/EXOSIP.o: common/EXOSIP.cc \
-  common/OverSimMessage.h \
-  common/RpcListener.h \
-  common/AbstractLookup.h \
-  common/BaseOverlay.h \
-  common/TopologyVis.h \
   ../../INET-OverSim-20100505/src/base/INETDefs.h \
-  common/oversim_mapset.h \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPvXAddress.h \
-  common/RpcState.h \
+  common/oversim_mapset.h \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPv6Address.h \
-  common/InitStages.h \
   ../../INET-OverSim-20100505/src/networklayer/contract/IPAddress.h \
-  common/NodeVector.h \
-  ../../INET-OverSim-20100505/src/base/INotifiable.h \
-  common/RecursiveLookup.h \
-  common/OverlayKey.h \
   common/TransportAddress.h \
-  common/CommonMessages_m.h \
-  common/NodeHandle.h \
-  common/BinaryValue.h \
-  common/Vector2D.h \
   common/HoangGlobalObject.h \
-  common/ProxNodeHandle.h \
-  common/IterativeLookupConfiguration.h \
-  common/EXOSIP.h \
-  common/Comparator.h \
-  common/RpcMacros.h \
-  common/BaseRpc.h \
-  common/OverSimMessage_m.h
+  common/EXOSIP.h
 $O/common/FinisherModule.o: common/FinisherModule.cc \
   common/GlobalStatistics.h \
   common/GlobalStatisticsAccess.h \

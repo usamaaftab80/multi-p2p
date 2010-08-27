@@ -754,9 +754,15 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
 //        	cout << "Node " << nodeID << " get a pkt. xw = " << xw << " ||kw = " << kw << endl;
 
-        	simtime_t delay = simTime() - niceMmsg->getCreationTime();
+        	double delay = global->getRealTime() - niceMmsg->getSendTime();
+//        	if(niceMmsg->getSenderID() < 5000){ //data msg from overlay server
+//				delay -= global->getServerBeginTime();
+//			}
+        	if(delay < 0){
+        		cout << "now:" << global->getRealTime() << " msgSendTime:" << niceMmsg->getSendTime() << " serverBegin:" << global->getServerBeginTime() << " lastHop:" << niceMmsg->getLastHopID() << " creator:" << niceMmsg->getSenderID() << endl;
+        	}
 
-        	global->recordIn(nodeID, niceMmsg->getSenderID(), niceMmsg->getSeqNo(), udpControlInfo->getTimeToLive(), niceMmsg->getLastHopID(), delay.dbl());
+        	global->recordIn(nodeID, niceMmsg->getSenderID(), niceMmsg->getSeqNo(), udpControlInfo->getTimeToLive(), niceMmsg->getLastHopID(), delay);
 
         	delete dup;
 
