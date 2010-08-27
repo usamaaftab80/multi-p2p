@@ -108,6 +108,8 @@ class HoangGlobalObject : public cSimpleModule
 	  void addToBitReceivedData(int value){bitReceivedData += value;};
 	  void addToBitSentData(int value){bitSentData += value;};
 
+	  double getRealTime();
+
 	  ~HoangGlobalObject();
 
 };
