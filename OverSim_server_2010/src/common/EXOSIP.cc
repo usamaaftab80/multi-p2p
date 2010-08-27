@@ -177,7 +177,7 @@ void *listensip (void *parameters){
 	  int pos = 0;
 	  eXosip_event_t *event;
 	  while(1) {
-	     if (!(event = eXosip_event_wait (0, 1000))) {
+	     if (!(event = eXosip_event_wait (0, 0))) {
 	          usleep (10000);
 	          continue;
 	        }

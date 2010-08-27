@@ -54,14 +54,20 @@ void HoangGlobalObject::initialize()
 	osip = new EXOSIP(sipPortListen, ueIDbegin, cardEthernetIP);
 	osip->assignHoangGlobalObject(this);
 
-	string uriTo = "<sip:as@50.5.0.2:5000>";
 	string body = "HOANG_SERVER_BEGIN";
+	//for single UE
+	string uriTo = "<sip:as@50.5.0.2:5000>";
 	osip->sendSipMessageTo(uriTo, body);
 	uriTo = "<sip:as@50.5.0.3:5001>";
 	osip->sendSipMessageTo(uriTo, body);
 	uriTo = "<sip:as@60.5.0.2:6000>";
 	osip->sendSipMessageTo(uriTo, body);
 	uriTo = "<sip:as@60.5.0.3:6001>";
+	osip->sendSipMessageTo(uriTo, body);
+	//for eNodeBs
+	uriTo = "<sip:as@157.159.16.172:6080>";
+	osip->sendSipMessageTo(uriTo, body);
+	uriTo = "<sip:as@157.159.16.172:6090>";
 	osip->sendSipMessageTo(uriTo, body);
 
 	cout << "Hoang global object initttt done at " << simTime() << endl;
@@ -171,4 +177,12 @@ int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
 
 	return id;
 
+}
+
+double HoangGlobalObject::getRealTime()
+{
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	double tim = (double)tv.tv_sec + (double)tv.tv_usec/1000000.0 - 1282900642.0;
+	return tim;
 }
