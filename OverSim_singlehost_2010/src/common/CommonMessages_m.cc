@@ -11420,6 +11420,7 @@ Register_Class(ALMMulticastMessage);
 ALMMulticastMessage::ALMMulticastMessage(const char *name, int kind) : ALMMessage(name,kind)
 {
     this->packetID_var = 0;
+    this->xw_var = 0;
 }
 
 ALMMulticastMessage::ALMMulticastMessage(const ALMMulticastMessage& other) : ALMMessage()
@@ -11437,6 +11438,7 @@ ALMMulticastMessage& ALMMulticastMessage::operator=(const ALMMulticastMessage& o
     if (this==&other) return *this;
     ALMMessage::operator=(other);
     this->packetID_var = other.packetID_var;
+    this->xw_var = other.xw_var;
     return *this;
 }
 
@@ -11444,12 +11446,14 @@ void ALMMulticastMessage::parsimPack(cCommBuffer *b)
 {
     ALMMessage::parsimPack(b);
     doPacking(b,this->packetID_var);
+    doPacking(b,this->xw_var);
 }
 
 void ALMMulticastMessage::parsimUnpack(cCommBuffer *b)
 {
     ALMMessage::parsimUnpack(b);
     doUnpacking(b,this->packetID_var);
+    doUnpacking(b,this->xw_var);
 }
 
 int ALMMulticastMessage::getPacketID() const
@@ -11460,6 +11464,16 @@ int ALMMulticastMessage::getPacketID() const
 void ALMMulticastMessage::setPacketID(int packetID_var)
 {
     this->packetID_var = packetID_var;
+}
+
+double ALMMulticastMessage::getXw() const
+{
+    return xw_var;
+}
+
+void ALMMulticastMessage::setXw(double xw_var)
+{
+    this->xw_var = xw_var;
 }
 
 class ALMMulticastMessageDescriptor : public cClassDescriptor
@@ -11509,7 +11523,7 @@ const char *ALMMulticastMessageDescriptor::getProperty(const char *propertyname)
 int ALMMulticastMessageDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 1+basedesc->getFieldCount(object) : 1;
+    return basedesc ? 2+basedesc->getFieldCount(object) : 2;
 }
 
 unsigned int ALMMulticastMessageDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -11522,8 +11536,9 @@ unsigned int ALMMulticastMessageDescriptor::getFieldTypeFlags(void *object, int 
     }
     static unsigned int fieldTypeFlags[] = {
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
 const char *ALMMulticastMessageDescriptor::getFieldName(void *object, int field) const
@@ -11536,8 +11551,9 @@ const char *ALMMulticastMessageDescriptor::getFieldName(void *object, int field)
     }
     static const char *fieldNames[] = {
         "packetID",
+        "xw",
     };
-    return (field>=0 && field<1) ? fieldNames[field] : NULL;
+    return (field>=0 && field<2) ? fieldNames[field] : NULL;
 }
 
 int ALMMulticastMessageDescriptor::findField(void *object, const char *fieldName) const
@@ -11545,6 +11561,7 @@ int ALMMulticastMessageDescriptor::findField(void *object, const char *fieldName
     cClassDescriptor *basedesc = getBaseClassDescriptor();
     int base = basedesc ? basedesc->getFieldCount(object) : 0;
     if (fieldName[0]=='p' && strcmp(fieldName, "packetID")==0) return base+0;
+    if (fieldName[0]=='x' && strcmp(fieldName, "xw")==0) return base+1;
     return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
@@ -11558,8 +11575,9 @@ const char *ALMMulticastMessageDescriptor::getFieldTypeString(void *object, int 
     }
     static const char *fieldTypeStrings[] = {
         "int",
+        "double",
     };
-    return (field>=0 && field<1) ? fieldTypeStrings[field] : NULL;
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *ALMMulticastMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -11600,6 +11618,7 @@ std::string ALMMulticastMessageDescriptor::getFieldAsString(void *object, int fi
     ALMMulticastMessage *pp = (ALMMulticastMessage *)object; (void)pp;
     switch (field) {
         case 0: return long2string(pp->getPacketID());
+        case 1: return double2string(pp->getXw());
         default: return "";
     }
 }
@@ -11615,6 +11634,7 @@ bool ALMMulticastMessageDescriptor::setFieldAsString(void *object, int field, in
     ALMMulticastMessage *pp = (ALMMulticastMessage *)object; (void)pp;
     switch (field) {
         case 0: pp->setPacketID(string2long(value)); return true;
+        case 1: pp->setXw(string2double(value)); return true;
         default: return false;
     }
 }
@@ -11629,8 +11649,9 @@ const char *ALMMulticastMessageDescriptor::getFieldStructName(void *object, int 
     }
     static const char *fieldStructNames[] = {
         NULL,
+        NULL,
     };
-    return (field>=0 && field<1) ? fieldStructNames[field] : NULL;
+    return (field>=0 && field<2) ? fieldStructNames[field] : NULL;
 }
 
 void *ALMMulticastMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const

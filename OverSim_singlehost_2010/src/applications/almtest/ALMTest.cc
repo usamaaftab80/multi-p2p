@@ -133,6 +133,8 @@ void ALMTest::sendDataToGroup( int i )
 
     msg->encapsulate(traced);
 
+    std::cout << "send data at App" << endl;
+
     send(msg, "to_lowerTier");
 
     observer->sentMessage(traced);

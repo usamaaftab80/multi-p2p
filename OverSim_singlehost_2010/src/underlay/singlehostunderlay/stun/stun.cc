@@ -7,7 +7,7 @@
 #ifdef WIN32
 #include <winsock2.h>
 #include <stdlib.h>
-#include <io.h>
+#include <stdio.h>
 #include <time.h>
 #else
 

@@ -292,6 +292,12 @@ void Nice::changeState( int toState )
         ("i2", 1, clustercolors[getHighestLayer()]);
 
         setOverlayReady(true);
+        //hoang
+        NiceMessage* msg = new NiceMessage("NICE_STATE_READY");
+        msg->setCommand(NICE_STATE_READY);
+        msg->setSrcNode(thisNode);
+        sendMessageToUDP(DataSender,msg);
+        //end of hoang
         break;
 
     }
@@ -497,6 +503,10 @@ void Nice::handleUDPMessage(BaseOverlayMessage* msg)
 				std::cout << endl <<"vua nhan duoc NICE_RP_NOTIFY from " << niceMsg->getSrcNode() << endl;
 
 				RendevouzPoint = niceMsg->getSrcNode();
+				if(DataSender.isUnspecified())
+				{
+					DataSender = niceMsg->getSrcNode();
+				}
 
 				break;
 				//end of hoang
@@ -1067,6 +1077,11 @@ void Nice::handleNiceHeartbeat(NiceMessage* msg)
 
                 /* Use Exponential Moving Average with factor 0.1 */
                 double newDistance = (simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2.0;
+//hoang
+                if(hoang_use_cost){
+					newDistance = cost();
+				}
+                //end of hoang
 
                 if (oldDistance > 0) {
 
@@ -1194,6 +1209,11 @@ void Nice::handleNiceHeartbeat(NiceMessage* msg)
 
                 /* Valid distance measurement, get value */
                 it->second->set_distance((simTime().dbl() - it->second->get_backHB(hbMsg->getSeqRspNo()) - hbMsg->getHb_delay())/2);
+//hoang
+                if(hoang_use_cost){
+					it->second->set_distance(cost());
+				}
+                //end of hoang
 
             }
 
@@ -1622,6 +1642,11 @@ void Nice::handleNicePingProbeResponse(NiceMessage* msg)
         if (it != peerInfos.end()) {
 
             double distance = simTime().dbl() - it->second->getDES();
+//hoang
+			if(hoang_use_cost){
+				distance = cost();
+			}
+			//end of hoang
 
             it->second->set_distance(distance);
             it->second->touch();
@@ -3729,7 +3754,7 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
                         //hoang
                         dup->setLastHopID(nodeID);
                         //FIXME: record sid=0 in case of streaming (only one sender=0)
-                        global->recordOut(nodeID,0,dup->getSeqNo(),global->getNodeIDofAddress(member.getAddress()));
+                        global->recordOut(nodeID,0,dup->getSeqNo());
                         //end of hoang
                         sendMessageToUDP(member, dup);
 
@@ -3755,7 +3780,7 @@ void Nice::sendDataToOverlay(NiceMulticastMessage *appMsg)
         //hoang
         dup->setLastHopID(nodeID);
         //FIXME: record sid=0 in case of streaming (only one sender=0)
-        global->recordOut(nodeID,0,dup->getSeqNo(),global->getNodeIDofAddress((it->first).getAddress()));
+        global->recordOut(nodeID,0,dup->getSeqNo());
         //end of hoang
         sendMessageToUDP(it->first, dup);
 
@@ -3846,6 +3871,48 @@ void Nice::pollRP(int layer)
         EV << simTime() << " : " << thisNode.getAddress() << " : pollRP() finished." << endl;
 
 } // pollRP
+
+
+double Nice::cost()
+{
+	double cost, kw_var , xw_var;
+
+	kw_var = getKw();
+	xw_var = getXw();
+
+/*	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
+	cCompoundModule* appModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("tier1"));
+	NiceTestApp* app = check_and_cast<NiceTestApp*> (appModule->getSubmodule("nicetestapp"));
+	double xd = app->getXd();
+//	double kd = getLastHopKd();
+	double kd = lastHopKd;
+
+	if(kd < 1e-10){
+		bool isSender = par("isSender");
+		if(!isSender){
+			std::cout << thisNode.getAddress() <<" kd " << kd << " at " << simTime() << endl;
+		}
+	}
+
+	if(xd < kd){
+		xd = kd + 1e-3;
+	}*/
+
+	cost = xw_var/(kw_var-xw_var);
+
+	if(hoang_debug_cost){
+		std::cout << "xw=" << xw_var << " kw=" << kw_var << " || cost=" << cost << endl;
+	}
+/*
+	if(cost > SimTime::getMaxTime().dbl()){
+		std::cout << "xd=" << xd << " kd=" << kd << " || xw=" << xw << " kw=" << kw_var << " || cost=" << cost << endl;
+		cost = 1;
+		globalStatistics->recordOutVector("Infinity cost times",1);
+	}*/
+
+//	globalStatistics->recordOutVector("1 Cost",cost);
+	return cost;
+}
 
 
 

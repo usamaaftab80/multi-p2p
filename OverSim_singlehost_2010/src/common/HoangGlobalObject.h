@@ -63,7 +63,7 @@ class HoangGlobalObject : public cSimpleModule
 	  void incNumNodeJoined(){numNodeJoined++;};
 
 	  void recordIn(uint nodeID,int sid,int pid,int ttl,int fromNode, float delay);
-	  void recordOut(uint nodeID,int sid,int pid, int toNode);
+	  void recordOut(uint nodeID,int sid,int pid);
 	  void updateRP(IPvXAddress add);
 
 	  void updateMemberList(int nodeID,IPvXAddress add);

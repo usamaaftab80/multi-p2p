@@ -52,6 +52,7 @@ EXECUTE_ON_STARTUP(
     e->insert(NICE_FORCE_MERGE, "NICE_FORCE_MERGE");
     e->insert(NICE_MULTICAST, "NICE_MULTICAST");
     e->insert(NICE_RP_NOTIFY, "NICE_RP_NOTIFY");
+    e->insert(NICE_STATE_READY, "NICE_STATE_READY");
 );
 
 Register_Class(NiceMessage);
@@ -1544,6 +1545,7 @@ NiceMulticastMessage::NiceMulticastMessage(const char *name, int kind) : BaseOve
     this->lastHopID_var = 0;
     this->command_var = 0;
     this->layer_var = 0;
+    this->xw_var = 0;
 }
 
 NiceMulticastMessage::NiceMulticastMessage(const NiceMulticastMessage& other) : BaseOverlayMessage()
@@ -1571,6 +1573,7 @@ NiceMulticastMessage& NiceMulticastMessage::operator=(const NiceMulticastMessage
     this->command_var = other.command_var;
     this->srcNode_var = other.srcNode_var;
     this->layer_var = other.layer_var;
+    this->xw_var = other.xw_var;
     return *this;
 }
 
@@ -1588,6 +1591,7 @@ void NiceMulticastMessage::parsimPack(cCommBuffer *b)
     doPacking(b,this->command_var);
     doPacking(b,this->srcNode_var);
     doPacking(b,this->layer_var);
+    doPacking(b,this->xw_var);
 }
 
 void NiceMulticastMessage::parsimUnpack(cCommBuffer *b)
@@ -1604,6 +1608,7 @@ void NiceMulticastMessage::parsimUnpack(cCommBuffer *b)
     doUnpacking(b,this->command_var);
     doUnpacking(b,this->srcNode_var);
     doUnpacking(b,this->layer_var);
+    doUnpacking(b,this->xw_var);
 }
 
 TransportAddress& NiceMulticastMessage::getLastHop()
@@ -1716,6 +1721,16 @@ void NiceMulticastMessage::setLayer(short layer_var)
     this->layer_var = layer_var;
 }
 
+double NiceMulticastMessage::getXw() const
+{
+    return xw_var;
+}
+
+void NiceMulticastMessage::setXw(double xw_var)
+{
+    this->xw_var = xw_var;
+}
+
 class NiceMulticastMessageDescriptor : public cClassDescriptor
 {
   public:
@@ -1763,7 +1778,7 @@ const char *NiceMulticastMessageDescriptor::getProperty(const char *propertyname
 int NiceMulticastMessageDescriptor::getFieldCount(void *object) const
 {
     cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 11+basedesc->getFieldCount(object) : 11;
+    return basedesc ? 12+basedesc->getFieldCount(object) : 12;
 }
 
 unsigned int NiceMulticastMessageDescriptor::getFieldTypeFlags(void *object, int field) const
@@ -1786,8 +1801,9 @@ unsigned int NiceMulticastMessageDescriptor::getFieldTypeFlags(void *object, int
         FD_ISEDITABLE,
         FD_ISCOMPOUND,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<11) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<12) ? fieldTypeFlags[field] : 0;
 }
 
 const char *NiceMulticastMessageDescriptor::getFieldName(void *object, int field) const
@@ -1810,8 +1826,9 @@ const char *NiceMulticastMessageDescriptor::getFieldName(void *object, int field
         "command",
         "srcNode",
         "layer",
+        "xw",
     };
-    return (field>=0 && field<11) ? fieldNames[field] : NULL;
+    return (field>=0 && field<12) ? fieldNames[field] : NULL;
 }
 
 int NiceMulticastMessageDescriptor::findField(void *object, const char *fieldName) const
@@ -1829,6 +1846,7 @@ int NiceMulticastMessageDescriptor::findField(void *object, const char *fieldNam
     if (fieldName[0]=='c' && strcmp(fieldName, "command")==0) return base+8;
     if (fieldName[0]=='s' && strcmp(fieldName, "srcNode")==0) return base+9;
     if (fieldName[0]=='l' && strcmp(fieldName, "layer")==0) return base+10;
+    if (fieldName[0]=='x' && strcmp(fieldName, "xw")==0) return base+11;
     return basedesc ? basedesc->findField(object, fieldName) : -1;
 }
 
@@ -1852,8 +1870,9 @@ const char *NiceMulticastMessageDescriptor::getFieldTypeString(void *object, int
         "int",
         "TransportAddress",
         "short",
+        "double",
     };
-    return (field>=0 && field<11) ? fieldTypeStrings[field] : NULL;
+    return (field>=0 && field<12) ? fieldTypeStrings[field] : NULL;
 }
 
 const char *NiceMulticastMessageDescriptor::getFieldProperty(void *object, int field, const char *propertyname) const
@@ -1907,6 +1926,7 @@ std::string NiceMulticastMessageDescriptor::getFieldAsString(void *object, int f
         case 8: return long2string(pp->getCommand());
         case 9: {std::stringstream out; out << pp->getSrcNode(); return out.str();}
         case 10: return long2string(pp->getLayer());
+        case 11: return double2string(pp->getXw());
         default: return "";
     }
 }
@@ -1930,6 +1950,7 @@ bool NiceMulticastMessageDescriptor::setFieldAsString(void *object, int field, i
         case 7: pp->setLastHopID(string2long(value)); return true;
         case 8: pp->setCommand(string2long(value)); return true;
         case 10: pp->setLayer(string2long(value)); return true;
+        case 11: pp->setXw(string2double(value)); return true;
         default: return false;
     }
 }
@@ -1954,8 +1975,9 @@ const char *NiceMulticastMessageDescriptor::getFieldStructName(void *object, int
         NULL,
         "TransportAddress",
         NULL,
+        NULL,
     };
-    return (field>=0 && field<11) ? fieldStructNames[field] : NULL;
+    return (field>=0 && field<12) ? fieldStructNames[field] : NULL;
 }
 
 void *NiceMulticastMessageDescriptor::getFieldStructPointer(void *object, int field, int i) const
