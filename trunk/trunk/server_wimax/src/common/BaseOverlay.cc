@@ -68,6 +68,7 @@ BaseOverlay::BaseOverlay()
     kw = 1e6;
     xw = 0;
     nodeID = numNodeConstructed++;
+    maxKD = 0;
     //end of hoang
 }
 

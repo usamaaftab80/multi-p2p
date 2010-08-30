@@ -835,6 +835,7 @@ protected:
     bool hoang_use_cost;
 	bool hoang_debug_cost;
 	double lastHopKd;
+	double maxKD;
 
 public:
     void setNodeID(int id){nodeID = id;};

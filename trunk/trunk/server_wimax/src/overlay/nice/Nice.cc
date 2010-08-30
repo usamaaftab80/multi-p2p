@@ -191,7 +191,7 @@ void Nice::initializeOverlay( int stage )
     second_leader = TransportAddress::UNSPECIFIED_NODE;
 
     // add some watches
-    WATCH(thisNode);
+    /*WATCH(thisNode);
     WATCH_POINTER_MAP(peerInfos);
     WATCH(evalLayer);
     WATCH(query_start);
@@ -211,7 +211,7 @@ void Nice::initializeOverlay( int stage )
     WATCH(numReceived);
     WATCH(totalReceivedBytes);
     WATCH(numHeartbeat);
-    WATCH(totalHeartbeatBytes);
+    WATCH(totalHeartbeatBytes);*/
 
 } // initializeOverlay
 
@@ -1559,8 +1559,11 @@ void Nice::handleNiceMulticast(NiceMulticastMessage* multicastMsg)
     }
     else {
     	//hoang
-    	xd = multicastMsg->getLastHopKd();
-    	multicastMsg->setBigKD(multicastMsg->getBigKD() + multicastMsg->getLastHopKd());
+//    	xd = multicastMsg->getLastHopKd();
+    	double bigKD_var = multicastMsg->getBigKD() + multicastMsg->getLastHopKd();
+//    	if(bigKD_var > maxKD)
+    		maxKD = bigKD_var;
+    	multicastMsg->setBigKD(bigKD_var);
     	//end of hoang
         unsigned int hopCount = multicastMsg->getHopCount();
         hopCount++;
@@ -3880,6 +3883,7 @@ double Nice::cost()
 
 	kw_var = getKw();
 	xw_var = getXw();
+//	xd = maxKD / 0.001;
 
 //	cModule* thisOverlayTerminal = check_and_cast<cModule*>(getParentModule()->getParentModule());
 //	cCompoundModule* appModule = check_and_cast<cCompoundModule*> (thisOverlayTerminal->getSubmodule("tier1"));
@@ -3901,8 +3905,8 @@ double Nice::cost()
 	}
 */
 //	cost = sqrt( (kd/(xd-kd)) * (xw/(kw_var-xw)) );
-	cost = xw_var / (kw_var - xw_var);
-
+//	cost = xw_var / (kw_var - xw_var);
+	cost = sqrt( (maxKD / 0.001) * (xw/(kw_var-xw)) );
 
 	if(hoang_debug_cost){
 		std::cout << "xw=" << xw_var << " kw=" << kw_var << " || cost=" << cost << endl;

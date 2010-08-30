@@ -113,20 +113,24 @@ void HoangGlobalObject::updateMemberList(int nodeID,IPvXAddress add)
 
 int HoangGlobalObject::getNodeIDofAddress(IPvXAddress add)
 {
+	bool found = false;
 	FILE * f;
 	f = fopen("member_list.txt","r");
-
 	char str[80];
-	int id;
+	int id = -1;
 
-	do
-	{
+	while(! feof(f)){
 		fscanf(f,"%d\t%s\n",&id,str);
+		if(add == IPvXAddress(str)){
+			found = true;
+			break;
+		}
 	}
-	while (add != IPvXAddress(str));
 
 	fclose(f);
 
-	return id;
+	if(!found)
+		id = -1;
 
+	return id;
 }
