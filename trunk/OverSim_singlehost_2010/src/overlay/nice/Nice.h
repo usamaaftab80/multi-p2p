@@ -58,6 +58,9 @@ typedef std::set<TransportAddress>::iterator TaSetIt;
  * gain RP knowledge
  */
 static TransportAddress RendevouzPoint = TransportAddress::UNSPECIFIED_NODE;
+//hoang
+static TransportAddress DataSender = TransportAddress::UNSPECIFIED_NODE;
+//end of hoang
 
 /**
  * NICE overlay module
@@ -317,6 +320,10 @@ private:
     void sendDataToOverlay(NiceMulticastMessage *appMsg);
 
     void pollRP(int layer);
+
+    //hoang
+    double cost();
+
 
 };
 

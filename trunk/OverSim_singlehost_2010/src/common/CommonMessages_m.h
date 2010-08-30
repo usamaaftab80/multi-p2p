@@ -1988,6 +1988,7 @@ inline void doUnpacking(cCommBuffer *b, ALMLeaveMessage& obj) {obj.parsimUnpack(
  * {
  *     
  *     int packetID;       
+ *     double xw;
  * }
  * </pre>
  */
@@ -1995,6 +1996,7 @@ class ALMMulticastMessage : public ::ALMMessage
 {
   protected:
     int packetID_var;
+    double xw_var;
 
     // protected and unimplemented operator==(), to prevent accidental usage
     bool operator==(const ALMMulticastMessage&);
@@ -2011,6 +2013,8 @@ class ALMMulticastMessage : public ::ALMMessage
     // field getter/setter methods
     virtual int getPacketID() const;
     virtual void setPacketID(int packetID_var);
+    virtual double getXw() const;
+    virtual void setXw(double xw_var);
 };
 
 inline void doPacking(cCommBuffer *b, ALMMulticastMessage& obj) {obj.parsimPack(b);}

@@ -614,6 +614,7 @@ packet ALMMulticastMessage extends ALMMessage
 {
     //hoang
     int packetID;       
+    double xw;
 }
 
 //

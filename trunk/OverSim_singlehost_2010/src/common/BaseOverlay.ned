@@ -65,7 +65,8 @@ simple BaseOverlay extends BaseRpc
         bool restoreContext; // if true, a node rejoins with its old nodeId and malicious state
         //hoang
         string globalModulePath;
-        
+        bool hoang_use_cost;
+		bool hoang_debug_cost;
 
     gates:
         input udpIn; // gate from the UDP layer

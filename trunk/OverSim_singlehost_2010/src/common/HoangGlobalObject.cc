@@ -48,6 +48,12 @@ HoangGlobalObject::~HoangGlobalObject()
 
 	cout << "\ntotalALMhopcount=" << totalALMhopcount << " numALMhopcount=" << numALMhopcount << endl<< endl;
 
+	ofstream alm_hc_file;
+	alm_hc_file.open ("alm_hopcount.log");
+
+	alm_hc_file << "totalALMhopcount=" << totalALMhopcount << endl << " numALMhopcount=" << numALMhopcount;
+	alm_hc_file.close();
+
 	fclose(inFile);
 	fclose(outFile);
 }
@@ -66,11 +72,11 @@ void HoangGlobalObject::recordIn(uint nodeID,int sid,int pid,int ttl,int fromNod
 	fprintf(inFile,"%f\t%d\t%d\t%d\t%d\t%d\t%f\n", simTime().dbl(), nodeID, sid, pid, ttl, fromNode, delay);
 }
 
-void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid, int toNode)
+void HoangGlobalObject::recordOut(uint nodeID,int sid,int pid)
 {
 	//write to out.log
 	//at simTime() nodeID	forwarded a packet sid,pid
-	fprintf(outFile,"%f\t%d\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid, toNode);
+	fprintf(outFile,"%f\t%d\t%d\t%d\n", simTime().dbl(), nodeID, sid, pid);
 }
 
 void HoangGlobalObject::updateRP(IPvXAddress add)
