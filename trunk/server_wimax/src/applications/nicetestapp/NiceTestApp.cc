@@ -264,6 +264,8 @@ void NiceTestApp::handleTimerEvent(cMessage* msg)
 
 		msg->setXw(periodicData[numSent].rate);
 
+		delete pingPongPkt;
+
 //		msg->encapsulate(pingPongPkt);
 
 		send(msg, "to_lowerTier");
