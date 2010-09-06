@@ -67,6 +67,7 @@ BaseOverlay::BaseOverlay()
     //hoang
     kw = 1e6;
     xw = 0;
+    nodeID = 1111;
     //end of hoang
 }
 
@@ -734,7 +735,8 @@ void BaseOverlay::handleMessage(cMessage* msg)
 
         	simtime_t delay = simTime() - niceMmsg->getCreationTime();
 
-        	global->recordIn(nodeID, 0, niceMmsg->getSeqNo(), udpControlInfo->getTimeToLive(), niceMmsg->getLastHopID(), delay.dbl());
+//        	global->recordIn(nodeID, 0, niceMmsg->getSeqNo(), udpControlInfo->getTimeToLive(), niceMmsg->getLastHopID(), delay.dbl());
+        	global->recordIn(nodeID, 0, niceMmsg->getSeqNo(), 10, niceMmsg->getLastHopID(), delay.dbl());
 
         	delete dup;
 
