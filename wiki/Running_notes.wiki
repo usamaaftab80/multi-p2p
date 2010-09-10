@@ -1,0 +1,49 @@
+=NICE streaming application test=
+Requirements:
+•	 OMNeT++ 4.0p1 (source + IDE, tgz) 
+•	OverSim-2009: svn/trunk/OverSim
+•	INET-2009: svn/trunk/INET
+Installation:
+•	Download & untar OverSim-20090908.tgz & INET-OverSim-20090317.tgz
+•	Copy and replace SVN code into extracted folders
+•	Build in Omnetpp IDE
+Configuration file: omnetpp.ini 
+•	Modify **.hoang_use_cost=true (or false) to run with (or without) new cost function
+•	To customize the cost function's variables (delay only, bandwidth only, delay+bandwidth) take a look at Nice::cost() in OverSim-20090908/src/overlay/Nice/Nice.cc
+•	**.overlayTerminalNumber = 16, 32, 64 … 1024
+Run:
+	cd OverSim20090908/simulations
+	../src/OverSim -u Cmdenv -c NiceTestAppGTITM
+
+
+=Tests with an outside wimax singleHost=
+Requirements:
+OpenVPN
+ OMNeT++ 4.1 (source + IDE, tgz)
+MUST setup OverSim on two sides: Server and SingleHost (on two different hosts)
+Installation:
+Server: checkout svn/trunk/OverSim_server_2010 and svn/trunk/inet2010 in the omnetpp4.1 IDE.
+SingleHost: checkout svn/trunk/OverSim_singlehost_2010 and  svn/trunk/inet2010
+Configuration files:
+Server: OverSim/simulations/realworld/world.ini
+SingleHost: OverSim/simulations/realworld/niceapp.ini
+Run:
+ Setup OpenVPN tunnel between Server and SingleHost:
+	Server: sudo openvpn openvpn_server.txt
+	SingleHost:
+		sudo openvpn openvpn_client.txt
+		sudo ./add_static_route_singlehost.sh
+Run at SingleHost first:
+	cd OverSim/simulations/realworld/
+	./run.sh
+Then start Server:
+	cd OverSim/simulations/realworld/
+	sudo ./root_setup-world.sh
+Notes:
+Must setup openvpn tunnel afirst of all to create an interface 1.1.1.2 for SingleHost and to resolve the problem of public/private IP address range.
+
+
+=Support IMS system=
+	Overlay Server 
+	EnodeB (scenario 2) 
+	Independent Single UEs (scenario 3)
