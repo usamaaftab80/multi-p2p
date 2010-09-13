@@ -1,0 +1,7 @@
+This is a patched version of the INET framework for use with the
+overlay network simulation framework OverSim (http://www.oversim.org/).
+
+If you have any problems with this release please don't bother the authors
+of the INET framework. Instead contact the OverSim develops and asked them
+for help.
+
