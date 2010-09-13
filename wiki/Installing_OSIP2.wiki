@@ -25,7 +25,8 @@ Download eXosip: http://mirror.lihnidos.org/GNU/savannah/exosip/libeXosip2-3.3.0
 
  make install
 
-
+==Config OMNeT++ IDE to build with osip library==
+http://i183.photobucket.com/albums/x32/hoangnq/install_osip.png
 
 = Example sourcecode =
 main.c
