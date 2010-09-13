@@ -1,0 +1,3 @@
+# Partial Tkenv config file -- see $HOME/.tkenvrc as well
+inspector "ARPTest" "ARPTest" "2" "618x338+1301+49"
+
