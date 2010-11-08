@@ -123,11 +123,11 @@ ff02::3 ip6-allhosts
    sudo /etc/init.d/bind9 restart
 }}}
 
-11.Configure the IMS Core
+== 11.Configure the IMS Core
 
     * By now you should have MySQL and DNS working
     * CSCFs
-          o **Copy the following files to /opt/OpenIMSCore or another location comfortable for you:*pcscf.cfg, pcscf.sh, icscf.cfg, icscf.xml, icscf.sh, scscf.cfg, scscf.xml, scscf.sh*,
+          o **Copy the following files to */opt/OpenIMSCore* or another location comfortable for you:*pcscf.cfg, pcscf.sh, icscf.cfg, icscf.xml, icscf.sh, scscf.cfg, scscf.xml, scscf.sh*,
 {{{
             cp ser_ims/cfg/*.cfg .
 
@@ -138,17 +138,17 @@ ff02::3 ip6-allhosts
             					
 
     * FHoSS
-          o Take a look at the configuration files in FHoSS/deploy/ (available after Step 3 completes)
+          o Take a look at the configuration files in *FHoSS/deploy/* (available after Step 3 completes)
     * Edit these files to your own preferences (don't forget to update the DNS zone file accordingly and restart the name server)
 
-== 11. Configure MySQL ==
+== 12. Configure MySQL ==
   * Run the SQL dumps (mysql -u root -p -h localhost < dump.sql):
 {{{      
       mysql -u root -p -h localhost < ser_ims/cfg/icscf.sql
       mysql -u root -p -h localhost < FHoSS/scripts/hss_db.sql  
       mysql -u root -p -h localhost < FHoSS/scripts/userdata.sql
 }}}
-== 12. Start all nodes and hss: ==
+== 13. Start all nodes and hss: ==
 {{{   
      cd opt/OpenIMSCore
      ./pcscf.sh
