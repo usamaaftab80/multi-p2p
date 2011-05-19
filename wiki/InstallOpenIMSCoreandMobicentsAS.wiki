@@ -162,7 +162,7 @@ ff02::3 ip6-allhosts
   # Edit /etc/resolv.conf
   # Edit /etc/hosts
   # Edit /etc/bind/open-ims.test
-  # Restart bind: sudo /edit/init.d/bind9 restart
+  # Restart bind: sudo /etc/init.d/bind9 restart
   # Check domain : 
 {{{ 
    dig open-ims.test
