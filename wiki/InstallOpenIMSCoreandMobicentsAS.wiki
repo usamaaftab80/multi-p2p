@@ -220,7 +220,7 @@ example :
 }}}
 
 =IV) Install Mobicents=
-  # Install Mobicents with JBOSS Application Server with link (version JBOSS 4.3.2 ) http://www.mobicents.org/user_guides/sip_servlets/index.html#bssswjicar-binary-SIP_Servlets_Server_with_JBoss-Installing_Configuring_and_Running
+  # Install Mobicents with JBOSS Application Server with link (version JBOSS 4.3.2 ) http://www.mobicents.org/installation-jboss.html
   # Install application conference with link : http://www.mobicents.org/mss-ide-setup.html  
   # Install source code from Mobicents's repository 
   # Go to dictectory : * conference-demo/* and use the command line : 
