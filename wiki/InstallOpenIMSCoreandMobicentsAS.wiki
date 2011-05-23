@@ -179,6 +179,7 @@ ff02::3 ip6-allhosts
     hss.properties (FHoSS/deploy)
 }}}
 => Check the web interface on : http://127.0.0.1:8080/
+account/pass: hss/hss
 
   # Configuration port for HSS : 
   * Edit in file */opt/OpenIMSCore/FHoSS/config/hss.properties* and change 
