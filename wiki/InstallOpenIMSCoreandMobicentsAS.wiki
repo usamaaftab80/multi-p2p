@@ -220,7 +220,7 @@ example :
 }}}
 
 =IV) Install Mobicents=
-{{{  # Install Mobicents with JBOSS Application Server with link (version JBOSS 4.3.2 ) http://www.mobicents.org/installation-jboss.html
+  # Install Mobicents with JBOSS Application Server with link (version JBOSS 4.3.2 ) http://www.mobicents.org/installation-jboss.html
   # Install application conference with link : http://www.mobicents.org/mss-ide-setup.html  
   # Install source code from Mobicents's repository 
   # Go to dictectory : * conference-demo/* and use the command line : 
@@ -235,7 +235,6 @@ INVITE: ("Conference", "DAR:From", "ORIGINATING", "", "NO_ROUTE", "0")
 MESSAGE: ("Conference", "DAR:From", "ORIGINATING", "", "NO_ROUTE", "0")
 NOTIFY: ("Conference", "DAR:From", "ORIGINATING", "", "NO_ROUTE", "0")
 SUBSCRIBE: ("Conference", "DAR:From", "ORIGINATING", "", "NO_ROUTE", "0")
-}}}
 }}}
   # Check whether Mobicent Sip servelet (version 4 and 5) has been installed on the system: /opt/MobicentsMSS (ver. 5.xxx for scenario 1/MCU and 3/ALM). And /opt/MobicentMSS-4xx (version 4.xxx for scenario 2 proposal)
   # Come to http://www.mobicents.org/mss-downloads.html to download 2 versions of JBoss: JBoss 4.2.3.GA (153.7MB) (for scenarios 2/proposal and 3/ALM) and JBoss 5.1.0.GA-jdk6-full (180MB) (for scenario 1 - MCU) to your harddisc,
