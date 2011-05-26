@@ -243,10 +243,11 @@ SUBSCRIBE: ("Conference", "DAR:From", "ORIGINATING", "", "NO_ROUTE", "0")
 set JBOSS_HOME environment variable to JBOSS ver4
 Run MSS ver 4: /opt/Mobicents/MSS-4xx/bin/run.sh
 }}}
-  # For scenario 2/Proposal and 3/ALM
+  # For scenario 2/Proposal and 3/ALM, the MSS version 5 is used. Since the Media server and the AS are separated, we have to run them in two command windows:
 {{{
 set JBOSS_HOME environment variable to JBOSS ver5
-Run MSS ver 4: /opt/Mobicents/MSS-5xx/bin/run.sh
+Run MSS ver 5: /opt/Mobicents/MSS-5xx/bin/run.sh
+Run MSS Media server ver 5: opt/Mobicents/MSS/mobicents-media-server/bin/run.sh
 }}}
   # Run JBOSS Application with real IP: Go to the directory : *JBOSS_HOME/bin/*   
 {{{
